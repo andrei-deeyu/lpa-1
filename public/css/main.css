@@ -158,4 +158,5 @@ label {
 .lpa-logo {
   position: relative;
   bottom: .5em;
+  border-radius: 5px;
 }
