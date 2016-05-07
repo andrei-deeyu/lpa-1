@@ -58,7 +58,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#">LPA</a>
+        <a class="navbar-brand" href="#"><img src="img/lpa-logo-40.jpg" alt="lpa logo" class="lpa-logo" /></a>
       </div>
       <div id="navbar" class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
@@ -172,35 +172,45 @@
                     <input type="text" class="form-control" id="form-twitter-field" value="" placeholder="@yourAccount">
                   </div>
                 </div>
-                <div class="form-group">
-                  <label for="form-bio">Bio</label>
-                  <textarea class="form-control col-lg-6" id="form-bio" name="bio"></textarea>
+                <button class="btn btn-primary btn-xs" type="button" data-toggle="collapse" data-target="#collapse-bio-links" aria-expanded="false" aria-controls="collapseExample">
+                  Bio, Fact, Expertise And Links
+                  <span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span>
+                </button>
+                <div class="collapse" id="collapse-bio-links">
+                  <div class="well">
+                    <div class="form-group">
+                      <label for="form-bio">Bio</label>
+                      <textarea class="form-control col-lg-6" id="form-bio" name="bio"></textarea>
+                    </div>
+                    <div class="form-group">
+                      <label for="form-fun-fact">Fun Fact</label>
+                      <textarea class="form-control col-lg-6" id="form-fun-fact" name="form-fun-fact"></textarea>
+                    </div>
+                    <!-- end -->
+                    <label for="form-expertise">Expertise</label>
+                    <textarea class="form-control col-lg-6" id="form-expertise" name="expertise"></textarea>
+                    <br>
+                    <label for="form-comments">Comments</label>
+                    <textarea class="form-control col-lg-6" id="form-comments" name="comments"></textarea>
+                    
+                    <label for="form-linkedin-url">Your LinkedIn</label>
+                    <div class="input-group">
+                      <span class="input-group-addon" id="form-linkedin-url-pre">http://www.linkedin.com/in/</span>
+                      <input type="text" class="form-control" id="form-linkedin-url">
+                    </div>
+                    <label for="form-personal-url">Personal Site</label>
+                    <div class="input-group">
+                      <span class="input-group-addon" id="form-personal-url-pre">http://</span>
+                      <input type="text" class="form-control" id="form-personal-url">
+                    </div>
+                    <label for="form-pic-url">Picture Url</label>
+                    <div class="input-group">
+                      <span class="input-group-addon" id="form-pic-url-pre">http://</span>
+                      <input type="text" class="form-control" id="form-pic-url">
+                    </div>
+                    
+                  </div>
                 </div>
-                <div class="form-group">
-                  <label for="form-fun-fact">Fun Fact</label>
-                  <textarea class="form-control col-lg-6" id="form-fun-fact" name="form-fun-fact"></textarea>
-                </div>
-                <!-- end -->
-                <label for="form-expertise">Expertise</label>
-                <textarea class="form-control col-lg-6" id="form-expertise" name="expertise"></textarea>
-                <br>
-                <label for="form-linkedin-url">Your LinkedIn</label>
-                <div class="input-group">
-                  <span class="input-group-addon" id="form-linkedin-url-pre">http://www.linkedin.com/in/</span>
-                  <input type="text" class="form-control" id="form-linkedin-url">
-                </div>
-                <label for="form-personal-url">Personal Site</label>
-                <div class="input-group">
-                  <span class="input-group-addon" id="form-personal-url-pre">http://</span>
-                  <input type="text" class="form-control" id="form-personal-url">
-                </div>
-                <label for="form-pic-url">Picture Url</label>
-                <div class="input-group">
-                  <span class="input-group-addon" id="form-pic-url-pre">http://</span>
-                  <input type="text" class="form-control" id="form-pic-url">
-                </div>
-                <label for="form-comments">Comments</label>
-                <textarea class="form-control col-lg-6" id="form-comments" name="comments"></textarea>
                 <div class="action-buttons">
                   <button id="form-cancel-mentor" class="btn btn-default">Clear</button>
                   <button id="form-save-mentor" type="submit" class="btn btn-success">Save</button>
@@ -421,7 +431,6 @@
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </div>
