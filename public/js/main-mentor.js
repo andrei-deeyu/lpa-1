@@ -30,7 +30,7 @@
       $("#logout-div").html("<form class='navbar-form navbar-right' role='form'><button id='logout-but' class='btn btn-success'>Logout</button> </form>");
 
       curMentorEmail = authData.google.email;
-      curMentorEmail = curMentorEmail.replace('.', '-');
+      curMentorEmail = curMentorEmail.replace(/\./g, "-");
       fetchMentor(curMentorEmail);
       // init our mentor with what we have from google-login
       $("#logout-but").text("Logout " + authData.google.displayName);
@@ -315,7 +315,7 @@
     var disTime = new Date().toJSON().slice(0, 21);
 
     // save it in firebase
-    var mentorKey = emailKey.replace('.', '-');
+    var mentorKey = emailKey.replace(/\./g, "-");
     ref.child("mentors").child(mentorKey).set({
       name: name,
       email: emailKey,
@@ -406,7 +406,7 @@
       if (mentor != null) {
         console.log("Setting data for: " + JSON.stringify(mentor));
         //$("#form-name-field").val(mentor.name);
-        var mEmail = key.replace('-', '.');
+        var mEmail = key.replace(/\-/g, "."); 
         $("#form-email-field").val(mEmail);
         $("#form-phone-field").val(mentor.phone);
         $("#form-country-field").val(mentor.country);

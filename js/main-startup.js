@@ -29,7 +29,7 @@
 
         curAttendeeEmail = authData.google.email;
         // so we could use it as firebase key
-        curAttendeeEmail = curAttendeeEmail.replace(".", "-");
+        curAttendeeEmail = curAttendeeEmail.replace(/\./g, "-");
         fetchAttendee(curAttendeeEmail);
 
         // init our attendee with what we have from google-login
