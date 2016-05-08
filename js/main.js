@@ -197,7 +197,7 @@
   });
 
   //
-  //
+  // Reset the schedule and make it clean again
   //
   $("#sc-reset-button").click(function() {
     buildScheduleRow();
@@ -208,7 +208,7 @@
   //
   function checkWeHaveDataForSchedule() {
     var secTimer;
-    console.log(" -- checkWeHaveDataForSchedule -- flag: " + gotDataForSchedule)
+    console.log(" -- checkWeHaveDataForSchedule -- flag: " + gotDataForSchedule);
     if (gotDataForSchedule < 3) {
       secTimer = setTimeout(checkWeHaveDataForSchedule, 1000);  /* this checks the flag every 1 second */
     } else {
