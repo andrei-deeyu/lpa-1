@@ -95,6 +95,7 @@
           <li role="presentation"><a href="#startup-tab" aria-controls="startup-tab" role="tab" data-toggle="tab">
            Startups</a></li>
           <li role="presentation"><a href="#attendees-tab" aria-controls="attendees-tab" role="tab" data-toggle="tab">Attendees</a></li>
+          <li role="presentation"><a href="#locations-tab" aria-controls="locations-tab" role="tab" data-toggle="tab">Locations</a></li>
           <li role="presentation"><a href="#schedule-tab" aria-controls="schedule-tab" role="tab" data-toggle="tab">Schedule</a></li>
           <li role="presentation"><a href="#schedule-viewer-tab" aria-controls="schedule-viewer-tab" role="tab" data-toggle="tab">Schedule Viewer</a></li>
         </ul>
@@ -387,6 +388,50 @@
               </div>
             </div>
           </div>
+          <!-- Locations -->
+          <div role="tabpanel" class="tab-pane" id="locations-tab">
+            <div class="row">
+              <div class="col-lg-6 col-md-6 fields-block">
+                <h4>Location</h4>
+                <div class="form-group">
+                  <div id="location-nameError" class="sr-only" role="alert"></div>
+                  <label for="location-name-field" class="sr-only">Name</label>
+                  <div class="input-group">
+                    <div class="input-group-addon"><span class="glyphicon glyphicon-leaf"></span></div>
+                    <input type="text" class="form-control" id="location-name-field" value="" placeholder="Location Name" autocomplete="name" required>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div id="location-addressError" class="sr-only" role="alert"></div>
+                  <label for="location-address-field" class="sr-only">Address</label>
+                  <div class="input-group">
+                    <div class="input-group-addon"><span class="glyphicon glyphicon-list"></span></div>
+                    <input type="text" class="form-control" id="location-address-field" value="" placeholder="Full Address">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div id="location-commentsError" class="sr-only" role="alert"></div>
+                  <label for="location-comments-field" class="sr-only">comments</label>
+                  <div class="input-group">
+                    <div class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></div>
+                    <input type="text" class="form-control" id="location-comments-field" value="" placeholder="Full comments">
+                  </div>
+                </div>
+                <div class="action-buttons">
+                  <button id="location-cancel-button" class="btn btn-default">Clear</button>
+                  <button id="location-save-button" type="submit" class="btn btn-success">Save Location</button>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2 col-offset-4 centered alert alert-success save-alert">
+                  <strong>Location Saved!</strong>
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-6">
+                <!-- list of out startups -->
+                <h3>Locations</h3>
+                <div id="locations-list"></div>
+              </div>
+            </div>
+          </div>
           <!-- Schedule -->
           <div role="tabpanel" class="tab-pane" id="schedule-tab">
             <div class="row">
@@ -459,7 +504,7 @@
     <footer>
       <div class="col-md-4">
         <p><span class="label label-success">Feedback: 
-        <a href="https://ido-green.appspot.com/" target="_blank">ido-green.appspot.com</a></span> - 
+        <a href="https://ido-green.appspot.com/" target="_blank">ido-green.appspot.com</a></span> -
           <span class="label label-success">
         <a href="https://github.com/greenido/lpa-1/issues/new" target="_blank">Open a Bug</a> </span>
         </p>
