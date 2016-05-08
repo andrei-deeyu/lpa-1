@@ -8,6 +8,24 @@
   $("#alert-warning-sign-in").hide();
   $("#spin").hide();
 
+
+  //
+  // handle the intro help and later the help function
+  //
+  if ( !localStorage.getItem("lpa-1-showed-help")) {
+    $('#joyRideTipContent').joyride({
+      autoStart: true,
+      localStorage: true,
+      localStorageKey: 'lpa-1-showed-help',
+      modal: true,
+      expose: true
+    });
+  }
+
+  $("#help-but").click(function() {
+    $("#joyRideTipContent").joyride({ autoStart: true });
+  });
+
   var startupNameList = [];
   var curMentorEmail = "";
 
@@ -222,12 +240,12 @@
         $("#startups-list").append(
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
           startupData.name + " ( <img src='" + startupLogoUrl + "' class='logo-img' alt='startup logo'> )" +
-          '</h3> </div> <div class="panel-body startup-edit" data-key="' + key + '"> <b>' + startupData.description + 
-          '</b><br>From: <b>' + startupData.country + ' - ' + startupData.city + 
-          '</b>  Founded: <b>' + startupData.dateFounded + '</b><br>Employees: <b>' + startupData.numEmployees + 
-          '</b><br> <h4> <span class="label label-warning"> <a href="' + startupData.video + 
+          '</h3> </div> <div class="panel-body startup-edit" data-key="' + key + '"> <b>' + startupData.description +
+          '</b><br>From: <b>' + startupData.country + ' - ' + startupData.city +
+          '</b>  Founded: <b>' + startupData.dateFounded + '</b><br>Employees: <b>' + startupData.numEmployees +
+          '</b><br> <h4> <span class="label label-warning"> <a href="' + startupData.video +
           '" target="_blank">Application Video</a> </span> ' +
-          ' &nbsp;&nbsp; <span class="label label-success"><a href="' + 
+          ' &nbsp;&nbsp; <span class="label label-success"><a href="' +
           startupData.historyUrl + '" target="_blank">History File</a> </span></h4></div> </div>'
         );
       });
@@ -406,7 +424,7 @@
       if (mentor != null) {
         console.log("Setting data for: " + JSON.stringify(mentor));
         //$("#form-name-field").val(mentor.name);
-        var mEmail = key.replace(/\-/g, "."); 
+        var mEmail = key.replace(/\-/g, ".");
         $("#form-email-field").val(mEmail);
         $("#form-phone-field").val(mentor.phone);
         $("#form-country-field").val(mentor.country);
