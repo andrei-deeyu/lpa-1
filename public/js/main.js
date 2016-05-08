@@ -89,7 +89,7 @@
       isInSaveOperation = true;
       console.log("is going INTO save");
       var startupName = $.trim($(this).text());
-      var startupKey = startupName.replace(" ", "");
+      var startupKey = startupName.replace(/\s/g, "");
       var mentorPerHour = [];
       for (var j = 1; j < 10; j++) {
         var tmpMentorEmail = $("#mentor-" + startupKey + "-" + j + "-select").val();
@@ -210,7 +210,7 @@
     for (var i = 0; i < len; i++) {
       html += '<div class="row">';
       html += '<div class="col-md-2 col-lg-1 text-center sc-start-name">' + startupNameList[i] + ' </div>';
-      var startupKey = startupNameList[i].replace(" ", "");
+      var startupKey = startupNameList[i].replace(/\s/g, "");
       for (var j = 1; j < 10; j++) {
         html += '<div class="col-md-1 col-lg-1 text-center ">';
         html += getMentorsSelect("mentor-" + startupKey + "-" + j + "-select");
@@ -438,7 +438,7 @@
   $("#st-save-button").click(function() {
     var name = $("#st-name-field").val();
     // we can't have spaces - easy life (for now)
-    name = name.replace(" ", "-");
+    name = name.replace(/\s/g, "-");
     var desc = $("#st-desc-field").val();
 
     // name validation

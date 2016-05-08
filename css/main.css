@@ -92,6 +92,7 @@ label {
 
 .mentor-selector {
   width: 6em;
+  margin-top: .4em;
 }
 
 .sc-comments {
@@ -139,8 +140,10 @@ label {
 
 .sc-start-name {
   background-color: yellow;
-  padding-top: .2em;
+  padding-top: 0.2em;
   border-radius: 25px;
+  margin-top: .75em;
+  padding-bottom: .2em;
 }
 
 .must-have-field {
