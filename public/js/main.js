@@ -4,7 +4,9 @@
 
   var startupNameList = [];
   var mentorsList = [];
+  var locationsList = [];
   var isInSaveOperation = false;
+  var gotDataForSchedule = 0;
 
   //
   // AUTH fun
@@ -22,7 +24,7 @@
       readMentors(authData);
       readStartups(authData);
       readAttendees(authData);
-
+      readLocations(authData);
     } else {
       console.log("User is logged out");
       $("#login-form").show();
@@ -202,7 +204,23 @@
   });
 
   //
-  // build the html row of our schedule
+  // We need the list of startups, mentors and location before we can build the UI for the schedule
+  //
+  function checkWeHaveDataForSchedule() {
+    var secTimer;
+    console.log(" -- checkWeHaveDataForSchedule -- flag: " + gotDataForSchedule)
+    if (gotDataForSchedule < 3) {
+      secTimer = setTimeout(checkWeHaveDataForSchedule, 1000);  /* this checks the flag every 1 second */
+    } else {
+      buildScheduleRow();
+      // shut the timer
+      clearTimeout(secTimer);
+    }
+  }
+  checkWeHaveDataForSchedule();
+
+  //
+  // Build the html row of our schedule
   //
   function buildScheduleRow() {
     var html = "";
@@ -219,29 +237,12 @@
       }
       html += '<div class="col-md-2 col-lg-2 text-center ">';
       html += '<textarea class="form-control sc-comments" id="sc-comments-' + startupKey +
-        '" name="sc-comments-' + i + '" placeholder="Anything you wish"></textarea>';
+        '" name="sc-comments-' + i + '" placeholder="General Comments For The Day"></textarea>';
       html += '</div>';
       html += '</div> <!-- row -->';
     }
 
     $("#schedule-tab-table").html(html);
-  }
-
-  //
-  // get list of locations for the meetings 
-  //
-  function getMeetingLocations(htmlObjId) {
-    var html = '<select id="' + htmlObjId + '" class="mentor-selector">';
-    //
-    // TODO: fetch it from firebase
-    var locationList = ["Room 1", "Room 22", "Next to Building 3", "Roy's living room"];
-    var len = locationList.length;
-    locationList.sort(compare);
-    for (var i = 0; i < len; i++) {
-      html += '<option value="' + locationList[i] + '">' + locationList[i] + '</option>';
-    }
-    html += '</select>';
-    return html;
   }
 
   //
@@ -514,8 +515,8 @@
       $('#att-startup-list-select').selectpicker();
 
       // start with building the basic ui to set a schedule
-      buildScheduleRow();
-
+      //buildScheduleRow();
+      gotDataForSchedule++;
       // 
       buildMentorStartupSelectors();
     });
@@ -589,7 +590,145 @@
         console.log("let not remove " + key + " for now");
       }
     });
+  });
 
+  //////////////////////////////////////////////////////////////////////////////
+  // Locations
+  //////////////////////////////////////////////////////////////////////////////
+  //
+  // get list of locations for the meetings 
+  //
+  function getMeetingLocations(htmlObjId) {
+    var html = '<select id="' + htmlObjId + '" class="mentor-selector">';
+    var len = locationsList.length;
+    locationsList.sort(compare);
+    for (var i = 0; i < len; i++) {
+      html += '<option value="' + locationsList[i].name + '">' + locationsList[i].name + '</option>';
+    }
+    html += '</select>';
+    return html;
+  }
+
+  //
+  // Save Location
+  //
+  $("#location-save-button").click(function() {
+    var name = $("#location-name-field").val();
+    // we can't have spaces - easy life (for now)
+    name = name.replace(/\s/g, "-");
+    var address = $("#location-address-field").val();
+
+    // name validation
+    if (name.length < 2) {
+      $("#location-nameError").html("Please give a name - So you could remember this location in the future!");
+      $("#location-nameError").removeClass("sr-only");
+      $("#location-nameError").addClass("alert");
+      $("#location-name-field").focus();
+      setTimeout(function() {
+        $("#location-nameError").removeClass("alert");
+        $("#location-nameError").addClass("sr-only");
+      }, 1500);
+      return;
+    }
+    console.log("saving location to Firebase: " + name);
+    var curUnixTime = new Date().getTime();
+    var disTime = new Date().toJSON().slice(0, 21);
+    ref.child("locations").child(name).set({
+      name: name,
+      address: address,
+      comments: $("#location-comments-field").val(),
+      unixTime: curUnixTime,
+      date: disTime
+    }, function(error) {
+      if (error) {
+        bootbox.alert("Location data could not be saved. Details: " + error);
+      } else {
+        console.log(name + " saved!");
+        $(".save-alert").show();
+        setTimeout(function() {
+          $(".save-alert").hide();
+        }, 1500);
+      }
+    });
+  });
+
+  //
+  // read the list of startups and display it
+  //
+  function readLocations(authData) {
+    var readRef = new Firebase("https://lpa-1.firebaseio.com/locations/");
+    readRef.orderByKey().on("value", function(snapshot) {
+      //console.log("The Startups: " + JSON.stringify(snapshot.val()));
+      $("#locations-list").html("");
+      snapshot.forEach(function(childSnapshot) {
+        var key = childSnapshot.key();
+        var locationData = childSnapshot.val();
+        locationsList.push(locationData);
+        $("#locations-list").append(
+          '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
+          locationData.name + '&nbsp;&nbsp; <button type="button" class="edit-location location-edit btn btn-info" aria-label="Edit" data-key="' + key +
+          '"><span class="glyphicon glyphicon-pencil"></span></button> <button type="button" class="remove-location btn btn-danger" aria-label="Close" data-key="' +
+          key + '"> <span class="glyphicon glyphicon-remove"></span></button>' +
+          '</h3> </div> <div class="panel-body location-edit" data-key="' + key + '"> <b>' + locationData.address + '</b><br>' +
+          locationData.comments + ' </div> </div>'
+        );
+      });
+    });
+    gotDataForSchedule++;
+  }
+
+  //
+  // clear the locations values
+  //
+  $("#location-cancel-button").click(function() {
+    $("#location-name-field").val("");
+    $("#location-address-field").val("");
+    $("#location-comments-field").val("");
+    $("#location-name-field").focus();
+    $('body').scrollTop(60);
+  });
+
+  //
+  // enable to edit locations from the list
+  //
+  $('body').on('click', '.location-edit', function(event) {
+    var locationName = this.dataset.key;
+    var ref = new Firebase("https://lpa-1.firebaseio.com/locations/" + locationName);
+    ref.on("value", function(locSnap) {
+      var location = locSnap.val();
+      if (location !== null) {
+        console.log("Setting data for location: " + JSON.stringify(location));
+        $("#location-name-field").val(location.name);
+        $("#location-address-field").val(location.address);
+        $("#location-comments-field").val(location.comments);
+        $("#location-name-field").focus();
+        $('body').scrollTop(60);
+      }
+    });
+  });
+
+  //
+  // Enable removing locations
+  //
+  $('body').on('click', '.remove-location', function(event) {
+    var key = this.dataset.key;
+    bootbox.confirm("This location is great. Are you sure? For Real?", function(result) {
+      if (result === true) {
+        var locRef = new Firebase('https://lpa-1.firebaseio.com/locations/' + key);
+        var onComplete = function(error) {
+          if (error) {
+            console.log('Synchronization Failed');
+          } else {
+            console.log('Synchronization Succeeded - location was removed');
+            $("#locations-list").html('<div id="loading-locations"><h2> <span class="glyphicon glyphicon-refresh"></span> <i class="fa fa-spinner fa-spin"></i> </h2></div>');
+            readLocations(authUserData);
+          }
+        };
+        locRef.remove(onComplete);
+      } else {
+        console.log("location: " + key + " was not remove for now");
+      }
+    });
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -703,6 +842,7 @@
           mentorData.domain + '<br>' + mentorData.expertise + ' </div> </div>'
         );
       });
+      gotDataForSchedule++;
     });
   }
 
