@@ -39,7 +39,7 @@ Please use: [Open an issue](https://github.com/greenido/lpa-1/issues)
 
 ### Help 
 * [ ] Add mailto explanation for Chrome: chrome://settings/handlers
-* [ ] Add an introJS to show the function/power user options in the app.
+* [x] Add an intro to show the function/power user options in the app.
 
 -----
 
