@@ -148,8 +148,8 @@
       var uniqueMentor = tmpMenForThisHour.filter(onlyUnique);
       if (uniqueMentor.length < stLen) {
         var hourStr = getHourAsRange("h-" + j);
-        var msg = "Yo! You have assign the same mentor to more then one startup at: " +
-          hourStr + " - Please fix it as we can't split mentors (yet).";
+        var msg = "Yo! You have assign the same mentor to more then one startup at: <h3>" +
+          hourStr + "</h3>Please fix it as we can't split mentors (yet).";
         return msg;
       }
     }
