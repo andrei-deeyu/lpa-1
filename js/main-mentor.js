@@ -8,11 +8,13 @@
   $("#alert-warning-sign-in").hide();
   $("#spin").hide();
 
+  var startupNameList = [];
+  var curMentorEmail = "";
 
   //
   // handle the intro help and later the help function
   //
-  if ( !localStorage.getItem("lpa-1-showed-help")) {
+  if (!localStorage.getItem("lpa-1-showed-help")) {
     $('#joyRideTipContent').joyride({
       autoStart: true,
       localStorage: true,
@@ -21,13 +23,9 @@
       expose: true
     });
   }
-
   $("#help-but").click(function() {
     $("#joyRideTipContent").joyride({ autoStart: true });
   });
-
-  var startupNameList = [];
-  var curMentorEmail = "";
 
   // AUTH fun
   // start the connection with firebase DB

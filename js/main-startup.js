@@ -11,6 +11,24 @@
   var startupNameList = [];
   var curAttendeeEmail = "";
   var curAttendeeStartup = "";
+
+  //
+  // handle the intro help and later the help function
+  //
+  if (!localStorage.getItem("lpa-1-showed-help")) {
+    $('#joyRideTipContent').joyride({
+      autoStart: true,
+      localStorage: true,
+      localStorageKey: 'lpa-1-showed-help',
+      modal: true,
+      expose: true
+    });
+  }
+  $("#help-but").click(function() {
+    $("#joyRideTipContent").joyride({ autoStart: true });
+  });
+
+
   //
   // AUTH fun
   // start the connection with firebase DB
@@ -289,7 +307,7 @@
     });
   }
 
- //
+  //
   // Save Attendee
   //
   $("#att-save-button").click(function() {

@@ -42,6 +42,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css">
   <link rel="stylesheet" href="css/bootstrap-theme.min.css">
   <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/joyride-2.1.css">
   <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
 </head>
 
@@ -64,7 +65,7 @@
         <ul class="nav navbar-nav">
           <!-- <li><a href="/todo-add-our-slack-channel.html">Slack</a></li> -->
           <li><a href="https://github.com/greenido/lpa-1" target="_blank">Code</a></li>
-          <li><a href="https://github.com/greenido/lpa-1/blob/master/README.md" target="_blank">Help</a></li>
+          <li><a id="help-but" href="#">Help</a></li>
         </ul>
         <div id="att-name-field-header"></div>
         <form id="login-form" class="navbar-form navbar-right" role="form">
@@ -84,10 +85,10 @@
       <div>
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist">
-          <li role="presentation" class="active"><a href="#m-schedule-tab" aria-controls="schedule-tab" role="tab" data-toggle="tab"> Attendee Schedule</a></li>
-          <li role="presentation"><a href="#startup-tab" aria-controls="startup-tab" role="tab" data-toggle="tab">Startups</a></li>
-          <li role="presentation"><a href="#attendees-tab" aria-controls="attendees-tab" role="tab" data-toggle="tab">Attendees</a></li>
-          <li role="presentation"><a href="#att-you-tab" aria-controls="attendees-tab" role="tab" data-toggle="tab">You</a></li>
+          <li id="sa-tab-li" role="presentation" class="active"><a href="#m-schedule-tab" aria-controls="schedule-tab" role="tab" data-toggle="tab"> Schedule</a></li>
+          <li id="s-tab-li" role="presentation"><a href="#startup-tab" aria-controls="startup-tab" role="tab" data-toggle="tab">Startups</a></li>
+          <li id="a-tab-li" role="presentation"><a href="#attendees-tab" aria-controls="attendees-tab" role="tab" data-toggle="tab">Attendees</a></li>
+          <li id="y-tab-li" role="presentation"><a href="#att-you-tab" aria-controls="attendees-tab" role="tab" data-toggle="tab">You</a></li>
         </ul>
         <!-- Tab panes -->
         <div class="tab-content">
@@ -215,6 +216,25 @@
       </div>
     </footer>
   </div>
+  <!-- Help Content -->
+  <ol id="joyRideTipContent">
+    <li data-id="y-tab-li" data-button="Next" data-options="tipAnimation:fade">
+      <h2>You The Attendee</h2>
+      <p>First time you here?!<h5>please fill all the details.</h5><br>Thanks :)</p>
+    </li>
+    <li data-id="m-schedule-tab" data-button="Next" data-options="tipLocation:left;tipAnimation:fade">
+      <h2>Schedule</h2>
+      <p>You can see the daily schedule and plan your day.</p>
+    </li>
+    <li data-id="s-tab-li" data-button="Next" data-options="tipAnimation:fade">
+      <h2>Startups</h2>
+      <p>See which startups are part of this LPA</p>
+    </li>
+    <li data-id="a-tab-li" data-button="Done" data-options="tipLocation:right">
+      <h2>Attendees</h2>
+      <p>See the other attendees' details</p>
+    </li>
+  </ol>
   <script src="https://cdn.firebase.com/js/client/2.3.1/firebase.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
   <script>
@@ -224,6 +244,7 @@
   <script src="js/vendor/bootbox.min.js"></script>
   <script src="js/bootstrap-markdown.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
+  <script src="js/vendor/jquery.joyride-2.1.js"></script>
   <script src="js/main-startup.js"></script>
   <script>
   (function(i, s, o, g, r, a, m) {
