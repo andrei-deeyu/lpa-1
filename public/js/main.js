@@ -9,6 +9,22 @@
   var gotDataForSchedule = 0;
 
   //
+  // handle the intro help and later the help function
+  //
+  if (!localStorage.getItem("lpa-1-showed-help")) {
+    $('#joyRideTipContent').joyride({
+      autoStart: true,
+      localStorage: true,
+      localStorageKey: 'lpa-1-showed-help',
+      modal: true,
+      expose: true
+    });
+  }
+  $("#help-but").click(function() {
+    $("#joyRideTipContent").joyride({ autoStart: true });
+  });
+
+  //
   // AUTH fun
   // start the connection with firebase DB
   //
@@ -210,7 +226,7 @@
     var secTimer;
     console.log(" -- checkWeHaveDataForSchedule -- flag: " + gotDataForSchedule);
     if (gotDataForSchedule < 3) {
-      secTimer = setTimeout(checkWeHaveDataForSchedule, 1000);  /* this checks the flag every 1 second */
+      secTimer = setTimeout(checkWeHaveDataForSchedule, 1000); /* this checks the flag every 1 second */
     } else {
       buildScheduleRow();
       // shut the timer
@@ -660,6 +676,7 @@
     readRef.orderByKey().on("value", function(snapshot) {
       //console.log("The Startups: " + JSON.stringify(snapshot.val()));
       $("#locations-list").html("");
+      locationsList = [];
       snapshot.forEach(function(childSnapshot) {
         var key = childSnapshot.key();
         var locationData = childSnapshot.val();
