@@ -842,6 +842,7 @@
     readRef.orderByKey().on("value", function(snapshot) {
       //console.log("The mentors: " + JSON.stringify(snapshot.val()));
       $("#mentors-list").html("");
+      mentorsList = [];
       snapshot.forEach(function(childSnapshot) {
         var key = childSnapshot.key();
         var mentorData = childSnapshot.val();
