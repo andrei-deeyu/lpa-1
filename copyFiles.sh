@@ -3,7 +3,7 @@ cp *.html public/
 cp -R js/ public/js/
 cp sw.js public/sw.js
 cp cache-polyfill.js public/cache-polyfill.js
-cp css/main.css public/css/main.css
+cp -R css/ public/css/
 cp -R img/ public/img/
 cp manifest.json public/manifest.json
 

@@ -10,4 +10,5 @@
 * HTML5, CSS3, 
 * jQuery, Modernizr
 * Bootstrap 3
-  * https://silviomoreto.github.io/bootstrap-select/examples/
+* https://silviomoreto.github.io/bootstrap-select/examples/
+* JoyRide by Zurb
