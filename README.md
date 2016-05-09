@@ -84,6 +84,14 @@ Please use: [Open an issue](https://github.com/greenido/lpa-1/issues)
 * Pic Url
 * Linkedin Url
 
+### Locations
+* Key: Name (with '-' instead of spaces)
+* Name
+* Address (free format)
+* Comments
+* unixTime (when it was added/updated) 
+
+
 ### Session
 
 #### This view is used by our attendee app
