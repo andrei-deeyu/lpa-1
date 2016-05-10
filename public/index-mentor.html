@@ -41,6 +41,9 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css">
   <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+  
+  <!-- Firechat -->
+  <link rel='stylesheet' href='https://cdn.firebase.com/libs/firechat/2.0.1/firechat.min.css' />
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/joyride-2.1.css">
   <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
@@ -88,6 +91,7 @@
           <li id="s-tab-li" role="presentation"><a href="#startup-tab" aria-controls="startup-tab" role="tab" data-toggle="tab" title="List of startups that are part of this LPA">Startups</a></li>
           <li id="a-tab-li" role="presentation"><a href="#attendees-tab" aria-controls="attendees-tab" role="tab" data-toggle="tab" title="List of all the attendees that are part of this LPA">Attendees</a></li>
           <li id="y-tab-li" role="presentation"><a href="#mentors-tab" aria-controls="mentors-tab" role="tab" data-toggle="tab" title="Your details - please feel free to fill them all! Thx!">You</a></li>
+          <li id="chat-tab-li" role="presentation"><a href="#chat-tab" aria-controls="chat-tab" role="tab" data-toggle="tab" title="Talk with other mentors on which places are the best">Conversation</a></li>
         </ul>
         <!-- Tab panes -->
         <div class="tab-content">
@@ -134,6 +138,7 @@
               </div>
             </div>
           </div>
+          <!-- mentor details -->
           <div role="tabpanel" class="tab-pane" id="mentors-tab">
             <div class="row">
               <div class="col-lg-6 col-md-6 fields-block">
@@ -251,87 +256,97 @@
             </div>
             <!-- row end hidden-md hidden-sm hidden-xs -->
           </div>
+          <div role="tabpanel" class="tab-pane" id="chat-tab">
+            <div class="row">
+              <div class="col-lg-10 col-md-10">
+                <h4>Mentors' Conversation</h4>
+                <div id='firechat-wrapper'></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <!-- Small modal for errors/warnings -->
-  <div id='err-modal' class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">Oppss... A little problam</h4>
-        </div>
-        <div class="modal-body">
-          <h3>Check again and try to click 'Allow', cool?</h3>
-          <p>If you can't login please check with the organizers.</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    <!-- Small modal for errors/warnings -->
+    <div id='err-modal' class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Oppss... A little problam</h4>
+          </div>
+          <div class="modal-body">
+            <h3>Check again and try to click 'Allow', cool?</h3>
+            <p>If you can't login please check with the organizers.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <!-- footer -->
-  <div class="container">
-    <footer>
-      <div class="col-md-4">
-        <hr>
-        <p><span class="label label-success">Feedback: 
+    <!-- footer -->
+    <div class="container">
+      <footer>
+        <div class="col-md-4">
+          <hr>
+          <p><span class="label label-success">Feedback: 
         <a href="https://ido-green.appspot.com/" target="_blank">ido-green.appspot.com</a></span> -
-          <span class="label label-success">
+            <span class="label label-success">
         <a href="https://github.com/greenido/lpa-1/issues/new" target="_blank">Open a Bug</a> </span>
-        </p>
-      </div>
-    </footer>
-  </div>
-  <!-- Help Content -->
-  <ol id="joyRideTipContent">
-    <li data-id="y-tab-li" data-button="Next" data-options="tipAnimation:fade">
-      <h2>You</h2>
-      <p>First time you here?!<h5>please fill all the details.</h5><br>Thanks :)</p>
-    </li>
-    <li data-id="m-schedule-tab" data-button="Next" data-options="tipAnimation:fade">
-      <h2>Schedule</h2>
-      <p>You can see the daily schedule, plan your day and fill the notes after each session.</p>
-    </li>
-    <li data-id="s-tab-li" data-button="Next" data-options="tipAnimation:fade">
-      <h2>Startups</h2>
-      <p>See which startups are part of this LPA</p>
-    </li>
-    <li data-id="a-tab-li" data-button="Done" data-options="tipLocation:right">
-      <h2>Attendees</h2>
-      <p>See the attendees' details and email them action items.</p>
-    </li>
-  </ol>
-  <script src="https://cdn.firebase.com/js/client/2.3.1/firebase.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-  <script>
-  window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')
-  </script>
-  <script src="js/vendor/bootstrap.min.js"></script>
-  <script src="js/vendor/bootbox.min.js"></script>
-  <script src="js/bootstrap-markdown.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
-  <script src="js/vendor/jquery.joyride-2.1.js"></script>
-  <script src="js/main-mentor.js"></script>
-  <script>
-  (function(i, s, o, g, r, a, m) {
-    i['GoogleAnalyticsObject'] = r;
-    i[r] = i[r] || function() {
-      (i[r].q = i[r].q || []).push(arguments)
-    }, i[r].l = 1 * new Date();
-    a = s.createElement(o),
-      m = s.getElementsByTagName(o)[0];
-    a.async = 1;
-    a.src = g;
-    m.parentNode.insertBefore(a, m)
-  })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+          </p>
+        </div>
+      </footer>
+    </div>
+    <!-- Help Content -->
+    <ol id="joyRideTipContent">
+      <li data-id="y-tab-li" data-button="Next" data-options="tipAnimation:fade">
+        <h2>You</h2>
+        <p>First time you here?!
+          <h5>please fill all the details.</h5>
+          <br>Thanks :)</p>
+      </li>
+      <li data-id="m-schedule-tab" data-button="Next" data-options="tipAnimation:fade">
+        <h2>Schedule</h2>
+        <p>You can see the daily schedule, plan your day and fill the notes after each session.</p>
+      </li>
+      <li data-id="s-tab-li" data-button="Next" data-options="tipAnimation:fade">
+        <h2>Startups</h2>
+        <p>See which startups are part of this LPA</p>
+      </li>
+      <li data-id="a-tab-li" data-button="Done" data-options="tipLocation:right">
+        <h2>Attendees</h2>
+        <p>See the attendees' details and email them action items.</p>
+      </li>
+    </ol>
+    <script src="https://cdn.firebase.com/js/client/2.3.1/firebase.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script>
+    window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')
+    </script>
+    <script src="js/vendor/bootstrap.min.js"></script>
+    <script src="js/vendor/bootbox.min.js"></script>
+    <script src="js/bootstrap-markdown.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
+    <script src="js/vendor/jquery.joyride-2.1.js"></script>
+    <script src='https://cdn.firebase.com/libs/firechat/2.0.1/firechat.min.js'></script>
+    <script src="js/main-mentor.js"></script>
+    <script>
+    (function(i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      i[r] = i[r] || function() {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date();
+      a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
-  ga('create', 'UA-76781519-1', 'auto');
-  ga('send', 'pageview');
-  </script>
+    ga('create', 'UA-76781519-1', 'auto');
+    ga('send', 'pageview');
+    </script>
 </body>
 <!-- v0.6 -->
 

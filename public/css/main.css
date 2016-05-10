@@ -163,3 +163,11 @@ label {
   bottom: .5em;
   border-radius: 5px;
 }
+
+
+/* Overriding the firechat to make the buttons look better */
+
+#firechat .firechat-dropdown-toggle.btn {
+  padding: 4px 0 0;
+  height: 28px;
+}

@@ -32,12 +32,25 @@
   //
   var ref = new Firebase("https://lpa-1.firebaseio.com");
   authUserData = null;
+  //
+  // Create a new Firebase reference, and a new instance of the Login client
+  //
+  var chatRef = new Firebase('https://lpa-1.firebaseio.com/chats/mentors');
+  //
+  // init the chat module
+  //
+  function initChat(authData) {
+    var chat = new FirechatUI(chatRef, document.getElementById('firechat-wrapper'));
+    chat.setUser(authData.uid, authData[authData.provider].displayName);
+  }
+  //
   ref.onAuth(function(authData) {
     if (authData) {
       if (authData.provider !== "google") {
         bootbox.alert("You must sign-in with your Google ID.<br>So first logout from the Admin App.<br>Thank you!");
         return;
       }
+      initChat(authData);
       authUserData = authData;
       localStorage.setItem("lpa1-g-authData", JSON.stringify(authData));
       $("#sc-reload-button").prop('disabled', false);
