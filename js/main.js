@@ -154,18 +154,24 @@
   //
   function isScheduleGotErrors() {
     var stLen = startupNameList.length;
+    var naLen = 0;
     for (var j = 1; j < 10; j++) {
       var tmpMenForThisHour = [];
       for (var i = 0; i < stLen; i++) {
         var tmpMentorEmail = $("#mentor-" + startupNameList[i] + "-" + j + "-select").val();
-        tmpMenForThisHour.push(tmpMentorEmail);
+        if (tmpMentorEmail === "na@na-com") {
+          naLen++;
+        } else {
+          tmpMenForThisHour.push(tmpMentorEmail);
+        }
+
       }
       // let's see if we have duplicates
       var uniqueMentor = tmpMenForThisHour.filter(onlyUnique);
-      if (uniqueMentor.length < stLen) {
+      if ( (uniqueMentor.length + naLen) < stLen) {
         var hourStr = getHourAsRange("h-" + j);
-        var msg = "Yo! You have assign the same mentor to more then one startup at: <h3>" +
-          hourStr + "</h3>Please fix it as we can't split mentors (yet).";
+        var msg = "Yo! You have assigned the same mentor to more than one startup (at least during <h3>" +
+          hourStr + ")</h3>Please resolve this as we can't split mentors (yet).";
         return msg;
       }
     }
