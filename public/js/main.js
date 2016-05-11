@@ -390,7 +390,7 @@
     readRef.orderByKey().on("value", function(snapshot) {
       var sessions = snapshot.val();
       if (sessions != null) {
-        $("#sc-reload-button").text("Reload " + curAttendeeStartup);
+        $("#sc-viewer-reload-button").text("Reload " + curAttendeeStartup);
         //console.log("The sessions: " + JSON.stringify(sessions));
         var scHtml = "";
         $("#mentor-schedule-list").html("");
