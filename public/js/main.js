@@ -30,9 +30,27 @@
   //
   var ref = new Firebase("https://lpa-1.firebaseio.com");
   authUserData = null;
+
+  //
+  // Create a new Firebase reference, and a new instance of the Login client
+  //
+  var mentorsChatRef = new Firebase('https://lpa-1.firebaseio.com/chats/mentors');
+  //
+  // init the chat module
+  //
+  function initMentorsChat(authData) {
+    var mChat = new FirechatUI(mentorsChatRef, $("#mentors-firechat-wrapper"));
+    mChat.setUser(authData.uid, authData[authData.provider].displayName);
+  }
+
+  //
+  //
+  //
   ref.onAuth(function(authData) {
     if (authData) {
       authUserData = authData;
+      initMentorsChat(authData);
+
       localStorage.setItem("lpa1-authData", JSON.stringify(authData));
       console.log("User " + authData.uid + " is logged in with " + authData.provider);
       $("#login-form").hide();
@@ -168,7 +186,7 @@
       }
       // let's see if we have duplicates
       var uniqueMentor = tmpMenForThisHour.filter(onlyUnique);
-      if ( (uniqueMentor.length + naLen) < stLen) {
+      if ((uniqueMentor.length + naLen) < stLen) {
         var hourStr = getHourAsRange("h-" + j);
         var msg = "Yo! You have assigned the same mentor to more than one startup (at least during <h3>" +
           hourStr + ")</h3>Please resolve this as we can't split mentors (yet).";
@@ -856,17 +874,17 @@
 
         var mPicUrl = addhttp(mentorData.pic);
         //console.log("key: " + key + " data: " + mentorData);    <div class="collapse" id="collapse-bio-links">
-        var divDetailKey = key.replace("@" , "");
+        var divDetailKey = key.replace("@", "");
         $("#mentors-list").append(
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
           mentorData.name + " ( " + mentorData.phone + " )" +
-          ' &nbsp; &nbsp;<button class="btn" type="button" data-toggle="collapse" data-target="#mentor-panel-' + divDetailKey + 
+          ' &nbsp; &nbsp;<button class="btn" type="button" data-toggle="collapse" data-target="#mentor-panel-' + divDetailKey +
           '" aria-expanded="false" aria-controls="collapseMentorDetails"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span></button> \
           <button type="button" class="edit-mentor mentor-edit btn btn-info" aria-label="Edit" data-key="' + key +
           '"><span class="glyphicon glyphicon-pencil"></span></button> <button type="button" class="remove-mentor btn btn-danger" aria-label="Close" data-key="' +
-           key + '"> <span class="glyphicon glyphicon-remove"></span></button>' +
-          '</h3> </div> <div id="mentor-panel-'+ divDetailKey + '" class="panel-body mentor-edit collapse" data-key="' + key +
-           '"> ' + mentorData.email + '<br>' +
+          key + '"> <span class="glyphicon glyphicon-remove"></span></button>' +
+          '</h3> </div> <div id="mentor-panel-' + divDetailKey + '" class="panel-body mentor-edit collapse" data-key="' + key +
+          '"> ' + mentorData.email + '<br>' +
           '<img src="' + mPicUrl + '" class="att-pic-card" alt="mentor picture" /> ' +
           mentorData.domain + '<br>' + mentorData.expertise + ' </div> </div>'
         );
