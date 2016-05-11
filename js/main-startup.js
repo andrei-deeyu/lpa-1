@@ -35,6 +35,22 @@
   //
   var ref = new Firebase("https://lpa-1.firebaseio.com");
   authUserData = null;
+
+  //
+  // Create a new Firebase reference, and a new instance of the Login client
+  //
+  var chatRef = new Firebase('https://lpa-1.firebaseio.com/chats/attendees');
+  //
+  // init the chat module
+  //
+  function initChat(authData) {
+    var chat = new FirechatUI(chatRef, document.getElementById('firechat-wrapper'));
+    chat.setUser(authData.uid, authData[authData.provider].displayName);
+  }
+
+  //
+  // Authentication actions
+  //
   ref.onAuth(function(authData) {
     if (authData) {
       authUserData = authData;
@@ -45,6 +61,7 @@
         $("#login-form").html("<img src='" + authData.google.profileImageURL + "' class='g-mentor-logo' alt='mentor logo' />");
         $("#logout-div").html("<form class='navbar-form navbar-right' role='form'><button id='logout-but' class='btn btn-success'>Logout</button> </form>");
 
+        initChat(authData);
         curAttendeeEmail = authData.google.email;
         // so we could use it as firebase key
         curAttendeeEmail = curAttendeeEmail.replace(/\./g, "-");

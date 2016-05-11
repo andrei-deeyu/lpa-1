@@ -32,6 +32,7 @@
   //
   var ref = new Firebase("https://lpa-1.firebaseio.com");
   authUserData = null;
+
   //
   // Create a new Firebase reference, and a new instance of the Login client
   //
@@ -43,6 +44,9 @@
     var chat = new FirechatUI(chatRef, document.getElementById('firechat-wrapper'));
     chat.setUser(authData.uid, authData[authData.provider].displayName);
   }
+
+  //
+  // Authentication actions
   //
   ref.onAuth(function(authData) {
     if (authData) {

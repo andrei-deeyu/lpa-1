@@ -41,7 +41,10 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css">
   <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+  <!-- Firechat -->
+  <link rel='stylesheet' href='https://cdn.firebase.com/libs/firechat/2.0.1/firechat.min.css' />
   <link rel="stylesheet" href="css/main.css">
+  <!-- Intro / Help -->
   <link rel="stylesheet" href="css/joyride-2.1.css">
   <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
 </head>
@@ -89,6 +92,7 @@
           <li id="s-tab-li" role="presentation"><a href="#startup-tab" aria-controls="startup-tab" role="tab" data-toggle="tab">Startups</a></li>
           <li id="a-tab-li" role="presentation"><a href="#attendees-tab" aria-controls="attendees-tab" role="tab" data-toggle="tab">Attendees</a></li>
           <li id="y-tab-li" role="presentation"><a href="#att-you-tab" aria-controls="attendees-tab" role="tab" data-toggle="tab">You</a></li>
+          <li id="chat-tab-li" role="presentation"><a href="#chat-tab" aria-controls="chat-tab" role="tab" data-toggle="tab" title="Talk with other attendees on which places are the best for dinner">Conversation</a></li>
         </ul>
         <!-- Tab panes -->
         <div class="tab-content">
@@ -180,7 +184,15 @@
               </div>
             </div>
           </div>
-          <!--  -->
+          <!-- Chat -->
+          <div role="tabpanel" class="tab-pane" id="chat-tab">
+            <div class="row">
+              <div class="col-lg-10 col-md-10">
+                <h4>Conversation</h4>
+                <div id='firechat-wrapper'></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -209,7 +221,7 @@
       <div class="col-md-4">
         <hr>
         <p><span class="label label-success">Feedback: 
-        <a href="https://ido-green.appspot.com/" target="_blank">ido-green.appspot.com</a></span> - 
+        <a href="https://ido-green.appspot.com/" target="_blank">ido-green.appspot.com</a></span> -
           <span class="label label-success">
         <a href="https://github.com/greenido/lpa-1/issues/new" target="_blank">Open a Bug</a> </span>
         </p>
@@ -220,7 +232,9 @@
   <ol id="joyRideTipContent">
     <li data-id="y-tab-li" data-button="Next" data-options="tipAnimation:fade">
       <h2>You The Attendee</h2>
-      <p>First time you here?!<h5>please fill all the details.</h5><br>Thanks :)</p>
+      <p>First time you here?!
+        <h5>please fill all the details.</h5>
+        <br>Thanks :)</p>
     </li>
     <li data-id="m-schedule-tab" data-button="Next" data-options="tipLocation:left;tipAnimation:fade">
       <h2>Schedule</h2>
@@ -230,10 +244,14 @@
       <h2>Startups</h2>
       <p>See which startups are part of this LPA</p>
     </li>
-    <li data-id="a-tab-li" data-button="Done" data-options="tipLocation:right">
+    <li data-id="a-tab-li" data-button="Next" data-options="tipLocation:right">
       <h2>Attendees</h2>
       <p>See the other attendees' details</p>
     </li>
+    <li data-id="chat-tab-li" data-button="Done" data-options="tipLocation:right">
+        <h2>Conversation</h2>
+        <p>Talk with other attendees on all the important issues you forgot to speak on during lunch.</p>
+      </li>
   </ol>
   <script src="https://cdn.firebase.com/js/client/2.3.1/firebase.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
@@ -245,6 +263,7 @@
   <script src="js/bootstrap-markdown.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
   <script src="js/vendor/jquery.joyride-2.1.js"></script>
+  <script src='https://cdn.firebase.com/libs/firechat/2.0.1/firechat.min.js'></script>
   <script src="js/main-startup.js"></script>
   <script>
   (function(i, s, o, g, r, a, m) {
