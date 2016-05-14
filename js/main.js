@@ -301,6 +301,8 @@
   }
 
   //
+  // helper function to sorting
+  //
   function compare(a, b) {
     if (a.name < b.name)
       return -1;
@@ -376,7 +378,7 @@
   }
 
   //
-  //
+  // Load the schedule per a attendee
   //
   function loadStartupSchedule(curAttendeeStartup) {
     var scDay = $("#schedule-viewer-day").val();
@@ -403,7 +405,6 @@
             sessions.mentors[i][1] + ' | ' + getHourAsRange("hour-" + (i + 1)) + '</h3> </div> <div class="panel-body">' +
             'Location: ' + sessions.mentors[i][2] + ' </div> </div>';
         }
-        //console.log(scHtml);
         $("#mentor-schedule-list").html(scHtml);
       } else {
         if (curAttendeeStartup == "") {
@@ -411,7 +412,6 @@
         } else {
           bootbox.alert("Could not find anything for " + curAttendeeStartup + " at this date.");
         }
-
       }
     });
   }
@@ -554,7 +554,7 @@
       $("#att-startup-sel-div").append(selHtml);
       $('#att-startup-list-select').selectpicker();
 
-      // start with building the basic ui to set a schedule
+      // Start with building the basic ui to set a schedule
       //buildScheduleRow();
       gotDataForSchedule++;
       // 
@@ -563,7 +563,7 @@
   }
 
   //
-  // clear the startup values
+  // Clear the startup values
   //
   $("#st-cancel-button").click(function() {
     $("#st-name-field").val("");
@@ -658,7 +658,7 @@
     name = name.replace(/\s/g, "-");
     var address = $("#location-address-field").val();
 
-    // name validation
+    // Name validation
     if (name.length < 2) {
       $("#location-nameError").html("Please give a name - So you could remember this location in the future!");
       $("#location-nameError").removeClass("sr-only");
@@ -670,7 +670,7 @@
       }, 1500);
       return;
     }
-    console.log("saving location to Firebase: " + name);
+    //console.log("saving location to Firebase: " + name);
     var curUnixTime = new Date().getTime();
     var disTime = new Date().toJSON().slice(0, 21);
     ref.child("locations").child(name).set({
