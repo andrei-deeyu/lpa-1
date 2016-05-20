@@ -28,14 +28,26 @@
   // AUTH fun
   // start the connection with firebase DB
   //
-  var ref = new Firebase("https://lpa-1.firebaseio.com");
+  // var ref = new Firebase("https://lpa-1.firebaseio.com");
+  //
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyDImJzAqBmZVXdaK55jVfRuoaHVLBDFgxU",
+    authDomain: "lpa-1.firebaseapp.com",
+    databaseURL: "https://lpa-1.firebaseio.com",
+    storageBucket: "project-1969056342883930904.appspot.com",
+  };
+  firebase.initializeApp(config);
+  var ref = firebase.database().ref();
+
   authUserData = null;
 
   //
   // Create a new Firebase reference, and a new instance of the Login client
   //
-  var mentorsChatRef = new Firebase('https://lpa-1.firebaseio.com/chats/mentors');
-  //
+  var mentorsChatRef = firebase.database().ref("mentors"); //new Firebase('https://lpa-1.firebaseio.com/chats/mentors');
+
+  // TODO: find a chat module for 3.0
   // init the chat module
   //
   function initMentorsChat(authData) {
@@ -46,12 +58,12 @@
   //
   //
   //
-  ref.onAuth(function(authData) {
+  firebase.auth().onAuthStateChanged(function(authData) {
     if (authData) {
       authUserData = authData;
-      initMentorsChat(authData);
+      //initMentorsChat(authData);
 
-      localStorage.setItem("lpa1-authData", JSON.stringify(authData));
+      //localStorage.setItem("lpa1-authData", JSON.stringify(authData));
       console.log("User " + authData.uid + " is logged in with " + authData.provider);
       $("#login-form").hide();
       $("#logout-div").html("<form class='navbar-form navbar-right' role='form'><button id='logout-but' class='btn btn-success'>Logout</button> </form>");
@@ -66,6 +78,27 @@
     }
   });
 
+  // ref.onAuth(function(authData) {
+  //   if (authData) {
+  //     authUserData = authData;
+  //     initMentorsChat(authData);
+
+  //     localStorage.setItem("lpa1-authData", JSON.stringify(authData));
+  //     console.log("User " + authData.uid + " is logged in with " + authData.provider);
+  //     $("#login-form").hide();
+  //     $("#logout-div").html("<form class='navbar-form navbar-right' role='form'><button id='logout-but' class='btn btn-success'>Logout</button> </form>");
+  //     readMentors(authData);
+  //     readStartups(authData);
+  //     readAttendees(authData);
+  //     readLocations(authData);
+  //   } else {
+  //     console.log("User is logged out");
+  //     $("#login-form").show();
+  //     $("#logout-div").html("");
+  //   }
+  // });
+
+
   //
   // Sign in user/password
   //
@@ -73,18 +106,34 @@
     $("#spin").show();
     var u_email = $("#email").val();
     var u_passwd = $("#passwd").val();
-    ref.authWithPassword({
-      email: u_email,
-      password: u_passwd
-    }, function(error, authData) {
+
+    var auth = firebase.auth();
+    auth.signInWithEmailAndPassword(u_email, u_password).catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
       $("#spin").hide();
-      if (error) {
-        console.log("Login Failed!", error);
-        $("#err-modal").modal('show');
+      console.log("Login Failed! errCode: " + errorCode + " ErrMsg: " + errorMessage);
+      $("#err-modal").modal('show');
+      if (errorCode === 'auth/wrong-password') {
+        console.log('Err: Wrong password.');
       } else {
-        console.log("Authenticated successfully with payload:", authData);
+        console.error(error);
       }
     });
+
+    // ref.authWithPassword({
+    //   email: u_email,
+    //   password: u_passwd
+    // }, function(error, authData) {
+    //   $("#spin").hide();
+    //   if (error) {
+    //     console.log("Login Failed!", error);
+    //     $("#err-modal").modal('show');
+    //   } else {
+    //     console.log("Authenticated successfully with payload:", authData);
+    //   }
+    // });
     return false;
   });
 
@@ -92,7 +141,12 @@
   // logout
   //
   $("#logout-but").click(function() {
-    ref.unauth();
+    // ref.unauth();
+    firebase.auth().signOut().then(function() {
+      console.log("Sign-out successful");
+    }, function(error) {
+      console.log("Could not sign-out. Err: " + error);
+    });
     return false;
   });
 
@@ -206,7 +260,8 @@
       $("#schedule-day-1").focus();
       return;
     }
-    var readRef = new Firebase("https://lpa-1.firebaseio.com/sessions/" + scDay + "/startups");
+    var readRef = ref("sessions/" + scDay + "/startups");
+    //new Firebase("https://lpa-1.firebaseio.com/sessions/" + scDay + "/startups");
     readRef.orderByKey().on("value", function(snapshot) {
       if (isInSaveOperation) {
         console.log("no no not yet");
@@ -248,6 +303,7 @@
   //
   function checkWeHaveDataForSchedule() {
     var secTimer;
+    checkWeHaveDataForScheduleCounter++;
     console.log(" -- checkWeHaveDataForSchedule -- flag: " + gotDataForSchedule);
     if (gotDataForSchedule < 3) {
       secTimer = setTimeout(checkWeHaveDataForSchedule, 1000); /* this checks the flag every 1 second */
@@ -256,7 +312,14 @@
       // shut the timer
       clearTimeout(secTimer);
     }
+    if (checkWeHaveDataForScheduleCounter > MAX_CALLS_FOR_CHECK_DATA) {
+      console.log("TODO: tell the user we have problems with fetching the data to build the schedule");
+      // shut the timer
+      clearTimeout(secTimer);
+    }
   }
+  var MAX_CALLS_FOR_CHECK_DATA = 10;
+  var checkWeHaveDataForScheduleCounter = 0;
   checkWeHaveDataForSchedule();
 
   //
@@ -349,7 +412,8 @@
       $("#schedule-viewer-day").focus();
       return;
     }
-    var readRef = new Firebase("https://lpa-1.firebaseio.com/sessions/" + scDay + "/mentors/" + curMentorEmail);
+    var readRef = ref("sessions/" + scDay + "/mentors/" + curMentorEmail);
+    //new Firebase("https://lpa-1.firebaseio.com/sessions/" + scDay + "/mentors/" + curMentorEmail);
     readRef.orderByKey().on("value", function(snapshot) {
       var sessions = snapshot.val();
       if (sessions != null) {
@@ -388,7 +452,8 @@
       return;
     }
 
-    var readRef = new Firebase("https://lpa-1.firebaseio.com/sessions/" + scDay + "/startups/" + curAttendeeStartup);
+    var readRef = ref("sessions/" + scDay + "/startups/" + curAttendeeStartup);
+    //new Firebase("https://lpa-1.firebaseio.com/sessions/" + scDay + "/startups/" + curAttendeeStartup);
     readRef.orderByKey().on("value", function(snapshot) {
       var sessions = snapshot.val();
       if (sessions != null) {
@@ -528,7 +593,8 @@
   // read the list of startups and display it
   //
   function readStartups(authData) {
-    var readRef = new Firebase("https://lpa-1.firebaseio.com/startups/");
+    var readRef = ref("startups");
+    //new Firebase("https://lpa-1.firebaseio.com/startups/");
     readRef.orderByKey().on("value", function(snapshot) {
       //console.log("The Startups: " + JSON.stringify(snapshot.val()));
       $("#startups-list").html("");
@@ -862,13 +928,14 @@
   // read the list of mentors and display it
   //
   function readMentors(authData) {
-    var readRef = new Firebase("https://lpa-1.firebaseio.com/mentors/");
+    var readRef = firebase.database().ref("mentors");
+    //new Firebase("https://lpa-1.firebaseio.com/mentors/");
     readRef.orderByKey().on("value", function(snapshot) {
       //console.log("The mentors: " + JSON.stringify(snapshot.val()));
       $("#mentors-list").html("");
       mentorsList = [];
       snapshot.forEach(function(childSnapshot) {
-        var key = childSnapshot.key();
+        var key = childSnapshot.key;
         var mentorData = childSnapshot.val();
         mentorsList.push(mentorData);
 
@@ -1130,6 +1197,14 @@
   // Utils
   //////////////////////////////////////////////////////////////////////////////////
 
+  //
+  //
+  //
+  window.onerror = function(message, url, lineNumber) {
+    //TODO: send to server 
+    console.error("Err:" + message + " url: " + url + " line: " + lineNumber);
+    return true;
+  };
   //
   // Helper function to get unique in array
   // usage example:
