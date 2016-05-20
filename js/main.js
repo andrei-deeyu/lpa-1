@@ -260,7 +260,7 @@
       $("#schedule-day-1").focus();
       return;
     }
-    var readRef = ref("sessions/" + scDay + "/startups");
+    var readRef = firebase.database().ref("sessions/" + scDay + "/startups");
     //new Firebase("https://lpa-1.firebaseio.com/sessions/" + scDay + "/startups");
     readRef.orderByKey().on("value", function(snapshot) {
       if (isInSaveOperation) {
@@ -412,7 +412,7 @@
       $("#schedule-viewer-day").focus();
       return;
     }
-    var readRef = ref("sessions/" + scDay + "/mentors/" + curMentorEmail);
+    var readRef = firebase.database().ref("sessions/" + scDay + "/mentors/" + curMentorEmail);
     //new Firebase("https://lpa-1.firebaseio.com/sessions/" + scDay + "/mentors/" + curMentorEmail);
     readRef.orderByKey().on("value", function(snapshot) {
       var sessions = snapshot.val();
@@ -452,7 +452,7 @@
       return;
     }
 
-    var readRef = ref("sessions/" + scDay + "/startups/" + curAttendeeStartup);
+    var readRef = firebase.database().ref("sessions/" + scDay + "/startups/" + curAttendeeStartup);
     //new Firebase("https://lpa-1.firebaseio.com/sessions/" + scDay + "/startups/" + curAttendeeStartup);
     readRef.orderByKey().on("value", function(snapshot) {
       var sessions = snapshot.val();
@@ -593,14 +593,14 @@
   // read the list of startups and display it
   //
   function readStartups(authData) {
-    var readRef = ref("startups");
+    var readRef = firebase.database().ref("startups");
     //new Firebase("https://lpa-1.firebaseio.com/startups/");
     readRef.orderByKey().on("value", function(snapshot) {
       //console.log("The Startups: " + JSON.stringify(snapshot.val()));
       $("#startups-list").html("");
       startupNameList = [];
       snapshot.forEach(function(childSnapshot) {
-        var key = childSnapshot.key();
+        var key = childSnapshot.key;
         startupNameList.push(key);
         var startupData = childSnapshot.val();
         var startupLogoUrl = addhttp(startupData.logo);
@@ -652,7 +652,8 @@
   //
   $('body').on('click', '.startup-edit', function(event) {
     var stName = this.dataset.key;
-    var ref = new Firebase("https://lpa-1.firebaseio.com/startups/" + stName);
+    var ref = firebase.database().ref("startups/" + stName);
+    //new Firebase("https://lpa-1.firebaseio.com/startups/" + stName);
     ref.on("value", function(startupSnap) {
       var st = startupSnap.val();
       if (st !== null) {
@@ -681,7 +682,8 @@
     var key = this.dataset.key;
     bootbox.confirm("Are you sure? For Real?", function(result) {
       if (result === true) {
-        var fredRef = new Firebase('https://lpa-1.firebaseio.com/startups/' + key);
+        var fredRef = firebase.database().ref("startups/" + key);
+        //new Firebase('https://lpa-1.firebaseio.com/startups/' + key);
         var onComplete = function(error) {
           if (error) {
             console.log('Synchronization failed');
@@ -762,13 +764,14 @@
   // read the list of startups and display it
   //
   function readLocations(authData) {
-    var readRef = new Firebase("https://lpa-1.firebaseio.com/locations/");
+    var readRef = firebase.database().ref("locations");
+    //new Firebase("https://lpa-1.firebaseio.com/locations/");
     readRef.orderByKey().on("value", function(snapshot) {
       //console.log("The Startups: " + JSON.stringify(snapshot.val()));
       $("#locations-list").html("");
       locationsList = [];
       snapshot.forEach(function(childSnapshot) {
-        var key = childSnapshot.key();
+        var key = childSnapshot.key;
         var locationData = childSnapshot.val();
         locationsList.push(locationData);
         $("#locations-list").append(
@@ -800,7 +803,8 @@
   //
   $('body').on('click', '.location-edit', function(event) {
     var locationName = this.dataset.key;
-    var ref = new Firebase("https://lpa-1.firebaseio.com/locations/" + locationName);
+    var ref = firebase.database().ref("locations/" + locationName);
+    //new Firebase("https://lpa-1.firebaseio.com/locations/" + locationName);
     ref.on("value", function(locSnap) {
       var location = locSnap.val();
       if (location !== null) {
@@ -821,7 +825,8 @@
     var key = this.dataset.key;
     bootbox.confirm("This location is great. Are you sure? For Real?", function(result) {
       if (result === true) {
-        var locRef = new Firebase('https://lpa-1.firebaseio.com/locations/' + key);
+        var locRef = firebase.database().ref("locations/" + key);
+        //new Firebase('https://lpa-1.firebaseio.com/locations/' + key);
         var onComplete = function(error) {
           if (error) {
             console.log('Synchronization Failed');
@@ -988,7 +993,8 @@
   //
   $('body').on('click', '.mentor-edit', function(event) {
     var key = this.dataset.key;
-    var ref = new Firebase("https://lpa-1.firebaseio.com/mentors/" + key);
+    var ref = firebase.database().ref("mentors/" + key);
+    //new Firebase("https://lpa-1.firebaseio.com/mentors/" + key);
     ref.on("value", function(mentorSnap) {
       var mentor = mentorSnap.val();
       if (mentor !== null) {
@@ -1021,7 +1027,8 @@
     var key = this.dataset.key;
     bootbox.confirm("Are you sure? For Real?", function(result) {
       if (result === true) {
-        var fredRef = new Firebase('https://lpa-1.firebaseio.com/mentors/' + key);
+        var fredRef = firebase.database().ref("mentors/" + key);
+        //new Firebase('https://lpa-1.firebaseio.com/mentors/' + key);
         var onComplete = function(error) {
           if (error) {
             console.log('Synchronization failed');
@@ -1113,12 +1120,13 @@
   // read the list of Attendees and display it
   //
   function readAttendees(authData) {
-    var readRef = new Firebase("https://lpa-1.firebaseio.com/attendees/");
+    var readRef = firebase.database().ref("attendees");
+    //new Firebase("https://lpa-1.firebaseio.com/attendees/");
     readRef.orderByKey().on("value", function(snapshot) {
       //console.log("The attendees: " + JSON.stringify(snapshot.val()));
       $("#att-list").html("");
       snapshot.forEach(function(childSnapshot) {
-        var key = childSnapshot.key();
+        var key = childSnapshot.key;
         var attData = childSnapshot.val();
         var picUrl = addhttp(attData.pic);
         //console.log("key: " + key + " data: " + attData);
@@ -1153,7 +1161,8 @@
   //
   $('body').on('click', '.att-edit', function(event) {
     var key = this.dataset.key;
-    var ref = new Firebase("https://lpa-1.firebaseio.com/attendees/" + key);
+    var ref = firebase.database().ref("attendees/" + key);
+    //new Firebase("https://lpa-1.firebaseio.com/attendees/" + key);
     ref.on("value", function(attSnap) {
       var att = attSnap.val();
       if (att !== null) {
@@ -1178,7 +1187,8 @@
     var key = this.dataset.key;
     bootbox.confirm("Are you sure? Delete " + key + " For Real?", function(result) {
       if (result === true) {
-        var fredRef = new Firebase('https://lpa-1.firebaseio.com/attendees/' + key);
+        var fredRef = firebase.database().ref("attendees/" + key);
+        //new Firebase('https://lpa-1.firebaseio.com/attendees/' + key);
         var onComplete = function(error) {
           if (error) {
             console.log('Synchronization failed');
