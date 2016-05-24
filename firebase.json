@@ -1,28 +1,8 @@
 {
-  "firebase": "LPA-1",
-  "public": "public",
-  "ignore": [
-    "firebase.json",
-    "**/.*",
-    "**/node_modules/**"
-  ],
-  "headers": [ {
-    "source" : "**/*.@(eot|otf|ttf|ttc|woff|font.css)",
-    "headers" : [ {
-      "key" : "Access-Control-Allow-Origin",
-      "value" : "*"
-    } ]
-    }, {
-    "source" : "**/*.@(jpg|jpeg|gif|png|js|css)",
-    "headers" : [ {
-      "key" : "Cache-Control",
-      "value" : "max-age=9997200"
-    } ]
-    }, {
-    "source" : "404.html",
-    "headers" : [ {
-      "key" : "Cache-Control",
-      "value" : "max-age=99300"
-    } ]
-  } ] 
+  "database": {
+    "rules": "database.rules.json"
+  },
+  "hosting": {
+    "public": "public"
+  }
 }
