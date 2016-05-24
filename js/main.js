@@ -27,30 +27,23 @@
   //
   // AUTH fun
   // start the connection with firebase DB
-  //
-  // var ref = new Firebase("https://lpa-1.firebaseio.com");
-  //
-  // Initialize Firebase
   var config = {
     apiKey: "AIzaSyDImJzAqBmZVXdaK55jVfRuoaHVLBDFgxU",
     authDomain: "lpa-1.firebaseapp.com",
     databaseURL: "https://lpa-1.firebaseio.com",
     storageBucket: "project-1969056342883930904.appspot.com",
   };
+  // Initialize Firebase
   firebase.initializeApp(config);
   var ref = firebase.database().ref();
-
   authUserData = null;
 
   //
-  // Create a new Firebase reference, and a new instance of the Login client
-  //
-  var mentorsChatRef = firebase.database().ref("mentors"); //new Firebase('https://lpa-1.firebaseio.com/chats/mentors');
-
-  // TODO: find a chat module for 3.0
-  // init the chat module
+  // Init the chat module
   //
   function initMentorsChat(authData) {
+    // Create a new Firebase reference, and a new instance of the Login client
+    var mentorsChatRef = firebase.database().ref("mentors"); //new Firebase('https://lpa-1.firebaseio.com/chats/mentors');
     var mChat = new FirechatUI(mentorsChatRef, $("#mentors-firechat-wrapper"));
     mChat.setUser(authData.uid, authData[authData.provider].displayName);
   }
@@ -58,57 +51,36 @@
   //
   //
   //
-  firebase.auth().onAuthStateChanged(function(authData) {
-    if (authData) {
-      authUserData = authData;
-      //initMentorsChat(authData);
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      authUserData = user;
+      //TODO: initMentorsChat(authData);
 
       //localStorage.setItem("lpa1-authData", JSON.stringify(authData));
-      console.log("User " + authData.uid + " is logged in with " + authData.provider);
+      console.log("User " + user.uid + " is logged in with " + user.provider);
       $("#login-form").hide();
       $("#logout-div").html("<form class='navbar-form navbar-right' role='form'><button id='logout-but' class='btn btn-success'>Logout</button> </form>");
-      readMentors(authData);
-      readStartups(authData);
-      readAttendees(authData);
-      readLocations(authData);
+      readMentors(user);
+      readStartups(user);
+      readAttendees(user);
+      readLocations(user);
     } else {
       console.log("User is logged out");
       $("#login-form").show();
+      $("#spin").hide();
       $("#logout-div").html("");
     }
   });
-
-  // ref.onAuth(function(authData) {
-  //   if (authData) {
-  //     authUserData = authData;
-  //     initMentorsChat(authData);
-
-  //     localStorage.setItem("lpa1-authData", JSON.stringify(authData));
-  //     console.log("User " + authData.uid + " is logged in with " + authData.provider);
-  //     $("#login-form").hide();
-  //     $("#logout-div").html("<form class='navbar-form navbar-right' role='form'><button id='logout-but' class='btn btn-success'>Logout</button> </form>");
-  //     readMentors(authData);
-  //     readStartups(authData);
-  //     readAttendees(authData);
-  //     readLocations(authData);
-  //   } else {
-  //     console.log("User is logged out");
-  //     $("#login-form").show();
-  //     $("#logout-div").html("");
-  //   }
-  // });
-
 
   //
   // Sign in user/password
   //
   $("#sign-in-but").click(function() {
     $("#spin").show();
-    var u_email = $("#email").val();
-    var u_passwd = $("#passwd").val();
+    var email = $("#email").val();
+    var password = $("#passwd").val();
 
-    var auth = firebase.auth();
-    auth.signInWithEmailAndPassword(u_email, u_password).catch(function(error) {
+    firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
       // Handle Errors here.
       var errorCode = error.code;
       var errorMessage = error.message;
@@ -121,9 +93,9 @@
         console.error(error);
       }
     });
-
+    return false;
     // ref.authWithPassword({
-    //   email: u_email,
+    //   email: email,
     //   password: u_passwd
     // }, function(error, authData) {
     //   $("#spin").hide();
@@ -134,14 +106,15 @@
     //     console.log("Authenticated successfully with payload:", authData);
     //   }
     // });
-    return false;
+    //return false;
   });
 
   //
   // logout
   //
-  $("#logout-but").click(function() {
+  $('#logout-div').on('click', '#logout-but', function(event) {
     // ref.unauth();
+    console.log("-- trying to logout --");
     firebase.auth().signOut().then(function() {
       console.log("Sign-out successful");
     }, function(error) {
@@ -149,6 +122,8 @@
     });
     return false;
   });
+
+  //$("#logout-but").click(function() {});
 
   //////////////////////////////////////////////////////////////////////////////
   // Schedule magic
@@ -313,11 +288,16 @@
       clearTimeout(secTimer);
     }
     if (checkWeHaveDataForScheduleCounter > MAX_CALLS_FOR_CHECK_DATA) {
-      console.log("TODO: tell the user we have problems with fetching the data to build the schedule");
+      if (firebase.auth().currentUser === null) {
+        bootbox.alert("Please sign-in so we could fetch all the information.");
+      } else {
+        bootbox.alert("Something is not right. We have problems with fetching the data.");
+      }
       // shut the timer
       clearTimeout(secTimer);
     }
   }
+
   var MAX_CALLS_FOR_CHECK_DATA = 10;
   var checkWeHaveDataForScheduleCounter = 0;
   checkWeHaveDataForSchedule();
@@ -976,9 +956,9 @@
     $("#form-city-field").val("");
     $("#form-domain-select").selectpicker('val', "UX");
     $("#form-domain-sec-select").selectpicker('val', "UX");
-    $("#form-twitter-field").val();
-    $("#form-bio").val();
-    $("#form-fun-fact").val();
+    $("#form-twitter-field").val("");
+    $("#form-bio").val("");
+    $("#form-fun-fact").val("");
     $("#form-expertise").val("");
     $("#form-linkedin-url").val("");
     $("#form-personal-url").val("");
