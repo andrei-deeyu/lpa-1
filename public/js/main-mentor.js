@@ -504,8 +504,10 @@
         $("#att-list").append(
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
           attData.name + " ( <a href='mailto:" + attData.email + "' target='_blank'>" + attData.email + "</a> )" +
-          '</h3> </div> <div class="panel-body att-edit" data-key="' + key + '"> ' + attData.startup + '<br>' +
-          '<img src="' + picUrl + '" class="att-pic-card" alt="attendee picture"/> <br>' + attData.linkedin + ' </div> </div>'
+          '</h3> </div> <div class="panel-body att-edit" data-key="' + key + '"> <h4>' + attData.startup + '</h4>' +
+          '<img src="' + picUrl + '" class="att-pic-card" alt="attendee picture"/> <br><b>Linkedin:</b> <a href="http://www.linkedin.com/in/' + 
+          attData.linkedin + '" target="_blank">' + attData.linkedin + '</a><br><b>Fun Fact:</b> ' + attData.funFact + 
+           ' </div> </div>'
         );
       });
     });
