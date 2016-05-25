@@ -938,7 +938,8 @@
           '</h3> </div> <div id="mentor-panel-' + divDetailKey + '" class="panel-body mentor-edit collapse" data-key="' + key +
           '"> ' + mentorData.email + '<br>' +
           '<img src="' + mPicUrl + '" class="att-pic-card" alt="mentor picture" /> ' +
-          mentorData.domain + '<br>' + mentorData.expertise + ' </div> </div>'
+          '<b>Domain:</b> ' + mentorData.domain + ' - <b>Secondary:</b> ' + mentorData.domainSec + 
+          '<br><b>Expertise:</b> ' + mentorData.expertise + ' </div> </div>'
         );
       });
       gotDataForSchedule++;
