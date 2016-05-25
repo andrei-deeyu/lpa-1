@@ -936,7 +936,7 @@
           '"><span class="glyphicon glyphicon-pencil"></span></button> <button type="button" class="remove-mentor btn btn-danger" aria-label="Close" data-key="' +
           key + '"> <span class="glyphicon glyphicon-remove"></span></button>' +
           '</h3> </div> <div id="mentor-panel-' + divDetailKey + '" class="panel-body mentor-edit collapse" data-key="' + key +
-          '"> ' + mentorData.email + '<br>' +
+          '"> <h5><a href="mailto:' + mentorData.email + '" target="_blank">' + mentorData.email + '</a></h5>' +
           '<img src="' + mPicUrl + '" class="att-pic-card" alt="mentor picture" /> ' +
           '<b>Domain:</b> ' + mentorData.domain + ' - <b>Secondary:</b> ' + mentorData.domainSec + 
           '<br><b>Expertise:</b> ' + mentorData.expertise + ' </div> </div>'

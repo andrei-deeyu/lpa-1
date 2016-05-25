@@ -72,6 +72,7 @@
 
       readStartups(authData);
       readAttendees(authData);
+      readMentors(authData);
     } else {
       console.log("User is logged out");
       logoutUI();
@@ -392,15 +393,18 @@
         var key = childSnapshot.key();
         var mentorData = childSnapshot.val();
         var mPicUrl = addhttp(mentorData.pic);
-        //console.log("key: " + key + " data: " + mentorData);
+        //console.log("key: " + key + " data: " + mentorData);    <div class="collapse" id="collapse-bio-links">
+        var divDetailKey = key.replace("@", "");
         $("#mentors-list").append(
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
           mentorData.name + " ( " + mentorData.phone + " )" +
-          '<button type="button" class="edit-mentor mentor-edit btn btn-info" aria-label="Edit" data-key="' + key +
-          '"><span class="glyphicon glyphicon-pencil"></span></button> <button type="button" class="remove-mentor btn btn-danger" aria-label="Close" data-key="' + key + '"> <span class="glyphicon glyphicon-remove"></span></button>' +
-          '</h3> </div> <div class="panel-body mentor-edit" data-key="' + key + '"> ' + mentorData.email + '<br>' +
+          ' &nbsp; &nbsp;<button class="btn" type="button" data-toggle="collapse" data-target="#mentor-panel-' + divDetailKey +
+          '" aria-expanded="false" aria-controls="collapseMentorDetails"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span></button>' +
+          '</h3> </div> <div id="mentor-panel-' + divDetailKey + '" class="panel-body mentor-edit collapse" data-key="' + key +
+          '"> <h5><a href="mailto:' + mentorData.email + '" target="_blank">' + mentorData.email + '</a></h5>' +
           '<img src="' + mPicUrl + '" class="att-pic-card" alt="mentor picture" /> ' +
-          mentorData.domain + '<br>' + mentorData.expertise + ' </div> </div>'
+          '<b>Domain:</b> ' + mentorData.domain + ' - <b>Secondary:</b> ' + mentorData.domainSec + 
+          '<br><b>Expertise:</b> ' + mentorData.expertise + ' </div> </div>'
         );
       });
     });
