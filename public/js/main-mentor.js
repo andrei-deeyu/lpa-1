@@ -121,7 +121,6 @@
   //////////////////////////////////////////////////////////////////////////////
   // Fetch schedule
   //////////////////////////////////////////////////////////////////////////////
-
   //
   // Reload the schedule from firebase
   //
@@ -140,7 +139,8 @@
         var html = "";
         $.each(sessions, function(key, scData) {
           // per startup set the mentors + comments
-          var meetingNotesKey = scDay + "/mentors/" + curMentorEmail + "/" + key + "/notes"; // + scData.startup;
+          var meetingNotesKey = scDay + "/mentors/" + curMentorEmail + "/" + key + "/notes";
+          var startupNotesKey = scDay + "/startups/" + scData.startup + "/notes/" + curMentorEmail + "/" + key;
           var curNotes = "";
           if (scData.notes && scData.notes.meetingNotes) {
             curNotes = scData.notes.meetingNotes;
@@ -149,7 +149,8 @@
           html += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
             scData.startup + ' | ' + getHourAsRange(key) + ' </h3> </div> <div class="panel-body">' +
             '<b>Location: ' + scData.location + '</b> <p class="" id="meet-details-' + key + '">Meeting Notes:<br> \
-            <textarea class="form-control col-lg-10 meeting-notes-text" data-key="' + meetingNotesKey + '" name="meeting-notes">' +
+            <textarea class="form-control col-lg-10 meeting-notes-text" data-key="' + meetingNotesKey +
+            '" data-startup="' + startupNotesKey + '" name="meeting-notes">' +
             curNotes + '</textarea>  <button class="btn btn-warning meeting-save-button">Save Notes</button> </p> </div> </div> </div>';
           // TODO: add an option to take photos: 
           // <div class="row"> <div class="col-lg-3 col-md-3"> <input type="file" name="file" class="input-img" id="notesImg" accept="image/*"> 
@@ -163,6 +164,51 @@
   });
 
   //
+  // Fetch all the mentor's notes
+  //
+  $('body').on('click', '.fetch-notes-button', function(event) {
+    // TODO - get it from the user
+    var startupName = $(this).data("key");
+    var readRef = new Firebase("https://lpa-1.firebaseio.com/sessions/");
+    readRef.orderByKey().on("value", function(snapshot) {
+      var sessions = snapshot.val();
+      if (sessions != null) {
+        //console.log("The sessions: " + JSON.stringify(sessions));
+        var html = "";
+        $.each(sessions, function(keyDate, scData) {
+          // per startup set the mentors + comments
+          //console.log("key: " + keyDate + " scData: " + scData);
+          var curNotes = "";
+          var curSt = scData.startups[startupName];
+          if (curSt.notes) {
+            for (var tmpMentorEmail in curSt.notes) {
+              var hours = curSt.notes[tmpMentorEmail];
+              Object.keys(hours).forEach(function(key) {
+                var val = hours[key];
+                var noteDate = val.date.replace("T", " ");
+                console.log("k: " + key + " v: " + val);
+                html += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
+                  startupName + ' | ' + getHourAsRange(key) + ' </h3> </div> <div class="panel-body">' +
+                  '<b>Mentor:</b> '+ tmpMentorEmail + '<br><b>Date: ' + noteDate + '</b> <p><b>Meeting Notes:</b><br>' + val.meetingNotes + '</p>' +
+                  '</div> </div>';
+              });
+            }
+            //console.log("========= note: " + JSON.stringify(curSt.notes));
+          }
+        });
+        if (html.length < 1) {
+          html = "<h2>No Notes :/<h2>";
+        }
+        $("#startup-notes").html(html);
+        $('body').scrollTop(60);
+      } else {
+        bootbox.alert("Could not find notes for you :/");
+      }
+    });
+  });
+
+
+  //
   // save the meeting notes
   //
   $('#mentor-schedule-list').on('click', '.meeting-save-button', function() {
@@ -170,6 +216,7 @@
     var ta = $(this).closest('p').find('textarea');
     var notes = ta.val();
     var keyToSession = ta.data('key');
+    var keyToStartup = ta.data('startup');
     console.log("keyToSession: " + keyToSession + " Notes: " + notes);
     if (keyToSession == undefined || keyToSession == null) {
       bootbox.alert("Sorry - Can't save your notes. Please take them in another way and let the organizers know about it.");
@@ -183,7 +230,23 @@
       date: disTime
     }, function(error) {
       if (error) {
-        alert("meeting notes for: " + keyToSession + " could not be saved :( Details: " + error);
+        bootbox.alert("Meeting notes for: " + keyToSession + " could not be saved :( Details: " + error);
+      } else {
+        console.log(keyToSession + " notes Saved!");
+        $(".save-alert").show();
+        setTimeout(function() {
+          $(".save-alert").hide();
+        }, 1500);
+      }
+    });
+    //
+    ref.child("sessions").child(keyToStartup).set({
+      meetingNotes: notes,
+      unixTime: curUnixTime,
+      date: disTime
+    }, function(error) {
+      if (error) {
+        bootbox.alert("Meeting notes for: " + keyToStartup + " could not be saved :( Details: " + error);
       } else {
         console.log(keyToSession + " notes Saved!");
         $(".save-alert").show();
@@ -262,7 +325,8 @@
           '</b><br> <h4> <span class="label label-warning"> <a href="' + startupData.video +
           '" target="_blank">Application Video</a> </span> ' +
           ' &nbsp;&nbsp; <span class="label label-success"><a href="' +
-          startupData.historyUrl + '" target="_blank">History File</a> </span></h4></div> </div>'
+          startupData.historyUrl + '" target="_blank">History File</a> </span></h4>' + '<button class="btn btn-lg btn-warning fetch-notes-button" data-key="' +
+          startupData.name +'">Notes</button></div> </div>'
         );
       });
       var selHtml = getStartupSelect();
@@ -403,7 +467,7 @@
           '</h3> </div> <div id="mentor-panel-' + divDetailKey + '" class="panel-body mentor-edit collapse" data-key="' + key +
           '"> <h5><a href="mailto:' + mentorData.email + '" target="_blank">' + mentorData.email + '</a></h5>' +
           '<img src="' + mPicUrl + '" class="att-pic-card" alt="mentor picture" /> ' +
-          '<b>Domain:</b> ' + mentorData.domain + ' - <b>Secondary:</b> ' + mentorData.domainSec + 
+          '<b>Domain:</b> ' + mentorData.domain + ' - <b>Secondary:</b> ' + mentorData.domainSec +
           '<br><b>Expertise:</b> ' + mentorData.expertise + ' </div> </div>'
         );
       });
@@ -509,9 +573,9 @@
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
           attData.name + " ( <a href='mailto:" + attData.email + "' target='_blank'>" + attData.email + "</a> )" +
           '</h3> </div> <div class="panel-body att-edit" data-key="' + key + '"> <h4>' + attData.startup + '</h4>' +
-          '<img src="' + picUrl + '" class="att-pic-card" alt="attendee picture"/> <br><b>Linkedin:</b> <a href="http://www.linkedin.com/in/' + 
-          attData.linkedin + '" target="_blank">' + attData.linkedin + '</a><br><b>Fun Fact:</b> ' + attData.funFact + 
-           ' </div> </div>'
+          '<img src="' + picUrl + '" class="att-pic-card" alt="attendee picture"/> <br><b>Linkedin:</b> <a href="http://www.linkedin.com/in/' +
+          attData.linkedin + '" target="_blank">' + attData.linkedin + '</a><br><b>Fun Fact:</b> ' + attData.funFact +
+          ' </div> </div>'
         );
       });
     });
