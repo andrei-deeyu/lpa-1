@@ -381,7 +381,7 @@
       var sessions = snapshot.val();
       if (sessions != null) {
         console.log("The sessions: " + JSON.stringify(sessions));
-        var html = "";
+        var html = ""; //"<h3>" + curMentorEmail + "</h3>";
         $("#mentor-schedule-list").html("");
         $.each(sessions, function(key, scData) {
           // per startup set the mentors + comments
@@ -420,9 +420,9 @@
     readRef.orderByKey().on("value", function(snapshot) {
       var sessions = snapshot.val();
       if (sessions != null) {
-        $("#sc-viewer-reload-button").text("Reload " + curAttendeeStartup);
+        //$("#sc-viewer-reload-button").text("Reload " + curAttendeeStartup);
         //console.log("The sessions: " + JSON.stringify(sessions));
-        var scHtml = "";
+        var scHtml = "<h3>" + curAttendeeStartup + "</h3>";
         $("#mentor-schedule-list").html("");
         scHtml += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title"> Comments For The Day' +
           '</h3> </div> <div class="panel-body">' + sessions.comments + '</div> </div>';
@@ -921,7 +921,7 @@
           '</h3> </div> <div id="mentor-panel-' + divDetailKey + '" class="panel-body mentor-edit collapse" data-key="' + key +
           '"> <h5><a href="mailto:' + mentorData.email + '" target="_blank">' + mentorData.email + '</a></h5>' +
           '<img src="' + mPicUrl + '" class="att-pic-card" alt="mentor picture" /> ' +
-          '<b>Domain:</b> ' + mentorData.domain + ' - <b>Secondary:</b> ' + mentorData.domainSec + 
+          '<b>Domain:</b> ' + mentorData.domain + ' - <b>Secondary:</b> ' + mentorData.domainSec +
           '<br><b>Expertise:</b> ' + mentorData.expertise + ' </div> </div>'
         );
       });
