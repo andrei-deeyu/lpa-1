@@ -55,7 +55,6 @@
     if (user) {
       authUserData = user;
       //TODO: initMentorsChat(authData);
-
       //localStorage.setItem("lpa1-authData", JSON.stringify(authData));
       console.log("User " + user.uid + " is logged in with " + user.provider);
       $("#login-form").hide();
@@ -94,19 +93,6 @@
       }
     });
     return false;
-    // ref.authWithPassword({
-    //   email: email,
-    //   password: u_passwd
-    // }, function(error, authData) {
-    //   $("#spin").hide();
-    //   if (error) {
-    //     console.log("Login Failed!", error);
-    //     $("#err-modal").modal('show');
-    //   } else {
-    //     console.log("Authenticated successfully with payload:", authData);
-    //   }
-    // });
-    //return false;
   });
 
   //
@@ -123,12 +109,9 @@
     return false;
   });
 
-  //$("#logout-but").click(function() {});
-
   //////////////////////////////////////////////////////////////////////////////
   // Schedule magic
   //////////////////////////////////////////////////////////////////////////////
-
   //
   // save the current schedule
   //
@@ -152,7 +135,7 @@
     // on each startup we collect the mentors per hours and create sessions
     $(".sc-start-name").each(function() {
       isInSaveOperation = true;
-      console.log("is going INTO save");
+      console.log("=== is going INTO save");
       var startupName = $.trim($(this).text());
       var startupKey = startupName.replace(/\s/g, "");
       var mentorPerHour = [];
@@ -193,7 +176,7 @@
       });
     });
     isInSaveOperation = false;
-    console.log("is going out of save");
+    console.log("=== is going out of save");
   });
 
   //
@@ -1138,7 +1121,7 @@
   });
 
   //
-  // enable to edit  from the list
+  // enable to edit from the list
   //
   $('body').on('click', '.att-edit', function(event) {
     var key = this.dataset.key;

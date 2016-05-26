@@ -176,8 +176,7 @@
         //console.log("The sessions: " + JSON.stringify(sessions));
         var html = "";
         $.each(sessions, function(keyDate, scData) {
-          // per startup set the mentors + comments
-          //console.log("key: " + keyDate + " scData: " + scData);
+          // per startup - show all the notes
           var curNotes = "";
           var curSt = scData.startups[startupName];
           if (curSt.notes) {
@@ -189,11 +188,10 @@
                 console.log("k: " + key + " v: " + val);
                 html += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
                   startupName + ' | ' + getHourAsRange(key) + ' </h3> </div> <div class="panel-body">' +
-                  '<b>Mentor:</b> '+ tmpMentorEmail + '<br><b>Date: ' + noteDate + '</b> <p><b>Meeting Notes:</b><br>' + val.meetingNotes + '</p>' +
+                  '<b>Mentor:</b> ' + tmpMentorEmail + '<br><b>Date: ' + noteDate + '</b> <p><b>Meeting Notes:</b><br>' + val.meetingNotes + '</p>' +
                   '</div> </div>';
               });
             }
-            //console.log("========= note: " + JSON.stringify(curSt.notes));
           }
         });
         if (html.length < 1) {
@@ -224,6 +222,7 @@
     }
     var curUnixTime = new Date().getTime();
     var disTime = new Date().toJSON().slice(0, 21);
+    // save under the mentor
     ref.child("sessions").child(keyToSession).set({
       meetingNotes: notes,
       unixTime: curUnixTime,
@@ -239,7 +238,7 @@
         }, 1500);
       }
     });
-    //
+    // save under the startup
     ref.child("sessions").child(keyToStartup).set({
       meetingNotes: notes,
       unixTime: curUnixTime,
@@ -249,6 +248,23 @@
         bootbox.alert("Meeting notes for: " + keyToStartup + " could not be saved :( Details: " + error);
       } else {
         console.log(keyToSession + " notes Saved!");
+        $(".save-alert").show();
+        setTimeout(function() {
+          $(".save-alert").hide();
+        }, 1500);
+      }
+    });
+    // save under notes for backup in case we re-set the schdule
+    // TODO: copy the notes to the new schdule?
+    ref.child("notes-backup").child(keyToStartup).set({
+      meetingNotes: notes,
+      unixTime: curUnixTime,
+      date: disTime
+    }, function(error) {
+      if (error) {
+        console.log("Meeting notes for: " + keyToStartup + " could not be saved :( Details: " + error);
+      } else {
+        console.log(keyToSession + " notes Saved to backup!");
         $(".save-alert").show();
         setTimeout(function() {
           $(".save-alert").hide();
@@ -326,7 +342,7 @@
           '" target="_blank">Application Video</a> </span> ' +
           ' &nbsp;&nbsp; <span class="label label-success"><a href="' +
           startupData.historyUrl + '" target="_blank">History File</a> </span></h4>' + '<button class="btn btn-lg btn-warning fetch-notes-button" data-key="' +
-          startupData.name +'">Notes</button></div> </div>'
+          startupData.name + '">Notes</button></div> </div>'
         );
       });
       var selHtml = getStartupSelect();
