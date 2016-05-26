@@ -91,6 +91,7 @@
           <li id="sa-tab-li" role="presentation" class="active"><a href="#m-schedule-tab" aria-controls="schedule-tab" role="tab" data-toggle="tab"> Schedule</a></li>
           <li id="s-tab-li" role="presentation"><a href="#startup-tab" aria-controls="startup-tab" role="tab" data-toggle="tab">Startups</a></li>
           <li id="a-tab-li" role="presentation"><a href="#attendees-tab" aria-controls="attendees-tab" role="tab" data-toggle="tab">Attendees</a></li>
+          <li id="mentors-tab-li" role="presentation"><a href="#mentors-tab" aria-controls="mentors-tab" role="tab" data-toggle="tab" title="All the Mentors' details">Mentors</a></li>
           <li id="y-tab-li" role="presentation"><a href="#att-you-tab" aria-controls="attendees-tab" role="tab" data-toggle="tab">You</a></li>
           <li id="chat-tab-li" role="presentation"><a href="#chat-tab" aria-controls="chat-tab" role="tab" data-toggle="tab" title="Talk with other attendees on which places are the best for dinner">Conversation</a></li>
         </ul>
@@ -116,7 +117,6 @@
             <div class="row">
               <div class="col-lg-6 col-md-6 fields-block">
                 <!-- list of out startups -->
-                <h3>Startups</h3>
                 <div id="startups-list"></div>
               </div>
               <div class="col-lg-6 col-md-6">
@@ -128,10 +128,20 @@
           <div role="tabpanel" class="tab-pane" id="attendees-tab">
             <div class="row">
               <div class="col-lg-6 col-md-6 fields-block">
-                <h3>Attendees</h3>
                 <div id="att-list"></div>
               </div>
               <div class="col-lg-6 col-md-6">
+                <img src="img/city.jpeg" class="img-background-max">
+              </div>
+            </div>
+          </div>
+          <!-- Mentors -->
+          <div role="tabpanel" class="tab-pane" id="mentors-tab">
+            <div class="row">
+              <div class="col-lg-8 col-md-8 ">
+                <div id="mentors-list"></div>
+              </div>
+              <div class="col-lg-4 col-md-4">
                 <img src="img/city.jpeg" class="img-background-max">
               </div>
             </div>
@@ -140,7 +150,7 @@
           <div role="tabpanel" class="tab-pane" id="att-you-tab">
             <div class="row">
               <div class="col-lg-6 col-md-6 fields-block">
-                <h4>Attendee</h4>
+                <h4>Your Details</h4>
                 <div class="form-group">
                   <div id="att-nameError" class="sr-only" role="alert"></div>
                   <label for="att-name-field" class="sr-only">Name</label>
@@ -244,14 +254,18 @@
       <h2>Startups</h2>
       <p>See which startups are part of this LPA</p>
     </li>
+    <li data-id="mentors-tab-li" data-button="Next" data-options="tipLocation:right">
+      <h2>Mentors</h2>
+      <p>See all the mentors' details and email them funny jokes.</p>
+    </li>
     <li data-id="a-tab-li" data-button="Next" data-options="tipLocation:right">
       <h2>Attendees</h2>
       <p>See the other attendees' details</p>
     </li>
     <li data-id="chat-tab-li" data-button="Done" data-options="tipLocation:right">
-        <h2>Conversation</h2>
-        <p>Talk with other attendees on all the important issues you forgot to speak on during lunch.</p>
-      </li>
+      <h2>Conversation</h2>
+      <p>Talk with other attendees on all the important issues you forgot to speak on during lunch.</p>
+    </li>
   </ol>
   <script src="https://cdn.firebase.com/js/client/2.3.1/firebase.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
