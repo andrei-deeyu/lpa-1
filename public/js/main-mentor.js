@@ -167,7 +167,6 @@
   // Fetch all the mentor's notes
   //
   $('body').on('click', '.fetch-notes-button', function(event) {
-    // TODO - get it from the user
     var startupName = $(this).data("key");
     var readRef = new Firebase("https://lpa-1.firebaseio.com/sessions/");
     readRef.orderByKey().on("value", function(snapshot) {
@@ -185,11 +184,10 @@
               Object.keys(hours).forEach(function(key) {
                 var val = hours[key];
                 var noteDate = val.date.replace("T", " ");
-                console.log("k: " + key + " v: " + val);
                 html += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
                   startupName + ' | ' + getHourAsRange(key) + ' </h3> </div> <div class="panel-body">' +
-                  '<b>Mentor:</b> ' + tmpMentorEmail + '<br><b>Date: ' + noteDate + '</b> <p><b>Meeting Notes:</b><br>' + val.meetingNotes + '</p>' +
-                  '</div> </div>';
+                  '<b>Mentor:</b> ' + tmpMentorEmail + '<br><b>Date: ' + noteDate + 
+                  '</b> <p><b>Meeting Notes:</b><br>' + val.meetingNotes + '</p> </div> </div>';
               });
             }
           }
