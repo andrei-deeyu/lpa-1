@@ -54,12 +54,6 @@
         bootbox.alert("You must sign-in with your Google ID.<br>So first logout from the Admin App.<br>Thank you!");
         return;
       }
-      var ret = checkIfMentorValid(authData);
-      if (!ret) {
-        console.log("This mentor is not part of the white list");
-        bootbox.alert("You are not on the mentor list.<br>Please talk with the LPA team.<br>Be strong.");
-        return;
-      }
 
       initChat(authData);
       authUserData = authData;
@@ -498,18 +492,19 @@
   //
   // read the list of mentors and display it
   //
-  function checkIfMentorValid(authData) {
-    var readRef = new Firebase("https://lpa-1.firebaseio.com/mentors/");
-    var curMentorEmail = authData.google.email;
-    readRef.orderByKey().on("value", function(snapshot) {
-      var mentorsDataStr = JSON.stringify(snapshot.val());
-      //console.log("The mentors: " + mentorsDataStr);
-      if (mentorsDataStr.indexOf(curMentorEmail) > 0) {
-        return true;
-      }
-      return false;
-    });
-  }
+  // function checkIfMentorValid(authData) {
+  //   var readRef = new Firebase("https://lpa-1.firebaseio.com/mentors/");
+  //   var curMentorEmail = authData.google.email;
+  //   readRef.orderByKey().on("value", function(snapshot) {
+  //     var mentorsDataStr = JSON.stringify(snapshot.val());
+  //     //console.log("The mentors: " + mentorsDataStr);
+  //     if (mentorsDataStr.indexOf(curMentorEmail) > 0) {
+  //       console.log("This mentor is not part of the white list");
+  //       bootbox.alert("You are not on the mentor list.<br>Please talk with the LPA team.<br>Be strong.");
+
+  //     }
+  //   });
+  // }
 
   //
   // clear the values of the mentor
@@ -563,6 +558,11 @@
         $('body').scrollTop(60);
       } else {
         bootbox.alert("It looks like you are not registered. Please ask for organizers to put you on the list, cool?");
+        ref.unauth();
+        setTimeout(function() {
+          location.reload();
+        }, 2000);
+
       }
     });
   }
