@@ -54,6 +54,13 @@
         bootbox.alert("You must sign-in with your Google ID.<br>So first logout from the Admin App.<br>Thank you!");
         return;
       }
+      var ret = checkIfMentorValid(authData);
+      if (!ret) {
+        console.log("This mentor is not part of the white list");
+        bootbox.alert("You are not on the mentor list.<br>Please talk with the LPA team.<br>Be strong.");
+        return;
+      }
+
       initChat(authData);
       authUserData = authData;
       localStorage.setItem("lpa1-g-authData", JSON.stringify(authData));
@@ -100,7 +107,7 @@
         $("#err-modal").modal('show');
       } else {
         $("#sc-reload-button").prop('disabled', false);
-        console.log("Authenticated successfully with payload:", authData);
+        console.log("Authenticated with payload:", authData);
       }
     }, {
       scope: "email"
@@ -186,7 +193,7 @@
                 var noteDate = val.date.replace("T", " ");
                 html += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
                   startupName + ' | ' + getHourAsRange(key) + ' </h3> </div> <div class="panel-body">' +
-                  '<b>Mentor:</b> ' + tmpMentorEmail + '<br><b>Date: ' + noteDate + 
+                  '<b>Mentor:</b> ' + tmpMentorEmail + '<br><b>Date: ' + noteDate +
                   '</b> <p><b>Meeting Notes:</b><br>' + val.meetingNotes + '</p> </div> </div>';
               });
             }
@@ -485,6 +492,22 @@
           '<br><b>Expertise:</b> ' + mentorData.expertise + ' </div> </div>'
         );
       });
+    });
+  }
+
+  //
+  // read the list of mentors and display it
+  //
+  function checkIfMentorValid(authData) {
+    var readRef = new Firebase("https://lpa-1.firebaseio.com/mentors/");
+    var curMentorEmail = authData.google.email;
+    readRef.orderByKey().on("value", function(snapshot) {
+      var mentorsDataStr = JSON.stringify(snapshot.val());
+      //console.log("The mentors: " + mentorsDataStr);
+      if (mentorsDataStr.indexOf(curMentorEmail) > 0) {
+        return true;
+      }
+      return false;
     });
   }
 
