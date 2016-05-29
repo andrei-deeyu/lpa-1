@@ -142,6 +142,7 @@
           // per startup set the mentors + comments
           var meetingNotesKey = scDay + "/mentors/" + curMentorEmail + "/" + key + "/notes";
           var startupNotesKey = scDay + "/startups/" + scData.startup + "/notes/" + curMentorEmail + "/" + key;
+          var startupBackupNotesKey = "/startups/" + scData.startup + "/" + scDay +  "/notes/" + curMentorEmail + "/" + key;
           var curNotes = "";
           if (scData.notes && scData.notes.meetingNotes) {
             curNotes = scData.notes.meetingNotes;
@@ -151,8 +152,9 @@
             scData.startup + ' | ' + getHourAsRange(key) + ' </h3> </div> <div class="panel-body">' +
             '<b>Location: ' + scData.location + '</b> <p class="" id="meet-details-' + key + '">Meeting Notes:<br> \
             <textarea class="form-control col-lg-10 meeting-notes-text" data-key="' + meetingNotesKey +
-            '" data-startup="' + startupNotesKey + '" name="meeting-notes">' +
-            curNotes + '</textarea>  <button class="btn btn-warning meeting-save-button">Save Notes</button> </p> </div> </div> </div>';
+            '" data-startup="' + startupNotesKey + '" data-notes-backup="' + startupBackupNotesKey + 
+            '" name="meeting-notes">' + curNotes + 
+            '</textarea>  <button class="btn btn-warning meeting-save-button">Save Notes</button> </p> </div> </div> </div>';
           // TODO: add an option to take photos: 
           // <div class="row"> <div class="col-lg-3 col-md-3"> <input type="file" name="file" class="input-img" id="notesImg" accept="image/*"> 
           // <button type="submit" class="btn btn-info meeting-img-button">Upload Image</button> 
@@ -214,6 +216,7 @@
     var notes = ta.val();
     var keyToSession = ta.data('key');
     var keyToStartup = ta.data('startup');
+    var keyToNotesBackup = ta.data('notes-backup');
     console.log("keyToSession: " + keyToSession + " Notes: " + notes);
     if (keyToSession == undefined || keyToSession == null) {
       bootbox.alert("Sorry - Can't save your notes. Please take them in another way and let the organizers know about it.");
@@ -253,9 +256,9 @@
         }, 1500);
       }
     });
-    // save under notes for backup in case we re-set the schdule
-    // TODO: copy the notes to the new schdule?
-    ref.child("notes-backup").child(keyToStartup).set({
+    // save under notes for backup in case we re-set the schedule
+    // TODO: copy the notes to the new schedule?
+    ref.child("notes-backup").child(keyToNotesBackup).set({
       meetingNotes: notes,
       unixTime: curUnixTime,
       date: disTime
