@@ -831,27 +831,27 @@
     }
 
     // email validation
-    if ($("#form-email-field").val().length < 2) {
-      $("#emailError").html("Please give an email - Don't worry we will never spam you.");
+    if ($("#form-email-field").val().length < 2 || $("#form-email-field").val().indexOf("gmail.com") < 0) {
+      $("#emailError").html("Please give a gmail address - Mentors will need to sign-in with their gmail account.");
       $("#emailError").removeClass("sr-only");
       $("#emailError").addClass("alert");
       $("#form-email-field").focus();
       setTimeout(function() {
         $("#emailError").removeClass("alert");
         $("#emailError").addClass("sr-only");
-      }, 1500);
+      }, 2500);
       return;
     }
     var emailRegEx = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g;
     if (!emailRegEx.test(emailKey)) {
-      $("#emailError").html("Please give a valid email (e.g. momo@okko.com");
+      $("#emailError").html("Please give a valid gmail address (e.g. momo@gmail.com");
       $("#emailError").removeClass("sr-only");
       $("#emailError").addClass("alert");
       $("#form-email-field").focus();
       setTimeout(function() {
         $("#emailError").removeClass("alert");
         $("#emailError").addClass("sr-only");
-      }, 1500);
+      }, 2500);
       return;
     }
 
