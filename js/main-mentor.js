@@ -142,7 +142,7 @@
           // per startup set the mentors + comments
           var meetingNotesKey = scDay + "/mentors/" + curMentorEmail + "/" + key + "/notes";
           var startupNotesKey = scDay + "/startups/" + scData.startup + "/notes/" + curMentorEmail + "/" + key;
-          var startupBackupNotesKey = "/startups/" + scData.startup + "/" + scDay +  "/notes/" + curMentorEmail + "/" + key;
+          var startupBackupNotesKey = "/startups/" + scData.startup + "/" + scDay + "/notes/" + curMentorEmail + "/" + key;
           var curNotes = "";
           if (scData.notes && scData.notes.meetingNotes) {
             curNotes = scData.notes.meetingNotes;
@@ -152,8 +152,8 @@
             scData.startup + ' | ' + getHourAsRange(key) + ' </h3> </div> <div class="panel-body">' +
             '<b>Location: ' + scData.location + '</b> <p class="" id="meet-details-' + key + '">Meeting Notes:<br> \
             <textarea class="form-control col-lg-10 meeting-notes-text" data-key="' + meetingNotesKey +
-            '" data-startup="' + startupNotesKey + '" data-notes-backup="' + startupBackupNotesKey + 
-            '" name="meeting-notes">' + curNotes + 
+            '" data-startup="' + startupNotesKey + '" data-notes-backup="' + startupBackupNotesKey +
+            '" name="meeting-notes">' + curNotes +
             '</textarea>  <button class="btn btn-warning meeting-save-button">Save Notes</button> </p> </div> </div> </div>';
           // TODO: add an option to take photos: 
           // <div class="row"> <div class="col-lg-3 col-md-3"> <input type="file" name="file" class="input-img" id="notesImg" accept="image/*"> 
@@ -205,7 +205,6 @@
       }
     });
   });
-
 
   //
   // save the meeting notes
@@ -474,20 +473,23 @@
       snapshot.forEach(function(childSnapshot) {
         var key = childSnapshot.key();
         var mentorData = childSnapshot.val();
-        var mPicUrl = addhttp(mentorData.pic);
-        //console.log("key: " + key + " data: " + mentorData);    <div class="collapse" id="collapse-bio-links">
-        var divDetailKey = key.replace("@", "");
-        $("#mentors-list").append(
-          '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
-          mentorData.name + " ( " + mentorData.phone + " )" +
-          ' &nbsp; &nbsp;<button class="btn" type="button" data-toggle="collapse" data-target="#mentor-panel-' + divDetailKey +
-          '" aria-expanded="false" aria-controls="collapseMentorDetails"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span></button>' +
-          '</h3> </div> <div id="mentor-panel-' + divDetailKey + '" class="panel-body mentor-edit collapse" data-key="' + key +
-          '"> <h5><a href="mailto:' + mentorData.email + '" target="_blank">' + mentorData.email + '</a></h5>' +
-          '<img src="' + mPicUrl + '" class="att-pic-card" alt="mentor picture" /> ' +
-          '<b>Domain:</b> ' + mentorData.domain + ' - <b>Secondary:</b> ' + mentorData.domainSec +
-          '<br><b>Expertise:</b> ' + mentorData.expertise + ' </div> </div>'
-        );
+        if (mentorData.name != "--N/A--") {
+          var mPicUrl = addhttp(mentorData.pic);
+          //console.log("key: " + key + " data: " + mentorData);    <div class="collapse" id="collapse-bio-links">
+          var divDetailKey = key.replace("@", "");
+          $("#mentors-list").append(
+            '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
+            mentorData.name + " ( " + mentorData.phone + " )" +
+            ' &nbsp; &nbsp;<button class="btn" type="button" data-toggle="collapse" data-target="#mentor-panel-' + divDetailKey +
+            '" aria-expanded="false" aria-controls="collapseMentorDetails"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span></button>' +
+            '</h3> </div> <div id="mentor-panel-' + divDetailKey + '" class="panel-body mentor-edit collapse" data-key="' + key +
+            '"> <h5><a href="mailto:' + mentorData.email + '" target="_blank">' + mentorData.email + '</a></h5>' +
+            '<img src="' + mPicUrl + '" class="att-pic-card" alt="mentor picture" /> ' +
+            '<b>Domain:</b> ' + mentorData.domain + ' - <b>Secondary:</b> ' + mentorData.domainSec +
+            '<br><b>Expertise:</b> ' + mentorData.expertise + ' </div> </div>'
+          );
+        }
+
       });
     });
   }
