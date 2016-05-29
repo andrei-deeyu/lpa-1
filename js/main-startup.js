@@ -125,7 +125,7 @@
   //////////////////////////////////////////////////////////////////////////////
   // Fetch schedule
   //////////////////////////////////////////////////////////////////////////////
-
+  //
   //
   // Reload the schedule that the attendee got (= per her startup)
   //
@@ -324,6 +324,10 @@
         localStorage.removeItem("lpa1-g-att-startup");
         $("#sc-reload-button").prop('disabled', true);
         bootbox.alert("Please check with the organizer why you aren't part of any startup");
+        ref.unauth();
+        setTimeout(function() {
+          location.reload();
+        }, 2000);
       }
     });
   }
