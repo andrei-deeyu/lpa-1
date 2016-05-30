@@ -335,7 +335,7 @@
         //console.log("key: " + key + " data: " + startupData);
         $("#startups-list").append(
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
-          startupData.name + " ( <img src='" + startupLogoUrl + "' class='logo-img' alt='startup logo'> )" +
+          startupData.name + "&nbsp;&nbsp;<img src='" + startupLogoUrl + "' class='logo-img' alt='startup logo'>" +
           '</h3> </div> <div class="panel-body startup-edit" data-key="' + key + '"> <b>' + startupData.description +
           '</b><br>From: <b>' + startupData.country + ' - ' + startupData.city +
           '</b>  Founded: <b>' + startupData.dateFounded + '</b><br>Employees: <b>' + startupData.numEmployees +
@@ -479,12 +479,12 @@
           var divDetailKey = key.replace("@", "");
           $("#mentors-list").append(
             '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
-            mentorData.name + " ( " + mentorData.phone + " )" +
+            mentorData.name + '<img src="' + mPicUrl + '" class="att-pic-card" alt="mentor picture" /> ' +
             ' &nbsp; &nbsp;<button class="btn" type="button" data-toggle="collapse" data-target="#mentor-panel-' + divDetailKey +
             '" aria-expanded="false" aria-controls="collapseMentorDetails"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span></button>' +
             '</h3> </div> <div id="mentor-panel-' + divDetailKey + '" class="panel-body mentor-edit collapse" data-key="' + key +
             '"> <h5><a href="mailto:' + mentorData.email + '" target="_blank">' + mentorData.email + '</a></h5>' +
-            '<img src="' + mPicUrl + '" class="att-pic-card" alt="mentor picture" /> ' +
+            '<b>Phone:</b> <a href="tel:' + mentorData.phone + '">' + mentorData.phone + "</a><br>" +
             '<b>Domain:</b> ' + mentorData.domain + ' - <b>Secondary:</b> ' + mentorData.domainSec +
             '<br><b>Expertise:</b> ' + mentorData.expertise + ' </div> </div>'
           );
@@ -612,9 +612,10 @@
         //console.log("key: " + key + " data: " + attData);
         $("#att-list").append(
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
-          attData.name + " ( <a href='mailto:" + attData.email + "' target='_blank'>" + attData.email + "</a> )" +
+          attData.name + '<img src="' + picUrl + '" class="att-pic-card" alt="attendee picture"/> ' +
           '</h3> </div> <div class="panel-body att-edit" data-key="' + key + '"> <h4>' + attData.startup + '</h4>' +
-          '<img src="' + picUrl + '" class="att-pic-card" alt="attendee picture"/> <br><b>Linkedin:</b> <a href="http://www.linkedin.com/in/' +
+          "<b>email:</b><a href='mailto:" + attData.email + "' target='_blank'>" + attData.email + "</a>" +
+          '<br><b>Linkedin:</b> <a href="http://www.linkedin.com/in/' +
           attData.linkedin + '" target="_blank">' + attData.linkedin + '</a><br><b>Fun Fact:</b> ' + attData.funFact +
           ' </div> </div>'
         );
