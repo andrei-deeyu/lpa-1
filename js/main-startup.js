@@ -228,7 +228,7 @@
         //console.log("key: " + key + " data: " + startupData);
         $("#startups-list").append(
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
-          startupData.name + " ( <img src='" + startupLogoUrl + "' class='logo-img' alt='startup logo'> )" +
+          startupData.name + "&nbsp;&nbsp;<img src='" + startupLogoUrl + "' class='logo-img' alt='startup logo'>" +
           '</h3> </div> <div class="panel-body startup-edit" data-key="' + key + '"> <b>' + startupData.description + '</b><br>' +
           startupData.country + '<br>' + startupData.city + ' </div> </div>'
         );
@@ -257,20 +257,23 @@
       snapshot.forEach(function(childSnapshot) {
         var key = childSnapshot.key();
         var mentorData = childSnapshot.val();
-        var mPicUrl = addhttp(mentorData.pic);
-        //console.log("key: " + key + " data: " + mentorData);    <div class="collapse" id="collapse-bio-links">
-        var divDetailKey = key.replace("@", "");
-        $("#mentors-list").append(
-          '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
-          mentorData.name + " ( " + mentorData.phone + " )" +
-          ' &nbsp; &nbsp;<button class="btn" type="button" data-toggle="collapse" data-target="#mentor-panel-' + divDetailKey +
-          '" aria-expanded="false" aria-controls="collapseMentorDetails"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span></button>' +
-          '</h3> </div> <div id="mentor-panel-' + divDetailKey + '" class="panel-body mentor-edit collapse" data-key="' + key +
-          '"> <h5><a href="mailto:' + mentorData.email + '" target="_blank">' + mentorData.email + '</a></h5>' +
-          '<img src="' + mPicUrl + '" class="att-pic-card" alt="mentor picture" /> ' +
-          '<b>Domain:</b> ' + mentorData.domain + ' - <b>Secondary:</b> ' + mentorData.domainSec + 
-          '<br><b>Expertise:</b> ' + mentorData.expertise + ' </div> </div>'
-        );
+        if (mentorData.name != "--N/A--") {
+          var mPicUrl = addhttp(mentorData.pic);
+          //console.log("key: " + key + " data: " + mentorData);    <div class="collapse" id="collapse-bio-links">
+          var divDetailKey = key.replace("@", "");
+          $("#mentors-list").append(
+            '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
+            mentorData.name + '<img src="' + mPicUrl + '" class="att-pic-card" alt="mentor picture" /> ' +
+            ' &nbsp; &nbsp;<button class="btn" type="button" data-toggle="collapse" data-target="#mentor-panel-' + divDetailKey +
+            '" aria-expanded="false" aria-controls="collapseMentorDetails"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span></button>' +
+            '</h3> </div> <div id="mentor-panel-' + divDetailKey + '" class="panel-body mentor-edit collapse" data-key="' + key +
+            '"> <h5><a href="mailto:' + mentorData.email + '" target="_blank">' + mentorData.email + '</a></h5>' +
+            '<b>Phone:</b> <a href="tel:' + mentorData.phone + '">' + mentorData.phone + '</a><br>' +
+            '<b>Domain:</b> ' + mentorData.domain + ' - <b>Secondary:</b> ' + mentorData.domainSec +
+            '<br><b>Expertise:</b> ' + mentorData.expertise + ' </div> </div>'
+          );
+        }
+
       });
     });
   }
@@ -417,9 +420,10 @@
         //console.log("key: " + key + " data: " + attData);
         $("#att-list").append(
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
-          attData.name + " ( <a href='mailto:" + attData.email + "' target='_blank'>" + attData.email + "</a> )" +
-          '</h3> </div> <div class="panel-body att-edit" data-key="' + key + '"> ' + attData.startup + '<br>' +
-          '<img src="' + picUrl + '" class="att-pic-card" alt="attendee picture"/> <br>' + attData.linkedin + ' </div> </div>'
+          attData.name + '<img src="' + picUrl + '" class="att-pic-card" alt="attendee picture"/>' +
+          '</h3> </div> <div class="panel-body att-edit" data-key="' + key + '"><h4>' + attData.startup + '</h4>' +
+          "<b>email:</b> <a href='mailto:" + attData.email + "' target='_blank'>" + attData.email + "</a>" +
+          '<br>' + attData.linkedin + ' </div> </div>'
         );
       });
     });
