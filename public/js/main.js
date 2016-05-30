@@ -1,7 +1,7 @@
 (function() {
   $(".save-alert").hide();
   $("#spin").hide();
-
+ 
   var startupNameList = [];
   var mentorsList = [];
   var locationsList = [];
