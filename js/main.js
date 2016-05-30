@@ -570,7 +570,7 @@
         //console.log("key: " + key + " data: " + startupData);
         $("#startups-list").append(
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
-          startupData.name + " ( <img src='" + startupLogoUrl + "' class='logo-img' alt='startup logo'> )" +
+          startupData.name + " <img src='" + startupLogoUrl + "' class='logo-img' alt='startup logo'> " +
           '<button type="button" class="edit-startup startup-edit btn btn-info" aria-label="Edit" data-key="' + key +
           '"><span class="glyphicon glyphicon-pencil"></span></button> <button type="button" class="remove-startup btn btn-danger" aria-label="Close" data-key="' +
           key + '"> <span class="glyphicon glyphicon-remove"></span></button>' +
@@ -912,7 +912,7 @@
         var divDetailKey = key.replace("@", "");
         $("#mentors-list").append(
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
-          mentorData.name + " ( " + mentorData.phone + " )" +
+          mentorData.name + '<img src="' + mPicUrl + '" class="att-pic-card" alt="mentor picture" /> ' +
           ' &nbsp; &nbsp;<button class="btn" type="button" data-toggle="collapse" data-target="#mentor-panel-' + divDetailKey +
           '" aria-expanded="false" aria-controls="collapseMentorDetails"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span></button> \
           <button type="button" class="edit-mentor mentor-edit btn btn-info" aria-label="Edit" data-key="' + key +
@@ -920,8 +920,8 @@
           key + '"> <span class="glyphicon glyphicon-remove"></span></button>' +
           '</h3> </div> <div id="mentor-panel-' + divDetailKey + '" class="panel-body mentor-edit collapse" data-key="' + key +
           '"> <h5><a href="mailto:' + mentorData.email + '" target="_blank">' + mentorData.email + '</a></h5>' +
-          '<img src="' + mPicUrl + '" class="att-pic-card" alt="mentor picture" /> ' +
-          '<b>Domain:</b> ' + mentorData.domain + ' - <b>Secondary:</b> ' + mentorData.domainSec +
+          '<b>Phone:</b> ' + mentorData.phone +
+          '<br><b>Domain:</b> ' + mentorData.domain + ' - <b>Secondary:</b> ' + mentorData.domainSec +
           '<br><b>Expertise:</b> ' + mentorData.expertise + ' </div> </div>'
         );
       });
