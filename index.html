@@ -41,8 +41,10 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css">
   <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-  <!-- Firechat -->
+
+  <!-- Firechat 
   <link rel='stylesheet' href='https://cdn.firebase.com/libs/firechat/2.0.1/firechat.min.css' />
+  -->
   <!-- Intro / Help -->
   <link rel="stylesheet" href="css/joyride-2.1.css">
   <link rel="stylesheet" href="css/main.css">
@@ -102,7 +104,7 @@
           <li id="locations-tab-li" role="presentation"><a href="#locations-tab" aria-controls="locations-tab" role="tab" data-toggle="tab">Locations</a></li>
           <li id="schedule-tab-li" role="presentation"><a href="#schedule-tab" aria-controls="schedule-tab" role="tab" data-toggle="tab">Schedule</a></li>
           <li id="schedule-viewer-tab-li" role="presentation"><a href="#schedule-viewer-tab" aria-controls="schedule-viewer-tab" role="tab" data-toggle="tab">Schedule Viewer</a></li>
-          <li id="chat-tab-li" role="presentation"><a href="#chat-tab" aria-controls="chat-tab" role="tab" data-toggle="tab" title="Talk with other mentors or attendees">Conversation</a></li>
+          <!-- <li id="chat-tab-li" role="presentation"><a href="#chat-tab" aria-controls="chat-tab" role="tab" data-toggle="tab" title="Talk with other mentors or attendees">Conversation</a></li> -->
         </ul>
         <!-- Tab panes -->
         <div class="tab-content">
@@ -158,19 +160,26 @@
                     <option>UX</option>
                     <option>Tech</option>
                     <option>Product</option>
+                    <option>Google Product</option>
                     <option>Marketing</option>
                     <option>Business</option>
+                    <option>Monetization</option>
+                    <option>Fundraising</option>
                   </select>
                 </div>
                 <!-- more -->
                 <label for="form-domain-sec-select">Secondary Domain</label>
                 <div class="input-group">
                   <select id="form-domain-sec-select" class="selectpicker" data-style="btn-info">
+                    <option>N/A</option>
                     <option>UX</option>
                     <option>Tech</option>
                     <option>Product</option>
+                    <option>Google Product</option>
                     <option>Marketing</option>
                     <option>Business</option>
+                    <option>Monetization</option>
+                    <option>Fundraising</option>
                   </select>
                 </div>
                 <div class="form-group">
@@ -200,6 +209,7 @@
                     <br>
                     <label for="form-comments">Comments</label>
                     <textarea class="form-control col-lg-6" id="form-comments" name="comments"></textarea>
+                    <br>
                     <label for="form-linkedin-url">Your LinkedIn</label>
                     <div class="input-group">
                       <span class="input-group-addon" id="form-linkedin-url-pre">http://www.linkedin.com/in/</span>
@@ -488,11 +498,11 @@
                 <h4>Mentors' Conversation</h4>
                 <div id='mentors-firechat-wrapper'></div>
               </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
   </div>
   <!-- Small modal for errors/warnings -->
   <div id='err-modal' class="modal fade" tabindex="-1" role="dialog">
@@ -560,7 +570,7 @@
       <p>Talk with other mentors or attendees on all the important things you forgot to tell them to bring.</p>
     </li>
   </ol>
-  <script src="https://cdn.firebase.com/js/client/2.3.1/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.0.0/firebase.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
   <script>
   window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')
@@ -570,7 +580,9 @@
   <script src="js/bootstrap-markdown.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
   <script src="js/vendor/jquery.joyride-2.1.js"></script>
-  <script src='https://cdn.firebase.com/libs/firechat/2.0.1/firechat.min.js'></script>
+  <!-- Firechat TODO: find if they have firebase 3 support 
+   <script src='https://cdn.firebase.com/libs/firechat/2.0.1/firechat.min.js'></script>
+   -->
   <script src="js/main.js"></script>
   <script>
   (function(i, s, o, g, r, a, m) {

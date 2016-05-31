@@ -41,7 +41,6 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css">
   <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-
   <!-- Firechat -->
   <link rel='stylesheet' href='https://cdn.firebase.com/libs/firechat/2.0.1/firechat.min.css' />
   <link rel="stylesheet" href="css/main.css">
@@ -77,7 +76,7 @@
         </form>
         <div id="logout-div"></div>
         <form class='navbar-form navbar-right' role='form'>
-          <button id="online-status" type="button" class="btn btn-info">Online</button>
+          <button id="online-status" type="button" class="btn btn-info" disabled>Online</button>
         </form>
       </div>
       <!--/.navbar-collapse -->
@@ -91,7 +90,8 @@
           <li id="ms-tab-li" role="presentation" class="active"><a href="#m-schedule-tab" aria-controls="schedule-tab" role="tab" data-toggle="tab" title="Your schedule: meetings and an option to take notes">Mentor Schedule</a></li>
           <li id="s-tab-li" role="presentation"><a href="#startup-tab" aria-controls="startup-tab" role="tab" data-toggle="tab" title="List of startups that are part of this LPA">Startups</a></li>
           <li id="a-tab-li" role="presentation"><a href="#attendees-tab" aria-controls="attendees-tab" role="tab" data-toggle="tab" title="List of all the attendees that are part of this LPA">Attendees</a></li>
-          <li id="y-tab-li" role="presentation"><a href="#mentors-tab" aria-controls="mentors-tab" role="tab" data-toggle="tab" title="Your details - please feel free to fill them all! Thx!">You</a></li>
+          <li id="mentors-tab-li" role="presentation"><a href="#mentors-tab" aria-controls="mentors-tab" role="tab" data-toggle="tab" title="All the Mentors' details">Mentors</a></li>
+          <li id="y-tab-li" role="presentation"><a href="#cur-mentor-tab" aria-controls="mentors-tab" role="tab" data-toggle="tab" title="Your details - please feel free to fill them all! Thx!">You</a></li>
           <li id="chat-tab-li" role="presentation"><a href="#chat-tab" aria-controls="chat-tab" role="tab" data-toggle="tab" title="Talk with other mentors on which places are the best">Conversation</a></li>
         </ul>
         <!-- Tab panes -->
@@ -99,7 +99,7 @@
           <!-- Schedule of the mentor -->
           <div role="tabpanel" class="tab-pane active" id="m-schedule-tab">
             <div class="row">
-              <div class="col-md-12 col-lg-12 text-center">
+              <div class="col-md-12 col-lg-12 col-sm-12 text-center">
                 Day:
                 <input type="date" class="schedule-day-x  text-center" id="schedule-day-1">
                 <button id="sc-reload-button" class="btn btn-warning">Reload</button>
@@ -117,12 +117,12 @@
           <!-- STARTUPS -->
           <div role="tabpanel" class="tab-pane" id="startup-tab">
             <div class="row">
-              <div class="col-lg-6 col-md-6 fields-block">
+              <div class="col-lg-6 col-md-6 col-sm-6 fields-block">
+                <div id="startup-notes"></div>
                 <!-- list of out startups -->
-                <h3>Startups</h3>
                 <div id="startups-list"></div>
               </div>
-              <div class="col-lg-6 col-md-6">
+              <div class="col-lg-6 col-md-6 col-sm-6">
                 <img src="img/lion.jpeg" class="img-background-max">
               </div>
             </div>
@@ -131,19 +131,29 @@
           <div role="tabpanel" class="tab-pane" id="attendees-tab">
             <div class="row">
               <div class="col-lg-6 col-md-6 fields-block">
-                <h3>Attendees</h3>
                 <div id="att-list"></div>
               </div>
-              <div class="col-lg-6 col-md-6">
+              <div class="col-lg-6 col-md-6 col-sm-6">
                 <img src="img/city.jpeg" class="img-background-max">
               </div>
             </div>
           </div>
-          <!-- mentor details -->
+          <!-- Mentors -->
           <div role="tabpanel" class="tab-pane" id="mentors-tab">
             <div class="row">
+              <div class="col-lg-8 col-md-8 col-sm-8">
+                <div id="mentors-list"></div>
+              </div>
+              <div class="col-lg-4 col-md-4 col-sm-4">
+                <img src="img/city.jpeg" class="img-background-max">
+              </div>
+            </div>
+          </div>
+          <!-- current mentor details -->
+          <div role="tabpanel" class="tab-pane" id="cur-mentor-tab">
+            <div class="row">
               <div class="col-lg-6 col-md-6 fields-block">
-                <h4>Mentor</h4>
+                <h4>Your Details</h4>
                 <div class="form-group">
                   <div id="nameError" class="sr-only" role="alert"></div>
                   <label for="form-name-field" class="sr-only">Name</label>
@@ -292,10 +302,11 @@
       <footer>
         <div class="col-md-4">
           <hr>
-          <p><span class="label label-success">Feedback: 
-        <a href="https://ido-green.appspot.com/" target="_blank">ido-green.appspot.com</a></span> -
-            <span class="label label-success">
-        <a href="https://github.com/greenido/lpa-1/issues/new" target="_blank">Open a Bug</a> </span>
+          <p>
+            <span class="label label-warning">
+          <a href="https://ido-green.appspot.com/" target="_blank">ido-green.appspot.com</a></span> -
+            <span class="label label-warning">
+          <a href="https://github.com/greenido/lpa-1/issues/new" target="_blank">Open a Bug</a> </span>
           </p>
         </div>
       </footer>
@@ -315,6 +326,10 @@
       <li data-id="s-tab-li" data-button="Next" data-options="tipAnimation:fade">
         <h2>Startups</h2>
         <p>See which startups are part of this LPA</p>
+      </li>
+      <li data-id="mentors-tab-li" data-button="Next" data-options="tipLocation:right">
+        <h2>Mentors</h2>
+        <p>See all the mentors' details and email them funny jokes.</p>
       </li>
       <li data-id="a-tab-li" data-button="Next" data-options="tipLocation:right">
         <h2>Attendees</h2>

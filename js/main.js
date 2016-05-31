@@ -1,7 +1,7 @@
 (function() {
   $(".save-alert").hide();
   $("#spin").hide();
-
+ 
   var startupNameList = [];
   var mentorsList = [];
   var locationsList = [];
@@ -27,18 +27,23 @@
   //
   // AUTH fun
   // start the connection with firebase DB
-  //
-  var ref = new Firebase("https://lpa-1.firebaseio.com");
+  var config = {
+    apiKey: "AIzaSyDImJzAqBmZVXdaK55jVfRuoaHVLBDFgxU",
+    authDomain: "lpa-1.firebaseapp.com",
+    databaseURL: "https://lpa-1.firebaseio.com",
+    storageBucket: "project-1969056342883930904.appspot.com",
+  };
+  // Initialize Firebase
+  firebase.initializeApp(config);
+  var ref = firebase.database().ref();
   authUserData = null;
 
   //
-  // Create a new Firebase reference, and a new instance of the Login client
-  //
-  var mentorsChatRef = new Firebase('https://lpa-1.firebaseio.com/chats/mentors');
-  //
-  // init the chat module
+  // Init the chat module
   //
   function initMentorsChat(authData) {
+    // Create a new Firebase reference, and a new instance of the Login client
+    var mentorsChatRef = firebase.database().ref("mentors"); //new Firebase('https://lpa-1.firebaseio.com/chats/mentors');
     var mChat = new FirechatUI(mentorsChatRef, $("#mentors-firechat-wrapper"));
     mChat.setUser(authData.uid, authData[authData.provider].displayName);
   }
@@ -46,22 +51,22 @@
   //
   //
   //
-  ref.onAuth(function(authData) {
-    if (authData) {
-      authUserData = authData;
-      initMentorsChat(authData);
-
-      localStorage.setItem("lpa1-authData", JSON.stringify(authData));
-      console.log("User " + authData.uid + " is logged in with " + authData.provider);
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      authUserData = user;
+      //TODO: initMentorsChat(authData);
+      //localStorage.setItem("lpa1-authData", JSON.stringify(authData));
+      console.log("User " + user.uid + " is logged in with " + user.provider);
       $("#login-form").hide();
       $("#logout-div").html("<form class='navbar-form navbar-right' role='form'><button id='logout-but' class='btn btn-success'>Logout</button> </form>");
-      readMentors(authData);
-      readStartups(authData);
-      readAttendees(authData);
-      readLocations(authData);
+      readMentors(user);
+      readStartups(user);
+      readAttendees(user);
+      readLocations(user);
     } else {
       console.log("User is logged out");
       $("#login-form").show();
+      $("#spin").hide();
       $("#logout-div").html("");
     }
   });
@@ -71,18 +76,20 @@
   //
   $("#sign-in-but").click(function() {
     $("#spin").show();
-    var u_email = $("#email").val();
-    var u_passwd = $("#passwd").val();
-    ref.authWithPassword({
-      email: u_email,
-      password: u_passwd
-    }, function(error, authData) {
+    var email = $("#email").val();
+    var password = $("#passwd").val();
+
+    firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
       $("#spin").hide();
-      if (error) {
-        console.log("Login Failed!", error);
-        $("#err-modal").modal('show');
+      console.log("Login Failed! errCode: " + errorCode + " ErrMsg: " + errorMessage);
+      $("#err-modal").modal('show');
+      if (errorCode === 'auth/wrong-password') {
+        console.log('Err: Wrong password.');
       } else {
-        console.log("Authenticated successfully with payload:", authData);
+        console.error(error);
       }
     });
     return false;
@@ -91,15 +98,20 @@
   //
   // logout
   //
-  $("#logout-but").click(function() {
-    ref.unauth();
+  $('#logout-div').on('click', '#logout-but', function(event) {
+    // ref.unauth();
+    console.log("-- trying to logout --");
+    firebase.auth().signOut().then(function() {
+      console.log("Sign-out successful");
+    }, function(error) {
+      console.log("Could not sign-out. Err: " + error);
+    });
     return false;
   });
 
   //////////////////////////////////////////////////////////////////////////////
   // Schedule magic
   //////////////////////////////////////////////////////////////////////////////
-
   //
   // save the current schedule
   //
@@ -113,7 +125,7 @@
     // check for duplicate mentors
     var isOk = isScheduleGotErrors();
     if (isOk.length > 3) {
-      bootbox.confirm(isOk + " <br> <h5>Wanna save it anyway?</h5>", function(result) {
+      bootbox.confirm(isOk + "<br><h5>Wanna save it anyway?</h5>", function(result) {
         if (result === false) {
           return;
         }
@@ -123,7 +135,7 @@
     // on each startup we collect the mentors per hours and create sessions
     $(".sc-start-name").each(function() {
       isInSaveOperation = true;
-      console.log("is going INTO save");
+      console.log("=== is going INTO save");
       var startupName = $.trim($(this).text());
       var startupKey = startupName.replace(/\s/g, "");
       var mentorPerHour = [];
@@ -164,7 +176,7 @@
       });
     });
     isInSaveOperation = false;
-    console.log("is going out of save");
+    console.log("=== is going OUT of save");
   });
 
   //
@@ -172,9 +184,10 @@
   //
   function isScheduleGotErrors() {
     var stLen = startupNameList.length;
-    var naLen = 0;
+    var msg = "Yo! You have assigned the same mentor to more than one startup";
     for (var j = 1; j < 10; j++) {
       var tmpMenForThisHour = [];
+      var naLen = 0;
       for (var i = 0; i < stLen; i++) {
         var tmpMentorEmail = $("#mentor-" + startupNameList[i] + "-" + j + "-select").val();
         if (tmpMentorEmail === "na@na-com") {
@@ -188,12 +201,14 @@
       var uniqueMentor = tmpMenForThisHour.filter(onlyUnique);
       if ((uniqueMentor.length + naLen) < stLen) {
         var hourStr = getHourAsRange("h-" + j);
-        var msg = "Yo! You have assigned the same mentor to more than one startup (at least during <h3>" +
-          hourStr + ")</h3>Please resolve this as we can't split mentors (yet).";
-        return msg;
+        msg += "<h5>At " + hourStr + "</h5>";
       }
     }
-    return "";
+    msg += "Please resolve this as we can't split mentors (yet).";
+    if (msg.indexOf('At') < 0) {
+      msg = "";
+    }
+    return msg;
   }
 
   //
@@ -206,7 +221,8 @@
       $("#schedule-day-1").focus();
       return;
     }
-    var readRef = new Firebase("https://lpa-1.firebaseio.com/sessions/" + scDay + "/startups");
+    var readRef = firebase.database().ref("sessions/" + scDay + "/startups");
+    //new Firebase("https://lpa-1.firebaseio.com/sessions/" + scDay + "/startups");
     readRef.orderByKey().on("value", function(snapshot) {
       if (isInSaveOperation) {
         console.log("no no not yet");
@@ -248,6 +264,7 @@
   //
   function checkWeHaveDataForSchedule() {
     var secTimer;
+    checkWeHaveDataForScheduleCounter++;
     console.log(" -- checkWeHaveDataForSchedule -- flag: " + gotDataForSchedule);
     if (gotDataForSchedule < 3) {
       secTimer = setTimeout(checkWeHaveDataForSchedule, 1000); /* this checks the flag every 1 second */
@@ -256,7 +273,19 @@
       // shut the timer
       clearTimeout(secTimer);
     }
+    if (checkWeHaveDataForScheduleCounter > MAX_CALLS_FOR_CHECK_DATA) {
+      if (firebase.auth().currentUser === null) {
+        bootbox.alert("Please sign-in so we could fetch all the information.");
+      } else {
+        bootbox.alert("Something is not right. We have problems with fetching the data.");
+      }
+      // shut the timer
+      clearTimeout(secTimer);
+    }
   }
+
+  var MAX_CALLS_FOR_CHECK_DATA = 10;
+  var checkWeHaveDataForScheduleCounter = 0;
   checkWeHaveDataForSchedule();
 
   //
@@ -349,12 +378,13 @@
       $("#schedule-viewer-day").focus();
       return;
     }
-    var readRef = new Firebase("https://lpa-1.firebaseio.com/sessions/" + scDay + "/mentors/" + curMentorEmail);
+    var readRef = firebase.database().ref("sessions/" + scDay + "/mentors/" + curMentorEmail);
+    //new Firebase("https://lpa-1.firebaseio.com/sessions/" + scDay + "/mentors/" + curMentorEmail);
     readRef.orderByKey().on("value", function(snapshot) {
       var sessions = snapshot.val();
       if (sessions != null) {
         console.log("The sessions: " + JSON.stringify(sessions));
-        var html = "";
+        var html = ""; //"<h3>" + curMentorEmail + "</h3>";
         $("#mentor-schedule-list").html("");
         $.each(sessions, function(key, scData) {
           // per startup set the mentors + comments
@@ -388,13 +418,14 @@
       return;
     }
 
-    var readRef = new Firebase("https://lpa-1.firebaseio.com/sessions/" + scDay + "/startups/" + curAttendeeStartup);
+    var readRef = firebase.database().ref("sessions/" + scDay + "/startups/" + curAttendeeStartup);
+    //new Firebase("https://lpa-1.firebaseio.com/sessions/" + scDay + "/startups/" + curAttendeeStartup);
     readRef.orderByKey().on("value", function(snapshot) {
       var sessions = snapshot.val();
       if (sessions != null) {
-        $("#sc-viewer-reload-button").text("Reload " + curAttendeeStartup);
+        //$("#sc-viewer-reload-button").text("Reload " + curAttendeeStartup);
         //console.log("The sessions: " + JSON.stringify(sessions));
-        var scHtml = "";
+        var scHtml = "<h3>" + curAttendeeStartup + "</h3>";
         $("#mentor-schedule-list").html("");
         scHtml += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title"> Comments For The Day' +
           '</h3> </div> <div class="panel-body">' + sessions.comments + '</div> </div>';
@@ -528,20 +559,21 @@
   // read the list of startups and display it
   //
   function readStartups(authData) {
-    var readRef = new Firebase("https://lpa-1.firebaseio.com/startups/");
+    var readRef = firebase.database().ref("startups");
+    //new Firebase("https://lpa-1.firebaseio.com/startups/");
     readRef.orderByKey().on("value", function(snapshot) {
       //console.log("The Startups: " + JSON.stringify(snapshot.val()));
       $("#startups-list").html("");
       startupNameList = [];
       snapshot.forEach(function(childSnapshot) {
-        var key = childSnapshot.key();
+        var key = childSnapshot.key;
         startupNameList.push(key);
         var startupData = childSnapshot.val();
         var startupLogoUrl = addhttp(startupData.logo);
         //console.log("key: " + key + " data: " + startupData);
         $("#startups-list").append(
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
-          startupData.name + " ( <img src='" + startupLogoUrl + "' class='logo-img' alt='startup logo'> )" +
+          startupData.name + " <img src='" + startupLogoUrl + "' class='logo-img' alt='startup logo'> " +
           '<button type="button" class="edit-startup startup-edit btn btn-info" aria-label="Edit" data-key="' + key +
           '"><span class="glyphicon glyphicon-pencil"></span></button> <button type="button" class="remove-startup btn btn-danger" aria-label="Close" data-key="' +
           key + '"> <span class="glyphicon glyphicon-remove"></span></button>' +
@@ -586,7 +618,8 @@
   //
   $('body').on('click', '.startup-edit', function(event) {
     var stName = this.dataset.key;
-    var ref = new Firebase("https://lpa-1.firebaseio.com/startups/" + stName);
+    var ref = firebase.database().ref("startups/" + stName);
+    //new Firebase("https://lpa-1.firebaseio.com/startups/" + stName);
     ref.on("value", function(startupSnap) {
       var st = startupSnap.val();
       if (st !== null) {
@@ -615,7 +648,8 @@
     var key = this.dataset.key;
     bootbox.confirm("Are you sure? For Real?", function(result) {
       if (result === true) {
-        var fredRef = new Firebase('https://lpa-1.firebaseio.com/startups/' + key);
+        var fredRef = firebase.database().ref("startups/" + key);
+        //new Firebase('https://lpa-1.firebaseio.com/startups/' + key);
         var onComplete = function(error) {
           if (error) {
             console.log('Synchronization failed');
@@ -696,13 +730,14 @@
   // read the list of startups and display it
   //
   function readLocations(authData) {
-    var readRef = new Firebase("https://lpa-1.firebaseio.com/locations/");
+    var readRef = firebase.database().ref("locations");
+    //new Firebase("https://lpa-1.firebaseio.com/locations/");
     readRef.orderByKey().on("value", function(snapshot) {
       //console.log("The Startups: " + JSON.stringify(snapshot.val()));
       $("#locations-list").html("");
       locationsList = [];
       snapshot.forEach(function(childSnapshot) {
-        var key = childSnapshot.key();
+        var key = childSnapshot.key;
         var locationData = childSnapshot.val();
         locationsList.push(locationData);
         $("#locations-list").append(
@@ -734,7 +769,8 @@
   //
   $('body').on('click', '.location-edit', function(event) {
     var locationName = this.dataset.key;
-    var ref = new Firebase("https://lpa-1.firebaseio.com/locations/" + locationName);
+    var ref = firebase.database().ref("locations/" + locationName);
+    //new Firebase("https://lpa-1.firebaseio.com/locations/" + locationName);
     ref.on("value", function(locSnap) {
       var location = locSnap.val();
       if (location !== null) {
@@ -755,7 +791,8 @@
     var key = this.dataset.key;
     bootbox.confirm("This location is great. Are you sure? For Real?", function(result) {
       if (result === true) {
-        var locRef = new Firebase('https://lpa-1.firebaseio.com/locations/' + key);
+        var locRef = firebase.database().ref("locations/" + key);
+        //new Firebase('https://lpa-1.firebaseio.com/locations/' + key);
         var onComplete = function(error) {
           if (error) {
             console.log('Synchronization Failed');
@@ -796,32 +833,33 @@
       return;
     }
 
-    // email validation
-    if ($("#form-email-field").val().length < 2) {
-      $("#emailError").html("Please give an email - Don't worry we will never spam you.");
+    // mentor email validation
+    if ($("#form-email-field").val().length < 2 || 
+      $("#form-email-field").val().indexOf("gmail.com") < 0 ||
+      $("#form-email-field").val().indexOf("google.com") < 0) {
+      $("#emailError").html("Please give a gmail/google address - Mentors will need to sign-in with their gmail/google account.");
       $("#emailError").removeClass("sr-only");
       $("#emailError").addClass("alert");
       $("#form-email-field").focus();
       setTimeout(function() {
         $("#emailError").removeClass("alert");
         $("#emailError").addClass("sr-only");
-      }, 1500);
+      }, 2500);
       return;
     }
     var emailRegEx = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g;
     if (!emailRegEx.test(emailKey)) {
-      $("#emailError").html("Please give a valid email (e.g. momo@okko.com");
+      $("#emailError").html("Please give a valid gmail address (e.g. momo@gmail.com");
       $("#emailError").removeClass("sr-only");
       $("#emailError").addClass("alert");
       $("#form-email-field").focus();
       setTimeout(function() {
         $("#emailError").removeClass("alert");
         $("#emailError").addClass("sr-only");
-      }, 1500);
+      }, 2500);
       return;
     }
-
-    console.log("saving to Firebase: " + name + " , " + email);
+    //console.log("saving to Firebase: " + name + " , " + email);
     var curUnixTime = new Date().getTime();
     var disTime = new Date().toJSON().slice(0, 21);
 
@@ -859,16 +897,17 @@
   });
 
   //
-  // read the list of mentors and display it
+  // Read the list of mentors and display it
   //
   function readMentors(authData) {
-    var readRef = new Firebase("https://lpa-1.firebaseio.com/mentors/");
+    var readRef = firebase.database().ref("mentors");
+    //new Firebase("https://lpa-1.firebaseio.com/mentors/");
     readRef.orderByKey().on("value", function(snapshot) {
       //console.log("The mentors: " + JSON.stringify(snapshot.val()));
       $("#mentors-list").html("");
       mentorsList = [];
       snapshot.forEach(function(childSnapshot) {
-        var key = childSnapshot.key();
+        var key = childSnapshot.key;
         var mentorData = childSnapshot.val();
         mentorsList.push(mentorData);
 
@@ -877,16 +916,17 @@
         var divDetailKey = key.replace("@", "");
         $("#mentors-list").append(
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
-          mentorData.name + " ( " + mentorData.phone + " )" +
+          mentorData.name + '<img src="' + mPicUrl + '" class="att-pic-card" alt="mentor picture" /> ' +
           ' &nbsp; &nbsp;<button class="btn" type="button" data-toggle="collapse" data-target="#mentor-panel-' + divDetailKey +
           '" aria-expanded="false" aria-controls="collapseMentorDetails"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span></button> \
           <button type="button" class="edit-mentor mentor-edit btn btn-info" aria-label="Edit" data-key="' + key +
           '"><span class="glyphicon glyphicon-pencil"></span></button> <button type="button" class="remove-mentor btn btn-danger" aria-label="Close" data-key="' +
           key + '"> <span class="glyphicon glyphicon-remove"></span></button>' +
           '</h3> </div> <div id="mentor-panel-' + divDetailKey + '" class="panel-body mentor-edit collapse" data-key="' + key +
-          '"> ' + mentorData.email + '<br>' +
-          '<img src="' + mPicUrl + '" class="att-pic-card" alt="mentor picture" /> ' +
-          mentorData.domain + '<br>' + mentorData.expertise + ' </div> </div>'
+          '"> <h5><a href="mailto:' + mentorData.email + '" target="_blank">' + mentorData.email + '</a></h5>' +
+          '<b>Phone:</b> ' + mentorData.phone +
+          '<br><b>Domain:</b> ' + mentorData.domain + ' - <b>Secondary:</b> ' + mentorData.domainSec +
+          '<br><b>Expertise:</b> ' + mentorData.expertise + ' </div> </div>'
         );
       });
       gotDataForSchedule++;
@@ -904,9 +944,9 @@
     $("#form-city-field").val("");
     $("#form-domain-select").selectpicker('val', "UX");
     $("#form-domain-sec-select").selectpicker('val', "UX");
-    $("#form-twitter-field").val();
-    $("#form-bio").val();
-    $("#form-fun-fact").val();
+    $("#form-twitter-field").val("");
+    $("#form-bio").val("");
+    $("#form-fun-fact").val("");
     $("#form-expertise").val("");
     $("#form-linkedin-url").val("");
     $("#form-personal-url").val("");
@@ -921,7 +961,8 @@
   //
   $('body').on('click', '.mentor-edit', function(event) {
     var key = this.dataset.key;
-    var ref = new Firebase("https://lpa-1.firebaseio.com/mentors/" + key);
+    var ref = firebase.database().ref("mentors/" + key);
+    //new Firebase("https://lpa-1.firebaseio.com/mentors/" + key);
     ref.on("value", function(mentorSnap) {
       var mentor = mentorSnap.val();
       if (mentor !== null) {
@@ -954,7 +995,8 @@
     var key = this.dataset.key;
     bootbox.confirm("Are you sure? For Real?", function(result) {
       if (result === true) {
-        var fredRef = new Firebase('https://lpa-1.firebaseio.com/mentors/' + key);
+        var fredRef = firebase.database().ref("mentors/" + key);
+        //new Firebase('https://lpa-1.firebaseio.com/mentors/' + key);
         var onComplete = function(error) {
           if (error) {
             console.log('Synchronization failed');
@@ -991,7 +1033,7 @@
       return;
     }
 
-    // email validation
+    // attendee email validation
     if ($("#att-email-field").val().length < 2) {
       $("#att-emailError").html("Please give an email - Don't worry we will never spam you.");
       $("#att-emailError").removeClass("sr-only");
@@ -1005,7 +1047,7 @@
     }
     var emailRegEx = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g;
     if (!emailRegEx.test(email)) {
-      $("#att-emailError").html("Please give a valid email (e.g. momo@okko.com");
+      $("#att-emailError").html("Please give a valid email (e.g. momo@gmail.com");
       $("#att-emailError").removeClass("sr-only");
       $("#att-emailError").addClass("alert");
       $("#form-email-field").focus();
@@ -1046,22 +1088,24 @@
   // read the list of Attendees and display it
   //
   function readAttendees(authData) {
-    var readRef = new Firebase("https://lpa-1.firebaseio.com/attendees/");
+    var readRef = firebase.database().ref("attendees");
+    //new Firebase("https://lpa-1.firebaseio.com/attendees/");
     readRef.orderByKey().on("value", function(snapshot) {
       //console.log("The attendees: " + JSON.stringify(snapshot.val()));
       $("#att-list").html("");
       snapshot.forEach(function(childSnapshot) {
-        var key = childSnapshot.key();
+        var key = childSnapshot.key;
         var attData = childSnapshot.val();
         var picUrl = addhttp(attData.pic);
         //console.log("key: " + key + " data: " + attData);
         $("#att-list").append(
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
-          attData.name + " ( <a href='mailto:" + attData.email + "' target='_blank'>" + attData.email + "</a> )" +
+          attData.name + '<img src="' + picUrl + '" class="att-pic-card" alt="attendee picture"/>' + 
           '<button type="button" class="edit-att att-edit btn btn-info" aria-label="Edit" data-key="' + key +
           '"><span class="glyphicon glyphicon-pencil"></span></button> <button type="button" class="remove-att btn btn-danger" aria-label="Close" data-key="' + key + '"> <span class="glyphicon glyphicon-remove"></span></button>' +
           '</h3> </div> <div class="panel-body att-edit" data-key="' + key + '"> ' + attData.startup + '<br>' +
-          '<img src="' + picUrl + '" class="att-pic-card" alt="attendee picture"/> <br>' + attData.linkedin + ' </div> </div>'
+          "<a href='mailto:" + attData.email + "' target='_blank'>" + attData.email + "</a><br>" + 
+          attData.linkedin + ' </div> </div>'
         );
       });
     });
@@ -1082,11 +1126,12 @@
   });
 
   //
-  // enable to edit  from the list
+  // enable to edit from the list
   //
   $('body').on('click', '.att-edit', function(event) {
     var key = this.dataset.key;
-    var ref = new Firebase("https://lpa-1.firebaseio.com/attendees/" + key);
+    var ref = firebase.database().ref("attendees/" + key);
+    //new Firebase("https://lpa-1.firebaseio.com/attendees/" + key);
     ref.on("value", function(attSnap) {
       var att = attSnap.val();
       if (att !== null) {
@@ -1111,7 +1156,8 @@
     var key = this.dataset.key;
     bootbox.confirm("Are you sure? Delete " + key + " For Real?", function(result) {
       if (result === true) {
-        var fredRef = new Firebase('https://lpa-1.firebaseio.com/attendees/' + key);
+        var fredRef = firebase.database().ref("attendees/" + key);
+        //new Firebase('https://lpa-1.firebaseio.com/attendees/' + key);
         var onComplete = function(error) {
           if (error) {
             console.log('Synchronization failed');
@@ -1130,6 +1176,14 @@
   // Utils
   //////////////////////////////////////////////////////////////////////////////////
 
+  //
+  //
+  //
+  window.onerror = function(message, url, lineNumber) {
+    //TODO: send to server 
+    console.error("Err:" + message + " url: " + url + " line: " + lineNumber);
+    return true;
+  };
   //
   // Helper function to get unique in array
   // usage example:

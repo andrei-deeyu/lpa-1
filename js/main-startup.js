@@ -72,6 +72,7 @@
 
         readStartups(authData);
         readAttendees(authData);
+        readMentors(authData);
       } else {
         $("#sc-reload-button").prop('disabled', true);
         console.log("Not auth with an email :/");
@@ -124,7 +125,7 @@
   //////////////////////////////////////////////////////////////////////////////
   // Fetch schedule
   //////////////////////////////////////////////////////////////////////////////
-
+  //
   //
   // Reload the schedule that the attendee got (= per her startup)
   //
@@ -227,9 +228,10 @@
         //console.log("key: " + key + " data: " + startupData);
         $("#startups-list").append(
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
-          startupData.name + " ( <img src='" + startupLogoUrl + "' class='logo-img' alt='startup logo'> )" +
-          '</h3> </div> <div class="panel-body startup-edit" data-key="' + key + '"> <b>' + startupData.description + '</b><br>' +
-          startupData.country + '<br>' + startupData.city + ' </div> </div>'
+          startupData.name + "&nbsp;&nbsp;<img src='" + startupLogoUrl + "' class='logo-img' alt='startup logo'>" +
+          '</h3> </div> <div class="panel-body startup-edit" data-key="' + key + '"> <div class="startup-card-desc">' + 
+          startupData.description + '</div><b>From:</b> ' +
+          startupData.country + '  ' + startupData.city + ' </div> </div>'
         );
       });
       var selHtml = getStartupSelect();
@@ -256,17 +258,23 @@
       snapshot.forEach(function(childSnapshot) {
         var key = childSnapshot.key();
         var mentorData = childSnapshot.val();
-        var mPicUrl = addhttp(mentorData.pic);
-        //console.log("key: " + key + " data: " + mentorData);
-        $("#mentors-list").append(
-          '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
-          mentorData.name + " ( " + mentorData.phone + " )" +
-          '<button type="button" class="edit-mentor mentor-edit btn btn-info" aria-label="Edit" data-key="' + key +
-          '"><span class="glyphicon glyphicon-pencil"></span></button> <button type="button" class="remove-mentor btn btn-danger" aria-label="Close" data-key="' + key + '"> <span class="glyphicon glyphicon-remove"></span></button>' +
-          '</h3> </div> <div class="panel-body mentor-edit" data-key="' + key + '"> ' + mentorData.email + '<br>' +
-          '<img src="' + mPicUrl + '" class="att-pic-card" alt="mentor picture" /> ' +
-          mentorData.domain + '<br>' + mentorData.expertise + ' </div> </div>'
-        );
+        if (mentorData.name != "--N/A--") {
+          var mPicUrl = addhttp(mentorData.pic);
+          //console.log("key: " + key + " data: " + mentorData);    <div class="collapse" id="collapse-bio-links">
+          var divDetailKey = key.replace("@", "");
+          $("#mentors-list").append(
+            '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
+            mentorData.name + '<img src="' + mPicUrl + '" class="att-pic-card" alt="mentor picture" /> ' +
+            ' &nbsp; &nbsp;<button class="btn" type="button" data-toggle="collapse" data-target="#mentor-panel-' + divDetailKey +
+            '" aria-expanded="false" aria-controls="collapseMentorDetails"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span></button>' +
+            '</h3> </div> <div id="mentor-panel-' + divDetailKey + '" class="panel-body mentor-edit collapse" data-key="' + key +
+            '"> <h5><a href="mailto:' + mentorData.email + '" target="_blank">' + mentorData.email + '</a></h5>' +
+            '<b>Phone:</b> <a href="tel:' + mentorData.phone + '">' + mentorData.phone + '</a><br>' +
+            '<b>Domain:</b> ' + mentorData.domain + ' - <b>Secondary:</b> ' + mentorData.domainSec +
+            '<br><b>Expertise:</b> ' + mentorData.expertise + ' </div> </div>'
+          );
+        }
+
       });
     });
   }
@@ -320,6 +328,10 @@
         localStorage.removeItem("lpa1-g-att-startup");
         $("#sc-reload-button").prop('disabled', true);
         bootbox.alert("Please check with the organizer why you aren't part of any startup");
+        ref.unauth();
+        setTimeout(function() {
+          location.reload();
+        }, 2000);
       }
     });
   }
@@ -409,9 +421,11 @@
         //console.log("key: " + key + " data: " + attData);
         $("#att-list").append(
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
-          attData.name + " ( <a href='mailto:" + attData.email + "' target='_blank'>" + attData.email + "</a> )" +
-          '</h3> </div> <div class="panel-body att-edit" data-key="' + key + '"> ' + attData.startup + '<br>' +
-          '<img src="' + picUrl + '" class="att-pic-card" alt="attendee picture"/> <br>' + attData.linkedin + ' </div> </div>'
+          attData.name + '<img src="' + picUrl + '" class="att-pic-card" alt="attendee picture"/>' +
+          '</h3> </div> <div class="panel-body att-edit" data-key="' + key + '"><h4>' + attData.startup + '</h4>' +
+          "<b>email:</b> <a href='mailto:" + attData.email + "' target='_blank'>" + attData.email + "</a>" +
+          '<br><b>Linkedin:</b> <a href="http://www.linkedin.com/in/' + attData.linkedin + '" target="_blank">' + 
+          attData.linkedin + '</a> </div> </div>'
         );
       });
     });

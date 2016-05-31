@@ -112,7 +112,9 @@ label {
 }
 
 .att-pic-card {
-  height: 60px;
+  height: 50px;
+  border-radius: 50%;
+  padding-left: 7px;
 }
 
 .radio-viewer {
@@ -148,6 +150,9 @@ label {
   padding-bottom: .2em;
 }
 
+.startup-card-desc {
+  width: 90%;
+}
 .must-have-field {
   background-color: antiquewhite;
 }
