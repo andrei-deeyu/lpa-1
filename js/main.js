@@ -834,8 +834,10 @@
     }
 
     // mentor email validation
-    if ($("#form-email-field").val().length < 2 || $("#form-email-field").val().indexOf("gmail.com") < 0) {
-      $("#emailError").html("Please give a gmail address - Mentors will need to sign-in with their gmail account.");
+    if ($("#form-email-field").val().length < 2 || 
+      $("#form-email-field").val().indexOf("gmail.com") < 0 ||
+      $("#form-email-field").val().indexOf("google.com") < 0) {
+      $("#emailError").html("Please give a gmail/google address - Mentors will need to sign-in with their gmail/google account.");
       $("#emailError").removeClass("sr-only");
       $("#emailError").addClass("alert");
       $("#form-email-field").focus();
