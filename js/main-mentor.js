@@ -28,7 +28,7 @@
   });
 
   // AUTH fun
-  // start the connection with firebase DB
+  // start the connection with Firebase
   //
   var ref = new Firebase("https://lpa-1.firebaseio.com");
   authUserData = null;
@@ -38,7 +38,7 @@
   //
   var chatRef = new Firebase('https://lpa-1.firebaseio.com/chats/mentors');
   //
-  // init the chat module
+  // Init the chat module
   //
   function initChat(authData) {
     var chat = new FirechatUI(chatRef, document.getElementById('firechat-wrapper'));

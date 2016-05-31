@@ -859,8 +859,7 @@
       }, 2500);
       return;
     }
-
-    console.log("saving to Firebase: " + name + " , " + email);
+    //console.log("saving to Firebase: " + name + " , " + email);
     var curUnixTime = new Date().getTime();
     var disTime = new Date().toJSON().slice(0, 21);
 
@@ -898,7 +897,7 @@
   });
 
   //
-  // read the list of mentors and display it
+  // Read the list of mentors and display it
   //
   function readMentors(authData) {
     var readRef = firebase.database().ref("mentors");
