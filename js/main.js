@@ -125,7 +125,7 @@
     // check for duplicate mentors
     var isOk = isScheduleGotErrors();
     if (isOk.length > 3) {
-      bootbox.confirm(isOk + " <br> <h5>Wanna save it anyway?</h5>", function(result) {
+      bootbox.confirm(isOk + "<br><h5>Wanna save it anyway?</h5>", function(result) {
         if (result === false) {
           return;
         }
@@ -184,9 +184,10 @@
   //
   function isScheduleGotErrors() {
     var stLen = startupNameList.length;
-    var naLen = 0;
+    var msg = "Yo! You have assigned the same mentor to more than one startup";
     for (var j = 1; j < 10; j++) {
       var tmpMenForThisHour = [];
+      var naLen = 0;
       for (var i = 0; i < stLen; i++) {
         var tmpMentorEmail = $("#mentor-" + startupNameList[i] + "-" + j + "-select").val();
         if (tmpMentorEmail === "na@na-com") {
@@ -200,12 +201,14 @@
       var uniqueMentor = tmpMenForThisHour.filter(onlyUnique);
       if ((uniqueMentor.length + naLen) < stLen) {
         var hourStr = getHourAsRange("h-" + j);
-        var msg = "Yo! You have assigned the same mentor to more than one startup (at least during <h3>" +
-          hourStr + ")</h3>Please resolve this as we can't split mentors (yet).";
-        return msg;
+        msg += "<h5>At " + hourStr + "</h5>";
       }
     }
-    return "";
+    msg += "Please resolve this as we can't split mentors (yet).";
+    if (msg.indexOf('At') < 0) {
+      msg = "";
+    }
+    return msg;
   }
 
   //
