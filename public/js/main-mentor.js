@@ -147,10 +147,13 @@
           if (scData.notes && scData.notes.meetingNotes) {
             curNotes = scData.notes.meetingNotes;
           }
-          console.log("update mentors and comments for: " + key + " " + scData);
+          console.log("=== update mentors and comments for: " + key + " | notes: " + curNotes + " | data: " + scData);
           html += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
-            scData.startup + ' | ' + getHourAsRange(key) + ' </h3> </div> <div class="panel-body">' +
-            '<b>Location: ' + scData.location + '</b> <p class="" id="meet-details-' + key + '">Meeting Notes:<br> \
+            scData.startup + ' | ' + getHourAsRange(key) + 
+            ' <button class="btn" type="button" data-toggle="collapse" data-target="#mentor-note-p-' + key +
+            '" aria-expanded="false" aria-controls="collapseMentorDetails"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span></button>' +
+            ' </h3><b>Location: ' + scData.location + '</b> </div> <div id="mentor-note-p-' + key + '" class="panel-body collapse">' +
+            '<p class="" id="meet-details-' + key + '">Meeting Notes:<br> \
             <textarea class="form-control col-lg-10 meeting-notes-text" data-key="' + meetingNotesKey +
             '" data-startup="' + startupNotesKey + '" data-notes-backup="' + startupBackupNotesKey +
             '" name="meeting-notes">' + curNotes +
@@ -167,7 +170,7 @@
   });
 
   //
-  // Fetch all the mentor's notes
+  // Fetch all the notes per startup
   //
   $('body').on('click', '.fetch-notes-button', function(event) {
     var startupName = $(this).data("key");
@@ -181,7 +184,7 @@
           // per startup - show all the notes
           var curNotes = "";
           var curSt = scData.notes;
-          if (curSt != undefined ) {
+          if (curSt != undefined) {
             for (var tmpMentorEmail in curSt) {
               var hours = curSt[tmpMentorEmail];
               Object.keys(hours).forEach(function(key) {
@@ -479,7 +482,6 @@
         var mentorData = childSnapshot.val();
         if (mentorData.name != "--N/A--") {
           var mPicUrl = addhttp(mentorData.pic);
-          //console.log("key: " + key + " data: " + mentorData);    <div class="collapse" id="collapse-bio-links">
           var divDetailKey = key.replace("@", "");
           $("#mentors-list").append(
             '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
