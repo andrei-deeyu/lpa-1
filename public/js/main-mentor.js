@@ -181,7 +181,7 @@
           // per startup - show all the notes
           var curNotes = "";
           var curSt = scData.startups[startupName];
-          if (curSt.notes) {
+          if (curSt != undefined && curSt.notes) {
             for (var tmpMentorEmail in curSt.notes) {
               var hours = curSt.notes[tmpMentorEmail];
               Object.keys(hours).forEach(function(key) {
@@ -196,7 +196,7 @@
           }
         });
         if (html.length < 1) {
-          html = "<h2>No Notes :/<h2>";
+          html = "<h2>No Notes for " + startupName + " :/</h2>";
         }
         $("#startup-notes").html(html);
         $('body').scrollTop(60);
