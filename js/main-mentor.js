@@ -12,7 +12,7 @@
   var curMentorEmail = "";
 
   //
-  // handle the intro help and later the help function
+  // Handle the intro help and later the help function
   //
   if (!localStorage.getItem("lpa-1-showed-help")) {
     $('#joyRideTipContent').joyride({
@@ -81,7 +81,7 @@
   });
 
   //
-  //
+  // Logout UI updater
   //
   function logoutUI() {
     $("#sc-reload-button").prop('disabled', true);
@@ -89,6 +89,7 @@
     $("#login-form").html('<button type="submit" id="google-sign-in-but" class="btn btn-success">Sign in</button> <span id="spin"><i class="fa fa-spinner fa-spin"></i></span>');
     $("#spin").hide();
   }
+
   //
   // Sign in user/password
   //
@@ -110,7 +111,7 @@
   });
 
   //
-  // logout
+  // logout action
   //
   $("#logout-but").click(function() {
     ref.unauth();
@@ -123,7 +124,7 @@
   // Fetch schedule
   //////////////////////////////////////////////////////////////////////////////
   //
-  // Reload the schedule from firebase
+  // Reload the schedule from firebase per date
   //
   $("#sc-reload-button").click(function() {
     var scDay = $("#schedule-day-1").val();
@@ -149,7 +150,7 @@
           }
           console.log("=== update mentors and comments for: " + key + " | notes: " + curNotes + " | data: " + scData);
           html += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
-            scData.startup + ' | ' + getHourAsRange(key) + 
+            scData.startup + ' | ' + getHourAsRange(key) +
             ' <button class="btn" type="button" data-toggle="collapse" data-target="#mentor-note-p-' + key +
             '" aria-expanded="false" aria-controls="collapseMentorDetails"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span></button>' +
             ' </h3><b>Location: ' + scData.location + '</b> </div> <div id="mentor-note-p-' + key + '" class="panel-body collapse">' +
@@ -198,8 +199,6 @@
               });
             }
           }
-
-
         });
         if (html.length < 1) {
           html = "<h2>No Notes for " + startupName + " :/</h2>";
@@ -214,7 +213,7 @@
   });
 
   //
-  // save the meeting notes
+  // Save the meeting notes
   //
   $('#mentor-schedule-list').on('click', '.meeting-save-button', function() {
     // save the meeting notes
@@ -313,7 +312,7 @@
   //////////////////////////////////////////////////////////////////////////////
 
   //
-  // get list of startups
+  // Get list of startups
   //
   function getStartupSelect() {
     var html = '<select id="att-startup-list-select" class="selectpicker" data-style="btn-info">';
@@ -326,7 +325,7 @@
   }
 
   //
-  // read the list of startups and display it
+  // Read the list of startups and display it
   //
   function readStartups(authData) {
     var readRef = new Firebase("https://lpa-1.firebaseio.com/startups/");
@@ -339,7 +338,6 @@
         startupNameList.push(key);
         var startupData = childSnapshot.val();
         var startupLogoUrl = addhttp(startupData.logo);
-        //console.log("key: " + key + " data: " + startupData);
         $("#startups-list").append(
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
           startupData.name + "&nbsp;&nbsp;<img src='" + startupLogoUrl + "' class='logo-img' alt='startup logo'>" +
