@@ -150,6 +150,9 @@ label {
   padding-bottom: .2em;
 }
 
+.startup-card-desc {
+  width: 90%;
+}
 .must-have-field {
   background-color: antiquewhite;
 }

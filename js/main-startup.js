@@ -229,8 +229,9 @@
         $("#startups-list").append(
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
           startupData.name + "&nbsp;&nbsp;<img src='" + startupLogoUrl + "' class='logo-img' alt='startup logo'>" +
-          '</h3> </div> <div class="panel-body startup-edit" data-key="' + key + '"> <b>' + startupData.description + '</b><br>' +
-          startupData.country + '<br>' + startupData.city + ' </div> </div>'
+          '</h3> </div> <div class="panel-body startup-edit" data-key="' + key + '"> <div class="startup-card-desc">' + 
+          startupData.description + '</div><b>From:</b> ' +
+          startupData.country + '  ' + startupData.city + ' </div> </div>'
         );
       });
       var selHtml = getStartupSelect();

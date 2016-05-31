@@ -337,9 +337,9 @@
         $("#startups-list").append(
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
           startupData.name + "&nbsp;&nbsp;<img src='" + startupLogoUrl + "' class='logo-img' alt='startup logo'>" +
-          '</h3> </div> <div class="panel-body startup-edit" data-key="' + key + '"> <b>' + startupData.description +
-          '</b><br>From: <b>' + startupData.country + ' - ' + startupData.city +
-          '</b>  Founded: <b>' + startupData.dateFounded + '</b><br>Employees: <b>' + startupData.numEmployees +
+          '</h3> </div> <div class="panel-body startup-edit" data-key="' + key + '"> <div class="startup-card-desc">' + startupData.description +
+          '</div>From: <b>' + startupData.country + '  ' + startupData.city +
+          '</b> Founded: <b>' + startupData.dateFounded + '</b><br>Employees: <b>' + startupData.numEmployees +
           '</b><br> <h4> <span class="label label-warning"> <a href="' + startupData.video +
           '" target="_blank">Application Video</a> </span> ' +
           ' &nbsp;&nbsp; <span class="label label-success"><a href="' +
