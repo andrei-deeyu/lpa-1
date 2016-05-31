@@ -171,7 +171,7 @@
   //
   $('body').on('click', '.fetch-notes-button', function(event) {
     var startupName = $(this).data("key");
-    var readRef = new Firebase("https://lpa-1.firebaseio.com/sessions/");
+    var readRef = new Firebase("https://lpa-1.firebaseio.com/notes-backup/startups/" + startupName);
     readRef.orderByKey().on("value", function(snapshot) {
       var sessions = snapshot.val();
       if (sessions != null) {
@@ -180,10 +180,10 @@
         $.each(sessions, function(keyDate, scData) {
           // per startup - show all the notes
           var curNotes = "";
-          var curSt = scData.startups[startupName];
-          if (curSt != undefined && curSt.notes) {
-            for (var tmpMentorEmail in curSt.notes) {
-              var hours = curSt.notes[tmpMentorEmail];
+          var curSt = scData.notes;
+          if (curSt != undefined ) {
+            for (var tmpMentorEmail in curSt) {
+              var hours = curSt[tmpMentorEmail];
               Object.keys(hours).forEach(function(key) {
                 var val = hours[key];
                 var noteDate = val.date.replace("T", " ");
@@ -195,15 +195,18 @@
               });
             }
           }
+
+
         });
         if (html.length < 1) {
           html = "<h2>No Notes for " + startupName + " :/</h2>";
         }
         $("#startup-notes").html(html);
-        $('body').scrollTop(60);
       } else {
         bootbox.alert("Could not find notes for you :/");
+        $("#startup-notes").html("");
       }
+      $('body').scrollTop(60);
     });
   });
 
