@@ -95,7 +95,7 @@
         hitType: 'event',
         eventCategory: 'sign-in',
         eventAction: 'sign-in-button',
-        eventLabel: 'authentication',
+        eventLabel: 'admin auth failed',
         eventValue: 1
       });
       $("#err-modal").modal('show');

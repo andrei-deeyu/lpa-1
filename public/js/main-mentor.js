@@ -74,6 +74,12 @@
       readStartups(authData);
       readAttendees(authData);
       readMentors(authData);
+      ga('send', {
+        hitType: 'event',
+        eventCategory: 'sign-in-mentor',
+        eventAction: 'authenticated user.uid: ' + authData.uid,
+        eventLabel: 'authentication'
+      });
     } else {
       console.log("User is logged out");
       logoutUI();
@@ -99,6 +105,12 @@
       $("#spin").hide();
       if (error) {
         console.log("Login Failed!", error);
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'sign-in-mentor',
+          eventAction: 'sign-in-button',
+          eventLabel: 'authentication failed: ' + error,
+        });
         $("#err-modal").modal('show');
       } else {
         $("#sc-reload-button").prop('disabled', false);
@@ -133,6 +145,13 @@
       $("#schedule-day-1").focus();
       return;
     }
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'schedule-mentor',
+      eventAction: 'reload-schedule',
+      eventLabel: 'for day: ' + scDay
+    });
+
     var readRef = new Firebase("https://lpa-1.firebaseio.com/sessions/" + scDay + "/mentors/" + curMentorEmail);
     readRef.orderByKey().on("value", function(snapshot) {
       var sessions = snapshot.val();
@@ -176,6 +195,13 @@
   $('body').on('click', '.fetch-notes-button', function(event) {
     var startupName = $(this).data("key");
     var readRef = new Firebase("https://lpa-1.firebaseio.com/notes-backup/startups/" + startupName);
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'startup-notes-mentor',
+      eventAction: 'fetch-notes',
+      eventLabel: 'startup: ' + startupName
+    });
+
     readRef.orderByKey().on("value", function(snapshot) {
       var sessions = snapshot.val();
       if (sessions != null) {
@@ -227,6 +253,12 @@
       bootbox.alert("Sorry - Can't save your notes. Please take them in another way and let the organizers know about it.");
       return;
     }
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'startup-notes-mentor',
+      eventAction: 'save-notes',
+      eventLabel: 'keyToNotesBackup: ' + keyToNotesBackup
+    });
     var curUnixTime = new Date().getTime();
     var disTime = new Date().toJSON().slice(0, 21);
     // save under the mentor
@@ -566,6 +598,12 @@
         $("#form-name-field").focus();
         $('body').scrollTop(60);
       } else {
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'check-mentor',
+          eventAction: 'fetch-not-registered-mentor',
+          eventLabel: 'key: ' + key
+        });
         bootbox.alert("It looks like you are not registered. Please ask for organizers to put you on the list, cool?");
         ref.unauth();
         setTimeout(function() {
@@ -630,6 +668,20 @@
   //////////////////////////////////////////////////////////////////////////////////
   // Utils
   //////////////////////////////////////////////////////////////////////////////////
+
+  //
+  //
+  //
+  window.onerror = function(message, url, lineNumber) {
+    //TODO: send to server 
+    console.log("Err:" + message + " url: " + url + " line: " + lineNumber);
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'mentor-gen-error',
+      eventAction: 'msg: ' + msg,
+      eventLabel: 'url: ' + url + " line: " + lineNumber
+    });
+  };
 
   //
   //
