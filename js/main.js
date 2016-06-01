@@ -1216,12 +1216,10 @@
   // Utils
   //////////////////////////////////////////////////////////////////////////////////
 
-
   //
-  //
+  // Catch errors and send them to GA
   //
   window.onerror = function(msg, url, lineNumber) {
-    //TODO: send to server 
     console.log("Err:" + msg + " url: " + url + " line: " + lineNumber);
     ga('send', {
       hitType: 'event',

@@ -676,7 +676,7 @@
   //////////////////////////////////////////////////////////////////////////////////
 
   //
-  //
+  // Catch errors and send them to GA
   //
   window.onerror = function(msg, url, lineNumber) {
     console.log("Err:" + msg + " url: " + url + " line: " + lineNumber);
