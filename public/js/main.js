@@ -1232,8 +1232,6 @@
     return true;
   };
 
-  throw "Deliberate Error!";
-
   //
   // Helper function to get unique in array
   // usage example:
