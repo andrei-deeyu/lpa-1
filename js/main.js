@@ -1,7 +1,7 @@
 (function() {
   $(".save-alert").hide();
   $("#spin").hide();
- 
+
   var startupNameList = [];
   var mentorsList = [];
   var locationsList = [];
@@ -57,6 +57,12 @@
       //TODO: initMentorsChat(authData);
       //localStorage.setItem("lpa1-authData", JSON.stringify(authData));
       console.log("User " + user.uid + " is logged in with " + user.provider);
+      ga('send', {
+        hitType: 'event',
+        eventCategory: 'sign-in',
+        eventAction: 'authenticated user.uid: ' + user.uid,
+        eventLabel: 'authentication'
+      });
       $("#login-form").hide();
       $("#logout-div").html("<form class='navbar-form navbar-right' role='form'><button id='logout-but' class='btn btn-success'>Logout</button> </form>");
       readMentors(user);
@@ -85,6 +91,13 @@
       var errorMessage = error.message;
       $("#spin").hide();
       console.log("Login Failed! errCode: " + errorCode + " ErrMsg: " + errorMessage);
+      ga('send', {
+        hitType: 'event',
+        eventCategory: 'sign-in',
+        eventAction: 'sign-in-button',
+        eventLabel: 'authentication',
+        eventValue: 1
+      });
       $("#err-modal").modal('show');
       if (errorCode === 'auth/wrong-password') {
         console.log('Err: Wrong password.');
@@ -99,12 +112,23 @@
   // logout
   //
   $('#logout-div').on('click', '#logout-but', function(event) {
-    // ref.unauth();
     console.log("-- trying to logout --");
     firebase.auth().signOut().then(function() {
       console.log("Sign-out successful");
+      ga('send', {
+        hitType: 'event',
+        eventCategory: 'sign-out',
+        eventAction: 'sign-out-button-success',
+        eventLabel: 'authentication'
+      });
     }, function(error) {
       console.log("Could not sign-out. Err: " + error);
+      ga('send', {
+        hitType: 'event',
+        eventCategory: 'sign-out',
+        eventAction: 'sign-out-button-failed',
+        eventLabel: 'authentication'
+      });
     });
     return false;
   });
@@ -131,6 +155,12 @@
         }
       });
     }
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'schedule',
+      eventAction: 'save-schedule',
+      eventLabel: 'for: ' + scDay
+    });
 
     // on each startup we collect the mentors per hours and create sessions
     $(".sc-start-name").each(function() {
@@ -378,6 +408,12 @@
       $("#schedule-viewer-day").focus();
       return;
     }
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'schedule',
+      eventAction: 'load-mentor-schedule',
+      eventLabel: 'day: ' + scDay
+    });
     var readRef = firebase.database().ref("sessions/" + scDay + "/mentors/" + curMentorEmail);
     //new Firebase("https://lpa-1.firebaseio.com/sessions/" + scDay + "/mentors/" + curMentorEmail);
     readRef.orderByKey().on("value", function(snapshot) {
@@ -417,7 +453,12 @@
       $("#schedule-viewer-day").focus();
       return;
     }
-
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'schedule',
+      eventAction: 'load-startup-schedule',
+      eventLabel: 'day: ' + scDay
+    });
     var readRef = firebase.database().ref("sessions/" + scDay + "/startups/" + curAttendeeStartup);
     //new Firebase("https://lpa-1.firebaseio.com/sessions/" + scDay + "/startups/" + curAttendeeStartup);
     readRef.orderByKey().on("value", function(snapshot) {
@@ -834,8 +875,8 @@
     }
 
     // mentor email validation
-    if (emailKey.length < 2 || 
-        (emailKey.indexOf("gmail.com") < 0 && emailKey.indexOf("google.com") < 0) ) {
+    if (emailKey.length < 2 ||
+      (emailKey.indexOf("gmail.com") < 0 && emailKey.indexOf("google.com") < 0)) {
       $("#emailError").html("Please give a gmail/google address - Mentors will need to sign-in with their gmail/google account.");
       $("#emailError").removeClass("sr-only");
       $("#emailError").addClass("alert");
@@ -1099,11 +1140,11 @@
         //console.log("key: " + key + " data: " + attData);
         $("#att-list").append(
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
-          attData.name + '<img src="' + picUrl + '" class="att-pic-card" alt="attendee picture"/>' + 
+          attData.name + '<img src="' + picUrl + '" class="att-pic-card" alt="attendee picture"/>' +
           '<button type="button" class="edit-att att-edit btn btn-info" aria-label="Edit" data-key="' + key +
           '"><span class="glyphicon glyphicon-pencil"></span></button> <button type="button" class="remove-att btn btn-danger" aria-label="Close" data-key="' + key + '"> <span class="glyphicon glyphicon-remove"></span></button>' +
           '</h3> </div> <div class="panel-body att-edit" data-key="' + key + '"> ' + attData.startup + '<br>' +
-          "<a href='mailto:" + attData.email + "' target='_blank'>" + attData.email + "</a><br>" + 
+          "<a href='mailto:" + attData.email + "' target='_blank'>" + attData.email + "</a><br>" +
           attData.linkedin + ' </div> </div>'
         );
       });
@@ -1180,7 +1221,13 @@
   //
   window.onerror = function(message, url, lineNumber) {
     //TODO: send to server 
-    console.error("Err:" + message + " url: " + url + " line: " + lineNumber);
+    console.log("Err:" + message + " url: " + url + " line: " + lineNumber);
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'admin-gen-error',
+      eventAction: 'msg: ' + msg,
+      eventLabel: 'url: ' + url + " line: " + lineNumber
+    });
     return true;
   };
   //
