@@ -185,6 +185,12 @@
         $("#mentor-schedule-list").html(html);
       } else {
         bootbox.alert("Could not find anything for this date.");
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'schedule-mentor',
+          eventAction: 'reload-empty-schedule: ' + curMentorEmail,
+          eventLabel: 'for day: ' + scDay
+        });
       }
     });
   });

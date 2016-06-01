@@ -178,6 +178,12 @@
           $("#sc-reload-button").text("Reload");
         } else {
           bootbox.alert("Could not find anything for " + curAttendeeStartup + " at this date.");
+          ga('send', {
+            hitType: 'event',
+            eventCategory: 'schedule-attendee',
+            eventAction: 'reload-empty-schedule: ' + curAttendeeStartup,
+            eventLabel: 'for day: ' + scDay
+          });
         }
 
       }
