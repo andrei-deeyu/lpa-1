@@ -73,6 +73,12 @@
         readStartups(authData);
         readAttendees(authData);
         readMentors(authData);
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'sign-in-attendee',
+          eventAction: 'authenticated user: ' + curAttendeeEmail,
+          eventLabel: 'authentication'
+        });
       } else {
         $("#sc-reload-button").prop('disabled', true);
         console.log("Not auth with an email :/");
@@ -101,6 +107,12 @@
       $("#spin").hide();
       if (error) {
         console.log("Login Failed!", error);
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'sign-in-attendee',
+          eventAction: 'sign-in-button',
+          eventLabel: 'authentication failed: ' + error,
+        });
         $("#err-modal").modal('show');
       } else {
         $("#sc-reload-button").prop('disabled', false);
@@ -136,7 +148,12 @@
       $("#schedule-day-1").focus();
       return;
     }
-
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'schedule-attendee',
+      eventAction: 'reload-schedule: ' + curAttendeeStartup,
+      eventLabel: 'for day: ' + scDay
+    });
     var readRef = new Firebase("https://lpa-1.firebaseio.com/sessions/" + scDay + "/startups/" + curAttendeeStartup);
     readRef.orderByKey().on("value", function(snapshot) {
       var sessions = snapshot.val();
@@ -229,7 +246,7 @@
         $("#startups-list").append(
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
           startupData.name + "&nbsp;&nbsp;<img src='" + startupLogoUrl + "' class='logo-img' alt='startup logo'>" +
-          '</h3> </div> <div class="panel-body startup-edit" data-key="' + key + '"> <div class="startup-card-desc">' + 
+          '</h3> </div> <div class="panel-body startup-edit" data-key="' + key + '"> <div class="startup-card-desc">' +
           startupData.description + '</div><b>From:</b> ' +
           startupData.country + '  ' + startupData.city + ' </div> </div>'
         );
@@ -324,6 +341,12 @@
         localStorage.setItem("lpa1-g-att-email", curAttendeeEmail);
         localStorage.setItem("lpa1-g-att-startup", curAttendeeStartup);
       } else {
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'check-attendee',
+          eventAction: 'fetch-not-registered-attendee',
+          eventLabel: 'key: ' + key
+        });
         localStorage.removeItem("lpa1-g-att-email");
         localStorage.removeItem("lpa1-g-att-startup");
         $("#sc-reload-button").prop('disabled', true);
@@ -424,7 +447,7 @@
           attData.name + '<img src="' + picUrl + '" class="att-pic-card" alt="attendee picture"/>' +
           '</h3> </div> <div class="panel-body att-edit" data-key="' + key + '"><h4>' + attData.startup + '</h4>' +
           "<b>email:</b> <a href='mailto:" + attData.email + "' target='_blank'>" + attData.email + "</a>" +
-          '<br><b>Linkedin:</b> <a href="http://www.linkedin.com/in/' + attData.linkedin + '" target="_blank">' + 
+          '<br><b>Linkedin:</b> <a href="http://www.linkedin.com/in/' + attData.linkedin + '" target="_blank">' +
           attData.linkedin + '</a> </div> </div>'
         );
       });
@@ -434,6 +457,18 @@
   //////////////////////////////////////////////////////////////////////////////////
   // Utils
   //////////////////////////////////////////////////////////////////////////////////
+  //
+  //
+  //
+  window.onerror = function(message, url, lineNumber) {
+    console.log("Err:" + message + " url: " + url + " line: " + lineNumber);
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'attendee-gen-error',
+      eventAction: 'msg: ' + msg,
+      eventLabel: 'url: ' + url + " line: " + lineNumber
+    });
+  };
 
   //
   //

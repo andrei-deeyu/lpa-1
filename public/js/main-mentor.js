@@ -148,7 +148,7 @@
     ga('send', {
       hitType: 'event',
       eventCategory: 'schedule-mentor',
-      eventAction: 'reload-schedule',
+      eventAction: 'reload-schedule: ' + curMentorEmail,
       eventLabel: 'for day: ' + scDay
     });
 
@@ -673,7 +673,6 @@
   //
   //
   window.onerror = function(message, url, lineNumber) {
-    //TODO: send to server 
     console.log("Err:" + message + " url: " + url + " line: " + lineNumber);
     ga('send', {
       hitType: 'event',
