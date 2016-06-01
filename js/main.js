@@ -1216,12 +1216,13 @@
   // Utils
   //////////////////////////////////////////////////////////////////////////////////
 
+
   //
   //
   //
-  window.onerror = function(message, url, lineNumber) {
+  window.onerror = function(msg, url, lineNumber) {
     //TODO: send to server 
-    console.log("Err:" + message + " url: " + url + " line: " + lineNumber);
+    console.log("Err:" + msg + " url: " + url + " line: " + lineNumber);
     ga('send', {
       hitType: 'event',
       eventCategory: 'admin-gen-error',
@@ -1230,6 +1231,9 @@
     });
     return true;
   };
+
+  throw "Deliberate Error!";
+
   //
   // Helper function to get unique in array
   // usage example:

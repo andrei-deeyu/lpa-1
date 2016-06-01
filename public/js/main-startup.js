@@ -466,8 +466,8 @@
   //
   //
   //
-  window.onerror = function(message, url, lineNumber) {
-    console.log("Err:" + message + " url: " + url + " line: " + lineNumber);
+  window.onerror = function(msg, url, lineNumber) {
+    console.log("Err:" + msg + " url: " + url + " line: " + lineNumber);
     ga('send', {
       hitType: 'event',
       eventCategory: 'attendee-gen-error',
