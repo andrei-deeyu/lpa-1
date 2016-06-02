@@ -163,18 +163,18 @@
           var meetingNotesKey = scDay + "/mentors/" + curMentorEmail + "/" + key + "/notes";
           var startupNotesKey = scDay + "/startups/" + scData.startup + "/notes/" + curMentorEmail + "/" + key;
           var startupBackupNotesKey = "/startups/" + scData.startup + "/" + scDay + "/notes/" + curMentorEmail + "/" + key;
-          
+
           console.log("=== Update mentors and comments for: " + key + " | data: " + scData);
           html += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
             scData.startup + ' | ' + getHourAsRange(key) +
-            ' <button class="btn expend-notes-but" type="button" data-textarea-key="' + key + '" data-note-key="' + startupBackupNotesKey + 
+            ' <button class="btn expend-notes-but" type="button" data-textarea-key="' + key + '" data-note-key="' + startupBackupNotesKey +
             '" data-toggle="collapse" data-target="#mentor-note-p-' + key +
             '" aria-expanded="false" aria-controls="collapseMentorDetails"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span></button>' +
             ' </h3><b>Location: ' + scData.location + '</b> </div> <div id="mentor-note-p-' + key + '" class="panel-body collapse">' +
             '<p class="" id="meet-details-' + key + '">Meeting Notes:<br> \
-            <textarea id="'+ key + '" class="form-control col-lg-10 meeting-notes-text" data-key="' + meetingNotesKey +
+            <textarea id="' + key + '" class="form-control col-lg-10 meeting-notes-text" data-key="' + meetingNotesKey +
             '" data-startup="' + startupNotesKey + '" data-notes-backup="' + startupBackupNotesKey +
-            '" name="meeting-notes">' + 
+            '" name="meeting-notes">' +
             '</textarea>  <button class="btn btn-warning meeting-save-button">Save Notes</button> </p> </div> </div> </div>';
           // TODO: add an option to take photos: 
           // <div class="row"> <div class="col-lg-3 col-md-3"> <input type="file" name="file" class="input-img" id="notesImg" accept="image/*"> 
@@ -194,13 +194,12 @@
   });
 
   //
-  // fetch the note per specific session
+  // Fetch the note per specific session
   //
   $('body').on('click', '.expend-notes-but', function(event) {
     var key = $(this).data("note-key");
     var textareaKey = $(this).data("textarea-key");
     var readRef = new Firebase("https://lpa-1.firebaseio.com/notes-backup/" + key);
-    //console.log("ref: "+ key);
     ga('send', {
       hitType: 'event',
       eventCategory: 'startup-notes-mentor',
