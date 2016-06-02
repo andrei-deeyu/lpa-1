@@ -77,7 +77,7 @@
           hitType: 'event',
           eventCategory: 'sign-in-attendee',
           eventAction: 'authenticated user: ' + curAttendeeEmail,
-          eventLabel: 'authentication'
+          eventLabel: 'authentication: ' + authData.google.displayName
         });
       } else {
         $("#sc-reload-button").prop('disabled', true);
@@ -90,7 +90,7 @@
   });
 
   //
-  //
+  // Logout UI 
   //
   function logoutUI() {
     $("#sc-reload-button").prop('disabled', true);
@@ -98,6 +98,7 @@
     $("#login-form").html('<button type="submit" id="google-sign-in-but" class="btn btn-success">Sign in</button> <span id="spin"><i class="fa fa-spinner fa-spin"></i></span>');
     $("#spin").hide();
   }
+
   //
   // Sign in user/password
   //
@@ -125,14 +126,13 @@
   });
 
   //
-  // logout
+  // logout button
   //
   $("#logout-but").click(function() {
     ref.unauth();
     logoutUI();
     return false;
   });
-
 
   //////////////////////////////////////////////////////////////////////////////
   // Fetch schedule
@@ -185,10 +185,8 @@
             eventLabel: 'for day: ' + scDay
           });
         }
-
       }
     });
-
   });
 
   function getHourAsRange(key) {
@@ -213,7 +211,6 @@
     } else {
       return "--";
     }
-
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -254,7 +251,9 @@
           startupData.name + "&nbsp;&nbsp;<img src='" + startupLogoUrl + "' class='logo-img' alt='startup logo'>" +
           '</h3> </div> <div class="panel-body startup-edit" data-key="' + key + '"> <div class="startup-card-desc">' +
           startupData.description + '</div><b>From:</b> ' +
-          startupData.country + '  ' + startupData.city + ' </div> </div>'
+          startupData.country + '  ' + startupData.city + 
+          '<b>Founded:</b> ' + startupData.dateFounded + '</b><br><b>Employees:</b> ' + startupData.numEmployees +
+          ' </div> </div>'
         );
       });
       var selHtml = getStartupSelect();
@@ -454,7 +453,8 @@
           '</h3> </div> <div class="panel-body att-edit" data-key="' + key + '"><h4>' + attData.startup + '</h4>' +
           "<b>email:</b> <a href='mailto:" + attData.email + "' target='_blank'>" + attData.email + "</a>" +
           '<br><b>Linkedin:</b> <a href="http://www.linkedin.com/in/' + attData.linkedin + '" target="_blank">' +
-          attData.linkedin + '</a> </div> </div>'
+          attData.linkedin + '</a><br><b>Fun Fact:</b> ' + attData.funFact + 
+          ' </div> </div>'
         );
       });
     });
