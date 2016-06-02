@@ -1197,7 +1197,6 @@
     bootbox.confirm("Are you sure? Delete " + key + " For Real?", function(result) {
       if (result === true) {
         var fredRef = firebase.database().ref("attendees/" + key);
-        //new Firebase('https://lpa-1.firebaseio.com/attendees/' + key);
         var onComplete = function(error) {
           if (error) {
             console.log('Synchronization failed');
@@ -1205,6 +1204,7 @@
             console.log('Synchronization succeeded - mentor was removed');
             $("#att-list").html('<div id="loading-attendees"><h2><i class="fa fa-spinner fa-spin"></i> </h2></div>');
             readAttendees(authUserData);
+            $("#att-cancel-button").click();
           }
         };
         fredRef.remove(onComplete);
