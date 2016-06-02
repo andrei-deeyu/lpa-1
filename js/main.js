@@ -137,7 +137,7 @@
   // Schedule magic
   //////////////////////////////////////////////////////////////////////////////
   //
-  // save the current schedule
+  // Save the current schedule
   //
   $("#sc-save-button").click(function() {
     var scDay = $("#schedule-day-1").val();
@@ -931,7 +931,7 @@
         $(".save-alert").show();
         setTimeout(function() {
           $(".save-alert").hide();
-        }, 1500);
+        }, 2500);
       }
     });
   });
