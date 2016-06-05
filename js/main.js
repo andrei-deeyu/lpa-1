@@ -1106,6 +1106,7 @@
       name: name,
       email: email,
       startup: $("#att-startup-list-select option:selected").text(),
+      role: $("#att-role").val(),
       linkedin: $("#att-linkedin-url").val(),
       pic: $("#att-pic-url").val(),
       funFact: $("#att-fun-fact").val(),
@@ -1137,15 +1138,19 @@
         var key = childSnapshot.key;
         var attData = childSnapshot.val();
         var picUrl = addhttp(attData.pic);
-        //console.log("key: " + key + " data: " + attData);
+        var role = attData.role;
+        if (role === undefined || role === null) {
+          role = "";
+        }
         $("#att-list").append(
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
           attData.name + '<img src="' + picUrl + '" class="att-pic-card" alt="attendee picture"/>' +
           '<button type="button" class="edit-att att-edit btn btn-info" aria-label="Edit" data-key="' + key +
           '"><span class="glyphicon glyphicon-pencil"></span></button> <button type="button" class="remove-att btn btn-danger" aria-label="Close" data-key="' + key + '"> <span class="glyphicon glyphicon-remove"></span></button>' +
           '</h3> </div> <div class="panel-body att-edit" data-key="' + key + '"> ' + attData.startup + '<br>' +
-          "<a href='mailto:" + attData.email + "' target='_blank'>" + attData.email + "</a><br>" +
-          attData.linkedin + ' </div> </div>'
+          '<b>Role:</b> ' + role + '<br>' + 
+          "<a href='mailto:" + attData.email + "' target='_blank'>" + attData.email + "</a><br><b>Linkedin: </b><a href='http://www.linkedin.com/in/" +
+          attData.linkedin + "' target='_blank'>" + attData.linkedin + '</a> </div> </div>'
         );
       });
     });
@@ -1158,6 +1163,7 @@
     $("#att-name-field").val("");
     $("#att-email-field").val("");
     $("#att-startup-list-select").val("");
+    $("#att-role").val("");
     $("#att-linkedin-url").val("");
     $("#att-fun-fact").val("");
     $("#att-pic-url").val("");
@@ -1179,6 +1185,7 @@
         $("#att-name-field").val(att.name);
         $("#att-email-field").val(att.email);
         $("#att-startup-list-select").selectpicker('val', att.startup);
+        $("#att-role").val(att.role);
         $("#att-linkedin-url").val(att.linkedin);
         $("#att-fun-fact").val(att.funFact);
         $("#att-pic-url").val(att.pic);

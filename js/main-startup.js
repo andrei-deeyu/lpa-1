@@ -28,7 +28,6 @@
     $("#joyRideTipContent").joyride({ autoStart: true });
   });
 
-
   //
   // AUTH fun
   // start the connection with firebase DB
@@ -170,7 +169,6 @@
             sessions.mentors[i][1] + ' | ' + getHourAsRange("hour-" + (i + 1)) + '</h3> </div> <div class="panel-body">' +
             'Location: ' + sessions.mentors[i][2] + ' </div> </div>';
         }
-        //console.log(scHtml);
         $("#attendee-schedule-list").html(scHtml);
       } else {
         if (curAttendeeStartup == "") {
@@ -230,7 +228,6 @@
     return html;
   }
 
-
   //
   // read the list of startups and display it
   //
@@ -251,7 +248,7 @@
           startupData.name + "&nbsp;&nbsp;<img src='" + startupLogoUrl + "' class='logo-img' alt='startup logo'>" +
           '</h3> </div> <div class="panel-body startup-edit" data-key="' + key + '"> <div class="startup-card-desc">' +
           startupData.description + '</div><b>From:</b> ' +
-          startupData.country + '  ' + startupData.city + 
+          startupData.country + '  ' + startupData.city +
           '<b>Founded:</b> ' + startupData.dateFounded + '</b><br><b>Employees:</b> ' + startupData.numEmployees +
           ' </div> </div>'
         );
@@ -262,8 +259,6 @@
       $('#att-startup-list-select').selectpicker();
     });
   }
-
-
 
   //////////////////////////////////////////////////////////////////////////////
   // Mentors
@@ -301,25 +296,6 @@
     });
   }
 
-  //
-  // clear the values of the mentor
-  //
-  $("#form-cancel-mentor").click(function() {
-    $("#form-name-field").val("");
-    $("#form-email-field").val("");
-    $("#form-phone-field").val("");
-    $("#form-country-field").val("");
-    $("#form-city-field").val("");
-    $("#form-domain-select").val("UX");
-    $("#form-expertise").val("");
-    $("#form-linkedin-url").val("");
-    $("#form-personal-url").val("");
-    $("#form-pic-url").val("");
-    $("#form-comments").val("");
-    $("#form-name-field").focus();
-    $('body').scrollTop(60);
-  });
-
   //////////////////////////////////////////////////////////////////////////////
   // Attendees
   //////////////////////////////////////////////////////////////////////////////
@@ -332,11 +308,11 @@
     ref.on("value", function(attSnap) {
       var att = attSnap.val();
       if (att != null) {
-        console.log("Setting data for: " + JSON.stringify(att));
         curAttendeeStartup = att.startup;
         $("#att-name-field").val(att.name);
         $("#att-email-field").val(att.email);
         $("#att-startup-list-select").selectpicker('val', att.startup);
+        $("#att-role").val(att.role);
         $("#att-linkedin-url").val(att.linkedin);
         $("#att-fun-fact").val(att.funFact);
         $("#att-pic-url").val(att.pic);
@@ -408,7 +384,6 @@
       return;
     }
 
-    console.log("saving attendee: " + name + " , " + email);
     var curUnixTime = new Date().getTime();
     var disTime = new Date().toJSON().slice(0, 21);
     emailKey = email.replace(/\./g, '-');
@@ -416,6 +391,7 @@
       name: name,
       email: email,
       startup: $("#att-startup-list-select option:selected").text(),
+      role: $("#att-role").val(),
       linkedin: $("#att-linkedin-url").val(),
       pic: $("#att-pic-url").val(),
       funFact: $("#att-fun-fact").val(),
@@ -425,7 +401,6 @@
       if (error) {
         bootbox.alert("Attendee could not be saved :( Details: " + error);
       } else {
-        console.log(name + " saved!");
         $(".save-alert").show();
         setTimeout(function() {
           $(".save-alert").hide();
@@ -446,14 +421,19 @@
         var key = childSnapshot.key();
         var attData = childSnapshot.val();
         var picUrl = addhttp(attData.pic);
-        //console.log("key: " + key + " data: " + attData);
+        var role = attData.role;
+        if (role === undefined || role === null) {
+          role = "";
+        } else {
+          role = " | " + role;
+        }
         $("#att-list").append(
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
           attData.name + '<img src="' + picUrl + '" class="att-pic-card" alt="attendee picture"/>' +
-          '</h3> </div> <div class="panel-body att-edit" data-key="' + key + '"><h4>' + attData.startup + '</h4>' +
+          '</h3> </div> <div class="panel-body att-edit" data-key="' + key + '"><h4>' + attData.startup + role + '</h4>' +
           "<b>email:</b> <a href='mailto:" + attData.email + "' target='_blank'>" + attData.email + "</a>" +
           '<br><b>Linkedin:</b> <a href="http://www.linkedin.com/in/' + attData.linkedin + '" target="_blank">' +
-          attData.linkedin + '</a><br><b>Fun Fact:</b> ' + attData.funFact + 
+          attData.linkedin + '</a><br><b>Fun Fact:</b> ' + attData.funFact +
           ' </div> </div>'
         );
       });
