@@ -78,7 +78,7 @@
         hitType: 'event',
         eventCategory: 'sign-in-mentor',
         eventAction: 'authenticated user.uid: ' + authData.uid,
-        eventLabel: 'authentication'
+        eventLabel: 'authentication: ' + curMentorEmail
       });
     } else {
       console.log("User is logged out");
@@ -490,7 +490,7 @@
     var curUnixTime = new Date().getTime();
     var disTime = new Date().toJSON().slice(0, 21);
 
-    // save it in firebase
+    // save mentor's details in firebase
     var mentorKey = emailKey.replace(/\./g, "-");
     ref.child("mentors").child(mentorKey).set({
       name: name,
@@ -520,7 +520,13 @@
           $(".save-alert").hide();
         }, 1500);
       }
-    })
+    });
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'save-mentor',
+      eventAction: 'save-mentor-info-fields',
+      eventLabel: 'key: ' + emailKey
+    });
   });
 
   //
@@ -592,6 +598,12 @@
     $("#form-comments").val("");
     $("#form-name-field").focus();
     $('body').scrollTop(60);
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'clear-mentor',
+      eventAction: 'clear-mentor-info-fields',
+      eventLabel: 'key: ' + curMentorEmail
+    });
   });
 
   //
@@ -635,28 +647,6 @@
       }
     });
   }
-
-  //
-  // enable removing mentors
-  //
-  $('body').on('click', '.remove-mentor', function(event) {
-    var key = this.dataset.key;
-    bootbox.confirm("Are you sure? For Real?", function(result) {
-      if (result == true) {
-        var fredRef = new Firebase('https://lpa-1.firebaseio.com/mentors/' + key);
-        var onComplete = function(error) {
-          if (error) {
-            console.log('Synchronization failed');
-          } else {
-            console.log('Synchronization succeeded - mentor was removed');
-            $("#mentors-list").html('<div id="loading-mentors"><h2><i class="fa fa-spinner fa-spin"></i> </h2></div>');
-            readMentors(authUserData);
-          }
-        };
-        fredRef.remove(onComplete);
-      }
-    });
-  });
 
   //////////////////////////////////////////////////////////////////////////////
   // Attendees
