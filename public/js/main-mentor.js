@@ -156,7 +156,7 @@
     readRef.orderByKey().on("value", function(snapshot) {
       var sessions = snapshot.val();
       if (sessions != null) {
-        console.log("The sessions: " + JSON.stringify(sessions));
+        //console.log("The sessions: " + JSON.stringify(sessions));
         var html = "";
         $.each(sessions, function(key, scData) {
           // per startup set the mentors + comments
@@ -164,7 +164,7 @@
           var startupNotesKey = scDay + "/startups/" + scData.startup + "/notes/" + curMentorEmail + "/" + key;
           var startupBackupNotesKey = "/startups/" + scData.startup + "/" + scDay + "/notes/" + curMentorEmail + "/" + key;
 
-          console.log("=== Update mentors and comments for: " + key + " | data: " + scData);
+          //console.log("=== Update mentors and comments for: " + key + " | data: " + scData);
           html += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
             scData.startup + ' | ' + getHourAsRange(key) +
             ' <button class="btn expend-notes-but" type="button" data-textarea-key="' + key + '" data-note-key="' + startupBackupNotesKey +
@@ -275,7 +275,7 @@
     var keyToSession = ta.data('key');
     var keyToStartup = ta.data('startup');
     var keyToNotesBackup = ta.data('notes-backup');
-    console.log("keyToSession: " + keyToSession + " Notes: " + notes);
+    //console.log("keyToSession: " + keyToSession + " Notes: " + notes);
     if (keyToSession == undefined || keyToSession == null) {
       bootbox.alert("Sorry - Can't save your notes. Please take them in another way and let the organizers know about it.");
       return;
@@ -297,7 +297,6 @@
       if (error) {
         bootbox.alert("Meeting notes for: " + keyToSession + " could not be saved :( Details: " + error);
       } else {
-        console.log(keyToSession + " notes Saved!");
         $(".save-alert").show();
         setTimeout(function() {
           $(".save-alert").hide();
@@ -313,7 +312,6 @@
       if (error) {
         bootbox.alert("Meeting notes for: " + keyToStartup + " could not be saved :( Details: " + error);
       } else {
-        console.log(keyToSession + " notes Saved!");
         $(".save-alert").show();
         setTimeout(function() {
           $(".save-alert").hide();
@@ -489,7 +487,6 @@
       return;
     }
 
-    console.log("saving to Firebase: " + name + " , " + emailKey);
     var curUnixTime = new Date().getTime();
     var disTime = new Date().toJSON().slice(0, 21);
 
@@ -605,7 +602,6 @@
     ref.on("value", function(mentorSnap) {
       var mentor = mentorSnap.val();
       if (mentor != null) {
-        console.log("Setting data for: " + JSON.stringify(mentor));
         //$("#form-name-field").val(mentor.name);
         var mEmail = key.replace(/\-/g, ".");
         $("#form-email-field").val(mEmail);
@@ -681,8 +677,7 @@
         var role = attData.role;
         if (role === undefined || role === null) {
           role = "";
-        }
-        else {
+        } else {
           role = " | " + role;
         }
         $("#att-list").append(
