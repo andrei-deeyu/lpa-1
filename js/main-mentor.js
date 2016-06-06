@@ -404,9 +404,9 @@
           '</div>From: <b>' + startupData.country + '  ' + startupData.city +
           '</b> Founded: <b>' + founded + '</b><br>Employees: <b>' + startupData.numEmployees +
           '</b><br> <h4> <span class="label label-warning"> <a href="' + startupData.video +
-          '" target="_blank">Application Video</a> </span> </h4>' +
-          '<button class="btn btn-lg btn-warning fetch-notes-button" data-key="' +
-          startupData.name + '">Notes</button></div> </div>'
+          '" target="_blank">Application Video</a> </span> ' +
+          '&nbsp;&nbsp;&nbsp;<button class="btn btn-lg btn-warning fetch-notes-button" data-key="' +
+          startupData.name + '">Notes</button> </h4> </div> </div>'
         );
       });
       var selHtml = getStartupSelect();
