@@ -249,7 +249,7 @@
           '</h3> </div> <div class="panel-body startup-edit" data-key="' + key + '"> <div class="startup-card-desc">' +
           startupData.description + '</div><b>From:</b> ' +
           startupData.country + '  ' + startupData.city +
-          '<b>Founded:</b> ' + startupData.dateFounded + '</b><br><b>Employees:</b> ' + startupData.numEmployees +
+          '<b>  Founded:</b> ' + startupData.dateFounded + '</b><br><b>Employees:</b> ' + startupData.numEmployees +
           ' </div> </div>'
         );
       });
