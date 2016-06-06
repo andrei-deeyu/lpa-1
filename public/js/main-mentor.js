@@ -402,9 +402,8 @@
           '</div>From: <b>' + startupData.country + '  ' + startupData.city +
           '</b> Founded: <b>' + startupData.dateFounded + '</b><br>Employees: <b>' + startupData.numEmployees +
           '</b><br> <h4> <span class="label label-warning"> <a href="' + startupData.video +
-          '" target="_blank">Application Video</a> </span> ' +
-          ' &nbsp;&nbsp; <span class="label label-success"><a href="' +
-          startupData.historyUrl + '" target="_blank">History File</a> </span></h4>' + '<button class="btn btn-lg btn-warning fetch-notes-button" data-key="' +
+          '" target="_blank">Application Video</a> </span> </h4>' +
+          '<button class="btn btn-lg btn-warning fetch-notes-button" data-key="' +
           startupData.name + '">Notes</button></div> </div>'
         );
       });
