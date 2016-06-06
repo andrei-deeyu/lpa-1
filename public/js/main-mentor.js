@@ -395,12 +395,13 @@
         startupNameList.push(key);
         var startupData = childSnapshot.val();
         var startupLogoUrl = addhttp(startupData.logo);
+        var founded = (startupData.dateFounded).substring(0,7);
         $("#startups-list").append(
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
           startupData.name + "&nbsp;&nbsp;<img src='" + startupLogoUrl + "' class='logo-img' alt='startup logo'>" +
           '</h3> </div> <div class="panel-body startup-edit" data-key="' + key + '"> <div class="startup-card-desc">' + startupData.description +
           '</div>From: <b>' + startupData.country + '  ' + startupData.city +
-          '</b> Founded: <b>' + startupData.dateFounded + '</b><br>Employees: <b>' + startupData.numEmployees +
+          '</b> Founded: <b>' + founded + '</b><br>Employees: <b>' + startupData.numEmployees +
           '</b><br> <h4> <span class="label label-warning"> <a href="' + startupData.video +
           '" target="_blank">Application Video</a> </span> </h4>' +
           '<button class="btn btn-lg btn-warning fetch-notes-button" data-key="' +
