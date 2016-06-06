@@ -155,6 +155,8 @@
         }
       });
     }
+    isInSaveOperation = true;
+    console.log("=== is going INTO save");
     ga('send', {
       hitType: 'event',
       eventCategory: 'schedule',
@@ -162,10 +164,32 @@
       eventLabel: 'for: ' + scDay
     });
 
+    // clean the schedule for that day
+    ref.child("sessions").child(scDay).child("mentors").set({}, function(error) {
+      if (error) {
+        bootbox.alert("Schedule could not clean mentor schedule for: " + scDay + " Details: " + error);
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'schedule-error',
+          eventAction: 'clean-mentors-schedule',
+          eventLabel: 'for: ' + scDay
+        });
+      }
+    });
+    ref.child("sessions").child(scDay).child("startups").set({}, function(error) {
+      if (error) {
+        bootbox.alert("Schedule could not clean startup schedule for: " + scDay + " Details: " + error);
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'schedule-error',
+          eventAction: 'clean-startup-schedule',
+          eventLabel: 'for: ' + scDay
+        });
+      }
+    });
+
     // on each startup we collect the mentors per hours and create sessions
     $(".sc-start-name").each(function() {
-      isInSaveOperation = true;
-      console.log("=== is going INTO save");
       var startupName = $.trim($(this).text());
       var startupKey = startupName.replace(/\s/g, "");
       var mentorPerHour = [];
@@ -255,7 +279,7 @@
     //new Firebase("https://lpa-1.firebaseio.com/sessions/" + scDay + "/startups");
     readRef.orderByKey().on("value", function(snapshot) {
       if (isInSaveOperation) {
-        console.log("no no not yet");
+        console.log("no no not yet - still writing to firebase");
         return;
       }
       var sessions = snapshot.val();
@@ -277,6 +301,10 @@
           }
         });
       } else {
+        if (isInSaveOperation) {
+          console.log("no no not yet - still writing to firebase");
+          return;
+        }
         bootbox.alert("Could not find anything for this date.");
       }
     });
@@ -1148,7 +1176,7 @@
           '<button type="button" class="edit-att att-edit btn btn-info" aria-label="Edit" data-key="' + key +
           '"><span class="glyphicon glyphicon-pencil"></span></button> <button type="button" class="remove-att btn btn-danger" aria-label="Close" data-key="' + key + '"> <span class="glyphicon glyphicon-remove"></span></button>' +
           '</h3> </div> <div class="panel-body att-edit" data-key="' + key + '"> ' + attData.startup + '<br>' +
-          '<b>Role:</b> ' + role + '<br>' + 
+          '<b>Role:</b> ' + role + '<br>' +
           "<a href='mailto:" + attData.email + "' target='_blank'>" + attData.email + "</a><br><b>Linkedin: </b><a href='http://www.linkedin.com/in/" +
           attData.linkedin + "' target='_blank'>" + attData.linkedin + '</a> </div> </div>'
         );
