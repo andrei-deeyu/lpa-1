@@ -145,14 +145,16 @@ label {
 .sc-start-name {
   background-color: yellow;
   padding-top: 0.2em;
-  border-radius: 25px;
+  border-radius: 10px;
   margin-top: .75em;
   padding-bottom: .2em;
+  padding-left: .4em;
 }
 
 .startup-card-desc {
   width: 90%;
 }
+
 .must-have-field {
   background-color: antiquewhite;
 }
