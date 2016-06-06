@@ -467,6 +467,7 @@
         $("#mentor-schedule-list").html(html);
       } else {
         bootbox.alert("Could not find anything for this date.");
+        $("#mentor-schedule-list").html("");
       }
     });
   }
@@ -507,6 +508,7 @@
         }
         $("#mentor-schedule-list").html(scHtml);
       } else {
+        $("#mentor-schedule-list").html("");
         if (curAttendeeStartup == "") {
           bootbox.alert("Please check why we don't have schedule for this startup.");
         } else {
