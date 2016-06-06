@@ -183,6 +183,7 @@
         $("#mentor-schedule-list").html(html);
       } else {
         bootbox.alert("Could not find anything for this date.");
+        $("#mentor-schedule-list").html("");
         ga('send', {
           hitType: 'event',
           eventCategory: 'schedule-mentor',
