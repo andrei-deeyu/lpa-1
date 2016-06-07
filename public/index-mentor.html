@@ -76,7 +76,9 @@
         </form>
         <div id="logout-div"></div>
         <form class='navbar-form navbar-right' role='form'>
-          <button id="online-status" type="button" class="btn btn-info" disabled>Online</button>
+          <li>
+            <button type="button" class="btn btn-primary btn-info" data-toggle="modal" data-target="#guideline-modal">Guidelines</button>
+          </li>
         </form>
       </div>
       <!--/.navbar-collapse -->
@@ -309,13 +311,96 @@
         <div class="col-md-4">
           <hr>
           <p>
-            <span class="label label-warning">
-          <a href="https://ido-green.appspot.com/" target="_blank">ido-green.appspot.com</a></span> -
-            <span class="label label-warning">
-          <a href="https://github.com/greenido/lpa-1/issues/new" target="_blank">Feedback</a> </span>
+          <button type="button" class="btn btn-info" data-toggle="modal" data-target="#guideline-modal">Guidelines</button>
+          <a href="https://github.com/greenido/lpa-1/issues/new" class="btn btn-success"  target="_blank">Feedback</a> 
           </p>
         </div>
       </footer>
+    </div>
+    <!-- Guideline Modal -->
+    <div class="modal fade" id="guideline-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Mentor Guidelines</h4>
+          </div>
+          <div class="modal-body">
+            <h4><a id="Before_your_session_1"></a>Before your session:</h4>
+            <ol>
+              <li>Read up on the startup you are about to meet using the <a href="https://lpa-1.firebaseapp.com/index-mentor.html">Accelerator
+app</a>. There you will find:
+                <ol>
+                  <li>Their basic company information</li>
+                  <li>Their first day diagnostic interview</li>
+                  <li>Notes from previous mentors</li>
+                </ol>
+              </li>
+              <li>Get to know who already mentored the startup. Sync with them on the 2-3 strengths and weaknesses of each startup.</li>
+            </ol>
+            <h4><a id="During_your_session_11"></a>During your session:</h4>
+            <h5><a id="Introductions_12"></a>Introductions</h5>
+            <ol>
+              <li>Take the first 5 minutes to set up expectations for the mentoring session with the startup
+                <ol>
+                  <li>“In this session I will be able to do xyz…”</li>
+                  <li>“What do you expect to come out of this mentorship session?”</li>
+                  <li>Be sure all parties get on the same page</li>
+                </ol>
+              </li>
+              <li>Present yourself in a way that the startup can better understand what your added value is for them.
+                <ol>
+                  <li>The startups will have access to your background/bio in the app, but its best to share a little about why you’re relevant in helping <em>them</em> specifically.
+                  </li>
+                </ol>
+              </li>
+              <li>Try to focus on their needs and challenges, and not on the solutions they suggest.
+              </li>
+              <li>Give them mostly hooks, not fish… but make sure they get some fish.</li>
+            </ol>
+            <h5><a id="Culture_28"></a>Culture</h5>
+            <ol>
+              <li>Be aware of cultural differences. For example, some cultures finds it impolite to disagree with you, and they will almost never tell you that they don’t agree.</li>
+              <li>Encourage the startups to speak, and tell them it is perfectly o.k. to disagree with you.</li>
+              <li>In some cases, being too direct can be perceived as rudeness by you, however, this is the common way of conveying messages among a different culture, hence, the startup perceives it very naturally.</li>
+              <li>Keep in mind that conventions, solutions, preferences are different among different countries.</li>
+              <li>Don’t be shy to ask the startups for details. Elaboration will ensure you are on the same page. Sometimes you think you know what they mean, but you really don’t. This can be due to language barriers or for other reasons.</li>
+            </ol>
+            <h5><a id="Overall_Best_Practices_44"></a>Overall Best Practices</h5>
+            <ol>
+              <li>Good mentors can communicate well and provide clear reasoning for their advice.
+              </li>
+              <li>Turn it into discussion, not a lecture. Make sure you are listening (NO talking) for <em>at least</em> 50% of the time.</li>
+              <li>It is perfectly alright to say: “I don’t know”, or “I’m not sure”.</li>
+              <li>Lead by example. Try to give the startups examples from your real world experience. In most cases, this is a better way to drive your points.</li>
+              <li>It is great to say: “let me think about it, and I’ll get back to you later.”</li>
+              <li>We highly encourage you to invite another mentor to give his/her opinion.</li>
+              <li>It is perfectly o.k. to disagree with a previous mentor, however, always try to provide the startup with the rationale behind these differences in approach so they can make up their own mind. Make sure you don’t confuse them.
+              </li>
+              <li>Good mentorship leads the startup in a proactive process:
+                <ol>
+                  <li>give startups homework</li>
+                  <li>instruct them what to do and use the outcome as a baseline for your next meeting with them (or their meetings with other mentors).</li>
+                </ol>
+              </li>
+              <li>Remember that this is <em>their</em> company. Mentorship is extremely valuable, and you will often be the expert, but ultimately they will need to choose what is best for their company.</li>
+            </ol>
+            <h4><a id="After_your_session_67"></a>After your session</h4>
+            <ol>
+              <li>The last 10 minutes of each session is designated for you to take notes and reflect on your session. Use the Accelerator app. Please be sure to do this–for the success of the startups and the program at-large.</li>
+              <li>Have a coffee :-)</li>
+              <li>Everyday ends with a mentor debriefing session. We would love to have you there to share your learnings and observations from the day.</li>
+            </ol>
+            <h4><a id="Most_importantly_76"></a>Most importantly</h4>
+            <ol>
+              <li>Have fun! If you have fun, everyone will benefit the most!</li>
+            </ol>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
     </div>
     <!-- Help Content -->
     <ol id="joyRideTipContent">
