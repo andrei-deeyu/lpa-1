@@ -544,6 +544,10 @@
         if (mentorData.name != "--N/A--") {
           var mPicUrl = addhttp(mentorData.pic);
           var divDetailKey = key.replace("@", "");
+          var mBio = "";
+          if (mentorData.bio && mentorData.bio != undefined) {
+            mBio = (mentorData.bio).replace(/\n/g, "<br>");
+          }
           $("#mentors-list").append(
             '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
             mentorData.name + '<img src="' + mPicUrl + '" class="att-pic-card" alt="mentor picture" /> ' +
@@ -553,7 +557,8 @@
             '"> <h5><a href="mailto:' + mentorData.email + '" target="_blank">' + mentorData.email + '</a></h5>' +
             '<b>Phone:</b> <a href="tel:' + mentorData.phone + '">' + mentorData.phone + "</a><br>" +
             '<b>Domain:</b> ' + mentorData.domain + ' - <b>Secondary:</b> ' + mentorData.domainSec +
-            '<br><b>Expertise:</b> ' + mentorData.expertise + ' </div> </div>'
+            '<br><b>Expertise:</b> ' + mentorData.expertise +
+            '<br><b>Bio:</b> ' + mBio + ' </div> </div>'
           );
         }
 
