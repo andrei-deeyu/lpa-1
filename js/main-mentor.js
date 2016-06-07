@@ -403,8 +403,8 @@
           '</h3> </div> <div class="panel-body startup-edit" data-key="' + key + '"> <div class="startup-card-desc">' + startupData.description +
           '</div>From: <b>' + startupData.country + '  ' + startupData.city +
           '</b> Founded: <b>' + founded + '</b><br>Employees: <b>' + startupData.numEmployees +
-          '</b><br> <h4> <span class="label label-warning"> <a href="' + startupData.video +
-          '" target="_blank">Application Video</a> </span> ' +
+          '</b><br> <h4>  <a href="' + startupData.video +
+          '" target="_blank" class="btn btn-info btn-lg">Intro Clip</a>  ' +
           '&nbsp;&nbsp;&nbsp;<button class="btn btn-lg btn-warning fetch-notes-button" data-key="' +
           startupData.name + '">Notes</button> </h4> </div> </div>'
         );
