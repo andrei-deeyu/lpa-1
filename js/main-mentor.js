@@ -557,8 +557,8 @@
             '"> <h5><a href="mailto:' + mentorData.email + '" target="_blank">' + mentorData.email + '</a></h5>' +
             '<b>Phone:</b> <a href="tel:' + mentorData.phone + '">' + mentorData.phone + "</a><br>" +
             '<b>Domain:</b> ' + mentorData.domain + ' - <b>Secondary:</b> ' + mentorData.domainSec +
-            '<br><b>Expertise:</b> ' + mentorData.expertise +
-            '<br><b>Bio:</b> ' + mBio + ' </div> </div>'
+            '<h4><b>Expertise</b></h4> ' + mentorData.expertise +
+            '<h4><b>Bio</b></h4> ' + mBio + ' </div> </div>'
           );
         }
 
