@@ -60,7 +60,7 @@
         $("#login-form").html("<img src='" + authData.google.profileImageURL + "' class='g-mentor-logo' alt='mentor logo' />");
         $("#logout-div").html("<form class='navbar-form navbar-right' role='form'><button id='logout-but' class='btn btn-success'>Logout</button> </form>");
 
-        initChat(authData);
+        // initChat(authData);
         curAttendeeEmail = authData.google.email;
         // so we could use it as firebase key
         curAttendeeEmail = curAttendeeEmail.replace(/\./g, "-");

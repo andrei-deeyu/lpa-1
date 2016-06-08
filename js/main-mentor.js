@@ -55,7 +55,7 @@
         return;
       }
 
-      initChat(authData);
+      // initChat(authData);
       authUserData = authData;
       localStorage.setItem("lpa1-g-authData", JSON.stringify(authData));
       $("#sc-reload-button").prop('disabled', false);
