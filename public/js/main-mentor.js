@@ -171,7 +171,13 @@
             '" data-toggle="collapse" data-target="#mentor-note-p-' + key +
             '" aria-expanded="false" aria-controls="collapseMentorDetails"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span></button>' +
             ' </h3><b>Location: ' + scData.location + '</b> </div> <div id="mentor-note-p-' + key + '" class="panel-body collapse">' +
-            '<p class="" id="meet-details-' + key + '">Meeting Notes:<br> \
+            '<p class="" id="meet-details-' + key + '"> ' +
+            '<h5><label>Did the attendees were open and receptive? (1-5)</label></h5> <br>\
+                <input type="text" class="note-slider" id="note-receptive-'+ key + '" name="note-receptive" data-provide="slider" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide"> \
+                <br><h5> <label>Was the session effective? (1-5)</label></h5><br> \
+                <input type="text" class="note-slider" id="note-effective-' + key + '" name="note-effective" data-provide="slider" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide"> \
+                <br><br> \
+            <h5>Meeting Notes</h5>What did you talked about & action items \
             <textarea id="' + key + '" class="form-control col-lg-10 meeting-notes-text" data-key="' + meetingNotesKey +
             '" data-startup="' + startupNotesKey + '" data-notes-backup="' + startupBackupNotesKey +
             '" name="meeting-notes">' +
@@ -181,6 +187,8 @@
           // <button type="submit" class="btn btn-info meeting-img-button">Upload Image</button> 
         });
         $("#mentor-schedule-list").html(html);
+        $(".note-slider").slider({tooltip: 'always'});
+        
       } else {
         bootbox.alert("Could not find anything for this date.");
         $("#mentor-schedule-list").html("");
@@ -200,6 +208,8 @@
   $('body').on('click', '.expend-notes-but', function(event) {
     var key = $(this).data("note-key");
     var textareaKey = $(this).data("textarea-key");
+    var receptiveSliderKey = "note-receptive-" + textareaKey;
+    var effectiveSliderKey = "note-effective-" + textareaKey;
     var readRef = new Firebase("https://lpa-1.firebaseio.com/notes-backup/" + key);
     ga('send', {
       hitType: 'event',
@@ -212,6 +222,12 @@
       var noteData = snapshot.val();
       if (noteData != null && noteData.meetingNotes) {
         $("#" + textareaKey).val(noteData.meetingNotes);
+      }
+      if (noteData != null && noteData.receptive) {
+        $("#" + receptiveSliderKey).slider('setValue', noteData.receptive);
+      }
+      if (noteData != null && noteData.effective) {
+        $("#" + effectiveSliderKey).slider('setValue', noteData.effective);
       }
     });
 
@@ -271,8 +287,13 @@
   //
   $('#mentor-schedule-list').on('click', '.meeting-save-button', function() {
     // save the meeting notes
-    var ta = $(this).closest('p').find('textarea');
+    var ta = $(this).parent().find('textarea');
     var notes = ta.val();
+
+    var sliders = $(this).parent().find('input');
+    var receptiveVal = $("#"+ sliders[0].id).slider('getValue');
+    var effectiveVal = $("#"+ sliders[1].id).slider('getValue');
+
     var keyToSession = ta.data('key');
     var keyToStartup = ta.data('startup');
     var keyToNotesBackup = ta.data('notes-backup');
@@ -291,6 +312,8 @@
     var disTime = new Date().toJSON().slice(0, 21);
     // save under the mentor
     ref.child("sessions").child(keyToSession).set({
+      receptive: receptiveVal,
+      effective: effectiveVal,
       meetingNotes: notes,
       unixTime: curUnixTime,
       date: disTime
@@ -306,6 +329,8 @@
     });
     // save under the startup
     ref.child("sessions").child(keyToStartup).set({
+      receptive: receptiveVal,
+      effective: effectiveVal,
       meetingNotes: notes,
       unixTime: curUnixTime,
       date: disTime
@@ -322,6 +347,8 @@
     // save under notes for backup in case we re-set the schedule
     // TODO: copy the notes to the new schedule?
     ref.child("notes-backup").child(keyToNotesBackup).set({
+      receptive: receptiveVal,
+      effective: effectiveVal,
       meetingNotes: notes,
       unixTime: curUnixTime,
       date: disTime
