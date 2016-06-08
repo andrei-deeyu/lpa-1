@@ -424,16 +424,19 @@
         var startupData = childSnapshot.val();
         var startupLogoUrl = addhttp(startupData.logo);
         var founded = (startupData.dateFounded).substring(0, 7);
+        var videoButton = "";
+        if (startupData.video && startupData.video.length > 5) {
+          videoButton = '<a href="' + startupData.video + '" target="_blank" class="btn btn-info btn-lg">Intro Clip</a>  ';
+        }
         $("#startups-list").append(
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
           startupData.name + "&nbsp;&nbsp;<img src='" + startupLogoUrl + "' class='logo-img' alt='startup logo'>" +
           '</h3> </div> <div class="panel-body startup-edit" data-key="' + key + '"> <div class="startup-card-desc">' + startupData.description +
           '</div>From: <b>' + startupData.country + '  ' + startupData.city +
           '</b> Founded: <b>' + founded + '</b><br>Employees: <b>' + startupData.numEmployees +
-          '</b><br> <h4>  <a href="' + startupData.video +
-          '" target="_blank" class="btn btn-info btn-lg">Intro Clip</a>  ' +
+          '</b><br>' + videoButton + 
           '&nbsp;&nbsp;&nbsp;<button class="btn btn-lg btn-warning fetch-notes-button" data-key="' +
-          startupData.name + '">Notes</button> </h4> </div> </div>'
+          startupData.name + '">Notes</button> </div> </div>'
         );
       });
       var selHtml = getStartupSelect();
