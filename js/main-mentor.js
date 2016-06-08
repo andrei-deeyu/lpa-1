@@ -396,7 +396,7 @@
         startupNameList.push(key);
         var startupData = childSnapshot.val();
         var startupLogoUrl = addhttp(startupData.logo);
-        var founded = (startupData.dateFounded).substring(0,7);
+        var founded = (startupData.dateFounded).substring(0, 7);
         $("#startups-list").append(
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
           startupData.name + "&nbsp;&nbsp;<img src='" + startupLogoUrl + "' class='logo-img' alt='startup logo'>" +
@@ -705,6 +705,16 @@
       eventLabel: 'url: ' + url + " line: " + lineNumber
     });
   };
+
+  //
+  // Get a formated date (of now) and set it to our schedule input
+  //
+  Date.prototype.toDateInputValue = (function() {
+    var local = new Date(this);
+    local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+    return local.toJSON().slice(0, 10);
+  });
+  $("#schedule-day-1").val(new Date().toDateInputValue());
 
   //
   //

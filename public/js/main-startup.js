@@ -294,7 +294,7 @@
             '<b>Phone:</b> <a href="tel:' + mentorData.phone + '">' + mentorData.phone + '</a><br>' +
             '<b>Domain:</b> ' + mentorData.domain + ' - <b>Secondary:</b> ' + mentorData.domainSec +
             '<h4><b>Expertise</b></h4> ' + mentorData.expertise +
-            '<h4><b>Bio</b></h4> ' + mBio +  ' </div> </div>'
+            '<h4><b>Bio</b></h4> ' + mBio + ' </div> </div>'
           );
         }
 
@@ -462,6 +462,16 @@
       eventLabel: 'url: ' + url + " line: " + lineNumber
     });
   };
+
+  //
+  // Get a formated date (of now) and set it to our schedule input
+  //
+  Date.prototype.toDateInputValue = (function() {
+    var local = new Date(this);
+    local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+    return local.toJSON().slice(0, 10);
+  });
+  $("#schedule-day-1").val(new Date().toDateInputValue());
 
   //
   //
