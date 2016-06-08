@@ -166,7 +166,8 @@
 
           //console.log("=== Update mentors and comments for: " + key + " | data: " + scData);
           html += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
-            scData.startup + ' | ' + getHourAsRange(key) +
+            '<button class="btn btn-warning fetch-notes-button" data-key="' + scData.startup + '">'+ scData.startup + '</button>'
+            + ' | ' + getHourAsRange(key) +
             ' <button class="btn expend-notes-but" type="button" data-textarea-key="' + key + '" data-note-key="' + startupBackupNotesKey +
             '" data-toggle="collapse" data-target="#mentor-note-p-' + key +
             '" aria-expanded="false" aria-controls="collapseMentorDetails"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span></button>' +
@@ -273,12 +274,14 @@
         if (html.length < 1) {
           html = "<h2>No Notes for " + startupName + " :/</h2>";
         }
-        $("#startup-notes").html(html);
+        $("#startup-details-modal-body").html(html);
+        $('#startup-details-modal').modal('show');
+
       } else {
         bootbox.alert("Could not find notes for you :/");
-        $("#startup-notes").html("");
+        $("#startup-details-modal-body").html("");
       }
-      $('body').scrollTop(60);
+      //$('body').scrollTop(60);
     });
   });
 
