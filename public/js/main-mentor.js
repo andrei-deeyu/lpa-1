@@ -263,9 +263,10 @@
                 var val = hours[key];
                 var noteDate = val.date.replace("T", " ");
                 var notesHtml = val.meetingNotes.replace(/\n/g, "<br>");
+                var tmpMentorEmailStr = tmpMentorEmail.replace(/-/g, ".");
                 html += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
-                  startupName + ' | ' + keyDate + " " + getHourAsRange(key) + ' |</h3> </div> <div class="panel-body">' +
-                  '<b>Mentor:</b> ' + tmpMentorEmail + '<br><b>Updated At: </b>' + noteDate +
+                   keyDate + " | " + getHourAsRange(key) + ' </h3> </div> <div class="panel-body">' +
+                  '<b>Mentor:</b> ' + tmpMentorEmailStr + '<br><b>Updated At: </b>' + noteDate +
                   '<p><b>Meeting Notes:</b><br>' + notesHtml + '</p> </div> </div>';
               });
             }
