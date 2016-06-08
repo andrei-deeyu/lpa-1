@@ -905,28 +905,16 @@
     }
 
     // mentor email validation
-    if (emailKey.length < 2 ||
-      (emailKey.indexOf("gmail.com") < 0 && emailKey.indexOf("google.com") < 0)) {
-      $("#emailError").html("Please give a gmail/google address - Mentors will need to sign-in with their gmail/google account.");
-      $("#emailError").removeClass("sr-only");
-      $("#emailError").addClass("alert");
-      $("#form-email-field").focus();
-      setTimeout(function() {
-        $("#emailError").removeClass("alert");
-        $("#emailError").addClass("sr-only");
-      }, 2500);
-      return;
-    }
     var emailRegEx = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g;
     if (!emailRegEx.test(emailKey)) {
-      $("#emailError").html("Please give a valid gmail address (e.g. momo@gmail.com");
+      $("#emailError").html("Please give a valid gmail or google for work address.<br>You can check it by opening this link:<a href='https://www.google.com/a/MyDomain.com/ServiceLogin' target='_blank'> google.com/a/MyDomain.com/ServiceLogin</a> and replace MyDomain with you domain.");
       $("#emailError").removeClass("sr-only");
       $("#emailError").addClass("alert");
       $("#form-email-field").focus();
       setTimeout(function() {
         $("#emailError").removeClass("alert");
         $("#emailError").addClass("sr-only");
-      }, 2500);
+      }, 6500);
       return;
     }
     //console.log("saving to Firebase: " + name + " , " + email);
