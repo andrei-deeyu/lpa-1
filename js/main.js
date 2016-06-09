@@ -141,22 +141,8 @@
   //
   // Save the current schedule
   //
-  $("#sc-save-button").click(function() {
-    var scDay = $("#schedule-day-1").val();
-    if (scDay === null || scDay === "") {
-      bootbox.alert("You must set a date!");
-      $("#schedule-day-1").focus();
-      return;
-    }
-    // check for duplicate mentors
-    var isOk = isScheduleGotErrors();
-    if (isOk.length > 3) {
-      bootbox.confirm(isOk + "<br><h5>Wanna save it anyway?</h5>", function(result) {
-        if (result === false) {
-          return;
-        }
-      });
-    }
+  function saveSchedule(scDay) {
+
     isInSaveOperation = true;
     console.log("=== is going INTO save");
     ga('send', {
@@ -233,6 +219,41 @@
     });
     isInSaveOperation = false;
     console.log("=== is going OUT of save");
+  }
+
+  //
+  // Save button action
+  //
+  $("#sc-save-button").click(function() {
+    var scDay = $("#schedule-day-1").val();
+    if (scDay === null || scDay === "") {
+      bootbox.alert("You must set a date!");
+      $("#schedule-day-1").focus();
+      return;
+    }
+
+    bootbox.confirm("<h5>You are going to save a new schedule for " + scDay + "</h5><h3>Are you sure?</h3>", function(result) {
+      if (result === false) {
+        return;
+      } else {
+        // check for duplicate mentors
+        var isOk = isScheduleGotErrors();
+        if (isOk.length > 3) {
+          bootbox.confirm(isOk + "<br><h5>Wanna save it anyway?</h5>", function(result) {
+            if (result === false) {
+              return;
+            }
+            else {
+              saveSchedule(scDay);      
+            }
+          });
+        }
+        else {
+          saveSchedule(scDay);
+        }
+      }
+    });
+
   });
 
   //
