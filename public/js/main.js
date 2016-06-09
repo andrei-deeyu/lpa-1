@@ -1,6 +1,7 @@
 (function() {
   $(".save-alert").hide();
   $("#spin").hide();
+  $("#sc-save-button").hide();
 
   var startupNameList = [];
   var mentorsList = [];
@@ -54,6 +55,7 @@
   firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
       authUserData = user;
+      $("#sc-save-button").show();
       //TODO: initMentorsChat(authData);
       //localStorage.setItem("lpa1-authData", JSON.stringify(authData));
       console.log("User " + user.uid + " is logged in with " + user.provider);
