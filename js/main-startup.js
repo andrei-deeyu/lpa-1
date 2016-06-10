@@ -86,7 +86,7 @@
     } else {
       console.log("Attendee is logged out");
       logoutUI();
-      bootbox.alert('<h2>Hey! Please Sign In.</h2><button type="submit" class="btn btn-success btn-lg sign-in-but-modal">Sign In</button>');
+      bootbox.alert('<center><button type="submit" class="btn btn-success btn-lg sign-in-but-modal">Sign In</button><br><br><img src="img/lpa-logo-40.jpg" alt="logo"/></center>');
     }
   });
 
