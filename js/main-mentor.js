@@ -24,6 +24,7 @@
     });
   }
   $("#help-but").click(function() {
+    $('.navbar-toggle').click();
     $("#joyRideTipContent").joyride({ autoStart: true });
   });
 
@@ -765,13 +766,6 @@
     return local.toJSON().slice(0, 10);
   });
   $("#schedule-day-1").val(new Date().toDateInputValue());
-
-  //
-  // Close the nav bar on clicks
-  //
-  $('.nav a').on('click', function() {
-    $('.navbar-toggle').click();
-  });
 
   //
   //
