@@ -474,6 +474,13 @@
   $("#schedule-day-1").val(new Date().toDateInputValue());
 
   //
+  // Close the nav bar on clicks
+  //
+  $('.nav a').on('click', function() {
+    $('.navbar-toggle').click();
+  });
+
+  //
   //
   //
   function timeConverter(UNIX_timestamp) {

@@ -83,6 +83,7 @@
     } else {
       console.log("User is logged out");
       logoutUI();
+      bootbox.alert('<h2>Hey! Please Sign In.</h2><button type="submit" class="btn btn-success btn-lg sign-in-but-modal">Sign In</button>');
     }
   });
 
@@ -97,9 +98,9 @@
   }
 
   //
-  // Sign in user/password
   //
-  $("#google-sign-in-but").click(function() {
+  //
+  function loginWithGoogle() {
     $("#spin").show();
     ref.authWithOAuthPopup("google", function(error, authData) {
       $("#spin").hide();
@@ -119,6 +120,22 @@
     }, {
       scope: "email"
     });
+  }
+
+  //
+  // handle the sign in button from the modal
+  //
+  $('body').on('click', '.sign-in-but-modal', function(event) {
+    bootbox.hideAll();
+    loginWithGoogle();
+    return false;
+  });
+
+  //
+  // Sign in user
+  //
+  $("#google-sign-in-but").click(function() {
+    loginWithGoogle();
     return false;
   });
 
@@ -166,15 +183,14 @@
 
           //console.log("=== Update mentors and comments for: " + key + " | data: " + scData);
           html += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
-            '<button class="btn btn-warning fetch-notes-button" data-key="' + scData.startup + '">'+ scData.startup + '</button>'
-            + ' | ' + getHourAsRange(key) +
+            '<button class="btn btn-warning fetch-notes-button" data-key="' + scData.startup + '">' + scData.startup + '</button>' + ' | ' + getHourAsRange(key) +
             ' <button class="btn expend-notes-but" type="button" data-textarea-key="' + key + '" data-note-key="' + startupBackupNotesKey +
             '" data-toggle="collapse" data-target="#mentor-note-p-' + key +
             '" aria-expanded="false" aria-controls="collapseMentorDetails"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span></button>' +
             ' </h3><b>Location: ' + scData.location + '</b> </div> <div id="mentor-note-p-' + key + '" class="panel-body collapse">' +
             '<p class="" id="meet-details-' + key + '"> ' +
             '<h5><label>Did the attendees were open and receptive? (1-5)</label></h5> <br>\
-                <input type="text" class="note-slider" id="note-receptive-'+ key + '" name="note-receptive" data-provide="slider" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide"> \
+                <input type="text" class="note-slider" id="note-receptive-' + key + '" name="note-receptive" data-provide="slider" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide"> \
                 <br><h5> <label>Was the session effective? (1-5)</label></h5><br> \
                 <input type="text" class="note-slider" id="note-effective-' + key + '" name="note-effective" data-provide="slider" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide"> \
                 <br><br> \
@@ -188,8 +204,8 @@
           // <button type="submit" class="btn btn-info meeting-img-button">Upload Image</button> 
         });
         $("#mentor-schedule-list").html(html);
-        $(".note-slider").slider({tooltip: 'always'});
-        
+        $(".note-slider").slider({ tooltip: 'always' });
+
       } else {
         bootbox.alert("Could not find anything for this date.");
         $("#mentor-schedule-list").html("");
@@ -265,7 +281,7 @@
                 var notesHtml = val.meetingNotes.replace(/\n/g, "<br>");
                 var tmpMentorEmailStr = tmpMentorEmail.replace(/-/g, ".");
                 html += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
-                   keyDate + " | " + getHourAsRange(key) + ' </h3> </div> <div class="panel-body">' +
+                  keyDate + " | " + getHourAsRange(key) + ' </h3> </div> <div class="panel-body">' +
                   '<b>Mentor:</b> ' + tmpMentorEmailStr + '<br><b>Updated At: </b>' + noteDate +
                   '<p><b>Meeting Notes:</b><br>' + notesHtml + '</p> </div> </div>';
               });
@@ -295,8 +311,8 @@
     var notes = ta.val();
 
     var sliders = $(this).parent().find('input');
-    var receptiveVal = $("#"+ sliders[0].id).slider('getValue');
-    var effectiveVal = $("#"+ sliders[1].id).slider('getValue');
+    var receptiveVal = $("#" + sliders[0].id).slider('getValue');
+    var effectiveVal = $("#" + sliders[1].id).slider('getValue');
 
     var keyToSession = ta.data('key');
     var keyToStartup = ta.data('startup');
@@ -438,7 +454,7 @@
           '</h3> </div> <div class="panel-body startup-edit" data-key="' + key + '"> <div class="startup-card-desc">' + startupData.description +
           '</div>From: <b>' + startupData.country + '  ' + startupData.city +
           '</b> Founded: <b>' + founded + '</b><br>Employees: <b>' + startupData.numEmployees +
-          '</b><br>' + videoButton + 
+          '</b><br>' + videoButton +
           '&nbsp;&nbsp;&nbsp;<button class="btn btn-lg btn-warning fetch-notes-button" data-key="' +
           startupData.name + '">Notes</button> </div> </div>'
         );
@@ -749,6 +765,13 @@
     return local.toJSON().slice(0, 10);
   });
   $("#schedule-day-1").val(new Date().toDateInputValue());
+
+  //
+  // Close the nav bar on clicks
+  //
+  $('.nav a').on('click', function() {
+    $('.navbar-toggle').click();
+  });
 
   //
   //
