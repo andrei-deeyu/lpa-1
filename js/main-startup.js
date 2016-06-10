@@ -126,31 +126,6 @@
   }
 
   //
-  //
-  //
-  function loginWithGoogle() {
-    $("#spin").show();
-    ref.authWithOAuthPopup("google", function(error, authData) {
-      $("#spin").hide();
-      if (error) {
-        console.log("Login Failed!", error);
-        ga('send', {
-          hitType: 'event',
-          eventCategory: 'sign-in-attendee',
-          eventAction: 'sign-in-button',
-          eventLabel: 'authentication failed: ' + error,
-        });
-        $("#err-modal").modal('show');
-      } else {
-        $("#sc-reload-button").prop('disabled', false);
-        console.log("Authenticated with payload:", authData);
-      }
-    }, {
-      scope: "email"
-    });
-  }
-
-  //
   // handle the sign in button from the modal
   //
   $('body').on('click', '.sign-in-but-modal', function(event) {
