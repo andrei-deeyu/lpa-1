@@ -202,10 +202,6 @@
             <textarea id="' + tKey + '" class="form-control col-lg-10 meeting-notes-text" data-notes-backup="' + startupBackupNotesKey +
             '" name="meeting-notes">' +
             '</textarea>  <br><button class="btn btn-warning meeting-save-button">Save Notes</button> </p> </div> </div> </div>';
-
-          // scHtml += '<div class="panel panel-default"> <div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
-          //   sessions.mentors[i][1] + ' | ' + getHourAsRange(tKey) + '</h3> </div> <div class="panel-body">' +
-          //   'Location: ' + sessions.mentors[i][2] + ' </div> </div>';
         }
         $("#attendee-schedule-list").html(scHtml);
         $(".note-slider").slider({ tooltip: 'always' });
