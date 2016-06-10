@@ -86,6 +86,7 @@
     } else {
       console.log("Attendee is logged out");
       logoutUI();
+      bootbox.alert('<h2>Hey! Please Sign In.</h2><button type="submit" class="btn btn-success btn-lg sign-in-but-modal">Sign In</button>');
     }
   });
 
@@ -100,9 +101,34 @@
   }
 
   //
-  // Sign in user/password
   //
-  $("#google-sign-in-but").click(function() {
+  //
+  function loginWithGoogle() {
+    $("#spin").show();
+    ref.authWithOAuthPopup("google", function(error, authData) {
+      $("#spin").hide();
+      if (error) {
+        console.log("Login Failed!", error);
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'sign-in-mentor',
+          eventAction: 'sign-in-button',
+          eventLabel: 'authentication failed: ' + error,
+        });
+        $("#err-modal").modal('show');
+      } else {
+        $("#sc-reload-button").prop('disabled', false);
+        console.log("Authenticated with payload:", authData);
+      }
+    }, {
+      scope: "email"
+    });
+  }
+
+  //
+  //
+  //
+  function loginWithGoogle() {
     $("#spin").show();
     ref.authWithOAuthPopup("google", function(error, authData) {
       $("#spin").hide();
@@ -117,11 +143,27 @@
         $("#err-modal").modal('show');
       } else {
         $("#sc-reload-button").prop('disabled', false);
-        console.log("Authenticated successfully with payload:", authData);
+        console.log("Authenticated with payload:", authData);
       }
     }, {
       scope: "email"
     });
+  }
+
+  //
+  // handle the sign in button from the modal
+  //
+  $('body').on('click', '.sign-in-but-modal', function(event) {
+    bootbox.hideAll();
+    loginWithGoogle();
+    return false;
+  });
+
+  //
+  // Sign in user/password
+  //
+  $("#google-sign-in-but").click(function() {
+    loginWithGoogle();
     return false;
   });
 
