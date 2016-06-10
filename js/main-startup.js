@@ -178,16 +178,37 @@
         $("#sc-reload-button").text("Reload " + curAttendeeStartup);
         //console.log("The sessions: " + JSON.stringify(sessions));
         var scHtml = "";
-        scHtml += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title"> Comments For The Day' +
+        scHtml += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title"> Notes For The Day' +
           '</h3> </div> <div class="panel-body">' + sessions.comments + '</div> </div>';
 
         // we know it's the mentors and hours
         for (var i = 0; i < sessions.mentors.length; i++) {
-          scHtml += '<div class="panel panel-default"> <div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
-            sessions.mentors[i][1] + ' | ' + getHourAsRange("hour-" + (i + 1)) + '</h3> </div> <div class="panel-body">' +
-            'Location: ' + sessions.mentors[i][2] + ' </div> </div>';
+          var tKey = "hour-" + (i + 1);
+          var startupBackupNotesKey = "/startups/" + curAttendeeStartup + "/" + scDay + "/attendees-notes/" + curAttendeeEmail + "/" + tKey;
+          scHtml += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
+            '<button class="btn btn-warning fetch-mentor-button" data-key="' + sessions.mentors[i][0] + '">' + sessions.mentors[i][1] +
+            '</button>' + ' | ' + getHourAsRange(tKey) +
+            ' <button class="btn expend-notes-but" type="button" data-textarea-key="' + tKey + '" data-note-key="' + startupBackupNotesKey +
+            '" data-toggle="collapse" data-target="#att-note-p-' + tKey +
+            '" aria-expanded="false" aria-controls="collapseAttDetails"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span></button>' +
+            ' </h3><b>Location: ' + sessions.mentors[i][2] + '</b> </div> <div id="att-note-p-' + tKey + '" class="panel-body collapse">' +
+            '<p class="" id="meet-details-' + tKey + '"> ' +
+            '<h5><label>Did the mentor listen to you and explain their advice? (1-5)</label></h5> <br>\
+                <input type="text" class="note-slider" id="note-listen-' + tKey + '" name="note-listen" data-provide="slider" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide"> \
+                <br><h5> <label>Was the session effective? (1-5)</label></h5><br> \
+                <input type="text" class="note-slider" id="note-effective-' + tKey + '" name="note-effective" data-provide="slider" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide"> \
+                <br><br> \
+            <h5>Meeting Notes</h5>What did you talk about? Any action items? \
+            <textarea id="' + tKey + '" class="form-control col-lg-10 meeting-notes-text" data-notes-backup="' + startupBackupNotesKey +
+            '" name="meeting-notes">' +
+            '</textarea>  <br><button class="btn btn-warning meeting-save-button">Save Notes</button> </p> </div> </div> </div>';
+
+          // scHtml += '<div class="panel panel-default"> <div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
+          //   sessions.mentors[i][1] + ' | ' + getHourAsRange(tKey) + '</h3> </div> <div class="panel-body">' +
+          //   'Location: ' + sessions.mentors[i][2] + ' </div> </div>';
         }
         $("#attendee-schedule-list").html(scHtml);
+        $(".note-slider").slider({ tooltip: 'always' });
       } else {
         if (curAttendeeStartup == "") {
           bootbox.alert("Please check why you are not part of any startup.");
@@ -205,6 +226,95 @@
     });
   });
 
+  //
+  //
+  //
+  $('body').on('click', '.fetch-mentor-button', function(event) {
+    var mentor = $(this).data("key");
+    showMentorDetails(mentor);
+  });
+
+  //
+  // Fetch the note per specific session
+  //
+  $('body').on('click', '.expend-notes-but', function(event) {
+    var key = $(this).data("note-key");
+    var textareaKey = $(this).data("textarea-key");
+    var listenSliderKey = "note-listen-" + textareaKey;
+    var effectiveSliderKey = "note-effective-" + textareaKey;
+    var readRef = new Firebase("https://lpa-1.firebaseio.com/notes-backup/" + key);
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'startup-notes-attendee',
+      eventAction: 'fetch-a-note',
+      eventLabel: 'key: ' + key
+    });
+
+    readRef.once("value", function(snapshot) {
+      var noteData = snapshot.val();
+      if (noteData != null && noteData.meetingNotes) {
+        $("#" + textareaKey).val(noteData.meetingNotes);
+      }
+      if (noteData != null && noteData.listen) {
+        $("#" + listenSliderKey).slider('setValue', noteData.listen);
+      }
+      if (noteData != null && noteData.effective) {
+        $("#" + effectiveSliderKey).slider('setValue', noteData.effective);
+      }
+    });
+  });
+
+  //
+  // Save the meeting notes
+  //
+  $('#attendee-schedule-list').on('click', '.meeting-save-button', function() {
+    // save the meeting notes
+    var ta = $(this).parent().find('textarea');
+    var notes = ta.val();
+
+    var sliders = $(this).parent().find('input');
+    var listenVal = $("#" + sliders[0].id).slider('getValue');
+    var effectiveVal = $("#" + sliders[1].id).slider('getValue');
+
+    var keyToNotesBackup = ta.data('notes-backup');
+    //console.log("keyToSession: " + keyToSession + " Notes: " + notes);
+    if (keyToNotesBackup == undefined || keyToNotesBackup == null) {
+      bootbox.alert("Sorry - Can't save your notes. Please take them in another way and let the organizers know about it.");
+      return;
+    }
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'startup-notes-attendee',
+      eventAction: 'save-notes',
+      eventLabel: 'keyToNotesBackup: ' + keyToNotesBackup
+    });
+    var curUnixTime = new Date().getTime();
+    var disTime = new Date().toJSON().slice(0, 21);
+
+
+    // save under notes for backup in case we re-set the schedule
+    ref.child("notes-backup").child(keyToNotesBackup).set({
+      listen: listenVal,
+      effective: effectiveVal,
+      meetingNotes: notes,
+      unixTime: curUnixTime,
+      date: disTime
+    }, function(error) {
+      if (error) {
+        console.log("Meeting notes for: " + keyToNotesBackup + " could not be saved :( Details: " + error);
+      } else {
+        console.log(keyToNotesBackup + " notes Saved to backup!");
+        $(".save-alert").show();
+        setTimeout(function() {
+          $(".save-alert").hide();
+        }, 2500);
+      }
+    });
+  });
+
+  //
+  //
+  //
   function getHourAsRange(key) {
     if (key.indexOf("1") > 0) {
       return "9:00 - 10:00";
@@ -228,6 +338,48 @@
       return "--";
     }
   }
+
+  //
+  // fetch mentor data base on its key (=email)
+  //
+  function showMentorDetails(key) {
+    if (key === "na@na-com") {
+      return;
+    }
+    var ref = new Firebase("https://lpa-1.firebaseio.com/mentors/" + key);
+    ref.on("value", function(mentorSnap) {
+      var mentor = mentorSnap.val();
+      if (mentor != null) {
+        var html = "<h3><img class='g-mentor-logo' src='" + mentor.pic + "' alt='mentor-image' />  " + mentor.name + "</h3>";
+        var mEmail = key.replace(/\-/g, ".");
+        var mBio = "";
+        if (mentor.bio && mentor.bio != undefined) {
+          mBio = (mentor.bio).replace(/\n/g, "<br>");
+        }
+        html += "<b>Email: </b>" + mEmail;
+        html += "<br><b>From: </b>" + mentor.country + " " + mentor.city;
+        html += "<br><b>Domain expertises: </b>" + mentor.domain + " " + mentor.domainSec;
+        html += "<h4>Bio </h4>" + mBio;
+        html += "<br><b>Fun Fact: </b>" + mentor.funFact;
+        html += "<br><b>Twitter: </b> <a href='http://www.twitter.com/" + mentor.twitter + "' target='_blank'>" + mentor.twitter + "</a>";
+        html += "<br><b>Linkedin: </b> <a href='http://www.linkedin.com/in/" + mentor.linkedin + "' target='_blank'>" + mentor.linkedin + "</a>";
+        bootbox.alert(html);
+      } else {
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'check-mentor',
+          eventAction: 'fetch-not-registered-mentor-from-attendee-app',
+          eventLabel: 'key: ' + key
+        });
+        bootbox.alert("It looks like this mentor is not registered. Please check with the organizers, cool?");
+        ref.unauth();
+        setTimeout(function() {
+          location.reload();
+        }, 2000);
+      }
+    });
+  }
+
 
   //////////////////////////////////////////////////////////////////////////////
   // Startups
