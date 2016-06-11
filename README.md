@@ -21,6 +21,7 @@ We got three web apps (so far):
   * Next, she can see what is the schedule per day.
   * After each session, the attendee should fill the notes' section. This will help us get better.
   * Check this [intro video](https://youtu.be/psdF_o25dJc) to the attendee app.
+
 -----
 
 ## Issue / Bug ?
