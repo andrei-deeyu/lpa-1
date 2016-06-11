@@ -13,12 +13,14 @@ We got three web apps (so far):
   * The mentor should sign-in with their gmail account and fill their personal details.
   * Next, she can see what is the schedule per day.
   * After each session, the mentor should fill the notes' section. This will help us learn and improve.
+  * Check this [intro video](https://youtu.be/trJcLl413hg) to the mentor app.
+
 
 * [Attendee Web App](https://lpa-1.firebaseapp.com/startup.html) - Used by the startups/attendees to see who is the lovely mentor that will work with them.
   * The attendee should sign-in with their gmail account and fill their personal details.
   * Next, she can see what is the schedule per day.
   * After each session, the attendee should fill the notes' section. This will help us get better.
-
+  * Check this [intro video](https://youtu.be/psdF_o25dJc) to the attendee app.
 -----
 
 ## Issue / Bug ?
