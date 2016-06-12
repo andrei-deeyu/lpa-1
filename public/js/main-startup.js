@@ -2,6 +2,7 @@
 // JS for the attendee web app
 // Author: Ido Green 
 // Date: 4/2016
+// V0.8
 //
 (function() {
   $(".save-alert").hide();
