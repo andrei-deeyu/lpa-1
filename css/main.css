@@ -28,6 +28,12 @@ label {
   padding: 2em;
 }
 
+.note-for-mentor-section {
+  padding: 1em;
+  background-color: rgba(122, 255, 0, 0.47);
+  margin-top: 1em;
+}
+
 
 /*
 .remove-mentor {
