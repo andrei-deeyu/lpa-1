@@ -368,10 +368,6 @@
           eventLabel: 'key: ' + key
         });
         bootbox.alert("It looks like this mentor is not registered. Please check with the organizers, cool?");
-        ref.unauth();
-        setTimeout(function() {
-          location.reload();
-        }, 2000);
       }
     });
   }
