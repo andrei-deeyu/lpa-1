@@ -501,10 +501,11 @@
         localStorage.removeItem("lpa1-g-att-startup");
         $("#sc-reload-button").prop('disabled', true);
         bootbox.alert("Please check with the organizer why you aren't part of any startup");
-        ref.unauth();
+        
         setTimeout(function() {
+          ref.unauth();
           location.reload();
-        }, 2000);
+        }, 6000);
       }
     });
   }
