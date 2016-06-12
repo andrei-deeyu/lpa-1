@@ -688,6 +688,7 @@
         $("#form-personal-url").val(mentor.site);
         $("#form-pic-url").val(mentor.pic);
         $("#form-comments").val(mentor.comments);
+        $("#notes-for-mentor").val(mentor.notesForDay);
         $("#form-name-field").focus();
         $('body').scrollTop(60);
       } else {

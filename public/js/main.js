@@ -962,6 +962,7 @@
       site: $("#form-personal-url").val(),
       pic: $("#form-pic-url").val(),
       comments: $("#form-comments").val(),
+      notesForDay: $("#form-note-for-mentor").val(),
       unixTime: curUnixTime,
       date: disTime
     }, function(error) {
@@ -1033,6 +1034,7 @@
     $("#form-personal-url").val("");
     $("#form-pic-url").val("");
     $("#form-comments").val("");
+    $("#form-note-for-mentor").val("");
     $("#form-name-field").focus();
     $('body').scrollTop(60);
   });
@@ -1063,6 +1065,7 @@
         $("#form-personal-url").val(mentor.site);
         $("#form-pic-url").val(mentor.pic);
         $("#form-comments").val(mentor.comments);
+        $("#form-note-for-mentor").val(mentor.notesForDay);
         $("#form-name-field").focus();
         $('body').scrollTop(60);
       }
