@@ -329,6 +329,14 @@
     var tas = $(this).parent().find('textarea');
     var notes = $( "#" + tas[0].id).val();
     var actionItems = $( "#" + tas[1].id).val();
+    if (notes.length < 3) {
+      bootbox.alert("Please fill the notes and write in few sentences what you talked about. Thanks!");
+      return;
+    }
+    if (actionItems.length < 3) {
+      bootbox.alert("Please write the action items that you gave the startups.");
+      return;
+    }
     var sliders = $(this).parent().find('input');
     var receptiveVal = $("#" + sliders[0].id).slider('getValue');
     var effectiveVal = $("#" + sliders[1].id).slider('getValue');
