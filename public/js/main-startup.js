@@ -405,6 +405,10 @@
         startupNameList.push(key);
         var startupData = childSnapshot.val();
         var startupLogoUrl = addhttp(startupData.logo);
+         var twitterLink = "";
+        if ( startupData.twitter &&  startupData.twitter.length >2) {
+          twitterLink = '&nbsp;&nbsp;<b>Twitter:</b> <a href="http://twitter.com/'+ startupData.twitter  +'" target="_blank">' +  startupData.twitter + '</a>';
+        } 
         //console.log("key: " + key + " data: " + startupData);
         $("#startups-list").append(
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
@@ -412,7 +416,7 @@
           '</h3> </div> <div class="panel-body startup-edit" data-key="' + key + '"> <div class="startup-card-desc">' +
           startupData.description + '</div><b>From:</b> ' +
           startupData.country + '  ' + startupData.city +
-          '<b>  Founded:</b> ' + startupData.dateFounded + '</b><br><b>Employees:</b> ' + startupData.numEmployees +
+          '<b>  Founded:</b> ' + startupData.dateFounded + '</b><br><b>Employees:</b> ' + startupData.numEmployees + twitterLink +
           ' </div> </div>'
         );
       });

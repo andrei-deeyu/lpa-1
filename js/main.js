@@ -640,6 +640,7 @@
       team: $("#st-team-url").val(),
       video: $("#st-video-url").val(),
       historyUrl: $("#st-history-url").val(),
+      twitter: $("#st-twitter-field").val(),
       unixTime: curUnixTime,
       date: disTime
     }, function(error) {
@@ -709,6 +710,7 @@
     $("#st-team-url").val("");
     $("#st-video-url").val("");
     $("#st-history-url").val("");
+    $("#st-twitter-field").val(""),
     $("#st-name-field").focus();
     $('body').scrollTop(60);
   });
@@ -735,6 +737,7 @@
         $("#st-team-url").val(st.team);
         $("#st-video-url").val(st.video);
         $("#st-history-url").val(st.historyUrl);
+        $("#st-twitter-field").val(st.twitter);
         $("#st-name-field").focus();
         $('body').scrollTop(60);
       }
