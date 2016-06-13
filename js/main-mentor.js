@@ -196,11 +196,15 @@
                 <br><h5> <label>Was the session effective? (1-5)</label></h5><br> \
                 <input type="text" class="note-slider" id="note-effective-' + key + '" name="note-effective" data-provide="slider" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide"> \
                 <br><br> \
-            <h5>Meeting Notes</h5>What did you talked about & action items \
+            What did you talked about? \
             <textarea id="' + key + '" class="form-control col-lg-10 meeting-notes-text" data-key="' + meetingNotesKey +
             '" data-startup="' + startupNotesKey + '" data-notes-backup="' + startupBackupNotesKey +
             '" name="meeting-notes">' +
-            '</textarea>  <br><button class="btn btn-warning meeting-save-button">Save Notes</button> </p> </div> </div> </div>';
+            '</textarea>  What are the action items? \
+            <textarea id="ai-' + key + '" class="form-control col-lg-10 meeting-notes-text" data-key="ai-' + meetingNotesKey +
+            '" data-startup="ai-' + startupNotesKey + '" data-notes-backup="ai-' + startupBackupNotesKey +
+            '" name="meeting-notes">' +
+            '</textarea> <br><button class="btn btn-warning meeting-save-button">Save Notes</button> </p> </div> </div> </div>';
           // TODO: add an option to take photos: 
           // <div class="row"> <div class="col-lg-3 col-md-3"> <input type="file" name="file" class="input-img" id="notesImg" accept="image/*"> 
           // <button type="submit" class="btn btn-info meeting-img-button">Upload Image</button> 
@@ -242,6 +246,9 @@
       if (noteData != null && noteData.meetingNotes) {
         $("#" + textareaKey).val(noteData.meetingNotes);
       }
+      if (noteData != null && noteData.actionItems) {
+        $("#ai-" + textareaKey).val(noteData.actionItems);
+      }
       if (noteData != null && noteData.receptive) {
         $("#" + receptiveSliderKey).slider('setValue', noteData.receptive);
       }
@@ -280,12 +287,22 @@
               Object.keys(hours).forEach(function(key) {
                 var val = hours[key];
                 var noteDate = val.date.replace("T", " ");
-                var notesHtml = val.meetingNotes.replace(/\n/g, "<br>");
+                var notesHtml = "";
+                if (val.meetingNotes && val.meetingNotes.length >2) {
+                  notesHtml = val.meetingNotes.replace(/\n/g, "<br>");  
+                }
+                
+                var actionItemsHtml = "";
+                if (val.actionItems && val.actionItems.length >2 ) {
+                  actionItemsHtml = val.actionItems.replace(/\n/g, "<br>");
+                }
                 var tmpMentorEmailStr = tmpMentorEmail.replace(/-/g, ".");
                 html += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
                   keyDate + " | " + getHourAsRange(key) + ' </h3> </div> <div class="panel-body">' +
                   '<b>Mentor:</b> ' + tmpMentorEmailStr + '<br><b>Updated At: </b>' + noteDate +
-                  '<p><b>Meeting Notes:</b><br>' + notesHtml + '</p> </div> </div>';
+                  '<p><b>Meeting Notes:</b><br>' + notesHtml + '</p>' +
+                  '<b>Action Items:</b> ' + actionItemsHtml + 
+                  ' </div> </div>';
               });
             }
           }
@@ -309,16 +326,16 @@
   //
   $('#mentor-schedule-list').on('click', '.meeting-save-button', function() {
     // save the meeting notes
-    var ta = $(this).parent().find('textarea');
-    var notes = ta.val();
-
+    var tas = $(this).parent().find('textarea');
+    var notes = $( "#" + tas[0].id).val();
+    var actionItems = $( "#" + tas[1].id).val();
     var sliders = $(this).parent().find('input');
     var receptiveVal = $("#" + sliders[0].id).slider('getValue');
     var effectiveVal = $("#" + sliders[1].id).slider('getValue');
 
-    var keyToSession = ta.data('key');
-    var keyToStartup = ta.data('startup');
-    var keyToNotesBackup = ta.data('notes-backup');
+    var keyToSession = tas.data('key');
+    var keyToStartup = tas.data('startup');
+    var keyToNotesBackup = tas.data('notes-backup');
     //console.log("keyToSession: " + keyToSession + " Notes: " + notes);
     if (keyToSession == undefined || keyToSession == null) {
       bootbox.alert("Sorry - Can't save your notes. Please take them in another way and let the organizers know about it.");
@@ -337,6 +354,7 @@
       receptive: receptiveVal,
       effective: effectiveVal,
       meetingNotes: notes,
+      actionItems: actionItems,
       unixTime: curUnixTime,
       date: disTime
     }, function(error) {
@@ -354,6 +372,7 @@
       receptive: receptiveVal,
       effective: effectiveVal,
       meetingNotes: notes,
+      actionItems: actionItems,
       unixTime: curUnixTime,
       date: disTime
     }, function(error) {
@@ -372,6 +391,7 @@
       receptive: receptiveVal,
       effective: effectiveVal,
       meetingNotes: notes,
+      actionItems: actionItems,
       unixTime: curUnixTime,
       date: disTime
     }, function(error) {
