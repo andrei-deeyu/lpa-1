@@ -206,7 +206,7 @@
       }
       //
       var startupComments = $("#sc-comments-" + startupKey).val();
-      console.log("Saving startup: " + startupName + " Comments:" + startupComments + " Mentors: " + mentorPerHour);
+      // console.log("Saving startup: " + startupName + " Comments:" + startupComments + " Mentors: " + mentorPerHour);
       // save the sessions per startup
       ref.child("sessions").child(scDay).child("startups").child(startupName).set({
         mentors: mentorPerHour,
@@ -316,7 +316,7 @@
         //console.log("The sessions: " + JSON.stringify(sessions));
         $.each(sessions, function(startupName, scData) {
           // per startup set the mentors + comments
-          console.log("update mentors and comments for: " + startupName);
+          //console.log("update mentors and comments for: " + startupName);
           $("#sc-comments-" + startupName).val(scData.comments);
           var len = scData.mentors.length + 1;
           for (var j = 1; j < len; j++) {
@@ -324,7 +324,7 @@
             var key = curMentor[0];
             var name = curMentor[1];
             var loc = curMentor[2];
-            console.log("startup: " + startupName + " key:" + key + " name:" + name);
+            //console.log("startup: " + startupName + " key:" + key + " name:" + name);
             $("#mentor-" + startupName + "-" + j + "-select").val(key);
             $("#meeting-location-" + startupName + "-" + j + "-select").val(loc);
           }
@@ -476,7 +476,7 @@
     readRef.orderByKey().on("value", function(snapshot) {
       var sessions = snapshot.val();
       if (sessions != null) {
-        console.log("The sessions: " + JSON.stringify(sessions));
+        //console.log("The sessions: " + JSON.stringify(sessions));
         var html = ""; //"<h3>" + curMentorEmail + "</h3>";
         $("#mentor-schedule-list").html("");
         $.each(sessions, function(key, scData) {
@@ -486,7 +486,7 @@
           if (scData.notes && scData.notes.meetingNotes) {
             curNotes = scData.notes.meetingNotes;
           }
-          console.log("update mentors and comments for: " + key + " " + scData);
+          //console.log("update mentors and comments for: " + key + " " + scData);
           html += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
             scData.startup + ' | ' + getHourAsRange(key) + ' </h3> </div> <div class="panel-body">' +
             '<b>Location: ' + scData.location + '</b> <p class="" id="meet-details-' + key + '">Meeting Notes:<br> \
@@ -625,7 +625,7 @@
       }, 1500);
       return;
     }
-    console.log("saving startup to Firebase: " + name + " | desc: " + desc);
+    //console.log("saving startup to Firebase: " + name + " | desc: " + desc);
     var curUnixTime = new Date().getTime();
     var disTime = new Date().toJSON().slice(0, 21);
     ref.child("startups").child(name).set({
@@ -647,7 +647,6 @@
       if (error) {
         bootbox.alert("Startup data could not be saved :( Details: " + error);
       } else {
-        console.log(name + " saved!");
         $(".save-alert").show();
         setTimeout(function() {
           $(".save-alert").hide();
@@ -725,7 +724,7 @@
     ref.on("value", function(startupSnap) {
       var st = startupSnap.val();
       if (st !== null) {
-        console.log("Setting data for startup: " + JSON.stringify(st));
+        //console.log("Setting data for startup: " + JSON.stringify(st));
         $("#st-name-field").val(st.name);
         $("#st-desc-field").val(st.description);
         $("#st-country-field").val(st.country);
@@ -755,7 +754,7 @@
         //new Firebase('https://lpa-1.firebaseio.com/startups/' + key);
         var onComplete = function(error) {
           if (error) {
-            console.log('Synchronization failed');
+            console.log('Synchronization failed could not remove mentor');
           } else {
             console.log('Synchronization succeeded - mentor was removed');
             $("#startups-list").html('<div id="loading-startup"><h2><i class="fa fa-spinner fa-spin"></i> </h2></div>');
@@ -820,7 +819,6 @@
       if (error) {
         bootbox.alert("Location data could not be saved. Details: " + error);
       } else {
-        console.log(name + " saved!");
         $(".save-alert").show();
         setTimeout(function() {
           $(".save-alert").hide();
@@ -877,7 +875,7 @@
     ref.on("value", function(locSnap) {
       var location = locSnap.val();
       if (location !== null) {
-        console.log("Setting data for location: " + JSON.stringify(location));
+        //console.log("Setting data for location: " + JSON.stringify(location));
         $("#location-name-field").val(location.name);
         $("#location-address-field").val(location.address);
         $("#location-comments-field").val(location.comments);
@@ -898,7 +896,7 @@
         //new Firebase('https://lpa-1.firebaseio.com/locations/' + key);
         var onComplete = function(error) {
           if (error) {
-            console.log('Synchronization Failed');
+            console.log('Location Synchronization Failed');
           } else {
             console.log('Synchronization Succeeded - location was removed');
             $("#locations-list").html('<div id="loading-locations"><h2> <span class="glyphicon glyphicon-refresh"></span> <i class="fa fa-spinner fa-spin"></i> </h2></div>');
@@ -978,7 +976,6 @@
       if (error) {
         bootbox.alert("Data could not be saved :( Details: " + error);
       } else {
-        console.log(name + " saved!");
         $(".save-alert").show();
         setTimeout(function() {
           $(".save-alert").hide();
@@ -1058,7 +1055,7 @@
     ref.on("value", function(mentorSnap) {
       var mentor = mentorSnap.val();
       if (mentor !== null) {
-        console.log("Setting data for: " + JSON.stringify(mentor));
+        //console.log("Setting data for: " + JSON.stringify(mentor));
         $("#form-name-field").val(mentor.name);
         $("#form-email-field").val(mentor.email);
         $("#form-phone-field").val(mentor.phone);
@@ -1092,7 +1089,7 @@
         //new Firebase('https://lpa-1.firebaseio.com/mentors/' + key);
         var onComplete = function(error) {
           if (error) {
-            console.log('Synchronization failed');
+            console.log('Synchronization failed for mentor remove');
           } else {
             console.log('Synchronization succeeded - mentor was removed');
             $("#mentors-list").html('<div id="loading-mentors"><h2><i class="fa fa-spinner fa-spin"></i> </h2></div>');
@@ -1151,7 +1148,7 @@
       return;
     }
 
-    console.log("saving attendee: " + name + " , " + email);
+    //console.log("saving attendee: " + name + " , " + email);
     var curUnixTime = new Date().getTime();
     var disTime = new Date().toJSON().slice(0, 21);
     emailKey = email.replace(/\./g, '-');
@@ -1169,7 +1166,6 @@
       if (error) {
         bootbox.alert("Attendee could not be saved :( Details: " + error);
       } else {
-        console.log(name + " saved!");
         $(".save-alert").show();
         setTimeout(function() {
           $(".save-alert").hide();
@@ -1234,7 +1230,7 @@
     ref.on("value", function(attSnap) {
       var att = attSnap.val();
       if (att !== null) {
-        console.log("Setting data for: " + JSON.stringify(att));
+        //console.log("Setting data for: " + JSON.stringify(att));
         $("#att-name-field").val(att.name);
         $("#att-email-field").val(att.email);
         $("#att-startup-list-select").selectpicker('val', att.startup);
@@ -1259,9 +1255,9 @@
         var fredRef = firebase.database().ref("attendees/" + key);
         var onComplete = function(error) {
           if (error) {
-            console.log('Synchronization failed');
+            console.log('Synchronization failed to remove attendee');
           } else {
-            console.log('Synchronization succeeded - mentor was removed');
+            console.log('Synchronization succeeded - attendee was removed');
             $("#att-list").html('<div id="loading-attendees"><h2><i class="fa fa-spinner fa-spin"></i> </h2></div>');
             readAttendees(authUserData);
             $("#att-cancel-button").click();
