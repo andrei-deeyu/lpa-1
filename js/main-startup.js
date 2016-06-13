@@ -178,9 +178,15 @@
       if (sessions != null) {
         $("#sc-reload-button").text("Reload " + curAttendeeStartup);
         //console.log("The sessions: " + JSON.stringify(sessions));
+        var commentsForTheDay = "Nothing for now. But remember: <h5>A lion runs the fastest when he is hungry.</h5><img src='img/lion-250.jpeg' alt='Ido famous lion' />";
+        if (sessions.comments && sessions.comments.length > 2) {
+          commentsForTheDay = sessions.comments;
+        }
         var scHtml = "";
         scHtml += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title"> Notes For The Day' +
-          '</h3> </div> <div class="panel-body">' + sessions.comments + '</div> </div>';
+          '  <button class="btn expend-comments-day-but" type="button" data-toggle="collapse" data-target="#att-comments-day" \
+          aria-expanded="false" aria-controls="collapseCommentsDetails"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"> \
+          </span></button> </h3> </div> <div id="att-comments-day" class="panel-body collapse">' + commentsForTheDay + '</div> </div>';
 
         // we know it's the mentors and hours
         for (var i = 0; i < sessions.mentors.length; i++) {
