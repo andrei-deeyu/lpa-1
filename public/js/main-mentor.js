@@ -330,11 +330,11 @@
     var notes = $( "#" + tas[0].id).val();
     var actionItems = $( "#" + tas[1].id).val();
     if (notes.length < 3) {
-      bootbox.alert("Please fill the notes and write in few sentences what you talked about. Thanks!");
+      bootbox.alert("<h4>Please fill the notes and write in few sentences what you talked about.</h4>");
       return;
     }
     if (actionItems.length < 3) {
-      bootbox.alert("Please write the action items that you gave the startups.");
+      bootbox.alert("<h4>Please write the action items that you gave the startups.</h4>");
       return;
     }
     var sliders = $(this).parent().find('input');
