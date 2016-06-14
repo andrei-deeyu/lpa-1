@@ -180,7 +180,7 @@
         //console.log("The sessions: " + JSON.stringify(sessions));
         var commentsForTheDay = "Nothing for now. But remember: <h5>A lion runs the fastest when he is hungry.</h5><img src='img/lion-250.jpeg' alt='Ido famous lion' />";
         if (sessions.comments && sessions.comments.length > 2) {
-          commentsForTheDay = sessions.comments;
+          commentsForTheDay = (sessions.comments).replace(/\n/g, "<br>");
         }
         var scHtml = "";
         scHtml += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title"> Notes For The Day' +

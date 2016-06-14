@@ -131,8 +131,12 @@ label {
   font-size: 120%;
 }
 
+#att-comments-day {
+  text-align: left;
+  font-size: 110%;
+}
 
-/********* TODO: Mentor page */
+/*** TODO: Mentor page */
 
 .meeting-save-button {
   margin-top: 0.5em;
