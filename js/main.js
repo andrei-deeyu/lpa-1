@@ -67,8 +67,8 @@
       console.log("User " + user.uid + " is logged in with " + user.provider);
       ga('send', {
         hitType: 'event',
-        eventCategory: 'sign-in',
-        eventAction: 'authenticated user.uid: ' + user.uid,
+        eventCategory: 'sign-in-admin',
+        eventAction: 'authenticated user.uid: ' + user.uid + ' email: ' + authUserData.email,
         eventLabel: 'authentication'
       });
       $("#login-form").hide();
@@ -102,8 +102,8 @@
       ga('send', {
         hitType: 'event',
         eventCategory: 'sign-in',
-        eventAction: 'sign-in-button',
-        eventLabel: 'admin auth failed',
+        eventAction: 'admin-sign-in-button',
+        eventLabel: 'sign-in-error: ' + errorMessage,
         eventValue: 1
       });
       $("#err-modal").modal('show');
@@ -153,9 +153,9 @@
     console.log("=== is going INTO save");
     ga('send', {
       hitType: 'event',
-      eventCategory: 'schedule',
+      eventCategory: 'schedule-admin',
       eventAction: 'save-schedule',
-      eventLabel: 'for: ' + scDay
+      eventLabel: 'for: ' + scDay + ' By: ' + authUserData.uid
     });
 
     // clean the schedule for that day
@@ -164,7 +164,7 @@
         bootbox.alert("Schedule could not clean mentor schedule for: " + scDay + " Details: " + error);
         ga('send', {
           hitType: 'event',
-          eventCategory: 'schedule-error',
+          eventCategory: 'schedule-admin-error',
           eventAction: 'clean-mentors-schedule',
           eventLabel: 'for: ' + scDay
         });
@@ -175,7 +175,7 @@
         bootbox.alert("Schedule could not clean startup schedule for: " + scDay + " Details: " + error);
         ga('send', {
           hitType: 'event',
-          eventCategory: 'schedule-error',
+          eventCategory: 'schedule-admin-error',
           eventAction: 'clean-startup-schedule',
           eventLabel: 'for: ' + scDay
         });
@@ -248,13 +248,11 @@
           bootbox.confirm(isOk + "<br><h5>Wanna save it anyway?</h5>", function(result) {
             if (result === false) {
               return;
-            }
-            else {
-              saveSchedule(scDay);      
+            } else {
+              saveSchedule(scDay);
             }
           });
-        }
-        else {
+        } else {
           saveSchedule(scDay);
         }
       }
@@ -701,7 +699,7 @@
     $("#st-video-url").val("");
     $("#st-history-url").val("");
     $("#st-twitter-field").val(""),
-    $("#st-name-field").focus();
+      $("#st-name-field").focus();
     $('body').scrollTop(60);
   });
 
@@ -747,6 +745,12 @@
           if (error) {
             console.log('Synchronization failed could not remove mentor');
           } else {
+            ga('send', {
+              hitType: 'event',
+              eventCategory: 'admin-remove-startup',
+              eventAction: 'delete',
+              eventLabel: 'removing: ' + key + " by: " + authUserData.uid
+            });
             console.log('Synchronization succeeded - mentor was removed');
             $("#startups-list").html('<div id="loading-startup"><h2><i class="fa fa-spinner fa-spin"></i> </h2></div>');
             readStartups(authUserData);
@@ -889,6 +893,12 @@
           if (error) {
             console.log('Location Synchronization Failed');
           } else {
+            ga('send', {
+              hitType: 'event',
+              eventCategory: 'admin-remove-location',
+              eventAction: 'delete',
+              eventLabel: 'removing: ' + key + " by: " + authUserData.uid
+            });
             console.log('Synchronization Succeeded - location was removed');
             $("#locations-list").html('<div id="loading-locations"><h2> <span class="glyphicon glyphicon-refresh"></span> <i class="fa fa-spinner fa-spin"></i> </h2></div>');
             readLocations(authUserData);
@@ -1081,7 +1091,19 @@
         var onComplete = function(error) {
           if (error) {
             console.log('Synchronization failed for mentor remove');
+            ga('send', {
+              hitType: 'event',
+              eventCategory: 'admin-remove-mentor-error',
+              eventAction: 'delete-error',
+              eventLabel: 'removing: ' + key + " by: " + authUserData.uid + " err: " + error
+            });
           } else {
+            ga('send', {
+              hitType: 'event',
+              eventCategory: 'admin-remove-mentor',
+              eventAction: 'delete',
+              eventLabel: 'removing: ' + key + " by: " + authUserData.uid
+            });
             console.log('Synchronization succeeded - mentor was removed');
             $("#mentors-list").html('<div id="loading-mentors"><h2><i class="fa fa-spinner fa-spin"></i> </h2></div>');
             readMentors(authUserData);
@@ -1247,7 +1269,19 @@
         var onComplete = function(error) {
           if (error) {
             console.log('Synchronization failed to remove attendee');
+            ga('send', {
+              hitType: 'event',
+              eventCategory: 'admin-remove-attendee-error',
+              eventAction: 'delete-error',
+              eventLabel: 'removing: ' + key + " by: " + authUserData.uid + " err: " + error
+            });
           } else {
+            ga('send', {
+              hitType: 'event',
+              eventCategory: 'admin-remove-attendee',
+              eventAction: 'delete',
+              eventLabel: 'removing: ' + key + " by: " + authUserData.uid
+            });
             console.log('Synchronization succeeded - attendee was removed');
             $("#att-list").html('<div id="loading-attendees"><h2><i class="fa fa-spinner fa-spin"></i> </h2></div>');
             readAttendees(authUserData);
