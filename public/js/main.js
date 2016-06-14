@@ -480,18 +480,9 @@
         var html = ""; //"<h3>" + curMentorEmail + "</h3>";
         $("#mentor-schedule-list").html("");
         $.each(sessions, function(key, scData) {
-          // per startup set the mentors + comments
-          var meetingNotesKey = scDay + "/mentors/" + curMentorEmail + "/" + key + "/notes"; // + scData.startup;
-          var curNotes = "";
-          if (scData.notes && scData.notes.meetingNotes) {
-            curNotes = scData.notes.meetingNotes;
-          }
-          //console.log("update mentors and comments for: " + key + " " + scData);
           html += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
             scData.startup + ' | ' + getHourAsRange(key) + ' </h3> </div> <div class="panel-body">' +
-            '<b>Location: ' + scData.location + '</b> <p class="" id="meet-details-' + key + '">Meeting Notes:<br> \
-            <textarea class="form-control col-lg-10 meeting-notes-text" data-key="' + meetingNotesKey + '" name="meeting-notes">' +
-            curNotes + '</textarea> </p> </div> </div> </div>';
+            '<b>Location: ' + scData.location + '</b> <p class="" id="meet-details-' + key + '"></p> </div> </div> </div>';
         });
         $("#mentor-schedule-list").html(html);
       } else {
