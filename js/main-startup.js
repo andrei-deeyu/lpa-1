@@ -191,7 +191,8 @@
         // we know it's the mentors and hours
         for (var i = 0; i < sessions.mentors.length; i++) {
           var tKey = "hour-" + (i + 1);
-          var startupBackupNotesKey = "/startups/" + curAttendeeStartup + "/" + scDay + "/attendees-notes/" + curAttendeeEmail + "/" + tKey;
+          var startupBackupNotesKey = "/startups/" + curAttendeeStartup + "/" + scDay + "/attendees-notes/" + sessions.mentors[i][0] +
+            "/" + curAttendeeEmail + "/" + tKey;
           if (sessions.mentors[i][0] !== "na@na-com") {
             scHtml += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
               '<button class="btn btn-warning fetch-mentor-button" data-key="' + sessions.mentors[i][0] + '">' + sessions.mentors[i][1] +
