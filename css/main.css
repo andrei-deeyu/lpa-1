@@ -93,6 +93,12 @@ label {
   padding: 1em;
 }
 
+/* For the notes table - might want to tight it */
+td {
+    text-align: left;
+    font-size: 90%;
+}
+
 .vcenter-s-header {
   display: inline-block;
   vertical-align: middle;
