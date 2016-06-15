@@ -172,7 +172,7 @@
     });
 
     var readRef = new Firebase("https://lpa-1.firebaseio.com/sessions/" + scDay + "/mentors/" + curMentorEmail);
-    readRef.orderByKey().on("value", function(snapshot) {
+    readRef.orderByKey().once("value", function(snapshot) {
       var sessions = snapshot.val();
       if (sessions != null) {
         //console.log("The sessions: " + JSON.stringify(sessions));
@@ -200,11 +200,11 @@
             <textarea id="' + key + '" class="form-control col-lg-10 meeting-notes-text" data-key="' + meetingNotesKey +
             '" data-startup="' + startupNotesKey + '" data-notes-backup="' + startupBackupNotesKey +
             '" name="meeting-notes">' +
-            '</textarea>  What are the action items? \
+            '</textarea>  <br>What are the action items? \
             <textarea id="ai-' + key + '" class="form-control col-lg-10 meeting-notes-text" data-key="ai-' + meetingNotesKey +
             '" data-startup="ai-' + startupNotesKey + '" data-notes-backup="ai-' + startupBackupNotesKey +
             '" name="meeting-notes">' +
-            '</textarea> <button class="btn btn-warning meeting-save-button">Save Notes</button> </p> </div> </div> </div>';
+            '</textarea> <br><button class="btn btn-warning meeting-save-button">Save Notes</button> </p> </div> </div> </div>';
           // TODO: add an option to take photos: 
           // <div class="row"> <div class="col-lg-3 col-md-3"> <input type="file" name="file" class="input-img" id="notesImg" accept="image/*"> 
           // <button type="submit" class="btn btn-info meeting-img-button">Upload Image</button> 
@@ -271,7 +271,7 @@
       eventLabel: 'startup: ' + startupName
     });
 
-    readRef.orderByKey().on("value", function(snapshot) {
+    readRef.orderByKey().once("value", function(snapshot) {
       var sessions = snapshot.val();
       if (sessions != null) {
         //console.log("The sessions: " + JSON.stringify(sessions));

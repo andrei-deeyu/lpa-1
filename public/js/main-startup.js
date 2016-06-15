@@ -173,7 +173,7 @@
       eventLabel: 'for day: ' + scDay
     });
     var readRef = new Firebase("https://lpa-1.firebaseio.com/sessions/" + scDay + "/startups/" + curAttendeeStartup);
-    readRef.orderByKey().on("value", function(snapshot) {
+    readRef.orderByKey().once("value", function(snapshot) {
       var sessions = snapshot.val();
       if (sessions != null) {
         $("#sc-reload-button").text("Reload " + curAttendeeStartup);
