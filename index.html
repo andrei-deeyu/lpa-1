@@ -104,8 +104,7 @@
           <li id="locations-tab-li" role="presentation"><a href="#locations-tab" aria-controls="locations-tab" role="tab" data-toggle="tab">Locations</a></li>
           <li id="schedule-tab-li" role="presentation"><a href="#schedule-tab" aria-controls="schedule-tab" role="tab" data-toggle="tab">Schedule</a></li>
           <li id="schedule-viewer-tab-li" role="presentation"><a href="#schedule-viewer-tab" aria-controls="schedule-viewer-tab" role="tab" data-toggle="tab">Schedule Viewer</a></li>
-          <!-- <li id="notes-tab-li" role="presentation"><a href="#notes-viewer-tab" aria-controls="notes-viewer-tab" role="tab" data-toggle="tab">Notes</a></li> -->
-          <!-- <li id="chat-tab-li" role="presentation"><a href="#chat-tab" aria-controls="chat-tab" role="tab" data-toggle="tab" title="Talk with other mentors or attendees">Conversation</a></li> -->
+          <li id="notes-tab-li" role="presentation"><a href="#notes-viewer-tab" aria-controls="notes-viewer-tab" role="tab" data-toggle="tab">Notes</a></li>
         </ul>
         <!-- Tab panes -->
         <div class="tab-content">
@@ -517,7 +516,21 @@
             </div>
             <div class="row">
               <div id="startup-notes-list" class="col-md-12 col-lg-12 text-center">
-                <table id="startup-notes-table" class="display" width="100%"></table>
+                <table id="startup-notes-table" class="display" width="100%">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Mentor</th>
+                      <th>Attendee</th>
+                      <th>Hour</th>
+                      <th>Effective</th>
+                      <th>Receptive</th>
+                      <th>Action Items</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                    <tbody id="startup-notes-table-body"></tbody>
+                </table>
               </div>
             </div>
           </div>
@@ -603,9 +616,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
   <script src="js/vendor/jquery.joyride-2.1.js"></script>
   <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
-  <!-- Firechat TODO: find if they have firebase 3 support 
-   <script src='https://cdn.firebase.com/libs/firechat/2.0.1/firechat.min.js'></script>
-   -->
   <script>
   (function(i, s, o, g, r, a, m) {
     i['GoogleAnalyticsObject'] = r;

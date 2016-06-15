@@ -450,10 +450,10 @@
       eventAction: 'admin-load-startup-notes',
       eventLabel: " Startup: " + curStartup
     });
-    var dataSet = [];
-    var gotAllData = false;
+    //var dataSet = [];
+    var tblHtml = "";
     var readRef = firebase.database().ref("notes-backup/startups/" + curStartup);
-    readRef.orderByKey().on("value", function(snapshot) {
+    readRef.orderByKey().once("value", function(snapshot) {
       var notes = snapshot.val();
       if (notes != null) {
         //console.log("notes: " + JSON.stringify(notes));
@@ -474,7 +474,10 @@
                   var receptive = (notes[x][noteType][mentor][hour]).receptive;
                   var actionItems = (notes[x][noteType][mentor][hour]).actionItems;
                   var mNotes = (notes[x][noteType][mentor][hour]).meetingNotes;
-                  dataSet.push([x, mentor, "n/a", hour, effective, receptive, actionItems, mNotes]);
+                  //dataSet.push([x, mentor, "n/a", hour, effective, receptive, actionItems, mNotes]);
+                  tblHtml += "<tr><td>" + x + "</td><td>" + mentor + "</td><td>N/A" + "</td><td>" +
+                    hour + "</td><td>" + effective + "</td><td>" + receptive + "</td><td>" +
+                    actionItems + "</td><td>" + mNotes + "</td></tr>";
                 } else {
                   var tmpAtt = attendee[0];
                   var tmpHour = hour[0];
@@ -483,57 +486,37 @@
                   var receptive = (notes[x][noteType][mentor][tmpAtt][tmpHour]).receptive;
                   var actionItems = (notes[x][noteType][mentor][tmpAtt][tmpHour]).actionItems;
                   var mNotes = (notes[x][noteType][mentor][tmpAtt][tmpHour]).meetingNotes;
-                  dataSet.push([x, mentor, tmpAtt, tmpHour, effective, receptive, actionItems, mNotes]);
+                  //dataSet.push([x, mentor, tmpAtt, tmpHour, effective, receptive, actionItems, mNotes]);
+                  tblHtml += "<tr><td>" + x + "</td><td>" + mentor + "</td><td>" + tmpAtt + "</td><td>" +
+                    tmpHour + "</td><td>" + effective + "</td><td>" + receptive + "</td><td>" +
+                    actionItems + "</td><td>" + mNotes + "</td></tr>";
                 }
               }
             }
           } catch (err) {
             console.log("Error in building the notes table: " + err);
-            dataSet.push([x, "", "", "", "", "", "", ""]);
+            //dataSet.push([x, "", "", "", "", "", "", ""]);
           }
         } // for loop
-        console.log("=======   " + dataSet);
-        gotAllData = true;
+        //console.log("======= " + dataSet);
+        $("#startup-notes-table-body").html(tblHtml);
+        $("#startup-notes-table").DataTable(
+          {columns: [
+            { title: "Date" },
+            { title: "Mentor" },
+            { title: "Attendee" },
+            { title: "Hour" },
+            { title: "Effective" },
+            { title: "Receptive" },
+            { title: "Action Items", "width": "280px" },
+            { title: "Notes", "width": "350px" }
+          ] });
       } else {
         bootbox.alert("Could not find notes for " + curStartup);
       }
     });
-
-    checkWeHaveDataForNotesTable(dataSet, gotAllData);
   }
 
-  var checkWeHaveDataForNotesCounter = 0;
-  //
-  //
-  //
-  function checkWeHaveDataForNotesTable(dataSet, gotAllData) {
-    var secTimer;
-    checkWeHaveDataForNotesCounter++;
-    console.log(" -- checkWeHaveDataForNotesCounter -- flag: " + gotAllData);
-    if ( !gotAllData) {
-      secTimer = setTimeout(checkWeHaveDataForNotesTable, 1000);
-    } else {
-      $('#startup-notes-table').DataTable({
-      data: dataSet,
-      columns: [
-        { title: "Date" },
-        { title: "Mentor" },
-        { title: "Attendee" },
-        { title: "Hour" },
-        { title: "Effective" },
-        { title: "Receptive" },
-        { title: "Action Items", "width": "280px" },
-        { title: "Notes", "width": "350px" }
-      ]
-    });
-      // shut the timer
-      clearTimeout(secTimer);
-    }
-    if (checkWeHaveDataForNotesCounter > MAX_CALLS_FOR_CHECK_DATA) {
-      clearTimeout(secTimer);
-      bootbox.alert("Could not fetch the notes :/");
-    }
-  }
 
   //////////////////////////////////////////////////////////////////////////////
   // Schedule viewer per mentor / startup
