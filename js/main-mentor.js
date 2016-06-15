@@ -211,7 +211,6 @@
         });
         $("#mentor-schedule-list").html(html);
         $(".note-slider").slider({ tooltip: 'always' });
-
       } else {
         bootbox.alert("Could not find anything for this date.");
         $("#mentor-schedule-list").html("");
@@ -483,13 +482,18 @@
         if ( startupData.twitter &&  startupData.twitter.length >2) {
           twitterLink = '&nbsp;&nbsp;<b>Twitter:</b> <a href="http://twitter.com/'+ startupData.twitter  +'" target="_blank">' +  startupData.twitter + '</a>';
         } 
+        var onePagerButton = "";
+        if (startupData.historyUrl && startupData.historyUrl.length > 4) {
+          var onePagerLink = addhttp(startupData.historyUrl);
+          onePagerButton = '<a href="' + onePagerLink + '" target="_blank" class="btn btn-info">First Day Evaluation</a>  ';
+        }
         $("#startups-list").append(
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
           startupData.name + "&nbsp;&nbsp;<img src='" + startupLogoUrl + "' class='logo-img' alt='startup logo'>" +
           '</h3> </div> <div class="panel-body startup-edit" data-key="' + key + '"> <div class="startup-card-desc">' + startupData.description +
           '</div><b>From: </b>' + startupData.country + '  ' + startupData.city +
           '<b> Founded: </b>' + founded + '<br><b>Employees: </b>' + startupData.numEmployees +
-          twitterLink + '<br>' + videoButton +
+          twitterLink + '<br>' + videoButton + '&nbsp;&nbsp;' + onePagerButton + 
           '&nbsp;&nbsp;&nbsp;<button class="btn btn-lg btn-warning fetch-notes-button" data-key="' +
           startupData.name + '">Notes</button> </div> </div>'
         );
