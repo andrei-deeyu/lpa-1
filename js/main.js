@@ -459,36 +459,40 @@
         for (var x in notes) {
           try {
             var attNotes = Object.keys(notes[x]); // or notes
-            var mentors = Object.keys(notes[x][attNotes]);
-            for (var i = 0; i < mentors.length; i++ ) {
-              // go on all the mentors
-              var mentor = mentors[i];
-              var attendee = Object.keys(notes[x][attNotes][mentor]);
-              if (attendee[0].indexOf("hour") > -1) {
-                // the old/broken format of notes without the mentor
-                var hour = attendee;
-                var effective = (notes[x][attNotes][mentor][hour]).effective;
-                var receptive = (notes[x][attNotes][mentor][hour]).receptive;
-                var actionItems = (notes[x][attNotes][mentor][hour]).actionItems;
-                var mNotes = (notes[x][attNotes][mentor][hour]).meetingNotes;
-                dataSet.push([x, mentor, "n/a", hour, effective, receptive, actionItems, mNotes]);
-              } else {
-                var hour = Object.keys(notes[x][attNotes][mentor][attendee]);
-                var effective = (notes[x][attNotes][mentor][attendee][hour]).effective;
-                var receptive = (notes[x][attNotes][mentor][attendee][hour]).receptive;
-                var actionItems = (notes[x][attNotes][mentor][attendee][hour]).actionItems;
-                var mNotes = (notes[x][attNotes][mentor][attendee][hour]).meetingNotes;
-                dataSet.push([x, mentor, attendee, hour, effective, receptive, actionItems, mNotes]);
+            for (var j = 0; j < attNotes.length; j++) {
+              var noteType = attNotes[j];
+              var mentors = Object.keys(notes[x][noteType]);
+              for (var i = 0; i < mentors.length; i++) {
+                // go on all the mentors
+                var mentor = mentors[i];
+                var attendee = Object.keys(notes[x][noteType][mentor]);
+                if (attendee[0].indexOf("hour") > -1) {
+                  // the old/broken format of notes without the mentor
+                  var hour = attendee[0];
+                  var effective = (notes[x][noteType][mentor][hour]).effective;
+                  var receptive = (notes[x][noteType][mentor][hour]).receptive;
+                  var actionItems = (notes[x][noteType][mentor][hour]).actionItems;
+                  var mNotes = (notes[x][noteType][mentor][hour]).meetingNotes;
+                  dataSet.push([x, mentor, "n/a", hour, effective, receptive, actionItems, mNotes]);
+                } else {
+                  var tmpAtt = attendee[0];
+                  var tmpHour = hour[0];
+                  var hour = Object.keys(notes[x][noteType][mentor][tmpAtt]);
+                  var effective = (notes[x][noteType][mentor][tmpAtt][tmpHour]).effective;
+                  var receptive = (notes[x][noteType][mentor][tmpAtt][tmpHour]).receptive;
+                  var actionItems = (notes[x][noteType][mentor][tmpAtt][tmpHour]).actionItems;
+                  var mNotes = (notes[x][noteType][mentor][tmpAtt][tmpHour]).meetingNotes;
+                  dataSet.push([x, mentor, tmpAtt, tmpHour, effective, receptive, actionItems, mNotes]);
+                }
               }
+
             }
-
-
           } catch (err) {
             console.log("Error in building the notes table: " + err);
-            dataSet.push([x, "", "", "", "", "", ""]);
+            dataSet.push([x, "", "", "", "", "", "", ""]);
           }
         }
-
+        console.log("=======   " + dataSet); // , "width": "250px"
         $('#startup-notes-table').DataTable({
           data: dataSet,
           columns: [
@@ -498,17 +502,16 @@
             { title: "Hour" },
             { title: "Effective" },
             { title: "Receptive" },
-            { title: "Action Items", "width": "250px"  },
-            { title: "Notes" , "width": "250px" }
+            { title: "Action Items"},
+            { title: "Notes" }
           ]
         });
-
-
+      }
+      else {
+        bootbox.alert("Could not find notes for " + curStartup);
       }
     });
-
   }
-
 
 
   //////////////////////////////////////////////////////////////////////////////
@@ -1399,7 +1402,7 @@
   // Catch errors and send them to GA
   //
   window.onerror = function(msg, url, lineNumber) {
-    console.log("Err:" + msg + " url: " + url + " line: " + lineNumber);
+    console.log("Err:" + JSON.stringify(msg) + " url: " + JSON.stringify(url) + " line: " + lineNumber);
     ga('send', {
       hitType: 'event',
       eventCategory: 'admin-gen-error',
