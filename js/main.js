@@ -450,12 +450,13 @@
       eventAction: 'admin-load-startup-notes',
       eventLabel: " Startup: " + curStartup
     });
+    var dataSet = [];
+    var gotAllData = false;
     var readRef = firebase.database().ref("notes-backup/startups/" + curStartup);
     readRef.orderByKey().on("value", function(snapshot) {
       var notes = snapshot.val();
       if (notes != null) {
         //console.log("notes: " + JSON.stringify(notes));
-        var dataSet = [];
         for (var x in notes) {
           try {
             var attNotes = Object.keys(notes[x]); // or notes
@@ -485,34 +486,54 @@
                   dataSet.push([x, mentor, tmpAtt, tmpHour, effective, receptive, actionItems, mNotes]);
                 }
               }
-
             }
           } catch (err) {
             console.log("Error in building the notes table: " + err);
             dataSet.push([x, "", "", "", "", "", "", ""]);
           }
-        }
-        console.log("=======   " + dataSet); // , "width": "250px"
-        $('#startup-notes-table').DataTable({
-          data: dataSet,
-          columns: [
-            { title: "Date" },
-            { title: "Mentor" },
-            { title: "Attendee" },
-            { title: "Hour" },
-            { title: "Effective" },
-            { title: "Receptive" },
-            { title: "Action Items"},
-            { title: "Notes" }
-          ]
-        });
-      }
-      else {
+        } // for loop
+        console.log("=======   " + dataSet);
+        gotAllData = true;
+      } else {
         bootbox.alert("Could not find notes for " + curStartup);
       }
     });
+
+    checkWeHaveDataForNotesTable(dataSet, gotAllData);
   }
 
+  var checkWeHaveDataForNotesCounter = 0;
+  //
+  //
+  //
+  function checkWeHaveDataForNotesTable(dataSet, gotAllData) {
+    var secTimer;
+    checkWeHaveDataForNotesCounter++;
+    console.log(" -- checkWeHaveDataForNotesCounter -- flag: " + gotAllData);
+    if ( !gotAllData) {
+      secTimer = setTimeout(checkWeHaveDataForNotesTable, 1000);
+    } else {
+      $('#startup-notes-table').DataTable({
+      data: dataSet,
+      columns: [
+        { title: "Date" },
+        { title: "Mentor" },
+        { title: "Attendee" },
+        { title: "Hour" },
+        { title: "Effective" },
+        { title: "Receptive" },
+        { title: "Action Items", "width": "280px" },
+        { title: "Notes", "width": "350px" }
+      ]
+    });
+      // shut the timer
+      clearTimeout(secTimer);
+    }
+    if (checkWeHaveDataForNotesCounter > MAX_CALLS_FOR_CHECK_DATA) {
+      clearTimeout(secTimer);
+      bootbox.alert("Could not fetch the notes :/");
+    }
+  }
 
   //////////////////////////////////////////////////////////////////////////////
   // Schedule viewer per mentor / startup
