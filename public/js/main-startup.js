@@ -262,8 +262,8 @@
       if (noteData != null && noteData.meetingNotes) {
         $("#" + textareaKey).val(noteData.meetingNotes);
       }
-      if (noteData != null && noteData.listen) {
-        $("#" + listenSliderKey).slider('setValue', noteData.listen);
+      if (noteData != null && noteData.receptive) {
+        $("#" + listenSliderKey).slider('setValue', noteData.receptive);
       }
       if (noteData != null && noteData.effective) {
         $("#" + effectiveSliderKey).slider('setValue', noteData.effective);
@@ -301,7 +301,7 @@
 
     // save under notes for backup in case we re-set the schedule
     ref.child("notes-backup").child(keyToNotesBackup).set({
-      listen: listenVal,
+      receptive: listenVal,
       effective: effectiveVal,
       meetingNotes: notes,
       unixTime: curUnixTime,

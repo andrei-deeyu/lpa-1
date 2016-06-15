@@ -41,6 +41,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css">
   <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
   <!-- Firechat 
   <link rel='stylesheet' href='https://cdn.firebase.com/libs/firechat/2.0.1/firechat.min.css' />
   -->
@@ -103,6 +104,7 @@
           <li id="locations-tab-li" role="presentation"><a href="#locations-tab" aria-controls="locations-tab" role="tab" data-toggle="tab">Locations</a></li>
           <li id="schedule-tab-li" role="presentation"><a href="#schedule-tab" aria-controls="schedule-tab" role="tab" data-toggle="tab">Schedule</a></li>
           <li id="schedule-viewer-tab-li" role="presentation"><a href="#schedule-viewer-tab" aria-controls="schedule-viewer-tab" role="tab" data-toggle="tab">Schedule Viewer</a></li>
+          <li id="notes-tab-li" role="presentation"><a href="#notes-viewer-tab" aria-controls="notes-viewer-tab" role="tab" data-toggle="tab">Notes</a></li>
           <!-- <li id="chat-tab-li" role="presentation"><a href="#chat-tab" aria-controls="chat-tab" role="tab" data-toggle="tab" title="Talk with other mentors or attendees">Conversation</a></li> -->
         </ul>
         <!-- Tab panes -->
@@ -317,7 +319,7 @@
                   <span class="input-group-addon" id="st-logo-url-icon">http://</span>
                   <input type="text" class="form-control" id="st-logo-url">
                 </div>
-                 <div class="form-group">
+                <div class="form-group">
                   <label for="st-twitter-field">Twitter</label>
                   <div class="input-group">
                     <div class="input-group-addon"><span class="glyphicon glyphicon-bullhorn"></span></div>
@@ -491,7 +493,7 @@
           <!-- Schedule Viewer -->
           <div role="tabpanel" class="tab-pane" id="schedule-viewer-tab">
             <div class="row">
-              <div id="mentor-startup-viewer" class="col-md-3 col-lg-3 text-center vcenter-s-header">
+              <div id="mentor-startup-viewer" class=" col-sm-4 col-md-3 col-lg-3 text-center vcenter-s-header">
               </div>
               <div class="col-md-6 col-lg-6 text-center vcenter-s-header radio-viewer">Day:
                 <input type="date" class="schedule-day-x  text-center" id="schedule-viewer-day">
@@ -504,16 +506,22 @@
               </div>
             </div>
           </div>
-          <!-- Chat 
-           <div role="tabpanel" class="tab-pane" id="chat-tab">
+          <!-- Notes Viewer -->
+          <div role="tabpanel" class="tab-pane" id="notes-viewer-tab">
             <div class="row">
-              <div class="col-lg-10 col-md-10">
-                <h4>Mentors' Conversation</h4>
-                <div id='mentors-firechat-wrapper'></div>
+              <div id="startup-notes-viewer" class="col-sm-2 col-md-2 col-lg-2 text-center notes-header">
+              </div>
+              <div class="col-sm-1 col-md-1 col-lg-1 text-center notes-header">
+                <button id="notes-viewer-reload-button" class="btn btn-info">Reload</button>
+              </div>
+            </div>
+            <div class="row">
+              <div id="startup-notes-list" class="col-md-12 col-lg-12 text-center">
+                <table id="startup-notes-table" class="display" width="100%"></table>
               </div>
             </div>
           </div>
-          -->
+          <!-- end of tabs -->
         </div>
       </div>
     </div>
@@ -594,6 +602,7 @@
   <script src="js/bootstrap-markdown.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
   <script src="js/vendor/jquery.joyride-2.1.js"></script>
+  <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
   <!-- Firechat TODO: find if they have firebase 3 support 
    <script src='https://cdn.firebase.com/libs/firechat/2.0.1/firechat.min.js'></script>
    -->

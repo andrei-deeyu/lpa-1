@@ -427,6 +427,91 @@
   }
 
   //////////////////////////////////////////////////////////////////////////////
+  // Notes viewer per startup
+  // TODO: per mentor
+  //////////////////////////////////////////////////////////////////////////////
+  //
+  // reset the notes viewer
+  //
+  $("#notes-viewer-reload-button").click(function() {
+    // Fetch the startup notes
+    var curStartup = $("#notes-viewer-startup-select").val();
+    loadStartupNotes(curStartup);
+
+  });
+
+  //
+  // Load the schedule per a attendee
+  //
+  function loadStartupNotes(curStartup) {
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'schedule',
+      eventAction: 'admin-load-startup-notes',
+      eventLabel: " Startup: " + curStartup
+    });
+    var readRef = firebase.database().ref("notes-backup/startups/" + curStartup);
+    readRef.orderByKey().on("value", function(snapshot) {
+      var notes = snapshot.val();
+      if (notes != null) {
+        //console.log("notes: " + JSON.stringify(notes));
+        var dataSet = [];
+        for (var x in notes) {
+          try {
+            var attNotes = Object.keys(notes[x]); // or notes
+            var mentors = Object.keys(notes[x][attNotes]);
+            for (var i = 0; i < mentors.length; i++ ) {
+              // go on all the mentors
+              var mentor = mentors[i];
+              var attendee = Object.keys(notes[x][attNotes][mentor]);
+              if (attendee[0].indexOf("hour") > -1) {
+                // the old/broken format of notes without the mentor
+                var hour = attendee;
+                var effective = (notes[x][attNotes][mentor][hour]).effective;
+                var receptive = (notes[x][attNotes][mentor][hour]).receptive;
+                var actionItems = (notes[x][attNotes][mentor][hour]).actionItems;
+                var mNotes = (notes[x][attNotes][mentor][hour]).meetingNotes;
+                dataSet.push([x, mentor, "n/a", hour, effective, receptive, actionItems, mNotes]);
+              } else {
+                var hour = Object.keys(notes[x][attNotes][mentor][attendee]);
+                var effective = (notes[x][attNotes][mentor][attendee][hour]).effective;
+                var receptive = (notes[x][attNotes][mentor][attendee][hour]).receptive;
+                var actionItems = (notes[x][attNotes][mentor][attendee][hour]).actionItems;
+                var mNotes = (notes[x][attNotes][mentor][attendee][hour]).meetingNotes;
+                dataSet.push([x, mentor, attendee, hour, effective, receptive, actionItems, mNotes]);
+              }
+            }
+
+
+          } catch (err) {
+            console.log("Error in building the notes table: " + err);
+            dataSet.push([x, "", "", "", "", "", ""]);
+          }
+        }
+
+        $('#startup-notes-table').DataTable({
+          data: dataSet,
+          columns: [
+            { title: "Date" },
+            { title: "Mentor" },
+            { title: "Attendee" },
+            { title: "Hour" },
+            { title: "Effective" },
+            { title: "Receptive" },
+            { title: "Action Items", "width": "250px"  },
+            { title: "Notes" , "width": "250px" }
+          ]
+        });
+
+
+      }
+    });
+
+  }
+
+
+
+  //////////////////////////////////////////////////////////////////////////////
   // Schedule viewer per mentor / startup
   //////////////////////////////////////////////////////////////////////////////
   //
@@ -516,7 +601,7 @@
         var scHtml = "<h3>" + curAttendeeStartup + "</h3>";
         $("#mentor-schedule-list").html("");
         var commentsForTheDay = "Nothing for now. But remember: <h5>A lion runs the fastest when he is hungry.</h5><img src='img/lion-250.jpeg' alt='Ido famous lion' />";
-         if (sessions.comments && sessions.comments.length > 2) {
+        if (sessions.comments && sessions.comments.length > 2) {
           commentsForTheDay = (sessions.comments).replace(/\n/g, "<br>");
         }
         scHtml += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title"> Comments For The Day' +
@@ -551,6 +636,9 @@
     html += "</div> </div>";
     $("#mentor-startup-viewer").html(html);
 
+    // add the startup selector to the notes tab as well
+    var notesHtml = getStartupSelect("notes-viewer-startup-select", "");
+    $("#startup-notes-viewer").html(notesHtml);
   }
 
   //

@@ -32,11 +32,12 @@ label {
   padding: 1em;
   background-color: rgba(122, 255, 0, 0.47);
   margin-top: 1em;
-  
 }
+
 .note-for-mentor-textarea {
   width: 90%
 }
+
 
 /*
 .remove-mentor {
@@ -88,6 +89,10 @@ label {
   padding-top: .5em;
 }
 
+.notes-header {
+  padding: 1em;
+}
+
 .vcenter-s-header {
   display: inline-block;
   vertical-align: middle;
@@ -135,6 +140,7 @@ label {
   text-align: left;
   font-size: 110%;
 }
+
 
 /*** TODO: Mentor page */
 
