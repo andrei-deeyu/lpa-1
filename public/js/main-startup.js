@@ -192,23 +192,26 @@
         for (var i = 0; i < sessions.mentors.length; i++) {
           var tKey = "hour-" + (i + 1);
           var startupBackupNotesKey = "/startups/" + curAttendeeStartup + "/" + scDay + "/attendees-notes/" + curAttendeeEmail + "/" + tKey;
-          scHtml += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
-            '<button class="btn btn-warning fetch-mentor-button" data-key="' + sessions.mentors[i][0] + '">' + sessions.mentors[i][1] +
-            '</button>' + ' | ' + getHourAsRange(tKey) +
-            ' <button class="btn expend-notes-but" type="button" data-textarea-key="' + tKey + '" data-note-key="' + startupBackupNotesKey +
-            '" data-toggle="collapse" data-target="#att-note-p-' + tKey +
-            '" aria-expanded="false" aria-controls="collapseAttDetails"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span></button>' +
-            ' </h3><b>Location: ' + sessions.mentors[i][2] + '</b> </div> <div id="att-note-p-' + tKey + '" class="panel-body collapse">' +
-            '<p class="" id="meet-details-' + tKey + '"> ' +
-            '<h5><label>Did the mentor listen to you and explain their advice? (1-5)</label></h5> <br>\
+          if (sessions.mentors[i][0] !== "na@na-com") {
+            scHtml += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
+              '<button class="btn btn-warning fetch-mentor-button" data-key="' + sessions.mentors[i][0] + '">' + sessions.mentors[i][1] +
+              '</button>' + ' | ' + getHourAsRange(tKey) +
+              ' <button class="btn expend-notes-but" type="button" data-textarea-key="' + tKey + '" data-note-key="' + startupBackupNotesKey +
+              '" data-toggle="collapse" data-target="#att-note-p-' + tKey +
+              '" aria-expanded="false" aria-controls="collapseAttDetails"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span></button>' +
+              ' </h3><b>Location: ' + sessions.mentors[i][2] + '</b> </div> <div id="att-note-p-' + tKey + '" class="panel-body collapse">' +
+              '<p class="" id="meet-details-' + tKey + '"> ' +
+              '<h5><label>Did the mentor listen to you and explain their advice? (1-5)</label></h5> <br>\
                 <input type="text" class="note-slider" id="note-listen-' + tKey + '" name="note-listen" data-provide="slider" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide"> \
                 <br><h5> <label>Was the session effective? (1-5)</label></h5><br> \
                 <input type="text" class="note-slider" id="note-effective-' + tKey + '" name="note-effective" data-provide="slider" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide"> \
                 <br><br> \
             <h5>Meeting Notes</h5>What did you talk about? Any action items? \
             <textarea id="' + tKey + '" class="form-control col-lg-10 meeting-notes-text" data-notes-backup="' + startupBackupNotesKey +
-            '" name="meeting-notes">' +
-            '</textarea>  <br><button class="btn btn-warning meeting-save-button">Save Notes</button> </p> </div> </div> </div>';
+              '" name="meeting-notes">' +
+              '</textarea>  <br><button class="btn btn-warning meeting-save-button">Save Notes</button> </p> </div> </div> </div>';
+          }
+
         }
         $("#attendee-schedule-list").html(scHtml);
         $(".note-slider").slider({ tooltip: 'always' });
@@ -411,10 +414,10 @@
         startupNameList.push(key);
         var startupData = childSnapshot.val();
         var startupLogoUrl = addhttp(startupData.logo);
-         var twitterLink = "";
-        if ( startupData.twitter &&  startupData.twitter.length >2) {
-          twitterLink = '&nbsp;&nbsp;<b>Twitter:</b> <a href="http://twitter.com/'+ startupData.twitter  +'" target="_blank">' +  startupData.twitter + '</a>';
-        } 
+        var twitterLink = "";
+        if (startupData.twitter && startupData.twitter.length > 2) {
+          twitterLink = '&nbsp;&nbsp;<b>Twitter:</b> <a href="http://twitter.com/' + startupData.twitter + '" target="_blank">' + startupData.twitter + '</a>';
+        }
         //console.log("key: " + key + " data: " + startupData);
         $("#startups-list").append(
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
@@ -511,7 +514,7 @@
         localStorage.removeItem("lpa1-g-att-startup");
         $("#sc-reload-button").prop('disabled', true);
         bootbox.alert("Please check with the organizer why you aren't part of any startup");
-        
+
         setTimeout(function() {
           ref.unauth();
           location.reload();
