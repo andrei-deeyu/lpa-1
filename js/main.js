@@ -480,8 +480,8 @@
                     actionItems + "</td><td>" + mNotes + "</td></tr>";
                 } else {
                   var tmpAtt = attendee[0];
-                  var tmpHour = hour[0];
                   var hour = Object.keys(notes[x][noteType][mentor][tmpAtt]);
+                  var tmpHour = hour[0];
                   var effective = (notes[x][noteType][mentor][tmpAtt][tmpHour]).effective;
                   var receptive = (notes[x][noteType][mentor][tmpAtt][tmpHour]).receptive;
                   var actionItems = (notes[x][noteType][mentor][tmpAtt][tmpHour]).actionItems;
