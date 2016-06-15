@@ -515,8 +515,12 @@
         //console.log("The sessions: " + JSON.stringify(sessions));
         var scHtml = "<h3>" + curAttendeeStartup + "</h3>";
         $("#mentor-schedule-list").html("");
+        var commentsForTheDay = "Nothing for now. But remember: <h5>A lion runs the fastest when he is hungry.</h5><img src='img/lion-250.jpeg' alt='Ido famous lion' />";
+         if (sessions.comments && sessions.comments.length > 2) {
+          commentsForTheDay = (sessions.comments).replace(/\n/g, "<br>");
+        }
         scHtml += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title"> Comments For The Day' +
-          '</h3> </div> <div class="panel-body">' + sessions.comments + '</div> </div>';
+          '</h3> </div> <div class="panel-body">' + commentsForTheDay + '</div> </div>';
 
         // we know it's the mentors and hours
         for (var i = 0; i < sessions.mentors.length; i++) {
