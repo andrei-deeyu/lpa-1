@@ -466,8 +466,8 @@
     ga('send', {
       hitType: 'event',
       eventCategory: 'schedule',
-      eventAction: 'load-mentor-schedule',
-      eventLabel: 'day: ' + scDay
+      eventAction: 'admin-load-mentor-schedule',
+      eventLabel: 'day: ' + scDay + " mentor:" + curMentorEmail
     });
     var readRef = firebase.database().ref("sessions/" + scDay + "/mentors/" + curMentorEmail);
     //new Firebase("https://lpa-1.firebaseio.com/sessions/" + scDay + "/mentors/" + curMentorEmail);
@@ -503,8 +503,8 @@
     ga('send', {
       hitType: 'event',
       eventCategory: 'schedule',
-      eventAction: 'load-startup-schedule',
-      eventLabel: 'day: ' + scDay
+      eventAction: 'admin-load-startup-schedule',
+      eventLabel: 'day: ' + scDay + " Startup: " + curAttendeeStartup
     });
     var readRef = firebase.database().ref("sessions/" + scDay + "/startups/" + curAttendeeStartup);
     //new Firebase("https://lpa-1.firebaseio.com/sessions/" + scDay + "/startups/" + curAttendeeStartup);
@@ -728,6 +728,12 @@
         $("#st-twitter-field").val(st.twitter);
         $("#st-name-field").focus();
         $('body').scrollTop(60);
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'startup',
+          eventAction: 'admin-edit-startup',
+          eventLabel: 'startup: ' + stName
+        });
       }
     });
   });
