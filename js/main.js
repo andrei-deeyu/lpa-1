@@ -452,7 +452,8 @@
     });
     //var dataSet = [];
     var tblHtml = "";
-    $("#startup-notes-table-body").html("");
+    $("#startup-notes-table").DataTable().destroy();
+    // Call the node with all the strtup's notes
     var readRef = firebase.database().ref("notes-backup/startups/" + curStartup);
     readRef.orderByKey().once("value", function(snapshot) {
       var notes = snapshot.val();
@@ -500,8 +501,10 @@
           }
         } // for loop
         //console.log("======= " + dataSet);
+
         $("#startup-notes-table-body").html(tblHtml);
-        $("#startup-notes-table").DataTable({
+        $("#startup-notes-table").DataTable({ 
+          paging: true,
           columns: [
             { title: "Date" },
             { title: "Mentor" },
