@@ -1,8 +1,10 @@
-//
+// 
 // JS for the mentor Admin web app
-// Author: Ido Green 
+// Author: Ido Green ❄️ 
 // Date: 4/2016
 // V8.0
+//
+// A 🐱 App
 //
 (function() {
   $(".save-alert").hide();

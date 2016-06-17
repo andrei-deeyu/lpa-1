@@ -4,6 +4,8 @@
 // Date: 4/2016
 // V0.8
 //
+// A 🐱 App
+//
 (function() {
   $(".save-alert").hide();
   $("#alert-warning-sign-in").hide();

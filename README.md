@@ -2,7 +2,7 @@
 ## Overview
 
 The goal of these apps is to enable us to run a LPA event(s).
-We got three web apps (so far):
+We got three web apps:
 
 * [Admin Web App](https://lpa-1.firebaseapp.com/) - Used by the organizers to set the schedule for the mentors and startups. 
   * The mentors and attendees emails/names should be added to the system so they will be 'white listed'.
@@ -25,6 +25,7 @@ We got three web apps (so far):
 -----
 
 ## Issue / Bug ?
+Even a 🐱 App needs love from time to time.
 Please use: [Open an issue](https://github.com/greenido/lpa-1/issues)
 
 -----
