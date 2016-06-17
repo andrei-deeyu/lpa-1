@@ -452,6 +452,7 @@
     });
     //var dataSet = [];
     var tblHtml = "";
+    $("#startup-notes-table-body").html("");
     var readRef = firebase.database().ref("notes-backup/startups/" + curStartup);
     readRef.orderByKey().once("value", function(snapshot) {
       var notes = snapshot.val();
@@ -500,8 +501,8 @@
         } // for loop
         //console.log("======= " + dataSet);
         $("#startup-notes-table-body").html(tblHtml);
-        $("#startup-notes-table").DataTable(
-          {columns: [
+        $("#startup-notes-table").DataTable({
+          columns: [
             { title: "Date" },
             { title: "Mentor" },
             { title: "Attendee" },
@@ -510,7 +511,8 @@
             { title: "Receptive" },
             { title: "Action Items", "width": "280px" },
             { title: "Notes", "width": "350px" }
-          ] });
+          ]
+        });
       } else {
         bootbox.alert("Could not find notes for " + curStartup);
       }
@@ -1450,6 +1452,21 @@
       url = "http://" + url;
     }
     return url;
+  }
+
+  //
+  // move a firebase node to a new location
+  //
+  function moveFBnode(oldRef, newRef) {
+    oldRef.once('value', function(snap) {
+      newRef.set(snap.val(), function(error) {
+        if (!error) {
+          oldRef.remove();
+        } else if (typeof(console) !== 'undefined' && console.error) {
+          console.error(error);
+        }
+      });
+    });
   }
 
   //
