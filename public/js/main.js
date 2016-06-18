@@ -230,6 +230,18 @@
   }
 
   //
+  //
+  //
+  $("#copy-comments-on-day").click(function() {
+    var textAreaArry = $(".sc-comments");
+    var firstComments = $("#" + textAreaArry[0].id).val();
+    for (var i = 1; i < textAreaArry.length; i++) {
+      $("#" + textAreaArry[i].id).val(firstComments);
+    }
+    bootbox.alert("Done❗️ All the startups are now set with the same comments.");
+  });
+
+  //
   // Save button action
   //
   $("#sc-save-button").click(function() {

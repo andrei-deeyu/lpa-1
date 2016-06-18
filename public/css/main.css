@@ -50,6 +50,10 @@ label {
 }
 */
 
+#copy-comments-on-day {
+  margin-left: 2em;
+}
+
 .remove-att {
   position: relative;
   left: 2em;
