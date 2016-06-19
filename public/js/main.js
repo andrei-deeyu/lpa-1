@@ -1115,7 +1115,7 @@
   function readMentors(authData) {
     var readRef = firebase.database().ref("mentors");
     //new Firebase("https://lpa-1.firebaseio.com/mentors/");
-    readRef.orderByKey().on("value", function(snapshot) {
+    readRef.orderByChild("name").on("value", function(snapshot) {
       //console.log("The mentors: " + JSON.stringify(snapshot.val()));
       $("#mentors-list").html("");
       mentorsList = [];
