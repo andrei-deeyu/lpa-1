@@ -153,6 +153,7 @@
 
     isInSaveOperation = true;
     console.log("=== is going INTO save");
+    $("#online-status").html("Saving...");
     ga('send', {
       hitType: 'event',
       eventCategory: 'schedule-admin',
@@ -219,6 +220,7 @@
         } else {
           console.log("Schedule saved!");
           $(".save-alert").show();
+          $("#online-status").html("All Good 👌");
           setTimeout(function() {
             $(".save-alert").hide();
           }, 1500);
