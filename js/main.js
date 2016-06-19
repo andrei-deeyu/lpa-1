@@ -365,18 +365,21 @@
     var secTimer;
     checkWeHaveDataForScheduleCounter++;
     console.log(" -- checkWeHaveDataForSchedule -- flag: " + gotDataForSchedule);
+     $("#online-status").html("Fetching...");
     if (gotDataForSchedule < 3) {
       secTimer = setTimeout(checkWeHaveDataForSchedule, 1000); /* this checks the flag every 1 second */
     } else {
       buildScheduleRow();
       // shut the timer
       clearTimeout(secTimer);
+      $("#online-status").html("All Good 👌");
     }
     if (checkWeHaveDataForScheduleCounter > MAX_CALLS_FOR_CHECK_DATA) {
       if (firebase.auth().currentUser === null) {
         bootbox.alert("Please sign-in so we could fetch all the information.");
       } else {
         bootbox.alert("Something is not right. We have problems with fetching the data.");
+        $("#online-status").html("Not Good 🤔  Try To Reload");
       }
       // shut the timer
       clearTimeout(secTimer);
