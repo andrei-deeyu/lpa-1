@@ -164,6 +164,15 @@ td {
   margin-top: 0.5em;
 }
 
+
+/** for phones make the save notes closer to the textarea */
+
+@media only screen and (max-width: 500px) {
+  .meeting-save-button {
+    margin-top: -1.3em;
+  }
+}
+
 #sc-reload-button {
   margin: 0.3em;
 }
