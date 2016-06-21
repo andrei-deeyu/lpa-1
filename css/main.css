@@ -163,6 +163,9 @@ td {
 
 
 /*** TODO: Mentor page */
+#mentor-notes-details-modal {
+  overflow:auto;
+}
 
 .meeting-save-button {
   margin-top: 0.5em;
