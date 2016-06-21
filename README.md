@@ -14,6 +14,7 @@ We got three web apps:
   * Next, she can see what is the schedule per day.
   * After each session, the mentor should fill the notes' section. This will help us learn and improve.
   * Check this [intro video](https://youtu.be/trJcLl413hg) to the mentor app.
+  * You can use: https://bit.ly/lpa-m
 
 
 * [Attendee Web App](https://lpa-1.firebaseapp.com/startup.html) - Used by the startups/attendees to see who is the lovely mentor that will work with them.
@@ -21,6 +22,7 @@ We got three web apps:
   * Next, she can see what is the schedule per day.
   * After each session, the attendee should fill the notes' section. This will help us get better.
   * Check this [intro video](https://youtu.be/psdF_o25dJc) to the attendee app.
+  * You can use: https://bit.ly/lpa-s
 
 -----
 

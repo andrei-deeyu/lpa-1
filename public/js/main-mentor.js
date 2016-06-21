@@ -289,20 +289,22 @@
                 var val = hours[key];
                 var noteDate = val.date.replace("T", " ");
                 var notesHtml = "";
-                if (val.meetingNotes && val.meetingNotes.length >2) {
-                  notesHtml = val.meetingNotes.replace(/\n/g, "<br>");  
+                if (val.meetingNotes && val.meetingNotes.length > 2) {
+                  notesHtml = val.meetingNotes.replace(/\n/g, "<br>");
                 }
-                
+
                 var actionItemsHtml = "";
-                if (val.actionItems && val.actionItems.length >2 ) {
+                if (val.actionItems && val.actionItems.length > 2) {
                   actionItemsHtml = val.actionItems.replace(/\n/g, "<br>");
                 }
                 var tmpMentorEmailStr = tmpMentorEmail.replace(/-/g, ".");
+                var tmpMentorDetails = '<button class="btn btn-sm btn-info fetch-mentor-button" data-key="' + tmpMentorEmail + '">' + 
+                                        tmpMentorEmailStr + '</button>';
                 html += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
                   keyDate + " | " + getHourAsRange(key) + ' </h3> </div> <div class="panel-body">' +
-                  '<b>Mentor:</b> ' + tmpMentorEmailStr + '<br><b>Updated At: </b>' + noteDate +
+                  '<b>Mentor:</b> ' + tmpMentorDetails + '<br><b>Updated At: </b>' + noteDate +
                   '<p><b>Meeting Notes:</b><br>' + notesHtml + '</p>' +
-                  '<b>Action Items:</b> ' + actionItemsHtml + 
+                  '<b>Action Items:</b> ' + actionItemsHtml +
                   ' </div> </div>';
               });
             }
@@ -328,8 +330,8 @@
   $('#mentor-schedule-list').on('click', '.meeting-save-button', function() {
     // save the meeting notes
     var tas = $(this).parent().find('textarea');
-    var notes = $( "#" + tas[0].id).val();
-    var actionItems = $( "#" + tas[1].id).val();
+    var notes = $("#" + tas[0].id).val();
+    var actionItems = $("#" + tas[1].id).val();
     if (notes.length < 3) {
       bootbox.alert("<h4>Please fill the notes and write in few sentences what you talked about.</h4>");
       return;
@@ -481,9 +483,9 @@
           videoButton = '<a href="' + videoLink + '" target="_blank" class="btn btn-info btn-lg">Intro Clip</a>  ';
         }
         var twitterLink = "";
-        if ( startupData.twitter &&  startupData.twitter.length >2) {
-          twitterLink = '&nbsp;&nbsp;<b>Twitter:</b> <a href="http://twitter.com/'+ startupData.twitter  +'" target="_blank">' +  startupData.twitter + '</a>';
-        } 
+        if (startupData.twitter && startupData.twitter.length > 2) {
+          twitterLink = '&nbsp;&nbsp;<b>Twitter:</b> <a href="http://twitter.com/' + startupData.twitter + '" target="_blank">' + startupData.twitter + '</a>';
+        }
         var onePagerButton = "";
         if (startupData.historyUrl && startupData.historyUrl.length > 4) {
           var onePagerLink = addhttp(startupData.historyUrl);
@@ -495,7 +497,7 @@
           '</h3> </div> <div class="panel-body startup-edit" data-key="' + key + '"> <div class="startup-card-desc">' + startupData.description +
           '</div><b>From: </b>' + startupData.country + '  ' + startupData.city +
           '<b> Founded: </b>' + founded + '<br><b>Employees: </b>' + startupData.numEmployees +
-          twitterLink + '<br>' + videoButton + '&nbsp;&nbsp;' + onePagerButton + 
+          twitterLink + '<br>' + videoButton + '&nbsp;&nbsp;' + onePagerButton +
           '&nbsp;&nbsp;&nbsp;<button class="btn btn-lg btn-warning fetch-notes-button" data-key="' +
           startupData.name + '">Notes</button> </div> </div>'
         );
@@ -658,23 +660,6 @@
   }
 
   //
-  // read the list of mentors and display it
-  //
-  // function checkIfMentorValid(authData) {
-  //   var readRef = new Firebase("https://lpa-1.firebaseio.com/mentors/");
-  //   var curMentorEmail = authData.google.email;
-  //   readRef.orderByKey().on("value", function(snapshot) {
-  //     var mentorsDataStr = JSON.stringify(snapshot.val());
-  //     //console.log("The mentors: " + mentorsDataStr);
-  //     if (mentorsDataStr.indexOf(curMentorEmail) > 0) {
-  //       console.log("This mentor is not part of the white list");
-  //       bootbox.alert("You are not on the mentor list.<br>Please talk with the LPA team.<br>Be strong.");
-
-  //     }
-  //   });
-  // }
-
-  //
   // clear the values of the mentor
   //
   $("#form-cancel-mentor").click(function() {
@@ -694,7 +679,7 @@
     $("#form-pic-url").val("");
     $("#form-comments").val("");
     $("#form-name-field").focus();
-    $('body').scrollTop(60);
+    //$('body').scrollTop(60);
     ga('send', {
       hitType: 'event',
       eventCategory: 'clear-mentor',
@@ -729,7 +714,7 @@
         $("#form-comments").val(mentor.comments);
         $("#notes-for-mentor").val(mentor.notesForDay);
         $("#form-name-field").focus();
-        $('body').scrollTop(60);
+        //$('body').scrollTop(60);
       } else {
         ga('send', {
           hitType: 'event',
@@ -756,7 +741,6 @@
   function readAttendees(authData) {
     var readRef = new Firebase("https://lpa-1.firebaseio.com/attendees/");
     readRef.orderByKey().on("value", function(snapshot) {
-      //console.log("The attendees: " + JSON.stringify(snapshot.val()));
       $("#att-list").html("");
       snapshot.forEach(function(childSnapshot) {
         var key = childSnapshot.key();
@@ -778,6 +762,55 @@
           ' </div> </div>'
         );
       });
+    });
+  }
+
+  //
+  //
+  //
+  $('body').on('click', '.fetch-mentor-button', function(event) {
+    var mentor = $(this).data("key");
+    showMentorDetails(mentor);
+  });
+
+  //
+  // fetch mentor data base on its key (=email)
+  //
+  function showMentorDetails(key) {
+    if (key === "na@na-com") {
+      return;
+    }
+    $('#startup-details-modal').modal('hide');
+    var ref = new Firebase("https://lpa-1.firebaseio.com/mentors/" + key);
+    ref.on("value", function(mentorSnap) {
+      var mentor = mentorSnap.val();
+      if (mentor != null) {
+        var picUrl = addhttp(mentor.pic);
+        var html = "<h3><img class='g-mentor-logo' src='" + picUrl + "' alt='mentor-image' />  " + mentor.name + "</h3>";
+        var mEmail = key.replace(/\-/g, ".");
+        var mBio = "";
+        if (mentor.bio && mentor.bio != undefined) {
+          mBio = (mentor.bio).replace(/\n/g, "<br>");
+        }
+        html += "<b>Email: </b>" + mEmail;
+        html += "<br><b>From: </b>" + mentor.country + " " + mentor.city;
+        html += "<br><b>Domain expertises: </b>" + mentor.domain + " " + mentor.domainSec;
+        html += "<h4>Bio </h4>" + mBio;
+        html += "<br><b>Fun Fact: </b>" + mentor.funFact;
+        html += "<br><b>Twitter: </b> <a href='http://www.twitter.com/" + mentor.twitter + "' target='_blank'>" + mentor.twitter + "</a>";
+        html += "<br><b>Linkedin: </b> <a href='http://www.linkedin.com/in/" + mentor.linkedin + "' target='_blank'>" + mentor.linkedin + "</a>";
+        $("#mentor-notes-details-modal-body").html(html);
+        $("#mentor-notes-details-modal").modal('show');
+        //bootbox.alert(html);
+      } else {
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'check-mentor',
+          eventAction: 'fetch-not-registered-mentor-from-attendee-app',
+          eventLabel: 'key: ' + key
+        });
+        bootbox.alert("It looks like this mentor is not registered. Please check with the organizers, cool?");
+      }
     });
   }
 
