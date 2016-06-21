@@ -151,6 +151,10 @@ td {
   margin: 0.5em;
   font-size: 120%;
 }
+.admin-comments-for-day {
+  text-align: left;
+  font-size: 90%;
+}
 
 #att-comments-day {
   text-align: left;
