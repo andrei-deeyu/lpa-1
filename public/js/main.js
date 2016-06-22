@@ -367,7 +367,7 @@
     var secTimer;
     checkWeHaveDataForScheduleCounter++;
     console.log(" -- checkWeHaveDataForSchedule -- flag: " + gotDataForSchedule);
-     $("#online-status").html("Fetching...");
+    $("#online-status").html("Fetching...");
     if (gotDataForSchedule < 3) {
       secTimer = setTimeout(checkWeHaveDataForSchedule, 1000); /* this checks the flag every 1 second */
     } else {
@@ -388,6 +388,9 @@
     }
   }
 
+  //
+  // Callbacks to gain all the data before we building the schedule grid
+  //
   var MAX_CALLS_FOR_CHECK_DATA = 10;
   var checkWeHaveDataForScheduleCounter = 0;
   checkWeHaveDataForSchedule();
@@ -419,7 +422,7 @@
   }
 
   //
-  // get list of mentors in a select 
+  // Util function to get a list of mentors in a select 
   //
   function getMentorsSelect(htmlObjId) {
     var html = '<select id="' + htmlObjId + '" class="mentor-selector">';
@@ -434,7 +437,7 @@
   }
 
   //
-  // helper function to sorting
+  // Helper function to sorting
   //
   function compare(a, b) {
     if (a.name < b.name)
@@ -522,7 +525,7 @@
         //console.log("======= " + dataSet);
 
         $("#startup-notes-table-body").html(tblHtml);
-        $("#startup-notes-table").DataTable({ 
+        $("#startup-notes-table").DataTable({
           paging: true,
           columns: [
             { title: "Date" },
@@ -540,7 +543,6 @@
       }
     });
   }
-
 
   //////////////////////////////////////////////////////////////////////////////
   // Schedule viewer per mentor / startup
@@ -769,7 +771,6 @@
   //
   function readStartups(authData) {
     var readRef = firebase.database().ref("startups");
-    //new Firebase("https://lpa-1.firebaseio.com/startups/");
     readRef.orderByKey().on("value", function(snapshot) {
       //console.log("The Startups: " + JSON.stringify(snapshot.val()));
       $("#startups-list").html("");
@@ -795,10 +796,7 @@
       $("#att-startup-sel-div").append(selHtml);
       $('#att-startup-list-select').selectpicker();
 
-      // Start with building the basic ui to set a schedule
-      //buildScheduleRow();
       gotDataForSchedule++;
-      // 
       buildMentorStartupSelectors();
     });
   }
@@ -1334,10 +1332,12 @@
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
           attData.name + '<img src="' + picUrl + '" class="att-pic-card" alt="attendee picture"/>' +
           '<button type="button" class="edit-att att-edit btn btn-info" aria-label="Edit" data-key="' + key +
-          '"><span class="glyphicon glyphicon-pencil"></span></button> <button type="button" class="remove-att btn btn-danger" aria-label="Close" data-key="' + key + '"> <span class="glyphicon glyphicon-remove"></span></button>' +
+          '"><span class="glyphicon glyphicon-pencil"></span></button> <button type="button" class="remove-att btn btn-danger" aria-label="Close" data-key="' + 
+          key + '"> <span class="glyphicon glyphicon-remove"></span></button>' +
           '</h3> </div> <div class="panel-body att-edit" data-key="' + key + '"> ' + attData.startup + '<br>' +
           '<b>Role:</b> ' + role + '<br>' +
-          "<a href='mailto:" + attData.email + "' target='_blank'>" + attData.email + "</a><br><b>Linkedin: </b><a href='http://www.linkedin.com/in/" +
+          "<a href='mailto:" + attData.email + "' target='_blank'>" + attData.email + 
+          "</a><br><b>Linkedin: </b><a href='http://www.linkedin.com/in/" +
           attData.linkedin + "' target='_blank'>" + attData.linkedin + '</a> </div> </div>'
         );
       });
