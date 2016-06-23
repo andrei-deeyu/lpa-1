@@ -133,3 +133,5 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 Please note: this is not a Google product
 
+[![Analytics](https://ga-beacon.appspot.com/UA-65622529-1/LPA-1/)](https://github.com/igrigorik/ga-beacon)
+
