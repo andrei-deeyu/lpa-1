@@ -448,7 +448,6 @@
     // Fetch the startup notes
     var curStartup = $("#notes-viewer-startup-select").val();
     loadStartupNotes(curStartup);
-
   });
 
   //
@@ -816,7 +815,6 @@
   $('body').on('click', '.startup-edit', function(event) {
     var stName = this.dataset.key;
     var ref = firebase.database().ref("startups/" + stName);
-    //new Firebase("https://lpa-1.firebaseio.com/startups/" + stName);
     ref.on("value", function(startupSnap) {
       var st = startupSnap.val();
       if (st !== null) {
@@ -853,7 +851,6 @@
     bootbox.confirm("Are you sure? For Real?", function(result) {
       if (result === true) {
         var fredRef = firebase.database().ref("startups/" + key);
-        //new Firebase('https://lpa-1.firebaseio.com/startups/' + key);
         var onComplete = function(error) {
           if (error) {
             console.log('Synchronization failed could not remove mentor');
@@ -940,7 +937,6 @@
   //
   function readLocations(authData) {
     var readRef = firebase.database().ref("locations");
-    //new Firebase("https://lpa-1.firebaseio.com/locations/");
     readRef.orderByKey().on("value", function(snapshot) {
       //console.log("The Startups: " + JSON.stringify(snapshot.val()));
       $("#locations-list").html("");
@@ -979,7 +975,6 @@
   $('body').on('click', '.location-edit', function(event) {
     var locationName = this.dataset.key;
     var ref = firebase.database().ref("locations/" + locationName);
-    //new Firebase("https://lpa-1.firebaseio.com/locations/" + locationName);
     ref.on("value", function(locSnap) {
       var location = locSnap.val();
       if (location !== null) {
@@ -1001,7 +996,6 @@
     bootbox.confirm("This location is great. Are you sure? For Real?", function(result) {
       if (result === true) {
         var locRef = firebase.database().ref("locations/" + key);
-        //new Firebase('https://lpa-1.firebaseio.com/locations/' + key);
         var onComplete = function(error) {
           if (error) {
             console.log('Location Synchronization Failed');
@@ -1103,7 +1097,6 @@
   //
   function readMentors(authData) {
     var readRef = firebase.database().ref("mentors");
-    //new Firebase("https://lpa-1.firebaseio.com/mentors/");
     readRef.orderByChild("name").on("value", function(snapshot) {
       //console.log("The mentors: " + JSON.stringify(snapshot.val()));
       $("#mentors-list").html("");
@@ -1200,7 +1193,6 @@
     bootbox.confirm("Are you sure? For Real?", function(result) {
       if (result === true) {
         var fredRef = firebase.database().ref("mentors/" + key);
-        //new Firebase('https://lpa-1.firebaseio.com/mentors/' + key);
         var onComplete = function(error) {
           if (error) {
             console.log('Synchronization failed for mentor remove');
@@ -1305,7 +1297,6 @@
   //
   function readAttendees(authData) {
     var readRef = firebase.database().ref("attendees");
-    //new Firebase("https://lpa-1.firebaseio.com/attendees/");
     readRef.orderByKey().on("value", function(snapshot) {
       //console.log("The attendees: " + JSON.stringify(snapshot.val()));
       $("#att-list").html("");
@@ -1354,7 +1345,6 @@
   $('body').on('click', '.att-edit', function(event) {
     var key = this.dataset.key;
     var ref = firebase.database().ref("attendees/" + key);
-    //new Firebase("https://lpa-1.firebaseio.com/attendees/" + key);
     ref.on("value", function(attSnap) {
       var att = attSnap.val();
       if (att !== null) {
@@ -1366,7 +1356,6 @@
         $("#att-linkedin-url").val(att.linkedin);
         $("#att-fun-fact").val(att.funFact);
         $("#att-pic-url").val(att.pic);
-
         $("#att-name-field").focus();
         $('body').scrollTop(60);
       }
