@@ -1,6 +1,6 @@
-// 
+//
 // JS for the mentor Admin web app
-// Author: Ido Green ❄️ 
+// Author: Ido Green ❄️
 // Date: 4/2016
 // V8.0
 //
@@ -48,23 +48,12 @@
   authUserData = null;
 
   //
-  // Init the chat module
-  //
-  function initMentorsChat(authData) {
-    // Create a new Firebase reference, and a new instance of the Login client
-    var mentorsChatRef = firebase.database().ref("mentors"); //new Firebase('https://lpa-1.firebaseio.com/chats/mentors');
-    var mChat = new FirechatUI(mentorsChatRef, $("#mentors-firechat-wrapper"));
-    mChat.setUser(authData.uid, authData[authData.provider].displayName);
-  }
-
-  //
   //
   //
   firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
       authUserData = user;
       $("#sc-save-button").show();
-      //TODO: initMentorsChat(authData);
       //localStorage.setItem("lpa1-authData", JSON.stringify(authData));
       console.log("User " + user.uid + " is logged in with " + user.provider);
       ga('send', {
@@ -1332,11 +1321,11 @@
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
           attData.name + '<img src="' + picUrl + '" class="att-pic-card" alt="attendee picture"/>' +
           '<button type="button" class="edit-att att-edit btn btn-info" aria-label="Edit" data-key="' + key +
-          '"><span class="glyphicon glyphicon-pencil"></span></button> <button type="button" class="remove-att btn btn-danger" aria-label="Close" data-key="' + 
+          '"><span class="glyphicon glyphicon-pencil"></span></button> <button type="button" class="remove-att btn btn-danger" aria-label="Close" data-key="' +
           key + '"> <span class="glyphicon glyphicon-remove"></span></button>' +
           '</h3> </div> <div class="panel-body att-edit" data-key="' + key + '"> ' + attData.startup + '<br>' +
           '<b>Role:</b> ' + role + '<br>' +
-          "<a href='mailto:" + attData.email + "' target='_blank'>" + attData.email + 
+          "<a href='mailto:" + attData.email + "' target='_blank'>" + attData.email +
           "</a><br><b>Linkedin: </b><a href='http://www.linkedin.com/in/" +
           attData.linkedin + "' target='_blank'>" + attData.linkedin + '</a> </div> </div>'
         );
