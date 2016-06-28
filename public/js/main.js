@@ -1,6 +1,6 @@
-// 
+//
 // JS for the mentor Admin web app
-// Author: Ido Green ❄️ 
+// Author: Ido Green ❄️
 // Date: 4/2016
 // V8.0
 //
@@ -48,23 +48,12 @@
   authUserData = null;
 
   //
-  // Init the chat module
-  //
-  function initMentorsChat(authData) {
-    // Create a new Firebase reference, and a new instance of the Login client
-    var mentorsChatRef = firebase.database().ref("mentors"); //new Firebase('https://lpa-1.firebaseio.com/chats/mentors');
-    var mChat = new FirechatUI(mentorsChatRef, $("#mentors-firechat-wrapper"));
-    mChat.setUser(authData.uid, authData[authData.provider].displayName);
-  }
-
-  //
   //
   //
   firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
       authUserData = user;
       $("#sc-save-button").show();
-      //TODO: initMentorsChat(authData);
       //localStorage.setItem("lpa1-authData", JSON.stringify(authData));
       console.log("User " + user.uid + " is logged in with " + user.provider);
       ga('send', {
@@ -320,7 +309,7 @@
     }
     var readRef = firebase.database().ref("sessions/" + scDay + "/startups");
     //new Firebase("https://lpa-1.firebaseio.com/sessions/" + scDay + "/startups");
-    readRef.orderByKey().on("value", function(snapshot) {
+    readRef.orderByKey().once("value", function(snapshot) {
       if (isInSaveOperation) {
         console.log("no no not yet - still writing to firebase");
         return;
@@ -459,7 +448,6 @@
     // Fetch the startup notes
     var curStartup = $("#notes-viewer-startup-select").val();
     loadStartupNotes(curStartup);
-
   });
 
   //
@@ -588,8 +576,7 @@
       eventLabel: 'day: ' + scDay + " mentor:" + curMentorEmail
     });
     var readRef = firebase.database().ref("sessions/" + scDay + "/mentors/" + curMentorEmail);
-    //new Firebase("https://lpa-1.firebaseio.com/sessions/" + scDay + "/mentors/" + curMentorEmail);
-    readRef.orderByKey().on("value", function(snapshot) {
+    readRef.orderByKey().once("value", function(snapshot) {
       var sessions = snapshot.val();
       if (sessions != null) {
         //console.log("The sessions: " + JSON.stringify(sessions));
@@ -625,7 +612,7 @@
       eventLabel: 'day: ' + scDay + " Startup: " + curAttendeeStartup
     });
     var readRef = firebase.database().ref("sessions/" + scDay + "/startups/" + curAttendeeStartup);
-    readRef.orderByKey().on("value", function(snapshot) {
+    readRef.orderByKey().once("value", function(snapshot) {
       var sessions = snapshot.val();
       if (sessions != null) {
         var scHtml = "<h3>" + curAttendeeStartup + "</h3>";
@@ -827,7 +814,6 @@
   $('body').on('click', '.startup-edit', function(event) {
     var stName = this.dataset.key;
     var ref = firebase.database().ref("startups/" + stName);
-    //new Firebase("https://lpa-1.firebaseio.com/startups/" + stName);
     ref.on("value", function(startupSnap) {
       var st = startupSnap.val();
       if (st !== null) {
@@ -864,7 +850,6 @@
     bootbox.confirm("Are you sure? For Real?", function(result) {
       if (result === true) {
         var fredRef = firebase.database().ref("startups/" + key);
-        //new Firebase('https://lpa-1.firebaseio.com/startups/' + key);
         var onComplete = function(error) {
           if (error) {
             console.log('Synchronization failed could not remove mentor');
@@ -951,7 +936,6 @@
   //
   function readLocations(authData) {
     var readRef = firebase.database().ref("locations");
-    //new Firebase("https://lpa-1.firebaseio.com/locations/");
     readRef.orderByKey().on("value", function(snapshot) {
       //console.log("The Startups: " + JSON.stringify(snapshot.val()));
       $("#locations-list").html("");
@@ -990,11 +974,9 @@
   $('body').on('click', '.location-edit', function(event) {
     var locationName = this.dataset.key;
     var ref = firebase.database().ref("locations/" + locationName);
-    //new Firebase("https://lpa-1.firebaseio.com/locations/" + locationName);
     ref.on("value", function(locSnap) {
       var location = locSnap.val();
       if (location !== null) {
-        //console.log("Setting data for location: " + JSON.stringify(location));
         $("#location-name-field").val(location.name);
         $("#location-address-field").val(location.address);
         $("#location-comments-field").val(location.comments);
@@ -1012,7 +994,6 @@
     bootbox.confirm("This location is great. Are you sure? For Real?", function(result) {
       if (result === true) {
         var locRef = firebase.database().ref("locations/" + key);
-        //new Firebase('https://lpa-1.firebaseio.com/locations/' + key);
         var onComplete = function(error) {
           if (error) {
             console.log('Location Synchronization Failed');
@@ -1114,7 +1095,6 @@
   //
   function readMentors(authData) {
     var readRef = firebase.database().ref("mentors");
-    //new Firebase("https://lpa-1.firebaseio.com/mentors/");
     readRef.orderByChild("name").on("value", function(snapshot) {
       //console.log("The mentors: " + JSON.stringify(snapshot.val()));
       $("#mentors-list").html("");
@@ -1176,11 +1156,9 @@
   $('body').on('click', '.mentor-edit', function(event) {
     var key = this.dataset.key;
     var ref = firebase.database().ref("mentors/" + key);
-    //new Firebase("https://lpa-1.firebaseio.com/mentors/" + key);
     ref.on("value", function(mentorSnap) {
       var mentor = mentorSnap.val();
       if (mentor !== null) {
-        //console.log("Setting data for: " + JSON.stringify(mentor));
         $("#form-name-field").val(mentor.name);
         $("#form-email-field").val(mentor.email);
         $("#form-phone-field").val(mentor.phone);
@@ -1211,7 +1189,6 @@
     bootbox.confirm("Are you sure? For Real?", function(result) {
       if (result === true) {
         var fredRef = firebase.database().ref("mentors/" + key);
-        //new Firebase('https://lpa-1.firebaseio.com/mentors/' + key);
         var onComplete = function(error) {
           if (error) {
             console.log('Synchronization failed for mentor remove');
@@ -1316,9 +1293,7 @@
   //
   function readAttendees(authData) {
     var readRef = firebase.database().ref("attendees");
-    //new Firebase("https://lpa-1.firebaseio.com/attendees/");
     readRef.orderByKey().on("value", function(snapshot) {
-      //console.log("The attendees: " + JSON.stringify(snapshot.val()));
       $("#att-list").html("");
       snapshot.forEach(function(childSnapshot) {
         var key = childSnapshot.key;
@@ -1332,11 +1307,11 @@
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
           attData.name + '<img src="' + picUrl + '" class="att-pic-card" alt="attendee picture"/>' +
           '<button type="button" class="edit-att att-edit btn btn-info" aria-label="Edit" data-key="' + key +
-          '"><span class="glyphicon glyphicon-pencil"></span></button> <button type="button" class="remove-att btn btn-danger" aria-label="Close" data-key="' + 
+          '"><span class="glyphicon glyphicon-pencil"></span></button> <button type="button" class="remove-att btn btn-danger" aria-label="Close" data-key="' +
           key + '"> <span class="glyphicon glyphicon-remove"></span></button>' +
           '</h3> </div> <div class="panel-body att-edit" data-key="' + key + '"> ' + attData.startup + '<br>' +
           '<b>Role:</b> ' + role + '<br>' +
-          "<a href='mailto:" + attData.email + "' target='_blank'>" + attData.email + 
+          "<a href='mailto:" + attData.email + "' target='_blank'>" + attData.email +
           "</a><br><b>Linkedin: </b><a href='http://www.linkedin.com/in/" +
           attData.linkedin + "' target='_blank'>" + attData.linkedin + '</a> </div> </div>'
         );
@@ -1365,11 +1340,9 @@
   $('body').on('click', '.att-edit', function(event) {
     var key = this.dataset.key;
     var ref = firebase.database().ref("attendees/" + key);
-    //new Firebase("https://lpa-1.firebaseio.com/attendees/" + key);
     ref.on("value", function(attSnap) {
       var att = attSnap.val();
       if (att !== null) {
-        //console.log("Setting data for: " + JSON.stringify(att));
         $("#att-name-field").val(att.name);
         $("#att-email-field").val(att.email);
         $("#att-startup-list-select").selectpicker('val', att.startup);
@@ -1377,7 +1350,6 @@
         $("#att-linkedin-url").val(att.linkedin);
         $("#att-fun-fact").val(att.funFact);
         $("#att-pic-url").val(att.pic);
-
         $("#att-name-field").focus();
         $('body').scrollTop(60);
       }
@@ -1456,8 +1428,8 @@
     var year = a.getFullYear();
     var month = months[a.getMonth()];
     var date = a.getDate();
-    var hour = a.getHours();
     var min = a.getMinutes();
+    var hour = a.getHours();
     var sec = a.getSeconds();
     var time = date + '/' + month + '/' + year + ' - ' + hour + ':' + min + ':' + sec;
     return time;

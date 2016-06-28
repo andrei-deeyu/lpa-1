@@ -309,7 +309,7 @@
     }
     var readRef = firebase.database().ref("sessions/" + scDay + "/startups");
     //new Firebase("https://lpa-1.firebaseio.com/sessions/" + scDay + "/startups");
-    readRef.orderByKey().on("value", function(snapshot) {
+    readRef.orderByKey().once("value", function(snapshot) {
       if (isInSaveOperation) {
         console.log("no no not yet - still writing to firebase");
         return;
@@ -576,8 +576,7 @@
       eventLabel: 'day: ' + scDay + " mentor:" + curMentorEmail
     });
     var readRef = firebase.database().ref("sessions/" + scDay + "/mentors/" + curMentorEmail);
-    //new Firebase("https://lpa-1.firebaseio.com/sessions/" + scDay + "/mentors/" + curMentorEmail);
-    readRef.orderByKey().on("value", function(snapshot) {
+    readRef.orderByKey().once("value", function(snapshot) {
       var sessions = snapshot.val();
       if (sessions != null) {
         //console.log("The sessions: " + JSON.stringify(sessions));
@@ -613,7 +612,7 @@
       eventLabel: 'day: ' + scDay + " Startup: " + curAttendeeStartup
     });
     var readRef = firebase.database().ref("sessions/" + scDay + "/startups/" + curAttendeeStartup);
-    readRef.orderByKey().on("value", function(snapshot) {
+    readRef.orderByKey().once("value", function(snapshot) {
       var sessions = snapshot.val();
       if (sessions != null) {
         var scHtml = "<h3>" + curAttendeeStartup + "</h3>";
@@ -978,7 +977,6 @@
     ref.on("value", function(locSnap) {
       var location = locSnap.val();
       if (location !== null) {
-        //console.log("Setting data for location: " + JSON.stringify(location));
         $("#location-name-field").val(location.name);
         $("#location-address-field").val(location.address);
         $("#location-comments-field").val(location.comments);
@@ -1158,11 +1156,9 @@
   $('body').on('click', '.mentor-edit', function(event) {
     var key = this.dataset.key;
     var ref = firebase.database().ref("mentors/" + key);
-    //new Firebase("https://lpa-1.firebaseio.com/mentors/" + key);
     ref.on("value", function(mentorSnap) {
       var mentor = mentorSnap.val();
       if (mentor !== null) {
-        //console.log("Setting data for: " + JSON.stringify(mentor));
         $("#form-name-field").val(mentor.name);
         $("#form-email-field").val(mentor.email);
         $("#form-phone-field").val(mentor.phone);
@@ -1298,7 +1294,6 @@
   function readAttendees(authData) {
     var readRef = firebase.database().ref("attendees");
     readRef.orderByKey().on("value", function(snapshot) {
-      //console.log("The attendees: " + JSON.stringify(snapshot.val()));
       $("#att-list").html("");
       snapshot.forEach(function(childSnapshot) {
         var key = childSnapshot.key;
@@ -1348,7 +1343,6 @@
     ref.on("value", function(attSnap) {
       var att = attSnap.val();
       if (att !== null) {
-        //console.log("Setting data for: " + JSON.stringify(att));
         $("#att-name-field").val(att.name);
         $("#att-email-field").val(att.email);
         $("#att-startup-list-select").selectpicker('val', att.startup);

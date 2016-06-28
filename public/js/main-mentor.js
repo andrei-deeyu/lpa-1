@@ -786,6 +786,7 @@
       var mentor = mentorSnap.val();
       if (mentor != null) {
         var picUrl = addhttp(mentor.pic);
+
         var html = "<h3><img class='g-mentor-logo' src='" + picUrl + "' alt='mentor-image' />  " + mentor.name + "</h3>";
         var mEmail = key.replace(/\-/g, ".");
         var mBio = "";
