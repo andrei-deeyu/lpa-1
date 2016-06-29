@@ -221,7 +221,7 @@
   }
 
   //
-  //
+  // Allow to copy comments from the first startup to all the rest 😎
   //
   $("#copy-comments-on-day").click(function() {
     var textAreaArry = $(".sc-comments");
@@ -242,7 +242,6 @@
       $("#schedule-day-1").focus();
       return;
     }
-
     bootbox.confirm("<h5>You are going to save a new schedule for " + scDay + "</h5><h3>Are you sure?</h3>", function(result) {
       if (result === false) {
         return;
@@ -298,15 +297,9 @@
   }
 
   //
-  // Reload the schedule from firebase
+  // reload the schedule from firebase
   //
-  $("#sc-reload-button").click(function() {
-    var scDay = $("#schedule-day-1").val();
-    if (scDay === null || scDay === "") {
-      bootbox.alert("You must set a date in order to reload schedule. Daaa!");
-      $("#schedule-day-1").focus();
-      return;
-    }
+  function reloadSchedule(scDay) {
     var readRef = firebase.database().ref("sessions/" + scDay + "/startups");
     //new Firebase("https://lpa-1.firebaseio.com/sessions/" + scDay + "/startups");
     readRef.orderByKey().once("value", function(snapshot) {
@@ -340,6 +333,19 @@
         bootbox.alert("Could not find anything for this date.");
       }
     });
+  }
+
+  //
+  // Reload the schedule from firebase
+  //
+  $("#sc-reload-button").click(function() {
+    var scDay = $("#schedule-day-1").val();
+    if (scDay === null || scDay === "") {
+      bootbox.alert("You must set a date in order to reload schedule. Daaa!");
+      $("#schedule-day-1").focus();
+      return;
+    }
+    reloadSchedule(scDay);
   });
 
   //
@@ -398,16 +404,24 @@
         html += '<div class="col-md-1 col-lg-1 text-center ">';
         html += getMentorsSelect("mentor-" + startupKey + "-" + j + "-select");
         html += '<br>' + getMeetingLocations("meeting-location-" + startupKey + "-" + j + "-select");
+        html += '<br>' + getMeetingTime("meeting-start-time-" + startupKey + "-" + j + "-select", j+9);
+        html += '<br>' + getMeetingTime("meeting-end-time-" + startupKey + "-" + j + "-select", j+10);
         html += '</div>';
       }
       html += '<div class="col-md-2 col-lg-2 text-center ">';
       html += '<textarea class="form-control sc-comments" id="sc-comments-' + startupKey +
         '" name="sc-comments-' + i + '" placeholder="General Comments For The Day"></textarea>';
       html += '</div>';
-      html += '</div> <!-- row -->';
+      html += '</div> <br><!-- row -->';
     }
 
     $("#schedule-tab-table").html(html);
+  }
+
+  function getMeetingTime(htmlObjId, defTime) {
+    var timeVal = defTime + ":00";
+    var html = '<input id="' + htmlObjId + '" type="time" class="meeting-time-picker" value="' + timeVal + '">';
+    return html;
   }
 
   //
