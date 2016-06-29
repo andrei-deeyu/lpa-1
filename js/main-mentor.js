@@ -480,7 +480,7 @@
         var videoButton = "";
         if (startupData.video && startupData.video.length > 5) {
           var videoLink = addhttp(startupData.video);
-          videoButton = '<a href="' + videoLink + '" target="_blank" class="btn btn-info btn-lg">Intro Clip</a>  ';
+          videoButton = '<a href="' + videoLink + '" target="_blank" class="btn btn-info ">Intro Clip</a>  ';
         }
         var twitterLink = "";
         if (startupData.twitter && startupData.twitter.length > 2) {
