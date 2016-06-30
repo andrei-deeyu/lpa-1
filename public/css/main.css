@@ -122,6 +122,13 @@ td {
   margin: 0.4em;
 }
 
+.meeting-time-picker {
+  width: 8em;
+  height: 1.6em;
+  margin-top: .2em;
+  font-size: 75%;
+}
+
 .mentor-selector {
   width: 6em;
   margin-top: .4em;

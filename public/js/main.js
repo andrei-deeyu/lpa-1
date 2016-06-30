@@ -139,7 +139,6 @@
   // Save the current schedule
   //
   function saveSchedule(scDay) {
-
     isInSaveOperation = true;
     console.log("=== is going INTO save");
     $("#online-status").html("Saving...");
@@ -183,13 +182,17 @@
         var tmpMentorEmail = $("#mentor-" + startupKey + "-" + j + "-select").val();
         var tmpMentorName = $("#mentor-" + startupKey + "-" + j + "-select option:selected").text();
         var location = $("#meeting-location-" + startupKey + "-" + j + "-select option:selected").text();
-        var tmpM = [tmpMentorEmail, tmpMentorName, location];
+        var startTime = $("#meeting-start-time-" + startupKey + "-" + j ).val();
+        var endTime = $("#meeting-end-time-" + startupKey + "-" + j ).val();
+        var tmpM = [tmpMentorEmail, tmpMentorName, location, startTime, endTime];
         mentorPerHour.push(tmpM);
 
         ref.child("sessions").child(scDay).child("mentors").child(tmpMentorEmail).child("hour-" + j).set({
           name: tmpMentorName,
           startup: startupKey,
-          location: location
+          location: location,
+          starttime: startTime,
+          endtime: endTime
         }, function(error) {
           if (error) {
             bootbox.alert("Schedule could not be saved :( Details: " + error);
@@ -221,7 +224,7 @@
   }
 
   //
-  //
+  // Allow to copy comments from the first startup to all the rest 😎
   //
   $("#copy-comments-on-day").click(function() {
     var textAreaArry = $(".sc-comments");
@@ -242,7 +245,6 @@
       $("#schedule-day-1").focus();
       return;
     }
-
     bootbox.confirm("<h5>You are going to save a new schedule for " + scDay + "</h5><h3>Are you sure?</h3>", function(result) {
       if (result === false) {
         return;
@@ -298,15 +300,9 @@
   }
 
   //
-  // Reload the schedule from firebase
+  // reload the schedule from firebase
   //
-  $("#sc-reload-button").click(function() {
-    var scDay = $("#schedule-day-1").val();
-    if (scDay === null || scDay === "") {
-      bootbox.alert("You must set a date in order to reload schedule. Daaa!");
-      $("#schedule-day-1").focus();
-      return;
-    }
+  function reloadSchedule(scDay) {
     var readRef = firebase.database().ref("sessions/" + scDay + "/startups");
     //new Firebase("https://lpa-1.firebaseio.com/sessions/" + scDay + "/startups");
     readRef.orderByKey().once("value", function(snapshot) {
@@ -327,9 +323,13 @@
             var key = curMentor[0];
             var name = curMentor[1];
             var loc = curMentor[2];
+            var startTime = curMentor[3];
+            var endTime = curMentor[4];
             //console.log("startup: " + startupName + " key:" + key + " name:" + name);
             $("#mentor-" + startupName + "-" + j + "-select").val(key);
             $("#meeting-location-" + startupName + "-" + j + "-select").val(loc);
+            $("#meeting-start-time-" + startupName + "-" + j ).val(startTime);
+            $("#meeting-end-time-" + startupName + "-" + j ).val(endTime);
           }
         });
       } else {
@@ -340,6 +340,19 @@
         bootbox.alert("Could not find anything for this date.");
       }
     });
+  }
+
+  //
+  // Reload the schedule from firebase
+  //
+  $("#sc-reload-button").click(function() {
+    var scDay = $("#schedule-day-1").val();
+    if (scDay === null || scDay === "") {
+      bootbox.alert("You must set a date in order to reload schedule. Daaa!");
+      $("#schedule-day-1").focus();
+      return;
+    }
+    reloadSchedule(scDay);
   });
 
   //
@@ -398,16 +411,24 @@
         html += '<div class="col-md-1 col-lg-1 text-center ">';
         html += getMentorsSelect("mentor-" + startupKey + "-" + j + "-select");
         html += '<br>' + getMeetingLocations("meeting-location-" + startupKey + "-" + j + "-select");
+        html += '<br>' + getMeetingTime("meeting-start-time-" + startupKey + "-" + j , j+9);
+        html += '<br>' + getMeetingTime("meeting-end-time-" + startupKey + "-" + j , j+10);
         html += '</div>';
       }
       html += '<div class="col-md-2 col-lg-2 text-center ">';
       html += '<textarea class="form-control sc-comments" id="sc-comments-' + startupKey +
         '" name="sc-comments-' + i + '" placeholder="General Comments For The Day"></textarea>';
       html += '</div>';
-      html += '</div> <!-- row -->';
+      html += '</div> <br><!-- row -->';
     }
 
     $("#schedule-tab-table").html(html);
+  }
+
+  function getMeetingTime(htmlObjId, defTime) {
+    var timeVal = defTime + ":00";
+    var html = '<input id="' + htmlObjId + '" type="time" class="meeting-time-picker" value="' + timeVal + '">';
+    return html;
   }
 
   //
@@ -583,8 +604,9 @@
         var html = ""; //"<h3>" + curMentorEmail + "</h3>";
         $("#mentor-schedule-list").html("");
         $.each(sessions, function(key, scData) {
+          //  getHourAsRange(key)
           html += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
-            scData.startup + ' | ' + getHourAsRange(key) + ' </h3> </div> <div class="panel-body">' +
+            scData.startup + ' | ' + scData.starttime + " - " + scData.endtime + ' </h3> </div> <div class="panel-body">' +
             '<b>Location: ' + scData.location + '</b> <p class="" id="meet-details-' + key + '"></p> </div> </div> </div>';
         });
         $("#mentor-schedule-list").html(html);
@@ -625,9 +647,11 @@
           '</h3> </div> <div class="panel-body admin-comments-for-day">' + commentsForTheDay + '</div> </div>';
 
         // we know it's the mentors and hours
+        //getHourAsRange("hour-" + (i + 1)) 
         for (var i = 0; i < sessions.mentors.length; i++) {
           scHtml += '<div class="panel panel-default"> <div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
-            sessions.mentors[i][1] + ' | ' + getHourAsRange("hour-" + (i + 1)) + '</h3> </div> <div class="panel-body">' +
+            sessions.mentors[i][1] + ' | ' + sessions.mentors[i][3] + " - " + sessions.mentors[i][4] +
+             '</h3> </div> <div class="panel-body">' +
             'Location: ' + sessions.mentors[i][2] + ' </div> </div>';
         }
         $("#mentor-schedule-list").html(scHtml);
