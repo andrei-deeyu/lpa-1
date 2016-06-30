@@ -328,33 +328,6 @@
   });
 
   //
-  //
-  //
-  function getHourAsRange(key) {
-    if (key.indexOf("1") > 0) {
-      return "9:00 - 10:00";
-    } else if (key.indexOf("2") > 0) {
-      return "10:00 - 11:00";
-    } else if (key.indexOf("3") > 0) {
-      return "11:00 - 12:00";
-    } else if (key.indexOf("4") > 0) {
-      return "12:00 - 13:00";
-    } else if (key.indexOf("5") > 0) {
-      return "13:00 - 14:00";
-    } else if (key.indexOf("6") > 0) {
-      return "14:00 - 15:00";
-    } else if (key.indexOf("7") > 0) {
-      return "15:00 - 16:00";
-    } else if (key.indexOf("8") > 0) {
-      return "16:00 - 17:00";
-    } else if (key.indexOf("9") > 0) {
-      return "17:00 - 18:00";
-    } else {
-      return "--";
-    }
-  }
-
-  //
   // fetch mentor data base on its key (=email)
   //
   function showMentorDetails(key) {

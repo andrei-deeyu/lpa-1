@@ -135,8 +135,9 @@ td {
 }
 
 .sc-comments {
-  margin-left: 2em;
+  margin-left: 1em;
   margin-bottom: 0.5em;
+  margin-top: 1.4em;
 }
 
 #schedule-tab {
@@ -158,6 +159,7 @@ td {
   margin: 0.5em;
   font-size: 120%;
 }
+
 .admin-comments-for-day {
   text-align: left;
   font-size: 90%;
@@ -170,8 +172,9 @@ td {
 
 
 /*** TODO: Mentor page */
+
 #mentor-notes-details-modal {
-  overflow:auto;
+  overflow: auto;
 }
 
 .meeting-save-button {
