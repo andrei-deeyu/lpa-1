@@ -190,15 +190,17 @@
           aria-expanded="false" aria-controls="collapseCommentsDetails"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"> \
           </span></button> </h3> </div> <div id="att-comments-day" class="panel-body collapse">' + commentsForTheDay + '</div> </div>';
 
-        // we know it's the mentors and hours
+        // we know it's the mentors and hours  getHourAsRange(tKey) 
         for (var i = 0; i < sessions.mentors.length; i++) {
           var tKey = "hour-" + (i + 1);
           var startupBackupNotesKey = "/startups/" + curAttendeeStartup + "/" + scDay + "/attendees-notes/" + sessions.mentors[i][0] +
             "/" + curAttendeeEmail + "/" + tKey;
           if (sessions.mentors[i][0] !== "na@na-com") {
+            var startTime = sessions.mentors[i][3];
+            var endTime = sessions.mentors[i][4];
             scHtml += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
               '<button class="btn btn-warning fetch-mentor-button" data-key="' + sessions.mentors[i][0] + '">' + sessions.mentors[i][1] +
-              '</button>' + ' | ' + getHourAsRange(tKey) +
+              '</button>' + ' | ' + startTime + " - " + endTime +
               ' <button class="btn expend-notes-but" type="button" data-textarea-key="' + tKey + '" data-note-key="' + startupBackupNotesKey +
               '" data-toggle="collapse" data-target="#att-note-p-' + tKey +
               '" aria-expanded="false" aria-controls="collapseAttDetails"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span></button>' +
@@ -211,7 +213,7 @@
                 <br><br> \
             <h5>Meeting Notes</h5>What did you talk about? Any action items? \
             <textarea id="' + tKey + '" class="form-control col-lg-10 meeting-notes-text" data-notes-backup="' + startupBackupNotesKey +
-              '" name="meeting-notes">' +
+              '" data-starttime="' + startTime + '" data-endtime="' + endTime + '" name="meeting-notes">' +
               '</textarea>  <br><button class="btn btn-warning meeting-save-button">Save Notes</button> </p> </div> </div> </div>';
           }
 
@@ -280,6 +282,8 @@
     // save the meeting notes
     var ta = $(this).parent().find('textarea');
     var notes = ta.val();
+    var startTime = ta.data('starttime');
+    var endTime = ta.data('endtime');
 
     var sliders = $(this).parent().find('input');
     var listenVal = $("#" + sliders[0].id).slider('getValue');
@@ -306,6 +310,8 @@
       receptive: listenVal,
       effective: effectiveVal,
       meetingNotes: notes,
+      starttime: startTime,
+      endtime: endTime,
       unixTime: curUnixTime,
       date: disTime
     }, function(error) {

@@ -157,7 +157,7 @@
   // Fetch schedule
   //////////////////////////////////////////////////////////////////////////////
   //
-  // Reload the schedule from firebase per date
+  // Reload the schedule from Firebase per date
   //
   $("#sc-reload-button").click(function() {
     var scDay = $("#schedule-day-1").val();
@@ -185,9 +185,10 @@
           var startupNotesKey = scDay + "/startups/" + scData.startup + "/notes/" + curMentorEmail + "/" + key;
           var startupBackupNotesKey = "/startups/" + scData.startup + "/" + scDay + "/notes/" + curMentorEmail + "/" + key;
 
-          //console.log("=== Update mentors and comments for: " + key + " | data: " + scData);
+          //console.log("=== Update mentors and comments for: " + key + " | data: " + scData);  getHourAsRange(key)
           html += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
-            '<button class="btn btn-warning fetch-notes-button" data-key="' + scData.startup + '">' + scData.startup + '</button>' + ' | ' + getHourAsRange(key) +
+            '<button class="btn btn-warning fetch-notes-button" data-key="' + scData.startup + '">' + scData.startup + '</button>' + ' | ' +
+            scData.starttime + " - " + scData.endtime + 
             ' <button class="btn expend-notes-but" type="button" data-textarea-key="' + key + '" data-note-key="' + startupBackupNotesKey +
             '" data-toggle="collapse" data-target="#mentor-note-p-' + key +
             '" aria-expanded="false" aria-controls="collapseMentorDetails"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span></button>' +
@@ -201,7 +202,7 @@
             What did you talked about? \
             <textarea id="' + key + '" class="form-control col-lg-10 meeting-notes-text" data-key="' + meetingNotesKey +
             '" data-startup="' + startupNotesKey + '" data-notes-backup="' + startupBackupNotesKey +
-            '" name="meeting-notes">' +
+            '" data-starttime="' + scData.starttime + '" data-endtime="' + scData.endtime + '" name="meeting-notes">' +
             '</textarea>  <br>What are the action items? \
             <textarea id="ai-' + key + '" class="form-control col-lg-10 meeting-notes-text" data-key="ai-' + meetingNotesKey +
             '" data-startup="ai-' + startupNotesKey + '" data-notes-backup="ai-' + startupBackupNotesKey +
@@ -288,6 +289,12 @@
               Object.keys(hours).forEach(function(key) {
                 var val = hours[key];
                 var noteDate = val.date.replace("T", " ");
+                var startTime = val.starttime;
+                var endTime = val.endtime;
+                var meetingTime = startTime + " - " + endTime;
+                if (startTime === undefined || startTime === null) {
+                  meetingTime = getHourAsRange(key); // The old way in v1.0
+                }
                 var notesHtml = "";
                 if (val.meetingNotes && val.meetingNotes.length > 2) {
                   notesHtml = val.meetingNotes.replace(/\n/g, "<br>");
@@ -300,8 +307,9 @@
                 var tmpMentorEmailStr = tmpMentorEmail.replace(/-/g, ".");
                 var tmpMentorDetails = '<button class="btn btn-sm btn-info fetch-mentor-button" data-key="' + tmpMentorEmail + '">' + 
                                         tmpMentorEmailStr + '</button>';
+                
                 html += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
-                  keyDate + " | " + getHourAsRange(key) + ' </h3> </div> <div class="panel-body">' +
+                  keyDate + " | " + meetingTime + ' </h3> </div> <div class="panel-body">' +
                   '<b>Mentor:</b> ' + tmpMentorDetails + '<br><b>Updated At: </b>' + noteDate +
                   '<p><b>Meeting Notes:</b><br>' + notesHtml + '</p>' +
                   '<b>Action Items:</b> ' + actionItemsHtml +
@@ -347,6 +355,8 @@
     var keyToSession = tas.data('key');
     var keyToStartup = tas.data('startup');
     var keyToNotesBackup = tas.data('notes-backup');
+    var startTime = tas.data('starttime');
+    var endTime = tas.data('endtime');
     //console.log("keyToSession: " + keyToSession + " Notes: " + notes);
     if (keyToSession == undefined || keyToSession == null) {
       bootbox.alert("Sorry - Can't save your notes. Please take them in another way and let the organizers know about it.");
@@ -366,6 +376,8 @@
       effective: effectiveVal,
       meetingNotes: notes,
       actionItems: actionItems,
+      starttime: startTime,
+      endtime: endTime,
       unixTime: curUnixTime,
       date: disTime
     }, function(error) {
@@ -384,6 +396,8 @@
       effective: effectiveVal,
       meetingNotes: notes,
       actionItems: actionItems,
+      starttime: startTime,
+      endtime: endTime,
       unixTime: curUnixTime,
       date: disTime
     }, function(error) {
@@ -403,6 +417,8 @@
       effective: effectiveVal,
       meetingNotes: notes,
       actionItems: actionItems,
+      starttime: startTime,
+      endtime: endTime,
       unixTime: curUnixTime,
       date: disTime
     }, function(error) {
@@ -419,7 +435,7 @@
   });
 
   //
-  //
+  // TODO: remove it once we don't need to support the old way of meeting times
   //
   function getHourAsRange(key) {
     if (key.indexOf("1") > 0) {
