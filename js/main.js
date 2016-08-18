@@ -545,8 +545,11 @@
             { title: "Receptive" },
             { title: "Action Items", "width": "280px" },
             { title: "Notes", "width": "350px" }
-          ]
+          ],
+          dom: 'Bfrtip',
+          buttons: ['csv', 'copy']
         });
+
       } else {
         bootbox.alert("Could not find notes for " + curStartup);
       }
