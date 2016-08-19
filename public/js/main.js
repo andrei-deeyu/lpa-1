@@ -182,8 +182,8 @@
         var tmpMentorEmail = $("#mentor-" + startupKey + "-" + j + "-select").val();
         var tmpMentorName = $("#mentor-" + startupKey + "-" + j + "-select option:selected").text();
         var location = $("#meeting-location-" + startupKey + "-" + j + "-select option:selected").text();
-        var startTime = $("#meeting-start-time-" + startupKey + "-" + j ).val();
-        var endTime = $("#meeting-end-time-" + startupKey + "-" + j ).val();
+        var startTime = $("#meeting-start-time-" + startupKey + "-" + j).val();
+        var endTime = $("#meeting-end-time-" + startupKey + "-" + j).val();
         var tmpM = [tmpMentorEmail, tmpMentorName, location, startTime, endTime];
         mentorPerHour.push(tmpM);
 
@@ -328,8 +328,8 @@
             //console.log("startup: " + startupName + " key:" + key + " name:" + name);
             $("#mentor-" + startupName + "-" + j + "-select").val(key);
             $("#meeting-location-" + startupName + "-" + j + "-select").val(loc);
-            $("#meeting-start-time-" + startupName + "-" + j ).val(startTime);
-            $("#meeting-end-time-" + startupName + "-" + j ).val(endTime);
+            $("#meeting-start-time-" + startupName + "-" + j).val(startTime);
+            $("#meeting-end-time-" + startupName + "-" + j).val(endTime);
           }
         });
       } else {
@@ -411,8 +411,8 @@
         html += '<div class="col-md-1 col-lg-1 text-center ">';
         html += getMentorsSelect("mentor-" + startupKey + "-" + j + "-select");
         html += '<br>' + getMeetingLocations("meeting-location-" + startupKey + "-" + j + "-select");
-        html += '<br>' + getMeetingTime("meeting-start-time-" + startupKey + "-" + j , j+9);
-        html += '<br>' + getMeetingTime("meeting-end-time-" + startupKey + "-" + j , j+10);
+        html += '<br>' + getMeetingTime("meeting-start-time-" + startupKey + "-" + j, j + 9);
+        html += '<br>' + getMeetingTime("meeting-end-time-" + startupKey + "-" + j, j + 10);
         html += '</div>';
       }
       html += '<div class="col-md-2 col-lg-2 text-center ">';
@@ -460,7 +460,7 @@
 
   //////////////////////////////////////////////////////////////////////////////
   // Notes viewer per startup
-  // TODO: per mentor
+  // TODO: per mentor?
   //////////////////////////////////////////////////////////////////////////////
   //
   // reset the notes viewer
@@ -553,6 +553,83 @@
       } else {
         bootbox.alert("Could not find notes for " + curStartup);
       }
+    });
+  }
+
+  // 
+  // Export All the notes trigger
+  //
+  $("#notes-viewer-export-all-button").click(function() {
+    // Fetch All the notes and export them to CSV
+    exportAllNotes();
+  });
+
+  function exportAllNotes() {
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'schedule',
+      eventAction: 'admin-export-all-notes',
+      eventLabel: "Admin user.uid: " + authUserData.uid + " email: " + authUserData.email
+    });
+
+    var csvStr = "";
+    // Call the node with all the strtup's notes
+    var readRef = firebase.database().ref("notes-backup/startups/");
+    readRef.orderByKey().once("value", function(snapshot) {
+      snapshot.forEach(function(childSnapshot) {
+        console.log("====");
+        var startupName = childSnapshot.getKey();
+        var notes = childSnapshot.val();
+        if (notes != null) {
+          console.log("Working on startup: " + startupName); // + "notes: " + JSON.stringify(notes));
+          for (var x in notes) {
+            try {
+              var attNotes = Object.keys(notes[x]); // or notes
+              for (var j = 0; j < attNotes.length; j++) {
+                var noteType = attNotes[j];
+                var mentors = Object.keys(notes[x][noteType]);
+                for (var i = 0; i < mentors.length; i++) {
+                  // go on all the mentors
+                  var mentor = mentors[i];
+                  var attendee = Object.keys(notes[x][noteType][mentor]);
+                  if (attendee[0].indexOf("hour") > -1) {
+                    // the old/broken format of notes without the mentor
+                    var hour = attendee[0];
+                    var effective = (notes[x][noteType][mentor][hour]).effective;
+                    var receptive = (notes[x][noteType][mentor][hour]).receptive;
+                    var actionItems = (notes[x][noteType][mentor][hour]).actionItems;
+                    var mNotes = (notes[x][noteType][mentor][hour]).meetingNotes;
+                    if (actionItems) actionItems = actionItems.replace(/\n/g, " | ");
+                    if (mNotes) mNotes = mNotes.replace(/\n/g, " | ");
+                    csvStr += startupName + ", \"" + x + "\" , \"" + mentor + "\" , N/A , " +
+                      hour + " , " + effective + " , " + receptive + " , \"" +
+                      actionItems + "\" , \"" + mNotes + "\" \n";
+
+                  } else {
+                    var tmpAtt = attendee[0];
+                    var hour = Object.keys(notes[x][noteType][mentor][tmpAtt]);
+                    var tmpHour = hour[0];
+                    var effective = (notes[x][noteType][mentor][tmpAtt][tmpHour]).effective;
+                    var receptive = (notes[x][noteType][mentor][tmpAtt][tmpHour]).receptive;
+                    var actionItems = (notes[x][noteType][mentor][tmpAtt][tmpHour]).actionItems;
+                    var mNotes = (notes[x][noteType][mentor][tmpAtt][tmpHour]).meetingNotes;
+                    if (actionItems) actionItems = actionItems.replace(/\n/g, " | ");
+                    if (mNotes) mNotes = mNotes.replace(/\n/g, " | ");
+                    csvStr += startupName + ", \"" + x + "\" , \"" + mentor + "\" , \"" + tmpAtt + "\" , " +
+                      tmpHour + " , " + effective + " , " + receptive + " , \"" +
+                      actionItems + "\" , \"" + mNotes + "\" \n";
+                  }
+                }
+              }
+            } catch (err) {
+              console.log("Error in building the notes table: " + err);
+            }
+          } // for loop on notes per startup
+          window.location.href = 'data:text/csv;charset=UTF-8,' + encodeURIComponent(csvStr);
+        } else {
+          bootbox.alert("Could not find notes to export for startup: " + startupName);
+        }
+      });
     });
   }
 
@@ -654,7 +731,7 @@
         for (var i = 0; i < sessions.mentors.length; i++) {
           scHtml += '<div class="panel panel-default"> <div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
             sessions.mentors[i][1] + ' | ' + sessions.mentors[i][3] + " - " + sessions.mentors[i][4] +
-             '</h3> </div> <div class="panel-body">' +
+            '</h3> </div> <div class="panel-body">' +
             'Location: ' + sessions.mentors[i][2] + ' </div> </div>';
         }
         $("#mentor-schedule-list").html(scHtml);

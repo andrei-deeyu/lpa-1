@@ -565,13 +565,13 @@
   });
 
   function exportAllNotes() {
-   /* ga('send', {
+    ga('send', {
       hitType: 'event',
       eventCategory: 'schedule',
       eventAction: 'admin-export-all-notes',
       eventLabel: "Admin user.uid: " + authUserData.uid + " email: " + authUserData.email
     });
-    */
+
     var csvStr = "";
     // Call the node with all the strtup's notes
     var readRef = firebase.database().ref("notes-backup/startups/");
@@ -599,11 +599,12 @@
                     var receptive = (notes[x][noteType][mentor][hour]).receptive;
                     var actionItems = (notes[x][noteType][mentor][hour]).actionItems;
                     var mNotes = (notes[x][noteType][mentor][hour]).meetingNotes;
-                    mNotes = mNotes.replace(/\n/g, " | ");
-                    //dataSet.push([x, mentor, "n/a", hour, effective, receptive, actionItems, mNotes]);
-                    csvStr += startupName + ", \"" + x + "\" , \"" + mentor + "\" , N/A , " + "\"" +
-                      hour + "\" , " + effective + "\" , " + receptive + "\" , " +
-                      actionItems + "\" , " + mNotes + "\" \n";
+                    if (actionItems) actionItems = actionItems.replace(/\n/g, " | ");
+                    if (mNotes) mNotes = mNotes.replace(/\n/g, " | ");
+                    csvStr += startupName + ", \"" + x + "\" , \"" + mentor + "\" , N/A , " +
+                      hour + " , " + effective + " , " + receptive + " , \"" +
+                      actionItems + "\" , \"" + mNotes + "\" \n";
+
                   } else {
                     var tmpAtt = attendee[0];
                     var hour = Object.keys(notes[x][noteType][mentor][tmpAtt]);
@@ -612,26 +613,23 @@
                     var receptive = (notes[x][noteType][mentor][tmpAtt][tmpHour]).receptive;
                     var actionItems = (notes[x][noteType][mentor][tmpAtt][tmpHour]).actionItems;
                     var mNotes = (notes[x][noteType][mentor][tmpAtt][tmpHour]).meetingNotes;
-                    mNotes = mNotes.replace(/\n/g, " | ");
-                    //dataSet.push([x, mentor, tmpAtt, tmpHour, effective, receptive, actionItems, mNotes]);
-                    csvStr += startupName + ", \"" + x + "\" , \"" + mentor + "\" , \"" + tmpAtt + "\" , \"" +
-                      tmpHour + "\" , \"" + effective + "\" , \"" + receptive + "\" , \"" +
+                    if (actionItems) actionItems = actionItems.replace(/\n/g, " | ");
+                    if (mNotes) mNotes = mNotes.replace(/\n/g, " | ");
+                    csvStr += startupName + ", \"" + x + "\" , \"" + mentor + "\" , \"" + tmpAtt + "\" , " +
+                      tmpHour + " , " + effective + " , " + receptive + " , \"" +
                       actionItems + "\" , \"" + mNotes + "\" \n";
                   }
                 }
               }
             } catch (err) {
               console.log("Error in building the notes table: " + err);
-              //dataSet.push([x, "", "", "", "", "", "", ""]);
             }
-          } // for loop
-          
+          } // for loop on notes per startup
+          window.location.href = 'data:text/csv;charset=UTF-8,' + encodeURIComponent(csvStr);
         } else {
           bootbox.alert("Could not find notes to export for startup: " + startupName);
         }
       });
-      console.log("======= Exporting to CSV file"); // + csvStr);
-      window.location.href = 'data:text/csv;charset=UTF-8,' + encodeURIComponent(csvStr);
     });
   }
 
