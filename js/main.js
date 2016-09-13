@@ -9,6 +9,7 @@
 (function() {
   $(".save-alert").hide();
   $("#spin").hide();
+  $("#gen-op-tab-li").hide();
   $("#sc-save-button").hide();
 
   var startupNameList = [];
@@ -56,6 +57,10 @@
       $("#sc-save-button").show();
       //localStorage.setItem("lpa1-authData", JSON.stringify(authData));
       console.log("User " + user.uid + " is logged in with " + user.provider);
+      if ( (user.email).indexOf("idog@") > -1 ) {
+        $("#gen-op-tab-li").show();
+      }
+
       ga('send', {
         hitType: 'event',
         eventCategory: 'sign-in-admin',
@@ -1459,6 +1464,36 @@
       }
     });
   });
+
+  $("#gen-ops-remove-all-att-button").click(function() {
+    removeAllAttendess(); 
+  });
+
+  function removeAllAttendess() {
+    var attRef = firebase.database().ref("attendees/");
+    var onCompleteRemoveAllAtt = function(error) {
+          if (error) {
+            console.log('Synchronization failed to remove ALL attendees');
+            ga('send', {
+              hitType: 'event',
+              eventCategory: 'admin-remove-all-attendees-error',
+              eventAction: 'delete-error',
+              eventLabel: "removing ALL Attendees by: " + authUserData.uid + " err: " + error
+            });
+          } else {
+            ga('send', {
+              hitType: 'event',
+              eventCategory: 'admin-remove-all-attendees',
+              eventAction: 'delete',
+              eventLabel: "removing ALL attendees by: " + authUserData.uid
+            });
+            console.log('Synchronization succeeded - ALL attendees were removed');
+            $("#att-list").html('<div id="loading-attendees"><h2><i class="fa fa-spinner fa-spin"></i> </h2></div>');
+            readAttendees(authUserData);
+          }
+        };
+    attRef.remove(onCompleteRemoveAllAtt);
+  }
 
   //
   // enable removing attendees

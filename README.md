@@ -120,6 +120,29 @@ Please use: [Open an issue](https://github.com/greenido/lpa-1/issues)
       * unixTime 
       * date
 
+### Notes
+  * startup name
+    * date
+      * attendee-notes
+        * attendee email
+          * hour of session
+            * date
+            * effective 
+            * meetingNotes 
+            * mentorName
+            * receptive
+            * unixTime
+      * mentor-notes
+        * mentor email
+          * hour of session
+            * actionItems
+            * date
+            * effective
+            * meetingNotes
+            * mentorName
+            * receptive
+            *unixTime
+
 
 ## License
 
