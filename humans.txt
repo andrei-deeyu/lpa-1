@@ -12,3 +12,4 @@
 * Bootstrap 3
 * https://silviomoreto.github.io/bootstrap-select/examples/
 * JoyRide by Zurb
+* Add To Home Screen - http://cubiq.org/add-to-home-screen
