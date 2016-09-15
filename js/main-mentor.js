@@ -10,6 +10,9 @@
   $(".save-alert").hide();
   $("#alert-warning-sign-in").hide();
   $("#spin").hide();
+  addToHomescreen({
+   startDelay: 15
+  });
 
   var startupNameList = [];
   var curMentorEmail = "";

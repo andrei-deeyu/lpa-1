@@ -39,8 +39,9 @@ Please use: [Open an issue](https://github.com/greenido/lpa-1/issues)
 
 ### PWA
 * [ ] Use Service workers for caching and local saving of notes.
-* [ ] Add manifest.
+* [x] Add manifest.
 * [ ] Add push notifications on special notes that you mark with "todo".
+* [x] Add to home screen.
 
 ### Sing-in
 * [x] Enable an option to use Google
@@ -141,7 +142,7 @@ Please use: [Open an issue](https://github.com/greenido/lpa-1/issues)
             * meetingNotes
             * mentorName
             * receptive
-            *unixTime
+            * unixTime
 
 
 ## License
