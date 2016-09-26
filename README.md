@@ -29,6 +29,7 @@ We got three web apps:
 ## Issue / Bug ?
 Even a 🐱 App needs love from time to time.
 Please use: [Open an issue](https://github.com/greenido/lpa-1/issues)
+Also check: https://status.firebase.google.com/ just to be on the safe side.
 
 -----
 ## ToDos
