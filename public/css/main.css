@@ -38,6 +38,11 @@ label {
   width: 90%
 }
 
+#export-all-mentors-button {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  margin-left: 1em;
+}
 
 /*
 .remove-mentor {

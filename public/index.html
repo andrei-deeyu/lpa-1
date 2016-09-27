@@ -106,6 +106,7 @@
           <li id="schedule-tab-li" role="presentation"><a href="#schedule-tab" aria-controls="schedule-tab" role="tab" data-toggle="tab">Schedule</a></li>
           <li id="schedule-viewer-tab-li" role="presentation"><a href="#schedule-viewer-tab" aria-controls="schedule-viewer-tab" role="tab" data-toggle="tab">Schedule Viewer</a></li>
           <li id="notes-tab-li" role="presentation"><a href="#notes-viewer-tab" aria-controls="notes-viewer-tab" role="tab" data-toggle="tab">Notes</a></li>
+          <li id="gen-op-tab-li" role="presentation"><a href="#gen-ops-tab" aria-controls="gen-ops-tab" role="tab" data-toggle="tab">Gen Ops</a></li>
         </ul>
         <!-- Tab panes -->
         <div class="tab-content">
@@ -244,6 +245,7 @@
                 <div id="mentors-list">
                   <img src="img/spin-82.svg" alt="spinner" />
                 </div>
+                <button id="export-all-mentors-button" class="btn btn-warning">Export All Mentors</button>
                 <img src="img/little-men.jpeg" class="img-background-max">
               </div>
             </div>
@@ -541,6 +543,15 @@
               </div>
             </div>
           </div>
+          <!-- Gen Ops -->
+          <div role="tabpanel" class="tab-pane" id="gen-ops-tab">
+            <div class="row">
+              <div class="col-sm-4 col-md-4 col-lg-4 text-center notes-header">
+                <button id="gen-ops-remove-all-att-button" class="btn btn-warning">Remove All Attendees</button>
+              </div>
+            </div>
+          </div>
+
           <!-- end of tabs -->
         </div>
       </div>
