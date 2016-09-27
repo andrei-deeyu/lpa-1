@@ -245,7 +245,7 @@
                 <div id="mentors-list">
                   <img src="img/spin-82.svg" alt="spinner" />
                 </div>
-                <button id="export-all-mentors-button" class="btn btn-warning">Export All Mentors</button>
+                <button id="export-all-mentors-button" class="btn btn-info">Export All Mentors</button>
                 <img src="img/little-men.jpeg" class="img-background-max">
               </div>
             </div>
@@ -546,8 +546,24 @@
           <!-- Gen Ops -->
           <div role="tabpanel" class="tab-pane" id="gen-ops-tab">
             <div class="row">
-              <div class="col-sm-4 col-md-4 col-lg-4 text-center notes-header">
-                <button id="gen-ops-remove-all-att-button" class="btn btn-warning">Remove All Attendees</button>
+              <div class="col-sm-4 col-md-4 col-lg-4 notes-header">
+              <h4>Attendees Utils</h4>
+                <button id="gen-ops-remove-all-att-button" class="btn btn-info">Remove All Attendees</button>
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg6 notes-header">
+                <!-- email for mentor to do a comeback -->
+                <h4>Mentors Utils</h4>
+                <div class="form-group">
+                  <div id="mentor-comeback-emailError" class="sr-only" role="alert"></div>
+                  <label for="mentor-comeback-email-field" class="sr-only">Email</label>
+                  <div class="input-group">
+                    <div class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></div>
+                    <input type="email" class="form-control must-have-field" title="The email should be like: ido@gmail-com"
+                      id="mentor-comeback-email-field" placeholder="Email" autocomplete="email" required>
+                  </div>
+                </div>
+                <button id="move-back-mentor-button" class="btn btn-info">Move back</button>
+                <button id="remove-all-mentors-button" class="btn btn-warning">Remove All Mentors</button>
               </div>
             </div>
           </div>

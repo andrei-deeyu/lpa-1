@@ -1291,7 +1291,7 @@
   });
 
   //
-  // enable removing mentors
+  // Enable removing mentors
   //
   $('body').on('click', '.remove-mentor', function(event) {
     var key = this.dataset.key;
@@ -1323,6 +1323,40 @@
       }
     });
   });
+
+  //
+  //
+  //
+  $("#remove-all-mentors-button").click(function() {
+    removeAllMentors();
+  });
+
+  //
+  // moving the mentors so we can work with new ones.
+  // TODO: think on making another field of 'on duty' for each mentor.
+  //
+  function removeAllMentors() {
+    var curUnixTime = new Date().getTime();
+    var disTime = new Date().toJSON().slice(0, 10);
+    var oldRef = firebase.database().ref("mentors");
+    var newRef = firebase.database().ref(disTime + "-mentors");
+    moveFBnode(oldRef, newRef);
+  }
+
+  $("#move-back-mentor-button").click(function() {
+    var mentorEmail = $("#mentor-comeback-email-field").val();
+    moveMentorBack(mentorEmail);
+  });
+
+  //
+  // TODO: change this! quickly please.
+  //
+  function moveMentorBack(mentorEmail) {
+    var oldRef = firebase.database().ref("2016-09-27-mentors/" + mentorEmail);
+    var newRef = firebase.database().ref("mentors/" + mentorEmail);
+    moveFBnode(oldRef, newRef); 
+    bootbox.alert(mentorEmail + " just did a comeback!");
+  }
 
   // 
   // Export all mentors to CSV trigger
