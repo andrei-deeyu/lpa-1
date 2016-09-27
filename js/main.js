@@ -795,7 +795,7 @@
   }
 
   //////////////////////////////////////////////////////////////////////////////
-  // Startups
+  // =Startups
   //////////////////////////////////////////////////////////////////////////////
   //
   // get list of startups in a select 
@@ -1126,7 +1126,7 @@
   });
 
   //////////////////////////////////////////////////////////////////////////////
-  // Mentors
+  // =Mentors
   //////////////////////////////////////////////////////////////////////////////
   //
   // Save mentors
@@ -1324,8 +1324,44 @@
     });
   });
 
+  // 
+  // Export all mentors to CSV trigger
+  //
+  $("#export-all-mentors-button").click(function() {
+    exportAllMentors();
+  });
+
+  function exportAllMentors() {
+     var readRef = firebase.database().ref("mentors");
+    readRef.orderByChild("name").once("value", function(snapshot) {  
+      ga('send', {
+        hitType: 'event',
+        eventCategory: 'gen-opts',
+        eventAction: 'admin-export-all-mentors',
+        eventLabel: "Admin user.uid: " + authUserData.uid + " email: " + authUserData.email
+      }); 
+      var total = 0;   
+      var csvStr = "name, email, phone, country, city, domain, second domain,twitter,bio,fun Fact,expertise,linedin,site,pic,comments \n";
+      snapshot.forEach(function(childSnapshot) {
+        var key = childSnapshot.key;
+        var mentor = childSnapshot.val();
+        var mPicUrl = addhttp(mentor.pic);
+        //console.log("key: " + key + " data: " + mentorData);
+        var divDetailKey = key.replace("@", "");
+        csvStr += mentor.name + "," + mentor.email + "," + mentor.phone + "," + mentor.country + "," + 
+        mentor.city + "," + mentor.domain + "," + mentor.domainSec + "," + mentor.twitter + "," + 
+        cleanForCSV(mentor.bio) + "," + cleanForCSV(mentor.funFact) + "," + cleanForCSV(mentor.expertise) + ", " + 
+        mentor.linkedin + "," + mentor.site + "," + mentor.pic + "," + 
+        cleanForCSV(mentor.comments) + "," + cleanForCSV(mentor.notesForDay) + "\n";
+        total++;
+      });
+      window.location.href = 'data:text/csv;charset=UTF-8,' + encodeURIComponent(csvStr);
+      bootbox.alert("All " + total +" mentors were exported. Enjoy!");
+    });
+  }
+
   //////////////////////////////////////////////////////////////////////////////
-  // Attendees
+  // =Attendees
   //////////////////////////////////////////////////////////////////////////////
   //
   // Save Attendee
@@ -1556,6 +1592,17 @@
   //
   function onlyUnique(value, index, self) {
     return self.indexOf(value) === index;
+  }
+
+  //
+  // util to help us get better CSV output (e.g. that doesn't break on " as value)
+  //
+  function cleanForCSV(str) {
+    if (str !== null && str !== undefined && str.length > 2) {
+      str = str.replace(/\"/g, "'");
+      str = '"' + str + '"';  
+    }
+    return str;
   }
 
   //
