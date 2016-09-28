@@ -818,6 +818,7 @@
     var name = $("#st-name-field").val();
     // we can't have spaces - easy life (for now)
     name = name.replace(/\s/g, "-");
+    name = name.replace(/\./g, "-");
     var desc = $("#st-desc-field").val();
 
     // name validation
