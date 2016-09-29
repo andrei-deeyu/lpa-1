@@ -982,6 +982,27 @@
     });
   });
 
+  //
+  //
+  //
+  $("#gen-ops-remove-all-startups-button").click(function() {
+    removeAllStartups();
+  });
+
+  //
+  // moving the mentors so we can work with new ones.
+  // TODO: think on making another field of 'on duty' for each mentor.
+  //
+  function removeAllStartups() {
+    var curUnixTime = new Date().getTime();
+    var disTime = new Date().toJSON().slice(0, 10);
+    var oldRef = firebase.database().ref("startups");
+    var newRef = firebase.database().ref(disTime + "-startups");
+    moveFBnode(oldRef, newRef);
+    bootbox.alert("All the startups were moved to " + disTime + "-startups");
+  }
+
+
   //////////////////////////////////////////////////////////////////////////////
   // Locations
   //////////////////////////////////////////////////////////////////////////////
@@ -1342,6 +1363,7 @@
     var oldRef = firebase.database().ref("mentors");
     var newRef = firebase.database().ref(disTime + "-mentors");
     moveFBnode(oldRef, newRef);
+    bootbox.alert("All the mentors were moved to " + disTime + "-mentors");
   }
 
   $("#move-back-mentor-button").click(function() {

@@ -772,23 +772,23 @@
   //
   function getHourAsRange(key) {
     if (key.indexOf("1") > 0) {
-      return "9:00 - 10:00";
-    } else if (key.indexOf("2") > 0) {
       return "10:00 - 11:00";
-    } else if (key.indexOf("3") > 0) {
+    } else if (key.indexOf("2") > 0) {
       return "11:00 - 12:00";
-    } else if (key.indexOf("4") > 0) {
+    } else if (key.indexOf("3") > 0) {
       return "12:00 - 13:00";
-    } else if (key.indexOf("5") > 0) {
+    } else if (key.indexOf("4") > 0) {
       return "13:00 - 14:00";
-    } else if (key.indexOf("6") > 0) {
+    } else if (key.indexOf("5") > 0) {
       return "14:00 - 15:00";
-    } else if (key.indexOf("7") > 0) {
+    } else if (key.indexOf("6") > 0) {
       return "15:00 - 16:00";
-    } else if (key.indexOf("8") > 0) {
+    } else if (key.indexOf("7") > 0) {
       return "16:00 - 17:00";
-    } else if (key.indexOf("9") > 0) {
+    } else if (key.indexOf("8") > 0) {
       return "17:00 - 18:00";
+    } else if (key.indexOf("9") > 0) {
+      return "18:00 - 19:00";
     } else {
       return "--";
     }
@@ -818,6 +818,7 @@
     var name = $("#st-name-field").val();
     // we can't have spaces - easy life (for now)
     name = name.replace(/\s/g, "-");
+    name = name.replace(/\./g, "-");
     var desc = $("#st-desc-field").val();
 
     // name validation
@@ -980,6 +981,27 @@
       }
     });
   });
+
+  //
+  //
+  //
+  $("#gen-ops-remove-all-startups-button").click(function() {
+    removeAllStartups();
+  });
+
+  //
+  // moving the mentors so we can work with new ones.
+  // TODO: think on making another field of 'on duty' for each mentor.
+  //
+  function removeAllStartups() {
+    var curUnixTime = new Date().getTime();
+    var disTime = new Date().toJSON().slice(0, 10);
+    var oldRef = firebase.database().ref("startups");
+    var newRef = firebase.database().ref(disTime + "-startups");
+    moveFBnode(oldRef, newRef);
+    bootbox.alert("All the startups were moved to " + disTime + "-startups");
+  }
+
 
   //////////////////////////////////////////////////////////////////////////////
   // Locations
@@ -1341,6 +1363,7 @@
     var oldRef = firebase.database().ref("mentors");
     var newRef = firebase.database().ref(disTime + "-mentors");
     moveFBnode(oldRef, newRef);
+    bootbox.alert("All the mentors were moved to " + disTime + "-mentors");
   }
 
   $("#move-back-mentor-button").click(function() {
