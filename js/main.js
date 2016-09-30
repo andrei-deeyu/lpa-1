@@ -529,17 +529,16 @@
             }
           } // for loop
           //console.log("======= " + dataSet);
-
-          
-
         } else {
           bootbox.alert("Could not find notes for " + curMentor);
         }  
       }).then( buildNotesTbl(tblHtml), errorBuildingNotesTable());
-      
     });
   }
 
+  //
+  // building the table of notes per mentor
+  //
   function buildNotesTbl(tblHtml) {
     $("#startup-notes-table-body").html(tblHtml);
     $("#startup-notes-table").DataTable({
@@ -559,9 +558,13 @@
     });
   }
 
+  //
+  // TODO: better job with errors here.
+  //
   function errorBuildingNotesTable() {
     console.log("Error in building the notes table.");
   }
+  
   //
   // reset the notes viewer
   //

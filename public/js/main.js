@@ -467,6 +467,101 @@
   // Notes viewer per startup
   // TODO: per mentor?
   //////////////////////////////////////////////////////////////////////////////
+  
+  //
+  // reload mentor's notes 
+  //
+  $("#notes-per-mentor-reload-button").click(function() {
+    // Fetch the startup notes
+    var curMentor = $("#notes-per-mentor-startup-select").val();
+    loadMentorNotes(curMentor);
+  });
+
+  //
+  //
+  //
+  function loadMentorNotes(curMentor) {
+     ga('send', {
+      hitType: 'event',
+      eventCategory: 'schedule',
+      eventAction: 'admin-load-mentor-notes',
+      eventLabel: " Mentor: " + curMentor
+    });
+    //var dataSet = [];
+    var tblHtml = "";
+    $("#startup-notes-table").DataTable().destroy();
+    // Call the node with all the strtup's notes
+    var readRef = firebase.database().ref("notes-backup/startups/");
+    readRef.orderByKey().once("value", function(snapshot) {  //.startAt(curMentor).endAt(curMentor)
+      snapshot.forEach(function(startupData) {
+        var notes = startupData.val();
+        if (notes != null) {
+          //console.log("notes: " + JSON.stringify(notes));
+          for (var x in notes) {
+            try {
+              var attNotes = Object.keys(notes[x]); // or notes
+              for (var j = 0; j < attNotes.length; j++) {
+                var noteType = attNotes[j];
+                var mentors = Object.keys(notes[x][noteType]);
+                for (var i = 0; i < mentors.length; i++) {
+                  // go on all the mentors
+                  var mentor = mentors[i];
+                  if (mentor === curMentor) {
+                    var attendee = Object.keys(notes[x][noteType][mentor]);
+                    if (attendee[0].indexOf("hour") > -1) {
+                      // the old/broken format of notes without the mentor
+                      var hour = attendee[0];
+                      var effective = (notes[x][noteType][mentor][hour]).effective;
+                      var receptive = (notes[x][noteType][mentor][hour]).receptive;
+                      var actionItems = (notes[x][noteType][mentor][hour]).actionItems;
+                      var mNotes = (notes[x][noteType][mentor][hour]).meetingNotes;
+                      //dataSet.push([x, mentor, "n/a", hour, effective, receptive, actionItems, mNotes]);
+                      tblHtml += "<tr><td>" + x + "</td><td>" + mentor + "</td><td>N/A" + "</td><td>" +
+                        hour + "</td><td>" + effective + "</td><td>" + receptive + "</td><td>" +
+                        actionItems + "</td><td>" + mNotes + "</td></tr>";  
+                    }
+                  }
+                }
+              }
+            } catch (err) {
+              console.log("Error in building the notes table: " + err);
+              //dataSet.push([x, "", "", "", "", "", "", ""]);
+            }
+          } // for loop
+          //console.log("======= " + dataSet);
+
+          
+
+        } else {
+          bootbox.alert("Could not find notes for " + curMentor);
+        }  
+      }).then( buildNotesTbl(tblHtml), errorBuildingNotesTable());
+      
+    });
+  }
+
+  function buildNotesTbl(tblHtml) {
+    $("#startup-notes-table-body").html(tblHtml);
+    $("#startup-notes-table").DataTable({
+      paging: true,
+      columns: [
+        { title: "Date" },
+        { title: "Mentor" },
+        { title: "Attendee" },
+        { title: "Hour" },
+        { title: "Effective" },
+        { title: "Receptive" },
+        { title: "Action Items", "width": "280px" },
+        { title: "Notes", "width": "350px" }
+      ],
+      dom: 'Bfrtip',
+      buttons: ['csv', 'copy']
+    });
+  }
+
+  function errorBuildingNotesTable() {
+    console.log("Error in building the notes table.");
+  }
   //
   // reset the notes viewer
   //
@@ -765,6 +860,9 @@
     // add the startup selector to the notes tab as well
     var notesHtml = getStartupSelect("notes-viewer-startup-select", "");
     $("#startup-notes-viewer").html(notesHtml);
+
+    var notesPerMentorHtml = getMentorsSelect("notes-per-mentor-startup-select", "");
+    $("#mentor-notes-viewer").html(notesPerMentorHtml);
   }
 
   //
