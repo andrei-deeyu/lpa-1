@@ -190,11 +190,11 @@
 
           //console.log("=== Update mentors and comments for: " + key + " | data: " + scData);  getHourAsRange(key)
           html += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
-            '<button class="btn btn-warning fetch-notes-button" data-key="' + scData.startup + '">' + scData.startup + '</button>' + ' | ' +
+            '<button class="btn btn-warning fetch-notes-button" data-key="' + scData.startup + '">' + scData.startup + '</button>' + '  ' +
             scData.starttime + " - " + scData.endtime + 
-            ' <button class="btn expend-notes-but" type="button" data-textarea-key="' + key + '" data-note-key="' + startupBackupNotesKey +
-            '" data-toggle="collapse" data-target="#mentor-note-p-' + key +
-            '" aria-expanded="false" aria-controls="collapseMentorDetails"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span></button>' +
+            ' <button class="btn expend-notes-but btn-info" type="button" data-textarea-key="' + key + '" data-note-key="' + startupBackupNotesKey +
+            '" data-toggle="collapse" data-target="#mentor-note-p-' + key + 
+            '" aria-expanded="false" aria-controls="collapseMentorDetails"> <span class="glyphicon glyphicon-resize-vertical" aria-hidden="true"></span>Open</button>' +
             ' </h3><b>Location: ' + scData.location + '</b> </div> <div id="mentor-note-p-' + key + '" class="panel-body collapse">' +
             '<p class="" id="meet-details-' + key + '"> ' +
             '<h5><label>Did the attendees were open and receptive? (1-5)</label></h5> <br>\
