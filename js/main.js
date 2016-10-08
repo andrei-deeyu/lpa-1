@@ -113,9 +113,9 @@
   });
 
   //
-  // logout
   //
-  $('#logout-div').on('click', '#logout-but', function(event) {
+  //
+  function logoutTheUser() {
     console.log("-- trying to logout --");
     firebase.auth().signOut().then(function() {
       console.log("Sign-out successful");
@@ -135,6 +135,13 @@
       });
     });
     return false;
+  }
+
+  //
+  // logout
+  //
+  $('#logout-div').on('click', '#logout-but', function(event) {
+    logoutTheUser();
   });
 
   //////////////////////////////////////////////////////////////////////////////
@@ -145,7 +152,7 @@
   //
   function saveSchedule(scDay) {
     isInSaveOperation = true;
-    console.log("=== is going INTO save");
+    console.log("=== Going INTO save");
     $("#online-status").html("Saving...");
     ga('send', {
       hitType: 'event',
@@ -204,9 +211,9 @@
           }
         });
       }
-      //
+      
       var startupComments = $("#sc-comments-" + startupKey).val();
-      // console.log("Saving startup: " + startupName + " Comments:" + startupComments + " Mentors: " + mentorPerHour);
+      //console.log("Saving startup: " + startupName + " Comments:" + startupComments + " Mentors: " + mentorPerHour);
       // save the sessions per startup
       ref.child("sessions").child(scDay).child("startups").child(startupName).set({
         mentors: mentorPerHour,
@@ -223,11 +230,88 @@
           }, 1500);
         }
       });
+      // save a local backup version of the schedule
+      var backupKey = scDay + "-" + (new Date()).getHours() + ":" + (new Date()).getMinutes();
+      ref.child("sessions").child("backups").child(backupKey).child("startups").child(startupName).set({
+        mentors: mentorPerHour,
+        comments: startupComments
+      }, function(error) {
+        if (error) {
+          console.error("Schedule backups could not be saved :( Details: " + error);
+        }
+      });
+      readLocalScheduleBackups();
     });
     isInSaveOperation = false;
-    console.log("=== is going OUT of save");
+    console.log("=== Going OUT of save");
   }
 
+  //
+  //
+  //
+  function readLocalScheduleBackups() {
+    var readRef = firebase.database().ref("sessions/backups");
+    readRef.orderByKey().once("value", function(snapshot) {
+      var backups = snapshot.val();
+      if (backups !== null) {
+        var html = '<label for="schedule-backup-sel">Backups</label> <div class="input-group"> <select id="schedule-backup-sel">';
+        $.each(backups, function(key, sData) {
+          html += '<option>' + key + '</option>';
+        }); 
+        html += "</select> &nbsp;&nbsp; <button id='reload-schedule-backup-but' class='btn btn-info'>Reload</button> </div>";
+        $("#schedule-ops").html(html);
+      }
+    });
+  }
+
+  //
+  // Trigger for the reload button
+  //
+  $('#schedule-local-ops').on('click', '#reload-schedule-backup-but', function(event) {
+    var backupKey = $("#schedule-backup-sel :selected").text();
+    reloadLocalScheduleToGrid(backupKey);
+  });
+
+  //
+  // reloading the schedule into the UI (=grid of startups/mentors)
+  //
+  function reloadLocalScheduleToGrid(backupKey) {
+    bootbox.confirm("<h5>You are going to reload an older schedule for " + backupKey +
+        "</h5><h3>Are you sure?</h3>", function(result) {
+      if (result === true) {
+        var readRef = firebase.database().ref("sessions/backups/" + backupKey + "/startups");
+        reloadSchedule(readRef);
+      }
+    });
+
+    $('body').scrollTop(60);
+  }
+
+  // 
+  // Remove all the backups from localstorage
+  //
+  $("#remove-allbackups").click(function() {
+    removeAllbackups();
+  });
+  
+  //
+  //
+  //
+  function removeAllbackups() {
+    ref.child("sessions/backups/").set({}, function(error) {
+      if (error) {
+        bootbox.alert("Could not clean all the backups :/ Details: " + error);
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'schedule-admin-error',
+          eventAction: 'clean-startups-schedule',
+          eventLabel: 'for all backups action'
+        });
+      }
+    });
+    $("#schedule-ops").html("");
+    bootbox.alert("Done removing all the backups! 😎");
+  }
   //
   // Allow to copy comments from the first startup to all the rest 😎
   //
@@ -307,9 +391,8 @@
   //
   // reload the schedule from firebase
   //
-  function reloadSchedule(scDay) {
-    var readRef = firebase.database().ref("sessions/" + scDay + "/startups");
-    //new Firebase("https://lpa-1.firebaseio.com/sessions/" + scDay + "/startups");
+  function reloadSchedule(readRef) {
+    
     readRef.orderByKey().once("value", function(snapshot) {
       if (isInSaveOperation) {
         console.log("no no not yet - still writing to firebase");
@@ -357,7 +440,8 @@
       $("#schedule-day-1").focus();
       return;
     }
-    reloadSchedule(scDay);
+    var readRef = firebase.database().ref("sessions/" + scDay + "/startups");
+    reloadSchedule(readRef);
   });
 
   //
@@ -1015,7 +1099,7 @@
     $("#st-video-url").val("");
     $("#st-history-url").val("");
     $("#st-twitter-field").val(""),
-      $("#st-name-field").focus();
+    $("#st-name-field").focus();
     $('body').scrollTop(60);
   });
 
@@ -1764,10 +1848,9 @@
   }
 
   //
+  // a = new Date()
   //
-  //
-  function timeConverter(UNIX_timestamp) {
-    var a = new Date(UNIX_timestamp * 1000);
+  function timeConverter(a) {
     var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     var year = a.getFullYear();
     var month = months[a.getMonth()];
@@ -1775,7 +1858,7 @@
     var min = a.getMinutes();
     var hour = a.getHours();
     var sec = a.getSeconds();
-    var time = date + '/' + month + '/' + year + ' - ' + hour + ':' + min + ':' + sec;
+    var time = date + '-' + month + '-' + year + '-' + hour + ':' + min + ':' + sec;
     return time;
   }
 
@@ -1800,6 +1883,17 @@
         } else if (typeof(console) !== 'undefined' && console.error) {
           console.error(error);
         }
+      });
+    });
+  }
+
+  //
+  // Copy a node
+  //
+  function copyFbRecord(oldRef, newRef) {    
+    oldRef.once('value', function(snap)  {
+      newRef.set( snap.val(), function(error) {
+        if( error && typeof(console) !== 'undefined' && console.error ) {  console.error(error); }
       });
     });
   }
