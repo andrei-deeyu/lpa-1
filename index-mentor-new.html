@@ -40,29 +40,21 @@
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.blue_grey-orange.min.css" />
+
+  <link rel="stylesheet" href="css/mentor-new.css" />
   <script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
 </head>
 
 <body>
 
-  <style>
-  <!-- TODO: Remove styles to its own stylesheet -->
-    section.lpa-test {
-      margin: 30px;
-    }
-    .lpa-template {
-      display: none;
-    }
-  </style>
-
-  <div class="demo-layout-waterfall mdl-layout mdl-js-layout">
-    <header class="mdl-layout__header mdl-layout__header--waterfall">
+  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <header class="mdl-layout__header mdl-layout__header--waterfall lpa-header">
       <!-- Top row, always visible -->
       <div class="mdl-layout__header-row">
         <!-- Title -->
         <span class="mdl-layout-title">Launchpad Mentor</span>
         <div class="mdl-layout-spacer"></div>
-        <nav class="mdl-navigation" id="lpa-main-nav">
+        <nav class="mdl-navigation lpa-main-nav" id="lpa-main-nav">
           <a class="mdl-navigation__link" href="" id="lpa-sign-out">Sign out</a>
           <a class="mdl-navigation__link" href="" data-subpage="schedule">Schedule</a>
           <a class="mdl-navigation__link" href="" data-subpage="startups">Startups</a>
@@ -70,15 +62,17 @@
           <a class="mdl-navigation__link" href="" data-subpage="mentors">Mentors</a>
           <a class="mdl-navigation__link" href="" data-subpage="profile">My Profile</a>
         </nav>
+        <nav class="mdl-navigation lpa-sign-in-nav">
+          <a class="mdl-navigation__link" href="">Sign in</a>
+        </nav>
       </div>
       <!-- Bottom row, not visible on scroll -->
       <div class="mdl-layout__header-row">
-        <div>some great intro here</div>
-        <div class="mdl-layout-spacer"></div>
-        <!-- Navigation -->
-        <nav class="mdl-navigation">
-          <a class="mdl-navigation__link" href="">Mentor Guidelines</a>
-        </nav>
+        <div>
+          <span class="lpa-header-title">Launchapd Bootcamp 2016</span>
+          <span class="lpa-header-info">SEPTEMBER 9-10, 2016</span>
+          <span class="lpa-header-info">Join the startup community. Be a mentor!</span>
+        </div>
       </div>
     </header>
     <div class="mdl-layout__drawer">
@@ -91,24 +85,29 @@
       </nav>
     </div>
     <main class="mdl-layout__content">
-      <div class="page-content">
 
-        <section class="lpa-sign-in-section" id="lpa-sign-in-section">
+      <div class="lpa-page-content">
+
+        <section class="lpa-sign-in-section lpa-subpage lpa-active" id="lpa-signin-subpage">
+          <p>Welcome to the mentor site! Please sign in to view your schedule.</p>
           <button id="lpa-sign-in" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
             Sign in
           </button>
         </section>
 
+
         <section class="lpa-subpage" id="lpa-schedule-subpage">
-          <h2>Schedule</h2>
+          <h1>Schedule</h1>
+          <p>Placeholder for schedule page content.</p>
         </section>
 
         <section class="lpa-subpage" id="lpa-startups-subpage">
-          <h2>Startups</h2>
+          <h1>Startups</h1>
+          <p>Placeholder for startups page content.</p>
         </section>
 
         <section class="lpa-subpage" id="lpa-attendees-subpage">
-          <h2>Attendees</h2>
+          <h1>Attendees</h1>
           <ul class="mdl-list" id="lpa-attendees-list">
           </ul>
           <li class="mdl-list__item mdl-list__item--three-line lpa-template" id="lpa-attendees-list-template">
@@ -126,7 +125,7 @@
         </section>
 
         <section class="lpa-subpage" id="lpa-mentors-subpage">
-        <h2>Mentors</h2>
+        <h1>Mentors</h1>
         <li class="mdl-list__item mdl-list__item--three-line lpa-template" id="lpa-mentors-list-template">
           <span class="mdl-list__item-primary-content">
             <i class="material-icons mdl-list__item-avatar">person</i>
@@ -143,7 +142,8 @@
         </section>
 
         <section class="lpa-subpage" id="lpa-profile-subpage">
-          <h2>My profile</h2>
+          <h1>My profile</h1>
+          <p>Placeholder for my profile page content.</p>
         </section>
 
       </div>

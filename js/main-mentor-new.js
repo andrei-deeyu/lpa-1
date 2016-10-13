@@ -17,7 +17,6 @@
   const ELEMENTS = {
     signOut: document.getElementById('lpa-sign-out'),
     signIn: document.getElementById('lpa-sign-in'),
-    signInSection: document.getElementById('lpa-sign-in-section'),
     mentorsListTemplate: document.getElementById('lpa-mentors-list-template'),
     mentorsList: document.getElementById('lpa-mentors-list'),
     attendeesListTemplate: document.getElementById('lpa-attendees-list-template'),
@@ -30,13 +29,11 @@
    */
   let UI = {
     updateUser: function(user) {
+      document.body.classList.toggle('lpa-signed-in', !!user);
       if (user) {
-        ELEMENTS.signOut.style.display = 'block';
-        // TODO: Animate sign in section.
-        ELEMENTS.signInSection.style.display = 'none';
+        UI.showSubpage('schedule');
       } else {
-        ELEMENTS.signOut.style.display = 'none';
-        ELEMENTS.signInSection.style.display = 'block';
+        UI.showSubpage('signin');
         ELEMENTS.mentorsList.innerHTML = '';
       }
     },
@@ -67,10 +64,10 @@
     },
     showSubpage: function(subpageName) {
       document.querySelectorAll('.lpa-subpage').forEach(function(subpage) {
-        subpage.style.display = 'none';
+        subpage.classList.remove('lpa-active');
       });
       let subpage = document.getElementById('lpa-' + subpageName + '-subpage');
-      subpage.style.display = 'block';
+      subpage.classList.add('lpa-active');
     }
   };
 
