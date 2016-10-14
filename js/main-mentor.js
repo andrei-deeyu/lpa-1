@@ -217,7 +217,7 @@
         $("#mentor-schedule-list").html(html);
         $(".note-slider").slider({ tooltip: 'always' });
       } else {
-        bootbox.alert("Could not find anything for this date.");
+        bootbox.alert("Could not find anything for this date. <br>Wanna add notes to an unscheduled meeting? <br> <button id='add-unschedule-notes' class='btn btn-info'> Yes! Add notes</button>");
         $("#mentor-schedule-list").html("");
         ga('send', {
           hitType: 'event',
@@ -227,6 +227,42 @@
         });
       }
     });
+  });
+
+  function addUnscheduledNotes() {
+    bootbox.hideAll();
+    var key = "temp";
+    var meetingNotesKey = "todo";
+    var startupBackupNotesKey = "todo";
+    var startupNotesKey  = "tdoo";
+
+    var selHtml = getStartupSelect();
+
+    bootbox.alert('<label>The Startup </label>  ' + selHtml + '<h5><label><br>Did the attendees were open and receptive? (1-5)</label></h5><br>\
+      <input type="text" class="note-slider" id="note-receptive-' + key + 
+      '" name="note-receptive" data-provide="slider" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide"> \
+      <br><h5> <label>Was the session effective? (1-5)</label></h5><br> \
+      <input type="text" class="note-slider" id="note-effective-' + key + 
+      '" name="note-effective" data-provide="slider" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide"> \
+      <br><br> \
+      What did you talked about? \
+      <textarea id="' + key + '" class="form-control col-lg-10 meeting-notes-text" data-key="' + meetingNotesKey +
+      '" data-startup="' + startupNotesKey + '" data-notes-backup="' + startupBackupNotesKey +
+      '" data-starttime="' +  timeConverter( new Date()) + '" data-endtime="' + timeConverter (new Date()) + '" name="meeting-notes">' +
+      '</textarea>  <br>What are the action items? \
+      <textarea id="ai-' + key + '" class="form-control col-lg-10 meeting-notes-text" data-key="ai-' + meetingNotesKey +
+      '" data-startup="ai-' + startupNotesKey + '" data-notes-backup="ai-' + startupBackupNotesKey +
+      '" name="meeting-notes">' +
+      '</textarea> <br><button class="btn btn-warning meeting-save-button">Save Notes</button> </p>');
+    $('.note-slider').slider({ tooltip: 'always' });
+    $('#att-startup-list-select').selectpicker();
+  }
+
+  //
+  // Ad hoc notes for unscheduled meeting
+  //
+  $('body').on('click', '#add-unschedule-notes', function(event) {
+    addUnscheduledNotes();
   });
 
   //
@@ -861,10 +897,10 @@
   $("#schedule-day-1").val(new Date().toDateInputValue());
 
   //
+  // a = new Date()
   //
-  //
-  function timeConverter(UNIX_timestamp) {
-    var a = new Date(UNIX_timestamp * 1000);
+  function timeConverter(a) {
+    //var a = new Date(UNIX_timestamp * 1000);
     var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     var year = a.getFullYear();
     var month = months[a.getMonth()];
