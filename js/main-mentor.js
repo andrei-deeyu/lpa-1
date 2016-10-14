@@ -217,7 +217,8 @@
         $("#mentor-schedule-list").html(html);
         $(".note-slider").slider({ tooltip: 'always' });
       } else {
-        bootbox.alert("Could not find anything for this date. <br>Wanna add notes to an unscheduled meeting? <br> <button id='add-unschedule-notes' class='btn btn-info'> Yes! Add notes</button>");
+        bootbox.alert("<h3>Could not find anything for this date.</h3> <br><h4>Unscheduled meeting? \
+         <button id='add-unschedule-notes' class='btn btn-info'> Yes! Add notes</button></h4>");
         $("#mentor-schedule-list").html("");
         ga('send', {
           hitType: 'event',
@@ -229,6 +230,9 @@
     });
   });
 
+  //
+  //
+  //
   function addUnscheduledNotes() {
     bootbox.hideAll();
     var key = "temp";
@@ -237,8 +241,8 @@
     var startupNotesKey  = "tdoo";
 
     var selHtml = getStartupSelect();
-
-    bootbox.alert('<label>The Startup </label>  ' + selHtml + '<h5><label><br>Did the attendees were open and receptive? (1-5)</label></h5><br>\
+    bootbox.confirm({
+      message: '<label>The Startup </label>  ' + selHtml + '<h5><label><br>Did the attendees were open and receptive? (1-5)</label></h5><br>\
       <input type="text" class="note-slider" id="note-receptive-' + key + 
       '" name="note-receptive" data-provide="slider" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide"> \
       <br><h5> <label>Was the session effective? (1-5)</label></h5><br> \
@@ -253,7 +257,24 @@
       <textarea id="ai-' + key + '" class="form-control col-lg-10 meeting-notes-text" data-key="ai-' + meetingNotesKey +
       '" data-startup="ai-' + startupNotesKey + '" data-notes-backup="ai-' + startupBackupNotesKey +
       '" name="meeting-notes">' +
-      '</textarea> <br><button class="btn btn-warning meeting-save-button">Save Notes</button> </p>');
+      '</textarea></p>',
+      buttons: {
+          confirm: {
+              label: 'Save Notes',
+              className: 'btn-success'
+          },
+          cancel: {
+              label: 'Cancel',
+              className: 'btn-danger'
+          }
+      },
+      callback: function (result) {
+          
+          var selStartup = $("#att-startup-list-select option:selected").text();
+          console.log("Saving the notes res: " + JSON.stringify(result) + " startup: " + selStartup);
+      }
+    });
+
     $('.note-slider').slider({ tooltip: 'always' });
     $('#att-startup-list-select').selectpicker();
   }
