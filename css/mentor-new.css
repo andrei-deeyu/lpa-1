@@ -1,0 +1,76 @@
+body {
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+}
+
+.lpa-template {
+  display: none;
+}
+
+.lpa-subpage {
+  transition: opacity 0.6s cubic-bezier(0, 0, 0.3, 1);
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: -1;
+  /* Add break points */
+  padding: 20px 80px;
+  opacity: 0;
+}
+
+.lpa-subpage.lpa-active {
+  opacity: 1;
+  z-index: 1;
+}
+
+.lpa-subpage h1 {
+  font-size: 1.5em;
+}
+
+.lpa-page-content {
+  position: relative;
+  width: 100%;
+}
+
+.lpa-sign-in-section {
+  height: 100px;
+  padding: 30px;
+  text-align: center;
+  background: rgb(0, 188, 212);
+}
+
+.lpa-header {
+  background: url(../img/city-hd.jpeg) center/cover;
+  min-height: 230px;
+}
+
+.lpa-header-info {
+  font-size: 1.1em;
+  display: block;
+  padding: .1em 0;
+}
+
+.lpa-header-title {
+  font-size: 1.5em;
+  display: block;
+  padding: 4em 0 1em 0;
+}
+
+.lpa-main-nav {
+  opacity: 0;
+}
+
+.lpa-signed-in .lpa-sign-in-section {
+  opacity: 0;
+}
+
+.lpa-signed-in .lpa-page-content {
+  position: relative;
+}
+
+.lpa-signed-in .lpa-main-nav {
+  opacity: 1;
+}
+
+.lpa-signed-in .lpa-sign-in-nav {
+  display: none;
+}

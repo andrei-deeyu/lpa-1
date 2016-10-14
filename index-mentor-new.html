@@ -1,0 +1,196 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en">
+<!--<![endif]-->
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="author" content="Green Ido | @greenido | plus.google.com/+greenido">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LPA - Mentor</title>
+  <meta name="description" content="A note for our LPA">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel=manifest href=manifest.json>
+  <meta name=mobile-web-app-capable content=yes>
+  <meta name=application-name content="LPA-1">
+  <link rel=icon sizes=192x192 href=img/pencil-192.png>
+  <meta name=apple-mobile-web-app-capable content=yes>
+  <meta name=apple-mobile-web-app-status-bar-style content=black>
+  <meta name=apple-mobile-web-app-title content="LPA">
+  <link rel=apple-touch-icon href=img/pencil-192.png>
+  <meta name=msapplication-TileImage content=img/pencil-144.png>
+  <meta name=msapplication-TileColor content=#2196F3>
+  <meta name=theme-color content=#2196F3>
+  <meta property=og:title content="LPA">
+  <meta property=og:type content=website>
+  <meta property=og:image content=https://lpa-1.firebaseapp.com/img/pencil-192.png>
+  <meta property=og:url content="https://lpa-1.firebaseapp.com/">
+  <meta property=og:description content="Our LPA web app! Smile!">
+  <meta name=twitter:card content=summary>
+  <meta name=twitter:url content="https://lpa-1.firebaseapp.com">
+  <meta name=twitter:title content="LPA">
+  <meta name=twitter:description content="Our LPA web app! Smile!">
+  <meta name=twitter:image content=https://lpa-1.firebaseapp.com/img/pencil-192.png>
+  <meta name=twitter:creator content=@greenido>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.blue_grey-orange.min.css" />
+
+  <link rel="stylesheet" href="css/mentor-new.css" />
+  <script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
+</head>
+
+<body>
+
+  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <header class="mdl-layout__header mdl-layout__header--waterfall lpa-header">
+      <!-- Top row, always visible -->
+      <div class="mdl-layout__header-row">
+        <!-- Title -->
+        <span class="mdl-layout-title">Launchpad Mentor</span>
+        <div class="mdl-layout-spacer"></div>
+        <nav class="mdl-navigation lpa-main-nav" id="lpa-main-nav">
+          <a class="mdl-navigation__link" href="" id="lpa-sign-out">Sign out</a>
+          <a class="mdl-navigation__link" href="" data-subpage="schedule">Schedule</a>
+          <a class="mdl-navigation__link" href="" data-subpage="startups">Startups</a>
+          <a class="mdl-navigation__link" href="" data-subpage="attendees">Attendees</a>
+          <a class="mdl-navigation__link" href="" data-subpage="mentors">Mentors</a>
+          <a class="mdl-navigation__link" href="" data-subpage="profile">My Profile</a>
+        </nav>
+        <nav class="mdl-navigation lpa-sign-in-nav">
+          <a class="mdl-navigation__link" href="">Sign in</a>
+        </nav>
+      </div>
+      <!-- Bottom row, not visible on scroll -->
+      <div class="mdl-layout__header-row">
+        <div>
+          <span class="lpa-header-title">Launchapd Bootcamp 2016</span>
+          <span class="lpa-header-info">SEPTEMBER 9-10, 2016</span>
+          <span class="lpa-header-info">Join the startup community. Be a mentor!</span>
+        </div>
+      </div>
+    </header>
+    <div class="mdl-layout__drawer">
+      <span class="mdl-layout-title">Title</span>
+      <nav class="mdl-navigation">
+        <a class="mdl-navigation__link" href="">Link</a>
+        <a class="mdl-navigation__link" href="">Link</a>
+        <a class="mdl-navigation__link" href="">Link</a>
+        <a class="mdl-navigation__link" href="">Link</a>
+      </nav>
+    </div>
+    <main class="mdl-layout__content">
+
+      <div class="lpa-page-content">
+
+        <section class="lpa-sign-in-section lpa-subpage lpa-active" id="lpa-signin-subpage">
+          <p>Welcome to the mentor site! Please sign in to view your schedule.</p>
+          <button id="lpa-sign-in" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+            Sign in
+          </button>
+        </section>
+
+
+        <section class="lpa-subpage" id="lpa-schedule-subpage">
+          <h1>Schedule</h1>
+          <p>Placeholder for schedule page content.</p>
+        </section>
+
+        <section class="lpa-subpage" id="lpa-startups-subpage">
+          <h1>Startups</h1>
+          <p>Placeholder for startups page content.</p>
+        </section>
+
+        <section class="lpa-subpage" id="lpa-attendees-subpage">
+          <h1>Attendees</h1>
+          <ul class="mdl-list" id="lpa-attendees-list">
+          </ul>
+          <li class="mdl-list__item mdl-list__item--three-line lpa-template" id="lpa-attendees-list-template">
+            <span class="mdl-list__item-primary-content">
+              <i class="material-icons mdl-list__item-avatar">person</i>
+              <span data-field="name">Placeholder name</span>
+              <span class="mdl-list__item-text-body" data-field="bio">
+                Placeholder bio.
+              </span>
+            </span>
+            <span class="mdl-list__item-secondary-content">
+              <a class="mdl-list__item-secondary-action" href="#"><i class="material-icons">star</i></a>
+            </span>
+          </li>
+        </section>
+
+        <section class="lpa-subpage" id="lpa-mentors-subpage">
+        <h1>Mentors</h1>
+        <li class="mdl-list__item mdl-list__item--three-line lpa-template" id="lpa-mentors-list-template">
+          <span class="mdl-list__item-primary-content">
+            <i class="material-icons mdl-list__item-avatar">person</i>
+            <span data-field="name">Placeholder name</span>
+            <span class="mdl-list__item-text-body" data-field="bio">
+              Placeholder bio.
+            </span>
+          </span>
+          <span class="mdl-list__item-secondary-content">
+            <a class="mdl-list__item-secondary-action" href="#"><i class="material-icons">star</i></a>
+          </span>
+        </li>
+        <ul class="mdl-list" id="lpa-mentors-list"></ul>
+        </section>
+
+        <section class="lpa-subpage" id="lpa-profile-subpage">
+          <h1>My profile</h1>
+          <p>Placeholder for my profile page content.</p>
+        </section>
+
+      </div>
+    </main>
+
+    <footer class="mdl-mini-footer">
+      <div class="mdl-mini-footer__left-section">
+        <div class="mdl-logo">
+          Launchpad Accelerator
+        </div>
+        <ul class="mdl-mini-footer__link-list">
+          <li><a href="#">Help</a></li>
+          <li><a href="#">Guidelines</a></li>
+          <li><a href="#">Feedback</a></li>
+          <li><a href="#">Bootcamp</a></li>
+        </ul>
+      </div>
+      <div class="mdl-mini-footer__right-section">
+        <button class="mdl-mini-footer__social-btn"></button>
+        <button class="mdl-mini-footer__social-btn"></button>
+        <button class="mdl-mini-footer__social-btn"></button>
+      </div>
+    </footer>
+
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/3.0.4/firebase.js"></script>
+  <script>
+  (function(i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r;
+    i[r] = i[r] || function() {
+      (i[r].q = i[r].q || []).push(arguments)
+    }, i[r].l = 1 * new Date();
+    a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0];
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m)
+  })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+  ga('create', 'UA-76781519-1', 'auto');
+  ga('send', 'pageview');
+  </script>
+
+  <!-- TODO: concatenate for production -->
+  <script src="js/firebase.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main-mentor-new.js"></script>
+</body>
+</html>
