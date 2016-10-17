@@ -263,14 +263,14 @@
       '" name="meeting-notes">' +
       '</textarea> <button id="adhoc-save-but">Save</button</p>',
       buttons: {
-          confirm: {
-              label: 'Save Notes',
-              className: 'btn-success'
-          },
-          cancel: {
-              label: 'Cancel',
-              className: 'btn-danger'
-          }
+        confirm: {
+            label: 'Save Notes',
+            className: 'btn-success'
+        },
+        cancel: {
+            label: 'Cancel',
+            className: 'btn-danger'
+        }
       },
       callback: function (result) {
         if (result) {
@@ -283,9 +283,9 @@
 
           $("#" + key).attr('data-startup', startupNotesKey);
           $("#ai-" + key).attr('data-startup', 'ai-' + startupNotesKey);
-          console.log("Saving startup: " + selStartup + " stkey: " + 
-            $("#"+key).attr('data-notes-backup') + " startupNotesKey: " +   $("#"+key).attr('data-startup') + 
-            " mentor: "+ curMentorEmail + " key: "+key);
+          // console.log("Saving startup: " + selStartup + " stkey: " + 
+          //   $("#"+key).attr('data-notes-backup') + " startupNotesKey: " +   $("#"+key).attr('data-startup') + 
+          //   " mentor: "+ curMentorEmail + " key: "+key);
           saveMeetingNotes( $("#adhoc-save-but"), selStartup);  
         }
       }
@@ -468,6 +468,12 @@
       }, function (error) {
         console.log("Error in saving the startup: " + startupName + " for ad hoc meeting. Err: "+ error);
       });
+      ga('send', {
+      hitType: 'event',
+      eventCategory: 'startup-notes-mentor',
+      eventAction: 'save-notes-ad-hoc-meeting',
+      eventLabel: 'keyToNotesBackup: ' + keyToNotesBackup
+    });
     }
 
     // save under the mentor - this is where we fetch the schedule for the mentors

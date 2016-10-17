@@ -155,7 +155,6 @@
     return false;
   });
 
-
   //////////////////////////////////////////////////////////////////////////////
   // Fetch schedule
   //////////////////////////////////////////////////////////////////////////////
@@ -183,7 +182,8 @@
         //console.log("The sessions: " + JSON.stringify(sessions));
         var html = "";
         $.each(sessions, function(key, scData) {
-          // per startup set the mentors + comments
+          // per startup set the mentors + comments. 
+          // key: hour-1 up to hour-9
           var meetingNotesKey = scDay + "/mentors/" + curMentorEmail + "/" + key + "/notes";
           var startupNotesKey = scDay + "/startups/" + scData.startup + "/notes/" + curMentorEmail + "/" + key;
           var startupBackupNotesKey = "/startups/" + scData.startup + "/" + scDay + "/notes/" + curMentorEmail + "/" + key;
@@ -218,7 +218,8 @@
         $("#mentor-schedule-list").html(html);
         $(".note-slider").slider({ tooltip: 'always' });
       } else {
-        bootbox.alert("Could not find anything for this date.");
+        bootbox.alert("<h3>Could not find anything for this date.</h3> <br>Unscheduled meeting? \
+         You can click on 'Ad Hoc Meeting' button.<br>Please check with the organizers before you do it. <br>Thanks!");
         $("#mentor-schedule-list").html("");
         ga('send', {
           hitType: 'event',
@@ -228,6 +229,77 @@
         });
       }
     });
+  });
+
+  //
+  // let mentor take notes on ad hoc session
+  //
+  function addUnscheduledNotes() {
+    bootbox.hideAll();
+    var scDay = $("#schedule-day-1").val();
+    var key = "hour-" + Date.now();
+    var selStartup = "todo";
+    var meetingNotesKey = scDay + "/mentors/" + curMentorEmail + "/" + key + "/notes";
+    var startupBackupNotesKey = "/startups/" + selStartup + "/" + scDay + "/notes/" + curMentorEmail + "/" + key;
+    var startupNotesKey = scDay + "/startups/" + selStartup + "/notes/" + curMentorEmail + "/" + key;
+    var startTime = (new Date()).getHours() + ":00";
+    var endTime = (new Date()).getHours() + ":30";
+    var selHtml = getStartupSelect();
+    bootbox.confirm({
+      message: '<label>The Startup </label>  ' + selHtml + '<h5><label><br>Did the attendees were open and receptive? (1-5)</label></h5><br>\
+      <input type="text" class="note-slider" id="note-receptive-' + key + 
+      '" name="note-receptive" data-provide="slider" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide"> \
+      <br><h5> <label>Was the session effective? (1-5)</label></h5><br> \
+      <input type="text" class="note-slider" id="note-effective-' + key + 
+      '" name="note-effective" data-provide="slider" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide"> \
+      <br><br> \
+      What did you talked about? \
+      <textarea id="' + key + '" class="form-control col-lg-10 meeting-notes-text" data-key="' + meetingNotesKey +
+      '" data-startup="' + startupNotesKey + '" data-notes-backup="' + startupBackupNotesKey +
+      '" data-starttime="' +  startTime + '" data-endtime="' + endTime + '" name="meeting-notes">' +
+      '</textarea>  <br>What are the action items? \
+      <textarea id="ai-' + key + '" class="form-control col-lg-10 meeting-notes-text" data-key="ai-' + meetingNotesKey +
+      '" data-startup="ai-' + startupNotesKey + '" data-notes-backup="ai-' + startupBackupNotesKey +
+      '" name="meeting-notes">' +
+      '</textarea> <button id="adhoc-save-but">Save</button</p>',
+      buttons: {
+        confirm: {
+            label: 'Save Notes',
+            className: 'btn-success'
+        },
+        cancel: {
+            label: 'Cancel',
+            className: 'btn-danger'
+        }
+      },
+      callback: function (result) {
+        if (result) {
+          var selStartup = $("#att-startup-list-select option:selected").text();
+          startupBackupNotesKey = "/startups/" + selStartup + "/" + scDay + "/notes/" + curMentorEmail + "/" + key;
+          startupNotesKey = scDay + "/startups/" + selStartup + "/notes/" + curMentorEmail + "/" + key;
+
+          $("#" + key).attr('data-notes-backup', startupBackupNotesKey);
+          $("#ai-" + key).attr('data-notes-backup', 'ai-' + startupBackupNotesKey);
+
+          $("#" + key).attr('data-startup', startupNotesKey);
+          $("#ai-" + key).attr('data-startup', 'ai-' + startupNotesKey);
+          // console.log("Saving startup: " + selStartup + " stkey: " + 
+          //   $("#"+key).attr('data-notes-backup') + " startupNotesKey: " +   $("#"+key).attr('data-startup') + 
+          //   " mentor: "+ curMentorEmail + " key: "+key);
+          saveMeetingNotes( $("#adhoc-save-but"), selStartup);  
+        }
+      }
+    });
+
+    $('.note-slider').slider({ tooltip: 'always' });
+    $('#att-startup-list-select').selectpicker();
+  }
+
+  //
+  // Ad hoc notes for unscheduled meeting
+  //
+  $('body').on('click', '#add-unschedule-notes', function(event) {
+    addUnscheduledNotes();
   });
 
   //
@@ -339,8 +411,15 @@
   // Save the meeting notes
   //
   $('#mentor-schedule-list').on('click', '.meeting-save-button', function() {
+    saveMeetingNotes( $(this) ,"");
+  });
+
+  //
+  //
+  //
+  function saveMeetingNotes(thisElem, startupName) {
     // save the meeting notes
-    var tas = $(this).parent().find('textarea');
+    var tas = thisElem.parent().find('textarea');
     var notes = $("#" + tas[0].id).val();
     var actionItems = $("#" + tas[1].id).val();
     if (notes.length < 3) {
@@ -351,12 +430,15 @@
       bootbox.alert("<h4>Please write the action items that you gave the startups.</h4>");
       return;
     }
-    var sliders = $(this).parent().find('input');
+    var sliders = thisElem.parent().find('input');
     var receptiveVal = $("#" + sliders[0].id).slider('getValue');
     var effectiveVal = $("#" + sliders[1].id).slider('getValue');
 
+    // 2016-10-17/mentors/greenido@gmail-com/hour-1476728831043/notes
     var keyToSession = tas.data('key');
     var keyToStartup = tas.data('startup');
+
+    // /startups/Aliada/2016-10-17/notes/greenido@gmail-com/hour-1476728831043"
     var keyToNotesBackup = tas.data('notes-backup');
     var startTime = tas.data('starttime');
     var endTime = tas.data('endtime');
@@ -373,7 +455,28 @@
     });
     var curUnixTime = new Date().getTime();
     var disTime = new Date().toJSON().slice(0, 21);
-    // save under the mentor
+
+    if (startupName.length > 1) {
+      // we need to save the startup as we are on ad hoc meeting
+      var tmpInx = keyToSession.lastIndexOf('/');
+      var tmpKey = keyToSession.substring(0, tmpInx);
+      ref.child("sessions").child(tmpKey).set({  
+        startup: startupName,
+        location: "earth",
+        starttime: startTime,
+        endtime: endTime
+      }, function (error) {
+        console.log("Error in saving the startup: " + startupName + " for ad hoc meeting. Err: "+ error);
+      });
+      ga('send', {
+      hitType: 'event',
+      eventCategory: 'startup-notes-mentor',
+      eventAction: 'save-notes-ad-hoc-meeting',
+      eventLabel: 'keyToNotesBackup: ' + keyToNotesBackup
+    });
+    }
+
+    // save under the mentor - this is where we fetch the schedule for the mentors
     ref.child("sessions").child(keyToSession).set({
       receptive: receptiveVal,
       effective: effectiveVal,
@@ -435,30 +538,29 @@
         }, 1500);
       }
     });
-  });
-
+  }
   //
   // TODO: remove it once we don't need to support the old way of meeting times
   //
   function getHourAsRange(key) {
-    if (key.indexOf("1") > 0) {
-      return "9:00 - 10:00";
-    } else if (key.indexOf("2") > 0) {
+     if (key.indexOf("1") > 0) {
       return "10:00 - 11:00";
-    } else if (key.indexOf("3") > 0) {
+    } else if (key.indexOf("2") > 0) {
       return "11:00 - 12:00";
-    } else if (key.indexOf("4") > 0) {
+    } else if (key.indexOf("3") > 0) {
       return "12:00 - 13:00";
-    } else if (key.indexOf("5") > 0) {
+    } else if (key.indexOf("4") > 0) {
       return "13:00 - 14:00";
-    } else if (key.indexOf("6") > 0) {
+    } else if (key.indexOf("5") > 0) {
       return "14:00 - 15:00";
-    } else if (key.indexOf("7") > 0) {
+    } else if (key.indexOf("6") > 0) {
       return "15:00 - 16:00";
-    } else if (key.indexOf("8") > 0) {
+    } else if (key.indexOf("7") > 0) {
       return "16:00 - 17:00";
-    } else if (key.indexOf("9") > 0) {
+    } else if (key.indexOf("8") > 0) {
       return "17:00 - 18:00";
+    } else if (key.indexOf("9") > 0) {
+      return "18:00 - 19:00";
     } else {
       return "--";
     }
@@ -862,10 +964,10 @@
   $("#schedule-day-1").val(new Date().toDateInputValue());
 
   //
+  // a = new Date()
   //
-  //
-  function timeConverter(UNIX_timestamp) {
-    var a = new Date(UNIX_timestamp * 1000);
+  function timeConverter(a) {
+    //var a = new Date(UNIX_timestamp * 1000);
     var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     var year = a.getFullYear();
     var month = months[a.getMonth()];
