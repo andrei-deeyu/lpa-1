@@ -456,26 +456,6 @@
     var curUnixTime = new Date().getTime();
     var disTime = new Date().toJSON().slice(0, 21);
 
-    if (startupName.length > 1) {
-      // we need to save the startup as we are on ad hoc meeting
-      var tmpInx = keyToSession.lastIndexOf('/');
-      var tmpKey = keyToSession.substring(0, tmpInx);
-      ref.child("sessions").child(tmpKey).set({  
-        startup: startupName,
-        location: "earth",
-        starttime: startTime,
-        endtime: endTime
-      }, function (error) {
-        console.log("Error in saving the startup: " + startupName + " for ad hoc meeting. Err: "+ error);
-      });
-      ga('send', {
-      hitType: 'event',
-      eventCategory: 'startup-notes-mentor',
-      eventAction: 'save-notes-ad-hoc-meeting',
-      eventLabel: 'keyToNotesBackup: ' + keyToNotesBackup
-    });
-    }
-
     // save under the mentor - this is where we fetch the schedule for the mentors
     ref.child("sessions").child(keyToSession).set({
       receptive: receptiveVal,
@@ -538,6 +518,32 @@
         }, 1500);
       }
     });
+
+    if (startupName.length > 1) {
+      // we need to save the startup as we are on ad hoc meeting
+      var tmpInx = keyToSession.lastIndexOf('/');
+      var tmpKey = keyToSession.substring(0, tmpInx);
+      ref.child("sessions").child(tmpKey).set({  
+        startup: startupName,
+        location: "earth",
+        starttime: startTime,
+        endtime: endTime
+      }, function (error) {
+        if (error) {
+          console.log("Error in saving the startup: " + startupName + " for ad hoc meeting. Err: "+ error);
+        } else {
+          // let's reload the schedule with this new meeting/notes
+          $("#sc-reload-button").click();
+        }
+      });
+      ga('send', {
+      hitType: 'event',
+      eventCategory: 'startup-notes-mentor',
+      eventAction: 'save-notes-ad-hoc-meeting',
+      eventLabel: 'keyToNotesBackup: ' + keyToNotesBackup
+    });
+    }
+
   }
   //
   // TODO: remove it once we don't need to support the old way of meeting times
