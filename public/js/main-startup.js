@@ -36,20 +36,9 @@
   // AUTH fun
   // start the connection with firebase DB
   //
-  var ref = new Firebase("https://lpa-1.firebaseio.com");
+  var END_POINT_URL = "https://lpa-1.firebaseio.com";
+  var ref = new Firebase(END_POINT_URL);
   authUserData = null;
-
-  //
-  // Create a new Firebase reference, and a new instance of the Login client
-  //
-  var chatRef = new Firebase('https://lpa-1.firebaseio.com/chats/attendees');
-  //
-  // init the chat module
-  //
-  function initChat(authData) {
-    var chat = new FirechatUI(chatRef, document.getElementById('firechat-wrapper'));
-    chat.setUser(authData.uid, authData[authData.provider].displayName);
-  }
 
   //
   // Authentication actions
@@ -64,7 +53,6 @@
         $("#login-form").html("<img src='" + authData.google.profileImageURL + "' class='g-mentor-logo' alt='mentor logo' />");
         $("#logout-div").html("<form class='navbar-form navbar-right' role='form'><button id='logout-but' class='btn btn-success'>Logout</button> </form>");
 
-        // initChat(authData);
         curAttendeeEmail = authData.google.email;
         // so we could use it as firebase key
         curAttendeeEmail = curAttendeeEmail.replace(/\./g, "-");
@@ -174,7 +162,7 @@
       eventAction: 'reload-schedule: ' + curAttendeeStartup,
       eventLabel: 'for day: ' + scDay
     });
-    var readRef = new Firebase("https://lpa-1.firebaseio.com/sessions/" + scDay + "/startups/" + curAttendeeStartup);
+    var readRef = new Firebase(END_POINT_URL + "/sessions/" + scDay + "/startups/" + curAttendeeStartup);
     readRef.orderByKey().once("value", function(snapshot) {
       var sessions = snapshot.val();
       if (sessions != null) {
@@ -253,7 +241,7 @@
     var textareaKey = $(this).data("textarea-key");
     var listenSliderKey = "note-listen-" + textareaKey;
     var effectiveSliderKey = "note-effective-" + textareaKey;
-    var readRef = new Firebase("https://lpa-1.firebaseio.com/notes-backup/" + key);
+    var readRef = new Firebase(END_POINT_URL + "/notes-backup/" + key);
     ga('send', {
       hitType: 'event',
       eventCategory: 'startup-notes-attendee',
@@ -334,7 +322,7 @@
     if (key === "na@na-com") {
       return;
     }
-    var ref = new Firebase("https://lpa-1.firebaseio.com/mentors/" + key);
+    var ref = new Firebase(END_POINT_URL + "/mentors/" + key);
     ref.on("value", function(mentorSnap) {
       var mentor = mentorSnap.val();
       if (mentor != null) {
@@ -387,7 +375,7 @@
   // read the list of startups and display it
   //
   function readStartups(authData) {
-    var readRef = new Firebase("https://lpa-1.firebaseio.com/startups/");
+    var readRef = new Firebase(END_POINT_URL + "/startups/");
     readRef.orderByKey().on("value", function(snapshot) {
       //console.log("The Startups: " + JSON.stringify(snapshot.val()));
       $("#startups-list").html("");
@@ -427,7 +415,7 @@
   // read the list of mentors and display it
   //
   function readMentors(authData) {
-    var readRef = new Firebase("https://lpa-1.firebaseio.com/mentors/");
+    var readRef = new Firebase(END_POINT_URL + "/mentors/");
     readRef.orderByKey().on("value", function(snapshot) {
       //console.log("The mentors: " + JSON.stringify(snapshot.val()));
       $("#mentors-list").html("");
@@ -469,7 +457,7 @@
   // fetch mentor data base on its key (=phone number)
   //
   function fetchAttendee(key) {
-    var ref = new Firebase("https://lpa-1.firebaseio.com/attendees/" + key);
+    var ref = new Firebase(END_POINT_URL + "/attendees/" + key);
     ref.on("value", function(attSnap) {
       var att = attSnap.val();
       if (att != null) {
@@ -579,7 +567,7 @@
   // read the list of Attendees and display it
   //
   function readAttendees(authData) {
-    var readRef = new Firebase("https://lpa-1.firebaseio.com/attendees/");
+    var readRef = new Firebase(END_POINT_URL + "/attendees/");
     readRef.orderByKey().on("value", function(snapshot) {
       //console.log("The attendees: " + JSON.stringify(snapshot.val()));
       $("#att-list").html("");
