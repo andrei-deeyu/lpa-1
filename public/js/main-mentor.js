@@ -42,18 +42,6 @@
   authUserData = null;
 
   //
-  // Create a new Firebase reference, and a new instance of the Login client
-  //
-  //var chatRef = new Firebase('https://lpa-1.firebaseio.com/chats/mentors');
-  //
-  // Init the chat module
-  //
-  // function initChat(authData) {
-  //   var chat = new FirechatUI(chatRef, document.getElementById('firechat-wrapper'));
-  //   chat.setUser(authData.uid, authData[authData.provider].displayName);
-  // }
-
-  //
   // Authentication actions
   //
   ref.onAuth(function(authData) {
