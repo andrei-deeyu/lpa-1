@@ -22,8 +22,7 @@
     attendeesListTemplate: document.getElementById('lpa-attendees-list-template'),
     attendeesList: document.getElementById('lpa-attendees-list'),
     mainNav: document.getElementById('lpa-main-nav'),
-    message: document.getElementById('lpa-message'),
-    toast: document.getElementById('lpa-toast')
+    message: document.getElementById('lpa-message')
   };
 
   /**
@@ -70,9 +69,6 @@
       });
       let subpage = document.getElementById('lpa-' + subpageName + '-subpage');
       subpage.classList.add('lpa-active');
-    },
-    updateOnlineStatus: function() {
-
     }
   };
 
@@ -130,8 +126,5 @@
   window.addEventListener("online", function(e) {
     ELEMENTS.message.classList.add('hide');
   }, false);
-
-
-
 
 })(firebase, authModule);
