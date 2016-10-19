@@ -246,3 +246,7 @@ td {
   padding: 4px 0 0;
   height: 28px;
 }
+
+#adhoc-save-but {
+  display: none;
+}
