@@ -9,7 +9,7 @@
  * TODO: Add Transition animations.
  * TODO: Use ES6 modules.
  */
-(function(firebase) {
+(function(firebase, authModule) {
 
   /**
    * UI Elements cache.
@@ -21,7 +21,9 @@
     mentorsList: document.getElementById('lpa-mentors-list'),
     attendeesListTemplate: document.getElementById('lpa-attendees-list-template'),
     attendeesList: document.getElementById('lpa-attendees-list'),
-    mainNav: document.getElementById('lpa-main-nav')
+    mainNav: document.getElementById('lpa-main-nav'),
+    message: document.getElementById('lpa-message'),
+    toast: document.getElementById('lpa-toast')
   };
 
   /**
@@ -68,6 +70,9 @@
       });
       let subpage = document.getElementById('lpa-' + subpageName + '-subpage');
       subpage.classList.add('lpa-active');
+    },
+    updateOnlineStatus: function() {
+
     }
   };
 
@@ -100,5 +105,33 @@
       });
     }
   });
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+      // Registration was successful
+      console.log('ServiceWorker registration successful with scope: ', registration.scope);
+    }).catch(function(err) {
+      // registration failed :(
+      console.log('ServiceWorker registration failed: ', err);
+    });
+  }
+
+  if (!navigator.onLine) {
+    ELEMENTS.message.innerHTML = 'You are in offline mode. Data may be stale.';
+    ELEMENTS.message.classList.remove('hide');
+  };
+
+  window.addEventListener("offline", function(e) {
+    ELEMENTS.message.innerHTML = 'You are in offline mode. Data may be stale.';
+    ELEMENTS.message.classList.remove('hide');
+  }, false);
+
+
+  window.addEventListener("online", function(e) {
+    ELEMENTS.message.classList.add('hide');
+  }, false);
+
+
+
 
 })(firebase, authModule);
