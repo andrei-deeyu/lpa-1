@@ -444,6 +444,9 @@
     });
     var curUnixTime = new Date().getTime();
     var disTime = new Date().toJSON().slice(0, 21);
+    
+    // We hold the open/close button to trigger it when the save operation is done.
+    var closingButton = thisElem.parent().parent().find('button')[1];
 
     // save under the mentor - this is where we fetch the schedule for the mentors
     ref.child("sessions").child(keyToSession).set({
@@ -460,6 +463,7 @@
         bootbox.alert("Meeting notes for: " + keyToSession + " could not be saved :( Details: " + error);
       } else {
         $(".save-alert").show();
+        closingButton.click();
         setTimeout(function() {
           $(".save-alert").hide();
         }, 1500);
@@ -478,12 +482,7 @@
     }, function(error) {
       if (error) {
         bootbox.alert("Meeting notes for: " + keyToStartup + " could not be saved :( Details: " + error);
-      } else {
-        $(".save-alert").show();
-        setTimeout(function() {
-          $(".save-alert").hide();
-        }, 1500);
-      }
+      } 
     });
     // save under notes for backup in case we re-set the schedule
     // TODO: copy the notes to the new schedule?
@@ -499,13 +498,7 @@
     }, function(error) {
       if (error) {
         console.log("Meeting notes for: " + keyToStartup + " could not be saved :( Details: " + error);
-      } else {
-        console.log(keyToSession + " notes Saved to backup!");
-        $(".save-alert").show();
-        setTimeout(function() {
-          $(".save-alert").hide();
-        }, 1500);
-      }
+      } 
     });
 
     if (startupName.length > 1) {
