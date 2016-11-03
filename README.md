@@ -4,12 +4,12 @@
 The goal of these apps is to enable us to run a LPA event(s).
 We got three web apps:
 
-* [Admin Web App](https://lpa-1.firebaseapp.com/) - Used by the organizers to set the schedule for the mentors and startups. 
+* [Admin Web App](https://lpa-space.firebaseapp.com/) - Used by the organizers to set the schedule for the mentors and startups. 
   * The mentors and attendees emails/names should be added to the system so they will be 'white listed'.
   * The startups' details should be filled.
   * The schedule per day of the LPA.
 
-* [Mentor Web App](https://lpa-1.firebaseapp.com/index-mentor.html) - Used by the mentors to see who they are going to meet (=which startup) and when.
+* [Mentor Web App](https://lpa-space.firebaseapp.com/index-mentor.html) - Used by the mentors to see who they are going to meet (=which startup) and when.
   * The mentor should sign-in with their gmail account and fill their personal details.
   * Next, she can see what is the schedule per day.
   * After each session, the mentor should fill the notes' section. This will help us learn and improve.
@@ -17,7 +17,7 @@ We got three web apps:
   * You can use: https://bit.ly/lpa-m
 
 
-* [Attendee Web App](https://lpa-1.firebaseapp.com/startup.html) - Used by the startups/attendees to see who is the lovely mentor that will work with them.
+* [Attendee Web App](https://lpa-space.firebaseapp.com/startup.html) - Used by the startups/attendees to see who is the lovely mentor that will work with them.
   * The attendee should sign-in with their gmail account and fill their personal details.
   * Next, she can see what is the schedule per day.
   * After each session, the attendee should fill the notes' section. This will help us get better.
@@ -53,7 +53,7 @@ Also check: https://status.firebase.google.com/ just to be on the safe side.
 
 -----
 
-![LPA PWA](https://lpa-1.firebaseapp.com/img/lion-hd.jpeg)
+![LPA PWA](https://lpa-space.firebaseapp.com/img/lion-hd.jpeg)
 ####A lion runs the fastest when he is hungry. 
 -----
 

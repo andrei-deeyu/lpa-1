@@ -36,7 +36,7 @@
   // AUTH fun
   // start the connection with firebase DB
   //
-  var END_POINT_URL = "https://lpa-1.firebaseio.com";
+  var END_POINT_URL = "https://lpa-space.firebaseio.com";
   var ref = new Firebase(END_POINT_URL);
   authUserData = null;
 
