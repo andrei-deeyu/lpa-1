@@ -238,11 +238,11 @@
                 <br><h5> <label>Was the session effective? (1-5)</label></h5><br> \
                 <input type="text" class="note-slider" id="note-effective-' + key + '" name="note-effective" data-provide="slider" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide"> \
                 <br><br> \
-            What did you talked about? \
+            <b>What did you talked about?</b> \
             <textarea id="' + key + '" class="form-control col-lg-10 meeting-notes-text" data-key="' + meetingNotesKey +
             '" data-startup="' + startupNotesKey + '" data-notes-backup="' + startupBackupNotesKey +
             '" data-starttime="' + scData.starttime + '" data-endtime="' + scData.endtime + '" name="meeting-notes">' +
-            '</textarea>  <br>What are the action items? \
+            '</textarea>  <br><b>What are the action items?</b> \
             <textarea id="ai-' + key + '" class="form-control col-lg-10 meeting-notes-text" data-key="ai-' + meetingNotesKey +
             '" data-startup="ai-' + startupNotesKey + '" data-notes-backup="ai-' + startupBackupNotesKey +
             '" name="meeting-notes">' +
