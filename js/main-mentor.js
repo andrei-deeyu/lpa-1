@@ -2,7 +2,7 @@
 // JS for the mentor web app
 // Author: Ido Green 
 // Date: 4/2016
-// V0.8
+// V0.9
 //
 // A 🐱 App
 //
@@ -65,7 +65,6 @@
         return;
       }
 
-      // initChat(authData);
       authUserData = authData;
       localStorage.setItem("lpa1-g-authData", JSON.stringify(authData));
       $("#sc-reload-button").prop('disabled', false);
@@ -116,7 +115,6 @@
     firebase.auth().signInWithPopup(provider).then(function(result) {
       $("#spin").hide();
       var token = result.credential.accessToken;
-      
       var user = result.user;
       console.log("Got user: ", user);
       $("#sc-reload-button").prop('disabled', false);
@@ -137,25 +135,6 @@
         });
         $("#err-modal").modal('show');
     });
-
-    // ref.authWithOAuthPopup("google", function(error, authData) {
-    //   $("#spin").hide();
-    //   if (error) {
-    //     console.log("Login Failed!", error);
-    //     ga('send', {
-    //       hitType: 'event',
-    //       eventCategory: 'sign-in-mentor',
-    //       eventAction: 'sign-in-button',
-    //       eventLabel: 'authentication failed: ' + error,
-    //     });
-    //     $("#err-modal").modal('show');
-    //   } else {
-    //     $("#sc-reload-button").prop('disabled', false);
-    //     console.log("Authenticated with payload:", authData);
-    //   }
-    // }, {
-    //   scope: "email"
-    // });
   }
 
   //
