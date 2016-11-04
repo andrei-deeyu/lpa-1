@@ -38,15 +38,29 @@
   // start the connection with Firebase
   //
   var END_POINT_URL = "https://lpa-space.firebaseio.com";
-  var ref = new Firebase(END_POINT_URL);
+  var config = {
+    apiKey: "AIzaSyBZWmUQWKU1vs--CMbITX8lawdmCslHaJs",
+    authDomain: "lpa-space.firebaseapp.com",
+    databaseURL: END_POINT_URL,
+    storageBucket: "lpa-space.appspot.com",
+    messagingSenderId: "942783265132"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(config);
+  var ref = firebase.database().ref();
+  var provider = new firebase.auth.GoogleAuthProvider();
+  provider.addScope("email");
+  provider.addScope("profile");
+
   authUserData = null;
 
   //
   // Authentication actions
   //
-  ref.onAuth(function(authData) {
+  //ref.onAuth(function(authData) {
+  firebase.auth().onAuthStateChanged(function(authData) {
     if (authData) {
-      if (authData.provider !== "google") {
+      if (authData.providerData[0] && authData.providerData[0].providerId !== "google.com") {
         bootbox.alert("You must sign-in with your Google ID.<br>So first logout from the Admin App.<br>Thank you!");
         return;
       }
@@ -55,17 +69,17 @@
       authUserData = authData;
       localStorage.setItem("lpa1-g-authData", JSON.stringify(authData));
       $("#sc-reload-button").prop('disabled', false);
-      console.log("User " + authData.uid + " is logged in with " + authData.provider);
-      $("#login-form").html("<img src='" + authData.google.profileImageURL + "' class='g-mentor-logo' alt='mentor logo' />");
+      console.log("User " + authData.uid + " is logged in with " ,authData.providerData);
+      $("#login-form").html("<img src='" + authData.photoURL + "' class='g-mentor-logo' alt='mentor logo' />");
       $("#logout-div").html("<form class='navbar-form navbar-right' role='form'><button id='logout-but' class='btn btn-success'>Logout</button> </form>");
 
-      curMentorEmail = authData.google.email;
+      curMentorEmail = authData.email;
       curMentorEmail = curMentorEmail.replace(/\./g, "-");
       fetchMentor(curMentorEmail);
       // init our mentor with what we have from google-login
-      $("#logout-but").text("Logout " + authData.google.displayName);
-      $("#form-name-field").val(authData.google.displayName);
-      $("#form-pic-url").val(authData.google.profileImageURL);
+      $("#logout-but").text("Logout " + authData.displayName);
+      $("#form-name-field").val(authData.displayName);
+      $("#form-pic-url").val(authData.photoURL);
 
       readStartups(authData);
       readAttendees(authData);
@@ -98,24 +112,50 @@
   //
   function loginWithGoogle() {
     $("#spin").show();
-    ref.authWithOAuthPopup("google", function(error, authData) {
+
+    firebase.auth().signInWithPopup(provider).then(function(result) {
       $("#spin").hide();
-      if (error) {
-        console.log("Login Failed!", error);
+      var token = result.credential.accessToken;
+      
+      var user = result.user;
+      console.log("Got user: ", user);
+      $("#sc-reload-button").prop('disabled', false);
+      console.log("Authenticated with payload:", result);
+    }).catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      var email = error.email;
+      var credential = error.credential;
+      console.log("Login Failed!", error);
         ga('send', {
           hitType: 'event',
           eventCategory: 'sign-in-mentor',
           eventAction: 'sign-in-button',
-          eventLabel: 'authentication failed: ' + error,
+          eventLabel: 'authentication failed. errCode: ' + errorCode + 
+            ' msg: ' + errorMessage + ' email: ' + email  + ' credential: ' + credential
         });
         $("#err-modal").modal('show');
-      } else {
-        $("#sc-reload-button").prop('disabled', false);
-        console.log("Authenticated with payload:", authData);
-      }
-    }, {
-      scope: "email"
     });
+
+    // ref.authWithOAuthPopup("google", function(error, authData) {
+    //   $("#spin").hide();
+    //   if (error) {
+    //     console.log("Login Failed!", error);
+    //     ga('send', {
+    //       hitType: 'event',
+    //       eventCategory: 'sign-in-mentor',
+    //       eventAction: 'sign-in-button',
+    //       eventLabel: 'authentication failed: ' + error,
+    //     });
+    //     $("#err-modal").modal('show');
+    //   } else {
+    //     $("#sc-reload-button").prop('disabled', false);
+    //     console.log("Authenticated with payload:", authData);
+    //   }
+    // }, {
+    //   scope: "email"
+    // });
   }
 
   //
@@ -139,8 +179,14 @@
   // logout action
   //
   $("#logout-but").click(function() {
-    ref.unauth();
-    logoutUI();
+    //ref.unauth();
+    firebase.auth().signOut().then(function() {
+      // Sign-out successful
+      logoutUI();
+    }, function(error) {
+      // An error happened.
+      console.log("Could not sign-out. err: "+ error);
+    });
     return false;
   });
 
@@ -164,8 +210,9 @@
       eventLabel: 'for day: ' + scDay
     });
 
-    var readRef = new Firebase(END_POINT_URL + "/sessions/" + scDay + "/mentors/" + curMentorEmail);
-    readRef.orderByKey().once("value", function(snapshot) {
+    ref.child("sessions").child(scDay).child("mentors").child(curMentorEmail).once("value", function(snapshot) {
+    //var readRef = new Firebase(END_POINT_URL + "/sessions/" + scDay + "/mentors/" + curMentorEmail);
+    // readRef.orderByKey().once("value", function(snapshot) {
       var sessions = snapshot.val();
       if (sessions != null) {
         //console.log("The sessions: " + JSON.stringify(sessions));
@@ -299,7 +346,8 @@
     var textareaKey = $(this).data("textarea-key");
     var receptiveSliderKey = "note-receptive-" + textareaKey;
     var effectiveSliderKey = "note-effective-" + textareaKey;
-    var readRef = new Firebase(END_POINT_URL + "/notes-backup/" + key);
+    // var readRef = new Firebase(END_POINT_URL + "/notes-backup/" + key);
+    var readRef = firebase.database().ref("/notes-backup/" + key);
     ga('send', {
       hitType: 'event',
       eventCategory: 'startup-notes-mentor',
@@ -330,7 +378,8 @@
   //
   $('body').on('click', '.fetch-notes-button', function(event) {
     var startupName = $(this).data("key");
-    var readRef = new Firebase(END_POINT_URL + "/notes-backup/startups/" + startupName);
+    // var readRef = new Firebase(END_POINT_URL + "/notes-backup/startups/" + startupName);
+    var readRef = firebase.database().ref("/notes-backup/startups/" + startupName);
     ga('send', {
       hitType: 'event',
       eventCategory: 'startup-notes-mentor',
@@ -575,13 +624,14 @@
   // Read the list of startups and display it
   //
   function readStartups(authData) {
-    var readRef = new Firebase(END_POINT_URL + "/startups/");
+    var readRef = firebase.database().ref("startups");
+    // var readRef = new Firebase(END_POINT_URL + "/startups/");
     readRef.orderByKey().on("value", function(snapshot) {
       //console.log("The Startups: " + JSON.stringify(snapshot.val()));
       $("#startups-list").html("");
       startupNameList = [];
       snapshot.forEach(function(childSnapshot) {
-        var key = childSnapshot.key();
+        var key = childSnapshot.key;
         startupNameList.push(key);
         var startupData = childSnapshot.val();
         var startupLogoUrl = addhttp(startupData.logo);
@@ -736,12 +786,13 @@
   // read the list of mentors and display it
   //
   function readMentors(authData) {
-    var readRef = new Firebase(END_POINT_URL + "/mentors/");
+    var readRef = firebase.database().ref("mentors");
+    // var readRef = new Firebase(END_POINT_URL + "/mentors/");
     readRef.orderByKey().on("value", function(snapshot) {
       //console.log("The mentors: " + JSON.stringify(snapshot.val()));
       $("#mentors-list").html("");
       snapshot.forEach(function(childSnapshot) {
-        var key = childSnapshot.key();
+        var key = childSnapshot.key;
         var mentorData = childSnapshot.val();
         if (mentorData.name != "--N/A--") {
           var mPicUrl = addhttp(mentorData.pic);
@@ -801,7 +852,8 @@
   // fetch mentor data base on its key (=email)
   //
   function fetchMentor(key) {
-    var ref = new Firebase(END_POINT_URL + "/mentors/" + key);
+    var ref = firebase.database().ref("/mentors/" + key);
+    // var ref = new Firebase(END_POINT_URL + "/mentors/" + key);
     ref.on("value", function(mentorSnap) {
       var mentor = mentorSnap.val();
       if (mentor != null) {
@@ -848,11 +900,12 @@
   // read the list of Attendees and display it
   //
   function readAttendees(authData) {
-    var readRef = new Firebase(END_POINT_URL + "/attendees/");
+    var readRef = firebase.database().ref("/attendees/");
+    // var readRef = new Firebase(END_POINT_URL + "/attendees/");
     readRef.orderByKey().on("value", function(snapshot) {
       $("#att-list").html("");
       snapshot.forEach(function(childSnapshot) {
-        var key = childSnapshot.key();
+        var key = childSnapshot.key;
         var attData = childSnapshot.val();
         var picUrl = addhttp(attData.pic);
         var role = attData.role;
@@ -890,7 +943,8 @@
       return;
     }
     $('#startup-details-modal').modal('hide');
-    var ref = new Firebase(END_POINT_URL + "/mentors/" + key);
+    var ref = firebase.database().ref("mentors/" + key);
+    // var ref = new Firebase(END_POINT_URL + "/mentors/" + key);
     ref.on("value", function(mentorSnap) {
       var mentor = mentorSnap.val();
       if (mentor != null) {
