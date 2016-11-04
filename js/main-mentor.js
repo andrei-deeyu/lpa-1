@@ -211,8 +211,6 @@
     });
 
     ref.child("sessions").child(scDay).child("mentors").child(curMentorEmail).once("value", function(snapshot) {
-    //var readRef = new Firebase(END_POINT_URL + "/sessions/" + scDay + "/mentors/" + curMentorEmail);
-    // readRef.orderByKey().once("value", function(snapshot) {
       var sessions = snapshot.val();
       if (sessions != null) {
         //console.log("The sessions: " + JSON.stringify(sessions));
@@ -346,7 +344,6 @@
     var textareaKey = $(this).data("textarea-key");
     var receptiveSliderKey = "note-receptive-" + textareaKey;
     var effectiveSliderKey = "note-effective-" + textareaKey;
-    // var readRef = new Firebase(END_POINT_URL + "/notes-backup/" + key);
     var readRef = firebase.database().ref("/notes-backup/" + key);
     ga('send', {
       hitType: 'event',
@@ -378,7 +375,6 @@
   //
   $('body').on('click', '.fetch-notes-button', function(event) {
     var startupName = $(this).data("key");
-    // var readRef = new Firebase(END_POINT_URL + "/notes-backup/startups/" + startupName);
     var readRef = firebase.database().ref("/notes-backup/startups/" + startupName);
     ga('send', {
       hitType: 'event',
@@ -625,7 +621,6 @@
   //
   function readStartups(authData) {
     var readRef = firebase.database().ref("startups");
-    // var readRef = new Firebase(END_POINT_URL + "/startups/");
     readRef.orderByKey().on("value", function(snapshot) {
       //console.log("The Startups: " + JSON.stringify(snapshot.val()));
       $("#startups-list").html("");
@@ -787,7 +782,6 @@
   //
   function readMentors(authData) {
     var readRef = firebase.database().ref("mentors");
-    // var readRef = new Firebase(END_POINT_URL + "/mentors/");
     readRef.orderByKey().on("value", function(snapshot) {
       //console.log("The mentors: " + JSON.stringify(snapshot.val()));
       $("#mentors-list").html("");
@@ -853,7 +847,6 @@
   //
   function fetchMentor(key) {
     var ref = firebase.database().ref("/mentors/" + key);
-    // var ref = new Firebase(END_POINT_URL + "/mentors/" + key);
     ref.on("value", function(mentorSnap) {
       var mentor = mentorSnap.val();
       if (mentor != null) {
@@ -901,7 +894,6 @@
   //
   function readAttendees(authData) {
     var readRef = firebase.database().ref("/attendees/");
-    // var readRef = new Firebase(END_POINT_URL + "/attendees/");
     readRef.orderByKey().on("value", function(snapshot) {
       $("#att-list").html("");
       snapshot.forEach(function(childSnapshot) {
@@ -944,7 +936,6 @@
     }
     $('#startup-details-modal').modal('hide');
     var ref = firebase.database().ref("mentors/" + key);
-    // var ref = new Firebase(END_POINT_URL + "/mentors/" + key);
     ref.on("value", function(mentorSnap) {
       var mentor = mentorSnap.val();
       if (mentor != null) {
