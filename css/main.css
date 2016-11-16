@@ -255,7 +255,10 @@ td {
   font-size: 130%;
   padding-right: 1em;
 }
-
+.pic-src {
+  padding: 0.5em;
+  border-radius: 20px;
+}
 /* fun with the input image customization */
 .img-1-upload > input {
   display: none;

@@ -277,13 +277,11 @@
       '" data-startup="ai-' + startupNotesKey + '" data-notes-backup="ai-' + startupBackupNotesKey +
       '" name="meeting-notes"> </textarea> <h5>Photos</h5> ' +
       '<div class="row">' + 
-          '<div class="col-lg-5 col-md-5 col-sm-5 img-1-upload"> <label for="camera-1" class="cam-label-but"> <span class="glyphicon glyphicon-camera"></span> Camera </label> \
-            <input type="file" accept="image/*" capture="camera" id="camera-1" class="camera-but"> </div> \
-          <div class="col-lg-3 col-md-3 col-sm-3"> <a id="pic-1-link" href="#" target="_blank" class="pic-link"> </a> <img id="pic-1" height="60"> </div> \
-        </div> \
-        <input type="file" accept="image/*" capture="camera" id="camera-2" class="camera-but"> <a id="pic-2-link" href="#" target="_blank"> <img id="pic-2" height="60"> </a>\
-        <input type="file" accept="image/*" capture="camera" id="camera-3" class="camera-but"> <a id="pic-3-link" href="#" target="_blank"> <img id="pic-3" height="60"> </a>\
-      <button id="adhoc-save-but">Save</button</p>',
+      '<div class="col-lg-5 col-md-5 col-sm-5 img-1-upload"> <label for="camera-1" class="cam-label-but"> <span class="glyphicon glyphicon-camera"></span> Camera </label> \
+        <input type="file" accept="image/*" capture="camera" id="camera-1" class="camera-but"> </div> \
+      <div class="col-lg-3 col-md-3 col-sm-3" id="img-place-holder" data-imgs-num="1"> </div> \
+      </div> \
+        <button id="adhoc-save-but">Save</button</p>',
       buttons: {
         confirm: {
             label: 'Save Notes',
@@ -324,15 +322,25 @@
     addUnscheduledNotes();
   });
 
-
+  //
+  // Listen to the camera button
+  //
   $('body').on('change', '.camera-but', function(event) {
     if (event.target && event.target.files[0]) {
-      var tmpId = event.target.id;
-      var picKey = (tmpId).substr(tmpId.length - 1);
-      var picElem = $("#pic-" + picKey);
+      // var tmpId = event.target.id;
+      // var picKey = (tmpId).substr(tmpId.length - 1);
+      // var picElem = $("#pic-" + picKey);
+      var imgNum = $("#img-place-holder").attr("data-imgs-num");
+      $("#img-place-holder").append('<a id="pic-' + imgNum + 
+        '-link" href="#" target="_blank" class="pic-link"> </a> <img id="pic-' + imgNum + '" height="60" class="pic-src"> ');
+      // 
+      var picElem = $("#pic-" + imgNum);
       uploadImage(event, picElem[0]);
+      var nImgNum = ++imgNum;
+      $("#img-place-holder").attr('data-imgs-num', nImgNum);
     }
   });
+
 
   //
   // Fetch the note per specific session
@@ -1058,10 +1066,8 @@
 
     var uploadTask = storageRef.child('images/' + file.name).put(file, metadata);
     uploadTask.picId = pic.id;
-    // Listen for state changes, errors, and completion of the upload.
-    uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
+    uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
       function(snapshot) {
-        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
         var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         console.log('Upload is ' + progress + '% done');
         $("#" + uploadTask.picId + "-link").html("%" + progress);
