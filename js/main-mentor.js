@@ -48,6 +48,8 @@
   // Initialize Firebase
   firebase.initializeApp(config);
   var ref = firebase.database().ref();
+  var storageRef = firebase.storage().ref();
+
   var provider = new firebase.auth.GoogleAuthProvider();
   provider.addScope("email");
   provider.addScope("profile");
@@ -273,8 +275,15 @@
       '</textarea>  <br>What are the action items? \
       <textarea id="ai-' + key + '" class="form-control col-lg-10 meeting-notes-text" data-key="ai-' + meetingNotesKey +
       '" data-startup="ai-' + startupNotesKey + '" data-notes-backup="ai-' + startupBackupNotesKey +
-      '" name="meeting-notes">' +
-      '</textarea> <button id="adhoc-save-but">Save</button</p>',
+      '" name="meeting-notes"> </textarea> <h5>Photos</h5> ' +
+      '<div class="row">' + 
+          '<div class="col-lg-5 col-md-5 col-sm-5 img-1-upload"> <label for="camera-1" class="cam-label-but"> <span class="glyphicon glyphicon-camera"></span> Camera </label> \
+            <input type="file" accept="image/*" capture="camera" id="camera-1" class="camera-but"> </div> \
+          <div class="col-lg-3 col-md-3 col-sm-3"> <a id="pic-1-link" href="#" target="_blank" class="pic-link"> </a> <img id="pic-1" height="60"> </div> \
+        </div> \
+        <input type="file" accept="image/*" capture="camera" id="camera-2" class="camera-but"> <a id="pic-2-link" href="#" target="_blank"> <img id="pic-2" height="60"> </a>\
+        <input type="file" accept="image/*" capture="camera" id="camera-3" class="camera-but"> <a id="pic-3-link" href="#" target="_blank"> <img id="pic-3" height="60"> </a>\
+      <button id="adhoc-save-but">Save</button</p>',
       buttons: {
         confirm: {
             label: 'Save Notes',
@@ -313,6 +322,16 @@
   //
   $('body').on('click', '#add-unschedule-notes', function(event) {
     addUnscheduledNotes();
+  });
+
+
+  $('body').on('change', '.camera-but', function(event) {
+    if (event.target && event.target.files[0]) {
+      var tmpId = event.target.id;
+      var picKey = (tmpId).substr(tmpId.length - 1);
+      var picElem = $("#pic-" + picKey);
+      uploadImage(event, picElem[0]);
+    }
   });
 
   //
@@ -1025,4 +1044,63 @@
     console.log("we are back online!");
     $("#online-status").html(" Online");
   }, false);
+
+  //
+  // Upload images to firebase storage
+  //
+  function uploadImage(e, pic) {
+    var file = e.target.files[0];
+    pic.src = URL.createObjectURL(file);
+    console.log("Working on picID: " + pic.id + " | Src: " + pic.src);
+    var metadata = {
+      contentType: 'image/jpeg'
+    };
+
+    var uploadTask = storageRef.child('images/' + file.name).put(file, metadata);
+    uploadTask.picId = pic.id;
+    // Listen for state changes, errors, and completion of the upload.
+    uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
+      function(snapshot) {
+        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log('Upload is ' + progress + '% done');
+        $("#" + uploadTask.picId + "-link").html("%" + progress);
+        switch (snapshot.state) {
+          case firebase.storage.TaskState.PAUSED:
+            console.log('Upload is paused');
+            $("#" + uploadTask.picId + "-link").html("Upload is paused");
+            break;
+          case firebase.storage.TaskState.RUNNING: 
+            console.log('Upload is running with ' + pic.id);
+            break;
+        }
+      },
+      function(error) {
+        switch (error.code) {
+          case 'storage/unauthorized':
+            // TODO - notify the user
+            console.log("NOT unauthorized to upload");
+            break;
+          case 'storage/canceled':
+            console.log("user canceled the upload");
+            break;
+          case 'storage/unknown':
+            // TODO: Unknown error occurred, inspect error.serverResponse
+            console.log("Unknown error occurred, inspect error.serverResponse", error);
+            break;
+        }
+      },
+      function() {
+        // Upload completed successfully
+        var downloadURL = uploadTask.snapshot.downloadURL;
+        console.log("The downloadURL: " + downloadURL);
+        //$("#" + uploadTask.picId).data("pic-url", downloadURL);
+        $("#" + uploadTask.picId + "-link").attr("href", downloadURL);
+      });
+
+  }
+    
+
+
+
 })();

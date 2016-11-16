@@ -250,3 +250,22 @@ td {
 #adhoc-save-but {
   display: none;
 }
+
+.pic-link {
+  font-size: 130%;
+  padding-right: 1em;
+}
+
+/* fun with the input image customization */
+.img-1-upload > input {
+  display: none;
+}
+.img-1-upload > button {
+  width: 60px;
+  cursor: pointer;
+}
+.cam-label-but {
+  padding: 0.8em;
+  background: rgba(44, 77, 181, 0.3);
+  border-radius: 20px;
+}
