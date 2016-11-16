@@ -327,13 +327,10 @@
   //
   $('body').on('change', '.camera-but', function(event) {
     if (event.target && event.target.files[0]) {
-      // var tmpId = event.target.id;
-      // var picKey = (tmpId).substr(tmpId.length - 1);
-      // var picElem = $("#pic-" + picKey);
       var imgNum = $("#img-place-holder").attr("data-imgs-num");
       $("#img-place-holder").append('<a id="pic-' + imgNum + 
-        '-link" href="#" target="_blank" class="pic-link"> </a> <img id="pic-' + imgNum + '" height="60" class="pic-src"> ');
-      // 
+        '-link" href="#" target="_blank" class="pic-link"> </a> <img id="pic-' + imgNum + 
+        '" height="60" class="pic-src"> ');
       var picElem = $("#pic-" + imgNum);
       uploadImage(event, picElem[0]);
       var nImgNum = ++imgNum;
@@ -474,6 +471,14 @@
     var receptiveVal = $("#" + sliders[0].id).slider('getValue');
     var effectiveVal = $("#" + sliders[1].id).slider('getValue');
 
+    var imgsElem = thisElem.parent().find('a');
+    console.log("Links to images: ", imgsElem);
+    var imgsLinks = [];
+    for (var i = 0; i < imgsElem.length; i++) {
+      if (imgsElem[i].href && imgsElem[i].href.length > 10) {
+        imgsLinks.push(imgsElem[i].href);
+      }
+    }
     // 2016-10-17/mentors/greenido@gmail-com/hour-1476728831043/notes
     var keyToSession = tas.data('key');
     var keyToStartup = tas.data('startup');
@@ -507,6 +512,7 @@
       actionItems: actionItems,
       starttime: startTime,
       endtime: endTime,
+      imgs: imgsLinks,
       unixTime: curUnixTime,
       date: disTime
     }, function(error) {
@@ -528,6 +534,7 @@
       actionItems: actionItems,
       starttime: startTime,
       endtime: endTime,
+      imgs: imgsLinks,
       unixTime: curUnixTime,
       date: disTime
     }, function(error) {
@@ -544,6 +551,7 @@
       actionItems: actionItems,
       starttime: startTime,
       endtime: endTime,
+      imgs: imgsLinks,
       unixTime: curUnixTime,
       date: disTime
     }, function(error) {
