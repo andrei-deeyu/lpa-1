@@ -202,12 +202,11 @@
           var meetingNotesKey = scDay + "/mentors/" + curMentorEmail + "/" + key + "/notes";
           var startupNotesKey = scDay + "/startups/" + scData.startup + "/notes/" + curMentorEmail + "/" + key;
           var startupBackupNotesKey = "/startups/" + scData.startup + "/" + scDay + "/notes/" + curMentorEmail + "/" + key;
-          // var photosHTML = '<h5>Photos</h5> <div class="row">' + 
-          //   '<div class="col-lg-5 col-md-5 col-sm-5 img-1-upload"> <label for="camera-1" class="cam-label-but"> <span class="glyphicon glyphicon-camera"></span> Camera </label> \
-          //     <input type="file" accept="image/*" capture="camera" id="camera-1" class="camera-but"> </div> \
-          //     <div class="col-lg-3 col-md-3 col-sm-3" id="img-place-holder" data-imgs-num="1"> </div> \
-          //   </div>';
-
+          var photosHTML = '<div class="row">' + 
+            '<div class="col-lg-5 col-md-5 col-sm-5 img-1-upload"> <label for="camera-' + key + '" class="cam-label-but"> <span class="glyphicon glyphicon-camera"></span> Camera </label> \
+              <input type="file" accept="image/*" capture="camera" id="camera-' + key + '" class="camera-but"> </div> \
+            <div class="col-lg-3 col-md-3 col-sm-3" id="img-place-holder" data-imgs-num="1"> </div> \
+            </div> ';
           //console.log("=== Update mentors and comments for: " + key + " | data: " + scData);  getHourAsRange(key)
           html += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
             '<button class="btn btn-warning fetch-notes-button" data-key="' + scData.startup + '">' + scData.startup + '</button>' + '  ' +
@@ -215,7 +214,8 @@
             ' <button class="btn expend-notes-but btn-info" type="button" data-textarea-key="' + key + '" data-note-key="' + startupBackupNotesKey +
             '" data-toggle="collapse" data-target="#mentor-note-p-' + key + 
             '" aria-expanded="false" aria-controls="collapseMentorDetails"> <span class="glyphicon glyphicon-resize-vertical" aria-hidden="true"></span>Open</button>' +
-            ' </h3><b>Location: ' + scData.location + '</b> </div> <div id="mentor-note-p-' + key + '" class="panel-body collapse">' +
+            ' </h3><b>Location: ' + scData.location + '</b> </div> ' +
+            '<div id="mentor-note-p-' + key + '" class="panel-body collapse">' +
             '<p class="" id="meet-details-' + key + '"> ' +
             '<h5><label>Did the attendees were open and receptive? (1-5)</label></h5> <br>\
                 <input type="text" class="note-slider" id="note-receptive-' + key + '" name="note-receptive" data-provide="slider" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide"> \
@@ -230,10 +230,8 @@
             <textarea id="ai-' + key + '" class="form-control col-lg-10 meeting-notes-text" data-key="ai-' + meetingNotesKey +
             '" data-startup="ai-' + startupNotesKey + '" data-notes-backup="ai-' + startupBackupNotesKey +
             '" name="meeting-notes">' +
-            '</textarea> <br><button class="btn btn-warning meeting-save-button">Save Notes</button> </p> </div> </div> </div>';
-          // TODO: add an option to take photos: 
-          // <div class="row"> <div class="col-lg-3 col-md-3"> <input type="file" name="file" class="input-img" id="notesImg" accept="image/*"> 
-          // <button type="submit" class="btn btn-info meeting-img-button">Upload Image</button> 
+            '</textarea> ' + photosHTML + '<br><button class="btn btn-warning meeting-save-button">Save Notes</button> </p> </div> </div> </div>';
+          
         });
         $("#mentor-schedule-list").html(html);
         $(".note-slider").slider({ tooltip: 'always' });
