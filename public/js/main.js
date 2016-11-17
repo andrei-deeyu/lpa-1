@@ -2,7 +2,7 @@
 // JS for the mentor Admin web app
 // Author: Ido Green ❄️
 // Date: 4/2016
-// V8.0
+// V0.9
 //
 // A 🐱 App
 //
@@ -38,10 +38,11 @@
   // AUTH fun
   // start the connection with firebase DB
   var config = {
-    apiKey: "AIzaSyDImJzAqBmZVXdaK55jVfRuoaHVLBDFgxU",
+    apiKey: "AIzaSyBZWmUQWKU1vs--CMbITX8lawdmCslHaJs",
     authDomain: "lpa-space.firebaseapp.com",
     databaseURL: "https://lpa-space.firebaseio.com",
-    storageBucket: "project-1969056342883930904.appspot.com",
+    storageBucket: "lpa-space.appspot.com",
+    messagingSenderId: "942783265132"
   };
   // Initialize Firebase
   firebase.initializeApp(config);

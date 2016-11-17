@@ -2,7 +2,7 @@
 // JS for the mentor web app
 // Author: Ido Green 
 // Date: 4/2016
-// V0.8
+// V0.9
 //
 // A 🐱 App
 //
@@ -38,34 +38,49 @@
   // start the connection with Firebase
   //
   var END_POINT_URL = "https://lpa-space.firebaseio.com";
-  var ref = new Firebase(END_POINT_URL);
+  var config = {
+    apiKey: "AIzaSyBZWmUQWKU1vs--CMbITX8lawdmCslHaJs",
+    authDomain: "lpa-space.firebaseapp.com",
+    databaseURL: END_POINT_URL,
+    storageBucket: "lpa-space.appspot.com",
+    messagingSenderId: "942783265132"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(config);
+  var ref = firebase.database().ref();
+  var storageRef = firebase.storage().ref();
+
+  var provider = new firebase.auth.GoogleAuthProvider();
+  provider.addScope("email");
+  provider.addScope("profile");
+
   authUserData = null;
 
   //
   // Authentication actions
   //
-  ref.onAuth(function(authData) {
+  //ref.onAuth(function(authData) {
+  firebase.auth().onAuthStateChanged(function(authData) {
     if (authData) {
-      if (authData.provider !== "google") {
+      if (authData.providerData[0] && authData.providerData[0].providerId !== "google.com") {
         bootbox.alert("You must sign-in with your Google ID.<br>So first logout from the Admin App.<br>Thank you!");
         return;
       }
 
-      // initChat(authData);
       authUserData = authData;
       localStorage.setItem("lpa1-g-authData", JSON.stringify(authData));
       $("#sc-reload-button").prop('disabled', false);
-      console.log("User " + authData.uid + " is logged in with " + authData.provider);
-      $("#login-form").html("<img src='" + authData.google.profileImageURL + "' class='g-mentor-logo' alt='mentor logo' />");
+      console.log("User " + authData.uid + " is logged in with " ,authData.providerData);
+      $("#login-form").html("<img src='" + authData.photoURL + "' class='g-mentor-logo' alt='mentor logo' />");
       $("#logout-div").html("<form class='navbar-form navbar-right' role='form'><button id='logout-but' class='btn btn-success'>Logout</button> </form>");
 
-      curMentorEmail = authData.google.email;
+      curMentorEmail = authData.email;
       curMentorEmail = curMentorEmail.replace(/\./g, "-");
       fetchMentor(curMentorEmail);
       // init our mentor with what we have from google-login
-      $("#logout-but").text("Logout " + authData.google.displayName);
-      $("#form-name-field").val(authData.google.displayName);
-      $("#form-pic-url").val(authData.google.profileImageURL);
+      $("#logout-but").text("Logout " + authData.displayName);
+      $("#form-name-field").val(authData.displayName);
+      $("#form-pic-url").val(authData.photoURL);
 
       readStartups(authData);
       readAttendees(authData);
@@ -98,23 +113,29 @@
   //
   function loginWithGoogle() {
     $("#spin").show();
-    ref.authWithOAuthPopup("google", function(error, authData) {
+
+    firebase.auth().signInWithPopup(provider).then(function(result) {
       $("#spin").hide();
-      if (error) {
-        console.log("Login Failed!", error);
+      var token = result.credential.accessToken;
+      var user = result.user;
+      console.log("Got user: ", user);
+      $("#sc-reload-button").prop('disabled', false);
+      console.log("Authenticated with payload:", result);
+    }).catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      var email = error.email;
+      var credential = error.credential;
+      console.log("Login Failed!", error);
         ga('send', {
           hitType: 'event',
           eventCategory: 'sign-in-mentor',
           eventAction: 'sign-in-button',
-          eventLabel: 'authentication failed: ' + error,
+          eventLabel: 'authentication failed. errCode: ' + errorCode + 
+            ' msg: ' + errorMessage + ' email: ' + email  + ' credential: ' + credential
         });
         $("#err-modal").modal('show');
-      } else {
-        $("#sc-reload-button").prop('disabled', false);
-        console.log("Authenticated with payload:", authData);
-      }
-    }, {
-      scope: "email"
     });
   }
 
@@ -139,8 +160,14 @@
   // logout action
   //
   $("#logout-but").click(function() {
-    ref.unauth();
-    logoutUI();
+    //ref.unauth();
+    firebase.auth().signOut().then(function() {
+      // Sign-out successful
+      logoutUI();
+    }, function(error) {
+      // An error happened.
+      console.log("Could not sign-out. err: "+ error);
+    });
     return false;
   });
 
@@ -164,8 +191,7 @@
       eventLabel: 'for day: ' + scDay
     });
 
-    var readRef = new Firebase(END_POINT_URL + "/sessions/" + scDay + "/mentors/" + curMentorEmail);
-    readRef.orderByKey().once("value", function(snapshot) {
+    ref.child("sessions").child(scDay).child("mentors").child(curMentorEmail).once("value", function(snapshot) {
       var sessions = snapshot.val();
       if (sessions != null) {
         //console.log("The sessions: " + JSON.stringify(sessions));
@@ -176,7 +202,11 @@
           var meetingNotesKey = scDay + "/mentors/" + curMentorEmail + "/" + key + "/notes";
           var startupNotesKey = scDay + "/startups/" + scData.startup + "/notes/" + curMentorEmail + "/" + key;
           var startupBackupNotesKey = "/startups/" + scData.startup + "/" + scDay + "/notes/" + curMentorEmail + "/" + key;
-
+          var photosHTML = '<h5><b>Photos</b></h5> <div class="row">' +  //col-lg-2 col-md-2 col-sm-3
+            '<div class="img-1-upload"> <label for="camera-' + key + '" class="cam-label-but"> <span class="glyphicon glyphicon-camera"></span> Camera </label> \
+              <input type="file" accept="image/*" capture="camera" id="camera-' + key + '" class="camera-but"> </div> \
+            <div class="" id="img-place-holder-' + key + '" data-imgs-num="1"> </div> \
+            </div> ';
           //console.log("=== Update mentors and comments for: " + key + " | data: " + scData);  getHourAsRange(key)
           html += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
             '<button class="btn btn-warning fetch-notes-button" data-key="' + scData.startup + '">' + scData.startup + '</button>' + '  ' +
@@ -184,25 +214,24 @@
             ' <button class="btn expend-notes-but btn-info" type="button" data-textarea-key="' + key + '" data-note-key="' + startupBackupNotesKey +
             '" data-toggle="collapse" data-target="#mentor-note-p-' + key + 
             '" aria-expanded="false" aria-controls="collapseMentorDetails"> <span class="glyphicon glyphicon-resize-vertical" aria-hidden="true"></span>Open</button>' +
-            ' </h3><b>Location: ' + scData.location + '</b> </div> <div id="mentor-note-p-' + key + '" class="panel-body collapse">' +
+            ' </h3><b>Location: ' + scData.location + '</b> </div> ' +
+            '<div id="mentor-note-p-' + key + '" class="panel-body collapse">' +
             '<p class="" id="meet-details-' + key + '"> ' +
             '<h5><label>Did the attendees were open and receptive? (1-5)</label></h5> <br>\
                 <input type="text" class="note-slider" id="note-receptive-' + key + '" name="note-receptive" data-provide="slider" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide"> \
                 <br><h5> <label>Was the session effective? (1-5)</label></h5><br> \
                 <input type="text" class="note-slider" id="note-effective-' + key + '" name="note-effective" data-provide="slider" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide"> \
                 <br><br> \
-            What did you talked about? \
+            <b>What did you talked about?</b> \
             <textarea id="' + key + '" class="form-control col-lg-10 meeting-notes-text" data-key="' + meetingNotesKey +
             '" data-startup="' + startupNotesKey + '" data-notes-backup="' + startupBackupNotesKey +
             '" data-starttime="' + scData.starttime + '" data-endtime="' + scData.endtime + '" name="meeting-notes">' +
-            '</textarea>  <br>What are the action items? \
+            '</textarea>  <br><b>What are the action items?</b> \
             <textarea id="ai-' + key + '" class="form-control col-lg-10 meeting-notes-text" data-key="ai-' + meetingNotesKey +
             '" data-startup="ai-' + startupNotesKey + '" data-notes-backup="ai-' + startupBackupNotesKey +
             '" name="meeting-notes">' +
-            '</textarea> <br><button class="btn btn-warning meeting-save-button">Save Notes</button> </p> </div> </div> </div>';
-          // TODO: add an option to take photos: 
-          // <div class="row"> <div class="col-lg-3 col-md-3"> <input type="file" name="file" class="input-img" id="notesImg" accept="image/*"> 
-          // <button type="submit" class="btn btn-info meeting-img-button">Upload Image</button> 
+            '</textarea> ' + photosHTML + '<br><button class="btn btn-warning meeting-save-button">Save Notes</button> </p> </div> </div> </div>';
+          
         });
         $("#mentor-schedule-list").html(html);
         $(".note-slider").slider({ tooltip: 'always' });
@@ -249,8 +278,13 @@
       '</textarea>  <br>What are the action items? \
       <textarea id="ai-' + key + '" class="form-control col-lg-10 meeting-notes-text" data-key="ai-' + meetingNotesKey +
       '" data-startup="ai-' + startupNotesKey + '" data-notes-backup="ai-' + startupBackupNotesKey +
-      '" name="meeting-notes">' +
-      '</textarea> <button id="adhoc-save-but">Save</button</p>',
+      '" name="meeting-notes"> </textarea> <h5>Photos</h5> ' +
+      '<div class="row">' + 
+      '<div class="col-lg-5 col-md-5 col-sm-5 img-1-upload"> <label for="camera-1" class="cam-label-but"> <span class="glyphicon glyphicon-camera"></span> Camera </label> \
+        <input type="file" accept="image/*" capture="camera" id="camera-1" class="camera-but"> </div> \
+      <div class="col-lg-3 col-md-3 col-sm-3" id="img-place-holder" data-imgs-num="1"> </div> \
+      </div> \
+        <button id="adhoc-save-but">Save</button</p>',
       buttons: {
         confirm: {
             label: 'Save Notes',
@@ -292,6 +326,31 @@
   });
 
   //
+  // Listen to the camera button
+  //
+  $('body').on('change', '.camera-but', function(event) {
+    if (event.target && event.target.files[0]) {
+      var imgsElemId = "#img-place-holder";
+      var picKey = "";
+      if (event.target.id != "camera-1") {
+        // let's have the specific id for the list of meetings
+        picKey = (event.target.id).substring(6);
+        imgsElemId += picKey;
+      }
+      
+      var imgNum = $(imgsElemId).attr("data-imgs-num");
+      $(imgsElemId).append('<a id="pic-' + imgNum + picKey + 
+        '-link" href="#" target="_blank" class="pic-link"> </a> <img id="pic-' + imgNum + picKey +
+        '" height="60" class="pic-src"> ');
+      var picElem = $("#pic-" + imgNum + picKey);
+      uploadImage(event, picElem[0]);
+      var nImgNum = ++imgNum;
+      $(imgsElemId).attr('data-imgs-num', nImgNum);
+    }
+  });
+
+
+  //
   // Fetch the note per specific session
   //
   $('body').on('click', '.expend-notes-but', function(event) {
@@ -299,7 +358,8 @@
     var textareaKey = $(this).data("textarea-key");
     var receptiveSliderKey = "note-receptive-" + textareaKey;
     var effectiveSliderKey = "note-effective-" + textareaKey;
-    var readRef = new Firebase(END_POINT_URL + "/notes-backup/" + key);
+    var imgsKey = "img-place-holder-" + textareaKey;
+    var readRef = firebase.database().ref("/notes-backup/" + key);
     ga('send', {
       hitType: 'event',
       eventCategory: 'startup-notes-mentor',
@@ -321,6 +381,16 @@
       if (noteData != null && noteData.effective) {
         $("#" + effectiveSliderKey).slider('setValue', noteData.effective);
       }
+      if (noteData != null && noteData.imgs) {
+        var imgsHTML = "";
+        for (var i = 0; i < noteData.imgs.length; i++) {
+          imgsHTML += '<a id="pic-' + (i+1) + textareaKey + '-link" href="' + noteData.imgs[i] + 
+          '" target="_blank" class="pic-link"> <img id="pic-' + 
+          (i+1) + textareaKey + '" height="80" class="pic-src" src="' + noteData.imgs[i] + '"> </a>';
+        }
+        $("#" + imgsKey).html(imgsHTML);
+        $("#" + imgsKey).attr('data-imgs-num', i);
+      }
     });
 
   });
@@ -330,7 +400,7 @@
   //
   $('body').on('click', '.fetch-notes-button', function(event) {
     var startupName = $(this).data("key");
-    var readRef = new Firebase(END_POINT_URL + "/notes-backup/startups/" + startupName);
+    var readRef = firebase.database().ref("/notes-backup/startups/" + startupName);
     ga('send', {
       hitType: 'event',
       eventCategory: 'startup-notes-mentor',
@@ -423,6 +493,14 @@
     var receptiveVal = $("#" + sliders[0].id).slider('getValue');
     var effectiveVal = $("#" + sliders[1].id).slider('getValue');
 
+    var imgsElem = thisElem.parent().find('a');
+    console.log("Links to images: ", imgsElem);
+    var imgsLinks = [];
+    for (var i = 0; i < imgsElem.length; i++) {
+      if (imgsElem[i].href && imgsElem[i].href.length > 10) {
+        imgsLinks.push(imgsElem[i].href);
+      }
+    }
     // 2016-10-17/mentors/greenido@gmail-com/hour-1476728831043/notes
     var keyToSession = tas.data('key');
     var keyToStartup = tas.data('startup');
@@ -456,6 +534,7 @@
       actionItems: actionItems,
       starttime: startTime,
       endtime: endTime,
+      imgs: imgsLinks,
       unixTime: curUnixTime,
       date: disTime
     }, function(error) {
@@ -477,6 +556,7 @@
       actionItems: actionItems,
       starttime: startTime,
       endtime: endTime,
+      imgs: imgsLinks,
       unixTime: curUnixTime,
       date: disTime
     }, function(error) {
@@ -493,6 +573,7 @@
       actionItems: actionItems,
       starttime: startTime,
       endtime: endTime,
+      imgs: imgsLinks,
       unixTime: curUnixTime,
       date: disTime
     }, function(error) {
@@ -575,13 +656,13 @@
   // Read the list of startups and display it
   //
   function readStartups(authData) {
-    var readRef = new Firebase(END_POINT_URL + "/startups/");
+    var readRef = firebase.database().ref("startups");
     readRef.orderByKey().on("value", function(snapshot) {
       //console.log("The Startups: " + JSON.stringify(snapshot.val()));
       $("#startups-list").html("");
       startupNameList = [];
       snapshot.forEach(function(childSnapshot) {
-        var key = childSnapshot.key();
+        var key = childSnapshot.key;
         startupNameList.push(key);
         var startupData = childSnapshot.val();
         var startupLogoUrl = addhttp(startupData.logo);
@@ -736,12 +817,12 @@
   // read the list of mentors and display it
   //
   function readMentors(authData) {
-    var readRef = new Firebase(END_POINT_URL + "/mentors/");
+    var readRef = firebase.database().ref("mentors");
     readRef.orderByKey().on("value", function(snapshot) {
       //console.log("The mentors: " + JSON.stringify(snapshot.val()));
       $("#mentors-list").html("");
       snapshot.forEach(function(childSnapshot) {
-        var key = childSnapshot.key();
+        var key = childSnapshot.key;
         var mentorData = childSnapshot.val();
         if (mentorData.name != "--N/A--") {
           var mPicUrl = addhttp(mentorData.pic);
@@ -801,7 +882,7 @@
   // fetch mentor data base on its key (=email)
   //
   function fetchMentor(key) {
-    var ref = new Firebase(END_POINT_URL + "/mentors/" + key);
+    var ref = firebase.database().ref("/mentors/" + key);
     ref.on("value", function(mentorSnap) {
       var mentor = mentorSnap.val();
       if (mentor != null) {
@@ -848,11 +929,11 @@
   // read the list of Attendees and display it
   //
   function readAttendees(authData) {
-    var readRef = new Firebase(END_POINT_URL + "/attendees/");
+    var readRef = firebase.database().ref("/attendees/");
     readRef.orderByKey().on("value", function(snapshot) {
       $("#att-list").html("");
       snapshot.forEach(function(childSnapshot) {
-        var key = childSnapshot.key();
+        var key = childSnapshot.key;
         var attData = childSnapshot.val();
         var picUrl = addhttp(attData.pic);
         var role = attData.role;
@@ -890,7 +971,7 @@
       return;
     }
     $('#startup-details-modal').modal('hide');
-    var ref = new Firebase(END_POINT_URL + "/mentors/" + key);
+    var ref = firebase.database().ref("mentors/" + key);
     ref.on("value", function(mentorSnap) {
       var mentor = mentorSnap.val();
       if (mentor != null) {
@@ -1001,4 +1082,57 @@
     console.log("we are back online!");
     $("#online-status").html(" Online");
   }, false);
+
+  //
+  // Upload images to firebase storage
+  //
+  function uploadImage(e, pic) {
+    var file = e.target.files[0];
+    pic.src = URL.createObjectURL(file);
+    console.log("Working on picID: " + pic.id + " | Src: " + pic.src);
+    var metadata = {
+      contentType: 'image/jpeg'
+    };
+
+    var uploadTask = storageRef.child('images/' + file.name).put(file, metadata);
+    uploadTask.picId = pic.id;
+    uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
+      function(snapshot) {
+        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        progress = Math.round(progress);
+        console.log('Upload is ' + progress + '% done');
+        $("#" + uploadTask.picId + "-link").html("%" + progress);
+        switch (snapshot.state) {
+          case firebase.storage.TaskState.PAUSED:
+            console.log('Upload is paused');
+            $("#" + uploadTask.picId + "-link").html("Upload is paused");
+            break;
+          case firebase.storage.TaskState.RUNNING: 
+            console.log('Upload is running with ' + pic.id);
+            break;
+        }
+      },
+      function(error) {
+        switch (error.code) {
+          case 'storage/unauthorized':
+            // TODO - notify the user
+            console.log("NOT unauthorized to upload");
+            break;
+          case 'storage/canceled':
+            console.log("user canceled the upload");
+            break;
+          case 'storage/unknown':
+            // TODO: Unknown error occurred, inspect error.serverResponse
+            console.log("Unknown error occurred, inspect error.serverResponse", error);
+            break;
+        }
+      },
+      function() {
+        // Upload completed successfully
+        var downloadURL = uploadTask.snapshot.downloadURL;
+        console.log("The downloadURL: " + downloadURL);
+        //$("#" + uploadTask.picId).data("pic-url", downloadURL);
+        $("#" + uploadTask.picId + "-link").attr("href", downloadURL);
+      });
+  }
 })();
