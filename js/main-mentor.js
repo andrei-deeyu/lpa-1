@@ -37,7 +37,6 @@
   // AUTH fun
   // start the connection with Firebase
   //
-  var END_POINT_URL = "https://lpa-1.firebaseio.com";
   var config = {
     apiKey: "AIzaSyDImJzAqBmZVXdaK55jVfRuoaHVLBDFgxU",
     authDomain: "lpa-1.firebaseapp.com",

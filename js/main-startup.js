@@ -36,7 +36,6 @@
   // AUTH fun
   // start the connection with firebase DB
   //
-  var END_POINT_URL = "https://lpa-1.firebaseio.com";
   var config = {
     apiKey: "AIzaSyDImJzAqBmZVXdaK55jVfRuoaHVLBDFgxU",
     authDomain: "lpa-1.firebaseapp.com",
@@ -263,7 +262,6 @@
     var textareaKey = $(this).data("textarea-key");
     var listenSliderKey = "note-listen-" + textareaKey;
     var effectiveSliderKey = "note-effective-" + textareaKey;
-    // var readRef = new Firebase(END_POINT_URL + "/notes-backup/" + key);
     ga('send', {
       hitType: 'event',
       eventCategory: 'startup-notes-attendee',
