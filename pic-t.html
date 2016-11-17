@@ -1,0 +1,126 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="author" content="Green Ido | @greenido | plus.google.com/+greenido">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.5.3/firebase.js"></script>
+  <title>LPA - Take A photo</title>
+</head>
+
+<body>
+  <h2> <button id="sign-in-but">Sign In</button> </h2>
+  <input type="file" accept="image/*" capture="camera" id="camera">
+  <img id="frame" height="400">
+  <script>
+  var camera = document.getElementById('camera');
+  var frame = document.getElementById('frame');
+
+  // Create a root reference
+  //
+  // AUTH fun
+  // start the connection with firebase DB
+  var config = {
+    apiKey: "AIzaSyDImJzAqBmZVXdaK55jVfRuoaHVLBDFgxU",
+    authDomain: "lpa-1.firebaseapp.com",
+    databaseURL: "https://lpa-1.firebaseio.com",
+    storageBucket: "project-1969056342883930904.appspot.com",
+  };
+  // Initialize Firebase
+  firebase.initializeApp(config);
+  var ref = firebase.database().ref();
+
+  firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          console.log("login user: ", user);
+        } else {
+          console.log("Not loged in");
+        }
+    });
+
+
+        function loginWithGoogle() {
+          ref.authWithOAuthPopup("google", function(error, authData) {
+            if (error) {
+              console.log("Login Failed!", error);
+            } else {
+              console.log("Authenticated with payload:", authData);
+            }
+          }, {
+            scope: "email"
+          });
+        }
+
+        //
+        // handle the sign in button from the modal
+        //
+        $('#sign-in-but').click(function(event) {
+          loginWithGoogle();
+          return false;
+        });
+
+        var storageRef = firebase.storage().ref();
+
+
+        camera.addEventListener('change', function(e) {
+          var file = e.target.files[0];
+          // Do something with the image file.
+          frame.src = URL.createObjectURL(file);
+          console.log("got: " + frame.src);
+
+          // Create the file metadata
+          var metadata = {
+            contentType: 'image/jpeg'
+          };
+
+          // Upload file and metadata to the object 'images/mountains.jpg'
+          var uploadTask = storageRef.child('images/' + file.name).put(file, metadata);
+
+          // Listen for state changes, errors, and completion of the upload.
+          uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
+            function(snapshot) {
+              // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+              var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+              console.log('Upload is ' + progress + '% done');
+              switch (snapshot.state) {
+                case firebase.storage.TaskState.PAUSED: // or 'paused'
+                  console.log('Upload is paused');
+                  break;
+                case firebase.storage.TaskState.RUNNING: // or 'running'
+                  console.log('Upload is running');
+                  break;
+              }
+            },
+            function(error) {
+              switch (error.code) {
+                case 'storage/unauthorized':
+                  // User doesn't have permission to access the object
+                  console.log("NOT unauthorized to upload");
+                  break;
+
+                case 'storage/canceled':
+                  // User canceled the upload
+                  console.log("user canceled the upload");
+                  break;
+
+                case 'storage/unknown':
+                  // Unknown error occurred, inspect error.serverResponse
+                  console.log("Unknown error occurred, inspect error.serverResponse", error);
+                  break;
+              }
+            },
+            function() {
+              // Upload completed successfully, now we can get the download URL
+              var downloadURL = uploadTask.snapshot.downloadURL;
+            });
+
+
+
+        });
+  </script>
+</body>
+
+</html>

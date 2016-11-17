@@ -2,7 +2,7 @@
 // JS for the mentor Admin web app
 // Author: Ido Green ❄️
 // Date: 4/2016
-// V8.0
+// V0.9
 //
 // A 🐱 App
 //
@@ -1817,16 +1817,17 @@
   //
   // Catch errors and send them to GA
   //
-  window.onerror = function(msg, url, lineNumber) {
-    console.log("Err:" + JSON.stringify(msg) + " url: " + JSON.stringify(url) + " line: " + lineNumber);
-    ga('send', {
-      hitType: 'event',
-      eventCategory: 'admin-gen-error',
-      eventAction: 'msg: ' + msg,
-      eventLabel: 'url: ' + url + " line: " + lineNumber
-    });
-    return true;
-  };
+  //----------- TODO ------
+  // window.onerror = function(msg, url, lineNumber) {
+  //   console.log("Err:" + JSON.stringify(msg) + " url: " + JSON.stringify(url) + " line: " + lineNumber);
+  //   ga('send', {
+  //     hitType: 'event',
+  //     eventCategory: 'admin-gen-error',
+  //     eventAction: 'msg: ' + msg,
+  //     eventLabel: 'url: ' + url + " line: " + lineNumber
+  //   });
+  //   return true;
+  // };
 
   //
   // Helper function to get unique in array

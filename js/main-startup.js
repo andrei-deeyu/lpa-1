@@ -2,7 +2,7 @@
 // JS for the attendee web app
 // Author: Ido Green 
 // Date: 4/2016
-// V0.8
+// V0.9
 //
 // A 🐱 App
 //
