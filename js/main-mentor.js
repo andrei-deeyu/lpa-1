@@ -205,7 +205,7 @@
           var photosHTML = '<h5><b>Photos</b></h5> <div class="row">' +  //col-lg-2 col-md-2 col-sm-3
             '<div class="img-1-upload"> <label for="camera-' + key + '" class="cam-label-but"> <span class="glyphicon glyphicon-camera"></span> Camera </label> \
               <input type="file" accept="image/*" capture="camera" id="camera-' + key + '" class="camera-but"> </div> \
-            <div class="col-lg-3 col-md-3 col-sm-3" id="img-place-holder-' + key + '" data-imgs-num="1"> </div> \
+            <div class="" id="img-place-holder-' + key + '" data-imgs-num="1"> </div> \
             </div> ';
           //console.log("=== Update mentors and comments for: " + key + " | data: " + scData);  getHourAsRange(key)
           html += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
@@ -1099,6 +1099,7 @@
     uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
       function(snapshot) {
         var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        progress = Math.round(progress);
         console.log('Upload is ' + progress + '% done');
         $("#" + uploadTask.picId + "-link").html("%" + progress);
         switch (snapshot.state) {
@@ -1133,10 +1134,5 @@
         //$("#" + uploadTask.picId).data("pic-url", downloadURL);
         $("#" + uploadTask.picId + "-link").attr("href", downloadURL);
       });
-
   }
-    
-
-
-
 })();
