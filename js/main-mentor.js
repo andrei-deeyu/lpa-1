@@ -58,7 +58,6 @@
   //
   // Authentication actions
   //
-  //ref.onAuth(function(authData) {
   firebase.auth().onAuthStateChanged(function(authData) {
     if (authData) {
       if (authData.providerData[0] && authData.providerData[0].providerId !== "google.com") {
@@ -159,12 +158,10 @@
   // logout action
   //
   $("#logout-but").click(function() {
-    //ref.unauth();
     firebase.auth().signOut().then(function() {
       // Sign-out successful
       logoutUI();
     }, function(error) {
-      // An error happened.
       console.log("Could not sign-out. err: " + error);
     });
     return false;
@@ -493,7 +490,7 @@
     var effectiveVal = $("#" + sliders[1].id).slider('getValue');
 
     var imgsElem = thisElem.parent().find('a');
-    console.log("Links to images: ", imgsElem);
+    //console.log("Links to images: ", imgsElem);
     var imgsLinks = [];
     for (var i = 0; i < imgsElem.length; i++) {
       if (imgsElem[i].href && imgsElem[i].href.length > 10) {

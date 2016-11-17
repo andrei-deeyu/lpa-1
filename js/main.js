@@ -1817,17 +1817,16 @@
   //
   // Catch errors and send them to GA
   //
-  //----------- TODO ------
-  // window.onerror = function(msg, url, lineNumber) {
-  //   console.log("Err:" + JSON.stringify(msg) + " url: " + JSON.stringify(url) + " line: " + lineNumber);
-  //   ga('send', {
-  //     hitType: 'event',
-  //     eventCategory: 'admin-gen-error',
-  //     eventAction: 'msg: ' + msg,
-  //     eventLabel: 'url: ' + url + " line: " + lineNumber
-  //   });
-  //   return true;
-  // };
+  window.onerror = function(msg, url, lineNumber) {
+    console.log("Err:" + JSON.stringify(msg) + " url: " + JSON.stringify(url) + " line: " + lineNumber);
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'admin-gen-error',
+      eventAction: 'msg: ' + msg,
+      eventLabel: 'url: ' + url + " line: " + lineNumber
+    });
+    return true;
+  };
 
   //
   // Helper function to get unique in array
