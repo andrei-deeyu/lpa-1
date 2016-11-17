@@ -36,17 +36,13 @@
   // AUTH fun
   // start the connection with firebase DB
   //
-<<<<<<< HEAD
   var END_POINT_URL = "https://lpa-space.firebaseio.com";
-  var ref = new Firebase(END_POINT_URL);
-=======
-  var END_POINT_URL = "https://lpa-1.firebaseio.com";
   var config = {
-    apiKey: "AIzaSyDImJzAqBmZVXdaK55jVfRuoaHVLBDFgxU",
-    authDomain: "lpa-1.firebaseapp.com",
-    databaseURL: "https://lpa-1.firebaseio.com",
-    storageBucket: "project-1969056342883930904.appspot.com",
-    messagingSenderId: "575025255250"
+    apiKey: "AIzaSyBZWmUQWKU1vs--CMbITX8lawdmCslHaJs",
+    authDomain: "lpa-space.firebaseapp.com",
+    databaseURL: END_POINT_URL,
+    storageBucket: "lpa-space.appspot.com",
+    messagingSenderId: "942783265132"
   };
   // Initialize Firebase
   firebase.initializeApp(config);
@@ -56,8 +52,6 @@
   var provider = new firebase.auth.GoogleAuthProvider();
   provider.addScope("email");
   provider.addScope("profile");
-
->>>>>>> master
   authUserData = null;
 
   //
@@ -163,7 +157,6 @@
   //
   $("#logout-but").click(function() {
     firebase.auth().signOut().then(function() {
-      // Sign-out successful
       logoutUI();
     }, function(error) {
       console.log("Could not sign-out. err: " + error);
@@ -191,8 +184,6 @@
       eventAction: 'reload-schedule: ' + curAttendeeStartup,
       eventLabel: 'for day: ' + scDay
     });
-    //var readRef = new Firebase(END_POINT_URL + "/sessions/" + scDay + "/startups/" + curAttendeeStartup);
-    //readRef.orderByKey().once("value", function(snapshot) {
     ref.child("sessions").child(scDay).child("startups").child(curAttendeeStartup).once("value", function(snapshot) {
       var sessions = snapshot.val();
       if (sessions != null) {
@@ -297,12 +288,10 @@
   // Save the meeting notes
   //
   $('#attendee-schedule-list').on('click', '.meeting-save-button', function() {
-    // save the meeting notes
     var ta = $(this).parent().find('textarea');
     var notes = ta.val();
     var startTime = ta.data('starttime');
     var endTime = ta.data('endtime');
-
     var sliders = $(this).parent().find('input');
     var listenVal = $("#" + sliders[0].id).slider('getValue');
     var effectiveVal = $("#" + sliders[1].id).slider('getValue');
@@ -321,7 +310,6 @@
     });
     var curUnixTime = new Date().getTime();
     var disTime = new Date().toJSON().slice(0, 21);
-
 
     // save under notes for backup in case we re-set the schedule
     ref.child("notes-backup").child(keyToNotesBackup).set({
@@ -352,7 +340,7 @@
     if (key === "na@na-com") {
       return;
     }
-    //var ref = new Firebase(END_POINT_URL + "/mentors/" + key);
+    
     var ref = firebase.database().ref("mentors/" + key);
     ref.on("value", function(mentorSnap) {
       var mentor = mentorSnap.val();
@@ -406,7 +394,6 @@
   // read the list of startups and display it
   //
   function readStartups(authData) {
-    // var readRef = new Firebase(END_POINT_URL + "/startups/");
     var readRef = firebase.database().ref("startups");
     readRef.orderByKey().on("value", function(snapshot) {
       //console.log("The Startups: " + JSON.stringify(snapshot.val()));
@@ -421,7 +408,6 @@
         if (startupData.twitter && startupData.twitter.length > 2) {
           twitterLink = '&nbsp;&nbsp;<b>Twitter:</b> <a href="http://twitter.com/' + startupData.twitter + '" target="_blank">' + startupData.twitter + '</a>';
         }
-        //console.log("key: " + key + " data: " + startupData);
         $("#startups-list").append(
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
           startupData.name + "&nbsp;&nbsp;<img src='" + startupLogoUrl + "' class='logo-img' alt='startup logo'>" +
@@ -447,10 +433,8 @@
   // read the list of mentors and display it
   //
   function readMentors(authData) {
-    // var readRef = new Firebase(END_POINT_URL + "/mentors/");
     var readRef = firebase.database().ref("mentors");
     readRef.orderByKey().on("value", function(snapshot) {
-      //console.log("The mentors: " + JSON.stringify(snapshot.val()));
       $("#mentors-list").html("");
       snapshot.forEach(function(childSnapshot) {
         var key = childSnapshot.key;
@@ -600,10 +584,8 @@
   // read the list of Attendees and display it
   //
   function readAttendees(authData) {
-    // var readRef = new Firebase(END_POINT_URL + "/attendees/");
     var readRef = firebase.database().ref("attendees");
     readRef.orderByKey().on("value", function(snapshot) {
-      //console.log("The attendees: " + JSON.stringify(snapshot.val()));
       $("#att-list").html("");
       snapshot.forEach(function(childSnapshot) {
         var key = childSnapshot.key;

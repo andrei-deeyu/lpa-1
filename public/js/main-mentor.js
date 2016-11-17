@@ -37,7 +37,6 @@
   // AUTH fun
   // start the connection with Firebase
   //
-<<<<<<< HEAD
   var END_POINT_URL = "https://lpa-space.firebaseio.com";
   var config = {
     apiKey: "AIzaSyBZWmUQWKU1vs--CMbITX8lawdmCslHaJs",
@@ -45,15 +44,6 @@
     databaseURL: END_POINT_URL,
     storageBucket: "lpa-space.appspot.com",
     messagingSenderId: "942783265132"
-=======
-  var END_POINT_URL = "https://lpa-1.firebaseio.com";
-  var config = {
-    apiKey: "AIzaSyDImJzAqBmZVXdaK55jVfRuoaHVLBDFgxU",
-    authDomain: "lpa-1.firebaseapp.com",
-    databaseURL: "https://lpa-1.firebaseio.com",
-    storageBucket: "project-1969056342883930904.appspot.com",
-    messagingSenderId: "575025255250"
->>>>>>> master
   };
   // Initialize Firebase
   firebase.initializeApp(config);
@@ -63,20 +53,11 @@
   var provider = new firebase.auth.GoogleAuthProvider();
   provider.addScope("email");
   provider.addScope("profile");
-<<<<<<< HEAD
-
   authUserData = null;
-=======
->>>>>>> master
 
-  authUserData = null;
   //
   // Authentication actions
   //
-<<<<<<< HEAD
-  //ref.onAuth(function(authData) {
-=======
->>>>>>> master
   firebase.auth().onAuthStateChanged(function(authData) {
     if (authData) {
       if (authData.providerData[0] && authData.providerData[0].providerId !== "google.com") {
@@ -84,7 +65,6 @@
         return;
       }
 
-<<<<<<< HEAD
       authUserData = authData;
       localStorage.setItem("lpa1-g-authData", JSON.stringify(authData));
       $("#sc-reload-button").prop('disabled', false);
@@ -99,22 +79,6 @@
       $("#logout-but").text("Logout " + authData.displayName);
       $("#form-name-field").val(authData.displayName);
       $("#form-pic-url").val(authData.photoURL);
-=======
-      authUserData = authData.providerData[0];
-      localStorage.setItem("lpa1-g-authData", JSON.stringify(authData));
-      $("#sc-reload-button").prop('disabled', false);
-      console.log("User " + authData.uid + " is logged in with ", authData.providerData);
-      $("#login-form").html("<img src='" + authUserData.photoURL + "' class='g-mentor-logo' alt='mentor logo' />");
-      $("#logout-div").html("<form class='navbar-form navbar-right' role='form'><button id='logout-but' class='btn btn-success'>Logout</button> </form>");
-
-      curMentorEmail = authUserData.email;
-      curMentorEmail = curMentorEmail.replace(/\./g, "-");
-      fetchMentor(curMentorEmail);
-      // init our mentor with what we have from google-login
-      $("#logout-but").text("Logout " + authUserData.displayName);
-      $("#form-name-field").val(authUserData.displayName);
-      $("#form-pic-url").val(authUserData.photoURL);
->>>>>>> master
 
       readStartups(authData);
       readAttendees(authData);
@@ -162,25 +126,14 @@
       var email = error.email;
       var credential = error.credential;
       console.log("Login Failed!", error);
-<<<<<<< HEAD
-        ga('send', {
-          hitType: 'event',
-          eventCategory: 'sign-in-mentor',
-          eventAction: 'sign-in-button',
-          eventLabel: 'authentication failed. errCode: ' + errorCode + 
-            ' msg: ' + errorMessage + ' email: ' + email  + ' credential: ' + credential
-        });
-        $("#err-modal").modal('show');
-=======
       ga('send', {
         hitType: 'event',
         eventCategory: 'sign-in-mentor',
         eventAction: 'sign-in-button',
-        eventLabel: 'authentication failed. errCode: ' + errorCode +
-          ' msg: ' + errorMessage + ' email: ' + email + ' credential: ' + credential
+        eventLabel: 'authentication failed. errCode: ' + errorCode + 
+          ' msg: ' + errorMessage + ' email: ' + email  + ' credential: ' + credential
       });
       $("#err-modal").modal('show');
->>>>>>> master
     });
   }
 
@@ -205,20 +158,10 @@
   // logout action
   //
   $("#logout-but").click(function() {
-<<<<<<< HEAD
-    //ref.unauth();
-=======
->>>>>>> master
     firebase.auth().signOut().then(function() {
-      // Sign-out successful
       logoutUI();
     }, function(error) {
-<<<<<<< HEAD
-      // An error happened.
-      console.log("Could not sign-out. err: "+ error);
-=======
       console.log("Could not sign-out. err: " + error);
->>>>>>> master
     });
     return false;
   });
@@ -254,11 +197,7 @@
           var meetingNotesKey = scDay + "/mentors/" + curMentorEmail + "/" + key + "/notes";
           var startupNotesKey = scDay + "/startups/" + scData.startup + "/notes/" + curMentorEmail + "/" + key;
           var startupBackupNotesKey = "/startups/" + scData.startup + "/" + scDay + "/notes/" + curMentorEmail + "/" + key;
-<<<<<<< HEAD
           var photosHTML = '<h5><b>Photos</b></h5> <div class="row">' +  //col-lg-2 col-md-2 col-sm-3
-=======
-          var photosHTML = '<h5><b>Photos</b></h5> <div class="row">' + //col-lg-2 col-md-2 col-sm-3
->>>>>>> master
             '<div class="img-1-upload"> <label for="camera-' + key + '" class="cam-label-but"> <span class="glyphicon glyphicon-camera"></span> Camera </label> \
               <input type="file" accept="image/*" capture="camera" id="camera-' + key + '" class="camera-but"> </div> \
             <div class="" id="img-place-holder-' + key + '" data-imgs-num="1"> </div> \
@@ -287,11 +226,6 @@
             '" data-startup="ai-' + startupNotesKey + '" data-notes-backup="ai-' + startupBackupNotesKey +
             '" name="meeting-notes">' +
             '</textarea> ' + photosHTML + '<br><button class="btn btn-warning meeting-save-button">Save Notes</button> </p> </div> </div> </div>';
-<<<<<<< HEAD
-          
-=======
-
->>>>>>> master
         });
         $("#mentor-schedule-list").html(html);
         $(".note-slider").slider({ tooltip: 'always' });
@@ -337,17 +271,10 @@
         '" data-starttime="' + startTime + '" data-endtime="' + endTime + '" name="meeting-notes">' +
         '</textarea>  <br>What are the action items? \
       <textarea id="ai-' + key + '" class="form-control col-lg-10 meeting-notes-text" data-key="ai-' + meetingNotesKey +
-<<<<<<< HEAD
       '" data-startup="ai-' + startupNotesKey + '" data-notes-backup="ai-' + startupBackupNotesKey +
       '" name="meeting-notes"> </textarea> <h5>Photos</h5> ' +
       '<div class="row">' + 
       '<div class="col-lg-5 col-md-5 col-sm-5 img-1-upload"> <label for="camera-1" class="cam-label-but"> <span class="glyphicon glyphicon-camera"></span> Camera </label> \
-=======
-        '" data-startup="ai-' + startupNotesKey + '" data-notes-backup="ai-' + startupBackupNotesKey +
-        '" name="meeting-notes"> </textarea> <h5>Photos</h5> ' +
-        '<div class="row">' +
-        '<div class="col-lg-5 col-md-5 col-sm-5 img-1-upload"> <label for="camera-1" class="cam-label-but"> <span class="glyphicon glyphicon-camera"></span> Camera </label> \
->>>>>>> master
         <input type="file" accept="image/*" capture="camera" id="camera-1" class="camera-but"> </div> \
       <div class="col-lg-3 col-md-3 col-sm-3" id="img-place-holder" data-imgs-num="1"> </div> \
       </div> \
@@ -404,15 +331,8 @@
         picKey = (event.target.id).substring(6);
         imgsElemId += picKey;
       }
-<<<<<<< HEAD
-      
       var imgNum = $(imgsElemId).attr("data-imgs-num");
       $(imgsElemId).append('<a id="pic-' + imgNum + picKey + 
-=======
-
-      var imgNum = $(imgsElemId).attr("data-imgs-num");
-      $(imgsElemId).append('<a id="pic-' + imgNum + picKey +
->>>>>>> master
         '-link" href="#" target="_blank" class="pic-link"> </a> <img id="pic-' + imgNum + picKey +
         '" height="60" class="pic-src"> ');
       var picElem = $("#pic-" + imgNum + picKey);
@@ -457,15 +377,9 @@
       if (noteData != null && noteData.imgs) {
         var imgsHTML = "";
         for (var i = 0; i < noteData.imgs.length; i++) {
-<<<<<<< HEAD
           imgsHTML += '<a id="pic-' + (i+1) + textareaKey + '-link" href="' + noteData.imgs[i] + 
           '" target="_blank" class="pic-link"> <img id="pic-' + 
           (i+1) + textareaKey + '" height="80" class="pic-src" src="' + noteData.imgs[i] + '"> </a>';
-=======
-          imgsHTML += '<a id="pic-' + (i + 1) + textareaKey + '-link" href="' + noteData.imgs[i] +
-            '" target="_blank" class="pic-link"> <img id="pic-' +
-            (i + 1) + textareaKey + '" height="80" class="pic-src" src="' + noteData.imgs[i] + '"> </a>';
->>>>>>> master
         }
         $("#" + imgsKey).html(imgsHTML);
         $("#" + imgsKey).attr('data-imgs-num', i);
@@ -573,11 +487,7 @@
     var effectiveVal = $("#" + sliders[1].id).slider('getValue');
 
     var imgsElem = thisElem.parent().find('a');
-<<<<<<< HEAD
-    console.log("Links to images: ", imgsElem);
-=======
     //console.log("Links to images: ", imgsElem);
->>>>>>> master
     var imgsLinks = [];
     for (var i = 0; i < imgsElem.length; i++) {
       if (imgsElem[i].href && imgsElem[i].href.length > 10) {
@@ -1190,11 +1100,7 @@
             console.log('Upload is paused');
             $("#" + uploadTask.picId + "-link").html("Upload is paused");
             break;
-<<<<<<< HEAD
           case firebase.storage.TaskState.RUNNING: 
-=======
-          case firebase.storage.TaskState.RUNNING:
->>>>>>> master
             console.log('Upload is running with ' + pic.id);
             break;
         }
