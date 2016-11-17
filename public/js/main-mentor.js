@@ -5,13 +5,13 @@
 // V0.9
 //
 // A 🐱 App
-//
+////
 (function() {
   $(".save-alert").hide();
   $("#alert-warning-sign-in").hide();
   $("#spin").hide();
   addToHomescreen({
-   startDelay: 15
+    startDelay: 15
   });
 
   var startupNameList = [];
@@ -37,6 +37,7 @@
   // AUTH fun
   // start the connection with Firebase
   //
+<<<<<<< HEAD
   var END_POINT_URL = "https://lpa-space.firebaseio.com";
   var config = {
     apiKey: "AIzaSyBZWmUQWKU1vs--CMbITX8lawdmCslHaJs",
@@ -44,6 +45,15 @@
     databaseURL: END_POINT_URL,
     storageBucket: "lpa-space.appspot.com",
     messagingSenderId: "942783265132"
+=======
+  var END_POINT_URL = "https://lpa-1.firebaseio.com";
+  var config = {
+    apiKey: "AIzaSyDImJzAqBmZVXdaK55jVfRuoaHVLBDFgxU",
+    authDomain: "lpa-1.firebaseapp.com",
+    databaseURL: "https://lpa-1.firebaseio.com",
+    storageBucket: "project-1969056342883930904.appspot.com",
+    messagingSenderId: "575025255250"
+>>>>>>> master
   };
   // Initialize Firebase
   firebase.initializeApp(config);
@@ -53,13 +63,20 @@
   var provider = new firebase.auth.GoogleAuthProvider();
   provider.addScope("email");
   provider.addScope("profile");
+<<<<<<< HEAD
 
   authUserData = null;
+=======
+>>>>>>> master
 
+  authUserData = null;
   //
   // Authentication actions
   //
+<<<<<<< HEAD
   //ref.onAuth(function(authData) {
+=======
+>>>>>>> master
   firebase.auth().onAuthStateChanged(function(authData) {
     if (authData) {
       if (authData.providerData[0] && authData.providerData[0].providerId !== "google.com") {
@@ -67,6 +84,7 @@
         return;
       }
 
+<<<<<<< HEAD
       authUserData = authData;
       localStorage.setItem("lpa1-g-authData", JSON.stringify(authData));
       $("#sc-reload-button").prop('disabled', false);
@@ -81,6 +99,22 @@
       $("#logout-but").text("Logout " + authData.displayName);
       $("#form-name-field").val(authData.displayName);
       $("#form-pic-url").val(authData.photoURL);
+=======
+      authUserData = authData.providerData[0];
+      localStorage.setItem("lpa1-g-authData", JSON.stringify(authData));
+      $("#sc-reload-button").prop('disabled', false);
+      console.log("User " + authData.uid + " is logged in with ", authData.providerData);
+      $("#login-form").html("<img src='" + authUserData.photoURL + "' class='g-mentor-logo' alt='mentor logo' />");
+      $("#logout-div").html("<form class='navbar-form navbar-right' role='form'><button id='logout-but' class='btn btn-success'>Logout</button> </form>");
+
+      curMentorEmail = authUserData.email;
+      curMentorEmail = curMentorEmail.replace(/\./g, "-");
+      fetchMentor(curMentorEmail);
+      // init our mentor with what we have from google-login
+      $("#logout-but").text("Logout " + authUserData.displayName);
+      $("#form-name-field").val(authUserData.displayName);
+      $("#form-pic-url").val(authUserData.photoURL);
+>>>>>>> master
 
       readStartups(authData);
       readAttendees(authData);
@@ -128,6 +162,7 @@
       var email = error.email;
       var credential = error.credential;
       console.log("Login Failed!", error);
+<<<<<<< HEAD
         ga('send', {
           hitType: 'event',
           eventCategory: 'sign-in-mentor',
@@ -136,6 +171,16 @@
             ' msg: ' + errorMessage + ' email: ' + email  + ' credential: ' + credential
         });
         $("#err-modal").modal('show');
+=======
+      ga('send', {
+        hitType: 'event',
+        eventCategory: 'sign-in-mentor',
+        eventAction: 'sign-in-button',
+        eventLabel: 'authentication failed. errCode: ' + errorCode +
+          ' msg: ' + errorMessage + ' email: ' + email + ' credential: ' + credential
+      });
+      $("#err-modal").modal('show');
+>>>>>>> master
     });
   }
 
@@ -160,13 +205,20 @@
   // logout action
   //
   $("#logout-but").click(function() {
+<<<<<<< HEAD
     //ref.unauth();
+=======
+>>>>>>> master
     firebase.auth().signOut().then(function() {
       // Sign-out successful
       logoutUI();
     }, function(error) {
+<<<<<<< HEAD
       // An error happened.
       console.log("Could not sign-out. err: "+ error);
+=======
+      console.log("Could not sign-out. err: " + error);
+>>>>>>> master
     });
     return false;
   });
@@ -202,7 +254,11 @@
           var meetingNotesKey = scDay + "/mentors/" + curMentorEmail + "/" + key + "/notes";
           var startupNotesKey = scDay + "/startups/" + scData.startup + "/notes/" + curMentorEmail + "/" + key;
           var startupBackupNotesKey = "/startups/" + scData.startup + "/" + scDay + "/notes/" + curMentorEmail + "/" + key;
+<<<<<<< HEAD
           var photosHTML = '<h5><b>Photos</b></h5> <div class="row">' +  //col-lg-2 col-md-2 col-sm-3
+=======
+          var photosHTML = '<h5><b>Photos</b></h5> <div class="row">' + //col-lg-2 col-md-2 col-sm-3
+>>>>>>> master
             '<div class="img-1-upload"> <label for="camera-' + key + '" class="cam-label-but"> <span class="glyphicon glyphicon-camera"></span> Camera </label> \
               <input type="file" accept="image/*" capture="camera" id="camera-' + key + '" class="camera-but"> </div> \
             <div class="" id="img-place-holder-' + key + '" data-imgs-num="1"> </div> \
@@ -210,9 +266,9 @@
           //console.log("=== Update mentors and comments for: " + key + " | data: " + scData);  getHourAsRange(key)
           html += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
             '<button class="btn btn-warning fetch-notes-button" data-key="' + scData.startup + '">' + scData.startup + '</button>' + '  ' +
-            scData.starttime + " - " + scData.endtime + 
+            scData.starttime + " - " + scData.endtime +
             ' <button class="btn expend-notes-but btn-info" type="button" data-textarea-key="' + key + '" data-note-key="' + startupBackupNotesKey +
-            '" data-toggle="collapse" data-target="#mentor-note-p-' + key + 
+            '" data-toggle="collapse" data-target="#mentor-note-p-' + key +
             '" aria-expanded="false" aria-controls="collapseMentorDetails"> <span class="glyphicon glyphicon-resize-vertical" aria-hidden="true"></span>Open</button>' +
             ' </h3><b>Location: ' + scData.location + '</b> </div> ' +
             '<div id="mentor-note-p-' + key + '" class="panel-body collapse">' +
@@ -231,7 +287,11 @@
             '" data-startup="ai-' + startupNotesKey + '" data-notes-backup="ai-' + startupBackupNotesKey +
             '" name="meeting-notes">' +
             '</textarea> ' + photosHTML + '<br><button class="btn btn-warning meeting-save-button">Save Notes</button> </p> </div> </div> </div>';
+<<<<<<< HEAD
           
+=======
+
+>>>>>>> master
         });
         $("#mentor-schedule-list").html(html);
         $(".note-slider").slider({ tooltip: 'always' });
@@ -265,37 +325,44 @@
     var selHtml = getStartupSelect();
     bootbox.confirm({
       message: '<label>The Startup </label>  ' + selHtml + '<h5><label><br>Did the attendees were open and receptive? (1-5)</label></h5><br>\
-      <input type="text" class="note-slider" id="note-receptive-' + key + 
-      '" name="note-receptive" data-provide="slider" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide"> \
+      <input type="text" class="note-slider" id="note-receptive-' + key +
+        '" name="note-receptive" data-provide="slider" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide"> \
       <br><h5> <label>Was the session effective? (1-5)</label></h5><br> \
-      <input type="text" class="note-slider" id="note-effective-' + key + 
-      '" name="note-effective" data-provide="slider" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide"> \
+      <input type="text" class="note-slider" id="note-effective-' + key +
+        '" name="note-effective" data-provide="slider" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide"> \
       <br><br> \
       What did you talked about? \
       <textarea id="' + key + '" class="form-control col-lg-10 meeting-notes-text" data-key="' + meetingNotesKey +
-      '" data-startup="' + startupNotesKey + '" data-notes-backup="' + startupBackupNotesKey +
-      '" data-starttime="' +  startTime + '" data-endtime="' + endTime + '" name="meeting-notes">' +
-      '</textarea>  <br>What are the action items? \
+        '" data-startup="' + startupNotesKey + '" data-notes-backup="' + startupBackupNotesKey +
+        '" data-starttime="' + startTime + '" data-endtime="' + endTime + '" name="meeting-notes">' +
+        '</textarea>  <br>What are the action items? \
       <textarea id="ai-' + key + '" class="form-control col-lg-10 meeting-notes-text" data-key="ai-' + meetingNotesKey +
+<<<<<<< HEAD
       '" data-startup="ai-' + startupNotesKey + '" data-notes-backup="ai-' + startupBackupNotesKey +
       '" name="meeting-notes"> </textarea> <h5>Photos</h5> ' +
       '<div class="row">' + 
       '<div class="col-lg-5 col-md-5 col-sm-5 img-1-upload"> <label for="camera-1" class="cam-label-but"> <span class="glyphicon glyphicon-camera"></span> Camera </label> \
+=======
+        '" data-startup="ai-' + startupNotesKey + '" data-notes-backup="ai-' + startupBackupNotesKey +
+        '" name="meeting-notes"> </textarea> <h5>Photos</h5> ' +
+        '<div class="row">' +
+        '<div class="col-lg-5 col-md-5 col-sm-5 img-1-upload"> <label for="camera-1" class="cam-label-but"> <span class="glyphicon glyphicon-camera"></span> Camera </label> \
+>>>>>>> master
         <input type="file" accept="image/*" capture="camera" id="camera-1" class="camera-but"> </div> \
       <div class="col-lg-3 col-md-3 col-sm-3" id="img-place-holder" data-imgs-num="1"> </div> \
       </div> \
         <button id="adhoc-save-but">Save</button</p>',
       buttons: {
         confirm: {
-            label: 'Save Notes',
-            className: 'btn-success'
+          label: 'Save Notes',
+          className: 'btn-success'
         },
         cancel: {
-            label: 'Cancel',
-            className: 'btn-danger'
+          label: 'Cancel',
+          className: 'btn-danger'
         }
       },
-      callback: function (result) {
+      callback: function(result) {
         if (result) {
           var selStartup = $("#att-startup-list-select option:selected").text();
           startupBackupNotesKey = "/startups/" + selStartup + "/" + scDay + "/notes/" + curMentorEmail + "/" + key;
@@ -309,7 +376,7 @@
           // console.log("Saving startup: " + selStartup + " stkey: " + 
           //   $("#"+key).attr('data-notes-backup') + " startupNotesKey: " +   $("#"+key).attr('data-startup') + 
           //   " mentor: "+ curMentorEmail + " key: "+key);
-          saveMeetingNotes( $("#adhoc-save-but"), selStartup);  
+          saveMeetingNotes($("#adhoc-save-but"), selStartup);
         }
       }
     });
@@ -337,9 +404,15 @@
         picKey = (event.target.id).substring(6);
         imgsElemId += picKey;
       }
+<<<<<<< HEAD
       
       var imgNum = $(imgsElemId).attr("data-imgs-num");
       $(imgsElemId).append('<a id="pic-' + imgNum + picKey + 
+=======
+
+      var imgNum = $(imgsElemId).attr("data-imgs-num");
+      $(imgsElemId).append('<a id="pic-' + imgNum + picKey +
+>>>>>>> master
         '-link" href="#" target="_blank" class="pic-link"> </a> <img id="pic-' + imgNum + picKey +
         '" height="60" class="pic-src"> ');
       var picElem = $("#pic-" + imgNum + picKey);
@@ -384,9 +457,15 @@
       if (noteData != null && noteData.imgs) {
         var imgsHTML = "";
         for (var i = 0; i < noteData.imgs.length; i++) {
+<<<<<<< HEAD
           imgsHTML += '<a id="pic-' + (i+1) + textareaKey + '-link" href="' + noteData.imgs[i] + 
           '" target="_blank" class="pic-link"> <img id="pic-' + 
           (i+1) + textareaKey + '" height="80" class="pic-src" src="' + noteData.imgs[i] + '"> </a>';
+=======
+          imgsHTML += '<a id="pic-' + (i + 1) + textareaKey + '-link" href="' + noteData.imgs[i] +
+            '" target="_blank" class="pic-link"> <img id="pic-' +
+            (i + 1) + textareaKey + '" height="80" class="pic-src" src="' + noteData.imgs[i] + '"> </a>';
+>>>>>>> master
         }
         $("#" + imgsKey).html(imgsHTML);
         $("#" + imgsKey).attr('data-imgs-num', i);
@@ -439,9 +518,9 @@
                   actionItemsHtml = val.actionItems.replace(/\n/g, "<br>");
                 }
                 var tmpMentorEmailStr = tmpMentorEmail.replace(/-/g, ".");
-                var tmpMentorDetails = '<button class="btn btn-sm btn-info fetch-mentor-button" data-key="' + tmpMentorEmail + '">' + 
-                                        tmpMentorEmailStr + '</button>';
-                
+                var tmpMentorDetails = '<button class="btn btn-sm btn-info fetch-mentor-button" data-key="' + tmpMentorEmail + '">' +
+                  tmpMentorEmailStr + '</button>';
+
                 html += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
                   keyDate + " | " + meetingTime + ' </h3> </div> <div class="panel-body">' +
                   '<b>Mentor:</b> ' + tmpMentorDetails + '<br><b>Updated At: </b>' + noteDate +
@@ -470,7 +549,7 @@
   // Save the meeting notes
   //
   $('#mentor-schedule-list').on('click', '.meeting-save-button', function() {
-    saveMeetingNotes( $(this) ,"");
+    saveMeetingNotes($(this), "");
   });
 
   //
@@ -494,7 +573,11 @@
     var effectiveVal = $("#" + sliders[1].id).slider('getValue');
 
     var imgsElem = thisElem.parent().find('a');
+<<<<<<< HEAD
     console.log("Links to images: ", imgsElem);
+=======
+    //console.log("Links to images: ", imgsElem);
+>>>>>>> master
     var imgsLinks = [];
     for (var i = 0; i < imgsElem.length; i++) {
       if (imgsElem[i].href && imgsElem[i].href.length > 10) {
@@ -522,7 +605,7 @@
     });
     var curUnixTime = new Date().getTime();
     var disTime = new Date().toJSON().slice(0, 21);
-    
+
     // We hold the open/close button to trigger it when the save operation is done.
     var closingButton = thisElem.parent().parent().find('button')[1];
 
@@ -562,7 +645,7 @@
     }, function(error) {
       if (error) {
         bootbox.alert("Meeting notes for: " + keyToStartup + " could not be saved :( Details: " + error);
-      } 
+      }
     });
     // save under notes for backup in case we re-set the schedule
     // TODO: copy the notes to the new schedule?
@@ -579,32 +662,32 @@
     }, function(error) {
       if (error) {
         console.log("Meeting notes for: " + keyToStartup + " could not be saved :( Details: " + error);
-      } 
+      }
     });
 
     if (startupName.length > 1) {
       // we need to save the startup as we are on ad hoc meeting
       var tmpInx = keyToSession.lastIndexOf('/');
       var tmpKey = keyToSession.substring(0, tmpInx);
-      ref.child("sessions").child(tmpKey).set({  
+      ref.child("sessions").child(tmpKey).set({
         startup: startupName,
         location: "earth",
         starttime: startTime,
         endtime: endTime
-      }, function (error) {
+      }, function(error) {
         if (error) {
-          console.log("Error in saving the startup: " + startupName + " for ad hoc meeting. Err: "+ error);
+          console.log("Error in saving the startup: " + startupName + " for ad hoc meeting. Err: " + error);
         } else {
           // let's reload the schedule with this new meeting/notes
           $("#sc-reload-button").click();
         }
       });
       ga('send', {
-      hitType: 'event',
-      eventCategory: 'startup-notes-mentor',
-      eventAction: 'save-notes-ad-hoc-meeting',
-      eventLabel: 'keyToNotesBackup: ' + keyToNotesBackup
-    });
+        hitType: 'event',
+        eventCategory: 'startup-notes-mentor',
+        eventAction: 'save-notes-ad-hoc-meeting',
+        eventLabel: 'keyToNotesBackup: ' + keyToNotesBackup
+      });
     }
 
   }
@@ -612,7 +695,7 @@
   // TODO: remove it once we don't need to support the old way of meeting times
   //
   function getHourAsRange(key) {
-     if (key.indexOf("1") > 0) {
+    if (key.indexOf("1") > 0) {
       return "10:00 - 11:00";
     } else if (key.indexOf("2") > 0) {
       return "11:00 - 12:00";
@@ -1107,7 +1190,11 @@
             console.log('Upload is paused');
             $("#" + uploadTask.picId + "-link").html("Upload is paused");
             break;
+<<<<<<< HEAD
           case firebase.storage.TaskState.RUNNING: 
+=======
+          case firebase.storage.TaskState.RUNNING:
+>>>>>>> master
             console.log('Upload is running with ' + pic.id);
             break;
         }

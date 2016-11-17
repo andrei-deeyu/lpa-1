@@ -5,13 +5,13 @@
 // V0.9
 //
 // A 🐱 App
-//
+////
 (function() {
   $(".save-alert").hide();
   $("#alert-warning-sign-in").hide();
   $("#spin").hide();
   addToHomescreen({
-   startDelay: 15
+    startDelay: 15
   });
 
   var startupNameList = [];
@@ -53,13 +53,11 @@
   var provider = new firebase.auth.GoogleAuthProvider();
   provider.addScope("email");
   provider.addScope("profile");
-
   authUserData = null;
 
   //
   // Authentication actions
   //
-  //ref.onAuth(function(authData) {
   firebase.auth().onAuthStateChanged(function(authData) {
     if (authData) {
       if (authData.providerData[0] && authData.providerData[0].providerId !== "google.com") {
@@ -128,14 +126,14 @@
       var email = error.email;
       var credential = error.credential;
       console.log("Login Failed!", error);
-        ga('send', {
-          hitType: 'event',
-          eventCategory: 'sign-in-mentor',
-          eventAction: 'sign-in-button',
-          eventLabel: 'authentication failed. errCode: ' + errorCode + 
-            ' msg: ' + errorMessage + ' email: ' + email  + ' credential: ' + credential
-        });
-        $("#err-modal").modal('show');
+      ga('send', {
+        hitType: 'event',
+        eventCategory: 'sign-in-mentor',
+        eventAction: 'sign-in-button',
+        eventLabel: 'authentication failed. errCode: ' + errorCode + 
+          ' msg: ' + errorMessage + ' email: ' + email  + ' credential: ' + credential
+      });
+      $("#err-modal").modal('show');
     });
   }
 
@@ -160,13 +158,10 @@
   // logout action
   //
   $("#logout-but").click(function() {
-    //ref.unauth();
     firebase.auth().signOut().then(function() {
-      // Sign-out successful
       logoutUI();
     }, function(error) {
-      // An error happened.
-      console.log("Could not sign-out. err: "+ error);
+      console.log("Could not sign-out. err: " + error);
     });
     return false;
   });
@@ -210,9 +205,9 @@
           //console.log("=== Update mentors and comments for: " + key + " | data: " + scData);  getHourAsRange(key)
           html += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
             '<button class="btn btn-warning fetch-notes-button" data-key="' + scData.startup + '">' + scData.startup + '</button>' + '  ' +
-            scData.starttime + " - " + scData.endtime + 
+            scData.starttime + " - " + scData.endtime +
             ' <button class="btn expend-notes-but btn-info" type="button" data-textarea-key="' + key + '" data-note-key="' + startupBackupNotesKey +
-            '" data-toggle="collapse" data-target="#mentor-note-p-' + key + 
+            '" data-toggle="collapse" data-target="#mentor-note-p-' + key +
             '" aria-expanded="false" aria-controls="collapseMentorDetails"> <span class="glyphicon glyphicon-resize-vertical" aria-hidden="true"></span>Open</button>' +
             ' </h3><b>Location: ' + scData.location + '</b> </div> ' +
             '<div id="mentor-note-p-' + key + '" class="panel-body collapse">' +
@@ -231,7 +226,6 @@
             '" data-startup="ai-' + startupNotesKey + '" data-notes-backup="ai-' + startupBackupNotesKey +
             '" name="meeting-notes">' +
             '</textarea> ' + photosHTML + '<br><button class="btn btn-warning meeting-save-button">Save Notes</button> </p> </div> </div> </div>';
-          
         });
         $("#mentor-schedule-list").html(html);
         $(".note-slider").slider({ tooltip: 'always' });
@@ -265,17 +259,17 @@
     var selHtml = getStartupSelect();
     bootbox.confirm({
       message: '<label>The Startup </label>  ' + selHtml + '<h5><label><br>Did the attendees were open and receptive? (1-5)</label></h5><br>\
-      <input type="text" class="note-slider" id="note-receptive-' + key + 
-      '" name="note-receptive" data-provide="slider" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide"> \
+      <input type="text" class="note-slider" id="note-receptive-' + key +
+        '" name="note-receptive" data-provide="slider" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide"> \
       <br><h5> <label>Was the session effective? (1-5)</label></h5><br> \
-      <input type="text" class="note-slider" id="note-effective-' + key + 
-      '" name="note-effective" data-provide="slider" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide"> \
+      <input type="text" class="note-slider" id="note-effective-' + key +
+        '" name="note-effective" data-provide="slider" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide"> \
       <br><br> \
       What did you talked about? \
       <textarea id="' + key + '" class="form-control col-lg-10 meeting-notes-text" data-key="' + meetingNotesKey +
-      '" data-startup="' + startupNotesKey + '" data-notes-backup="' + startupBackupNotesKey +
-      '" data-starttime="' +  startTime + '" data-endtime="' + endTime + '" name="meeting-notes">' +
-      '</textarea>  <br>What are the action items? \
+        '" data-startup="' + startupNotesKey + '" data-notes-backup="' + startupBackupNotesKey +
+        '" data-starttime="' + startTime + '" data-endtime="' + endTime + '" name="meeting-notes">' +
+        '</textarea>  <br>What are the action items? \
       <textarea id="ai-' + key + '" class="form-control col-lg-10 meeting-notes-text" data-key="ai-' + meetingNotesKey +
       '" data-startup="ai-' + startupNotesKey + '" data-notes-backup="ai-' + startupBackupNotesKey +
       '" name="meeting-notes"> </textarea> <h5>Photos</h5> ' +
@@ -287,15 +281,15 @@
         <button id="adhoc-save-but">Save</button</p>',
       buttons: {
         confirm: {
-            label: 'Save Notes',
-            className: 'btn-success'
+          label: 'Save Notes',
+          className: 'btn-success'
         },
         cancel: {
-            label: 'Cancel',
-            className: 'btn-danger'
+          label: 'Cancel',
+          className: 'btn-danger'
         }
       },
-      callback: function (result) {
+      callback: function(result) {
         if (result) {
           var selStartup = $("#att-startup-list-select option:selected").text();
           startupBackupNotesKey = "/startups/" + selStartup + "/" + scDay + "/notes/" + curMentorEmail + "/" + key;
@@ -309,7 +303,7 @@
           // console.log("Saving startup: " + selStartup + " stkey: " + 
           //   $("#"+key).attr('data-notes-backup') + " startupNotesKey: " +   $("#"+key).attr('data-startup') + 
           //   " mentor: "+ curMentorEmail + " key: "+key);
-          saveMeetingNotes( $("#adhoc-save-but"), selStartup);  
+          saveMeetingNotes($("#adhoc-save-but"), selStartup);
         }
       }
     });
@@ -337,7 +331,6 @@
         picKey = (event.target.id).substring(6);
         imgsElemId += picKey;
       }
-      
       var imgNum = $(imgsElemId).attr("data-imgs-num");
       $(imgsElemId).append('<a id="pic-' + imgNum + picKey + 
         '-link" href="#" target="_blank" class="pic-link"> </a> <img id="pic-' + imgNum + picKey +
@@ -439,9 +432,9 @@
                   actionItemsHtml = val.actionItems.replace(/\n/g, "<br>");
                 }
                 var tmpMentorEmailStr = tmpMentorEmail.replace(/-/g, ".");
-                var tmpMentorDetails = '<button class="btn btn-sm btn-info fetch-mentor-button" data-key="' + tmpMentorEmail + '">' + 
-                                        tmpMentorEmailStr + '</button>';
-                
+                var tmpMentorDetails = '<button class="btn btn-sm btn-info fetch-mentor-button" data-key="' + tmpMentorEmail + '">' +
+                  tmpMentorEmailStr + '</button>';
+
                 html += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
                   keyDate + " | " + meetingTime + ' </h3> </div> <div class="panel-body">' +
                   '<b>Mentor:</b> ' + tmpMentorDetails + '<br><b>Updated At: </b>' + noteDate +
@@ -470,7 +463,7 @@
   // Save the meeting notes
   //
   $('#mentor-schedule-list').on('click', '.meeting-save-button', function() {
-    saveMeetingNotes( $(this) ,"");
+    saveMeetingNotes($(this), "");
   });
 
   //
@@ -494,7 +487,7 @@
     var effectiveVal = $("#" + sliders[1].id).slider('getValue');
 
     var imgsElem = thisElem.parent().find('a');
-    console.log("Links to images: ", imgsElem);
+    //console.log("Links to images: ", imgsElem);
     var imgsLinks = [];
     for (var i = 0; i < imgsElem.length; i++) {
       if (imgsElem[i].href && imgsElem[i].href.length > 10) {
@@ -522,7 +515,7 @@
     });
     var curUnixTime = new Date().getTime();
     var disTime = new Date().toJSON().slice(0, 21);
-    
+
     // We hold the open/close button to trigger it when the save operation is done.
     var closingButton = thisElem.parent().parent().find('button')[1];
 
@@ -562,7 +555,7 @@
     }, function(error) {
       if (error) {
         bootbox.alert("Meeting notes for: " + keyToStartup + " could not be saved :( Details: " + error);
-      } 
+      }
     });
     // save under notes for backup in case we re-set the schedule
     // TODO: copy the notes to the new schedule?
@@ -579,32 +572,32 @@
     }, function(error) {
       if (error) {
         console.log("Meeting notes for: " + keyToStartup + " could not be saved :( Details: " + error);
-      } 
+      }
     });
 
     if (startupName.length > 1) {
       // we need to save the startup as we are on ad hoc meeting
       var tmpInx = keyToSession.lastIndexOf('/');
       var tmpKey = keyToSession.substring(0, tmpInx);
-      ref.child("sessions").child(tmpKey).set({  
+      ref.child("sessions").child(tmpKey).set({
         startup: startupName,
         location: "earth",
         starttime: startTime,
         endtime: endTime
-      }, function (error) {
+      }, function(error) {
         if (error) {
-          console.log("Error in saving the startup: " + startupName + " for ad hoc meeting. Err: "+ error);
+          console.log("Error in saving the startup: " + startupName + " for ad hoc meeting. Err: " + error);
         } else {
           // let's reload the schedule with this new meeting/notes
           $("#sc-reload-button").click();
         }
       });
       ga('send', {
-      hitType: 'event',
-      eventCategory: 'startup-notes-mentor',
-      eventAction: 'save-notes-ad-hoc-meeting',
-      eventLabel: 'keyToNotesBackup: ' + keyToNotesBackup
-    });
+        hitType: 'event',
+        eventCategory: 'startup-notes-mentor',
+        eventAction: 'save-notes-ad-hoc-meeting',
+        eventLabel: 'keyToNotesBackup: ' + keyToNotesBackup
+      });
     }
 
   }
@@ -612,7 +605,7 @@
   // TODO: remove it once we don't need to support the old way of meeting times
   //
   function getHourAsRange(key) {
-     if (key.indexOf("1") > 0) {
+    if (key.indexOf("1") > 0) {
       return "10:00 - 11:00";
     } else if (key.indexOf("2") > 0) {
       return "11:00 - 12:00";
