@@ -202,10 +202,10 @@
           var meetingNotesKey = scDay + "/mentors/" + curMentorEmail + "/" + key + "/notes";
           var startupNotesKey = scDay + "/startups/" + scData.startup + "/notes/" + curMentorEmail + "/" + key;
           var startupBackupNotesKey = "/startups/" + scData.startup + "/" + scDay + "/notes/" + curMentorEmail + "/" + key;
-          var photosHTML = '<div class="row">' + 
-            '<div class="col-lg-5 col-md-5 col-sm-5 img-1-upload"> <label for="camera-' + key + '" class="cam-label-but"> <span class="glyphicon glyphicon-camera"></span> Camera </label> \
+          var photosHTML = '<h5><b>Photos</b></h5> <div class="row">' +  //col-lg-2 col-md-2 col-sm-3
+            '<div class="img-1-upload"> <label for="camera-' + key + '" class="cam-label-but"> <span class="glyphicon glyphicon-camera"></span> Camera </label> \
               <input type="file" accept="image/*" capture="camera" id="camera-' + key + '" class="camera-but"> </div> \
-            <div class="col-lg-3 col-md-3 col-sm-3" id="img-place-holder" data-imgs-num="1"> </div> \
+            <div class="col-lg-3 col-md-3 col-sm-3" id="img-place-holder-' + key + '" data-imgs-num="1"> </div> \
             </div> ';
           //console.log("=== Update mentors and comments for: " + key + " | data: " + scData);  getHourAsRange(key)
           html += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
@@ -330,14 +330,22 @@
   //
   $('body').on('change', '.camera-but', function(event) {
     if (event.target && event.target.files[0]) {
-      var imgNum = $("#img-place-holder").attr("data-imgs-num");
-      $("#img-place-holder").append('<a id="pic-' + imgNum + 
-        '-link" href="#" target="_blank" class="pic-link"> </a> <img id="pic-' + imgNum + 
+      var imgsElemId = "#img-place-holder";
+      var picKey = "";
+      if (event.target.id != "camera-1") {
+        // let's have the specific id for the list of meetings
+        picKey = (event.target.id).substring(6);
+        imgsElemId += picKey;
+      }
+      
+      var imgNum = $(imgsElemId).attr("data-imgs-num");
+      $(imgsElemId).append('<a id="pic-' + imgNum + picKey + 
+        '-link" href="#" target="_blank" class="pic-link"> </a> <img id="pic-' + imgNum + picKey +
         '" height="60" class="pic-src"> ');
-      var picElem = $("#pic-" + imgNum);
+      var picElem = $("#pic-" + imgNum + picKey);
       uploadImage(event, picElem[0]);
       var nImgNum = ++imgNum;
-      $("#img-place-holder").attr('data-imgs-num', nImgNum);
+      $(imgsElemId).attr('data-imgs-num', nImgNum);
     }
   });
 
@@ -350,6 +358,7 @@
     var textareaKey = $(this).data("textarea-key");
     var receptiveSliderKey = "note-receptive-" + textareaKey;
     var effectiveSliderKey = "note-effective-" + textareaKey;
+    var imgsKey = "img-place-holder-" + textareaKey;
     var readRef = firebase.database().ref("/notes-backup/" + key);
     ga('send', {
       hitType: 'event',
@@ -371,6 +380,16 @@
       }
       if (noteData != null && noteData.effective) {
         $("#" + effectiveSliderKey).slider('setValue', noteData.effective);
+      }
+      if (noteData != null && noteData.imgs) {
+        var imgsHTML = "";
+        for (var i = 0; i < noteData.imgs.length; i++) {
+          imgsHTML += '<a id="pic-' + (i+1) + textareaKey + '-link" href="' + noteData.imgs[i] + 
+          '" target="_blank" class="pic-link"> <img id="pic-' + 
+          (i+1) + textareaKey + '" height="80" class="pic-src" src="' + noteData.imgs[i] + '"> </a>';
+        }
+        $("#" + imgsKey).html(imgsHTML);
+        $("#" + imgsKey).attr('data-imgs-num', i);
       }
     });
 
