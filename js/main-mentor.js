@@ -336,7 +336,7 @@
       var imgNum = $(imgsElemId).attr("data-imgs-num");
       $(imgsElemId).append('<a id="pic-' + imgNum + picKey +
         '-link" href="#" target="_blank" class="pic-link"> </a> <img id="pic-' + imgNum + picKey +
-        '" height="60" class="pic-src"> ');
+        '" height="130" class="pic-src"> ');
       var picElem = $("#pic-" + imgNum + picKey);
       uploadImage(event, picElem[0]);
       var nImgNum = ++imgNum;
