@@ -701,9 +701,8 @@
   // Save mentors
   //
   $("#form-save-mentor").click(function() {
-    var authData = ref.getAuth();
-    if (authData) {
-      console.log("User " + authData.uid + " is logged in with " + authData.provider);
+    if (authUserData) {
+      console.log("User " + authUserData.uid + " is logged in with " + authUserData.provider);
     } else {
       console.log("User is logged out");
       $("#alert-warning-sign-in").show();
