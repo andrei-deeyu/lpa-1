@@ -381,7 +381,7 @@
         for (var i = 0; i < noteData.imgs.length; i++) {
           imgsHTML += '<a id="pic-' + (i + 1) + textareaKey + '-link" href="' + noteData.imgs[i] +
             '" target="_blank" class="pic-link"> <img id="pic-' +
-            (i + 1) + textareaKey + '" height="80" class="pic-src" src="' + noteData.imgs[i] + '"> </a>';
+            (i + 1) + textareaKey + '" height="130" class="pic-src" src="' + noteData.imgs[i] + '"> </a>';
         }
         $("#" + imgsKey).html(imgsHTML);
         $("#" + imgsKey).attr('data-imgs-num', i);
