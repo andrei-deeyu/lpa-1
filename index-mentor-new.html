@@ -100,6 +100,25 @@
         <section class="lpa-subpage" id="lpa-schedule-subpage">
           <h1>Schedule</h1>
           <p>Placeholder for schedule page content.</p>
+
+          Select the day:  <input id="schedule-datepicker" type="date"/>
+
+          <ul class="mdl-list" id="lpa-schedule-list">
+            <li class="mdl-list__item mdl-list__item--three-line lpa-template" id="lpa-schedule-list-template">
+              <span class="mdl-list__item-primary-content">
+                <i class="material-icons mdl-list__item-avatar">person</i>
+                <span data-field="starttime">Placeholder name</span>
+                <span data-field="startup">Placeholder startup</span>
+                <span class="mdl-list__item-text-body" data-field="location">
+                  Placeholder location.
+                </span>
+              </span>
+              <span class="mdl-list__item-secondary-content">
+                <a class="mdl-list__item-secondary-action" href="#"><i class="material-icons">star</i></a>
+              </span>
+            </li>
+          </ul>
+
         </section>
 
         <section class="lpa-subpage" id="lpa-startups-subpage">
@@ -194,6 +213,7 @@
   <!-- TODO: concatenate for production -->
   <script src="js/firebase.js"></script>
   <script src="js/auth.js"></script>
+  <script src="js/ui.js"></script>
   <script src="js/main-mentor-new.js"></script>
 </body>
 </html>

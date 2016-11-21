@@ -9,96 +9,43 @@
  * TODO: Add Transition animations.
  * TODO: Use ES6 modules.
  */
-(function(firebase, authModule) {
-
-  /**
-   * UI Elements cache.
-   */
-  const ELEMENTS = {
-    signOut: document.getElementById('lpa-sign-out'),
-    signIn: document.getElementById('lpa-sign-in'),
-    mentorsListTemplate: document.getElementById('lpa-mentors-list-template'),
-    mentorsList: document.getElementById('lpa-mentors-list'),
-    attendeesListTemplate: document.getElementById('lpa-attendees-list-template'),
-    attendeesList: document.getElementById('lpa-attendees-list'),
-    mainNav: document.getElementById('lpa-main-nav'),
-    message: document.getElementById('lpa-message')
-  };
-
-  /**
-   * Component responsible for HTML modification.
-   */
-  let UI = {
-    updateUser: function(user) {
-      document.body.classList.toggle('lpa-signed-in', !!user);
-      if (user) {
-        UI.showSubpage('schedule');
-      } else {
-        UI.showSubpage('signin');
-        ELEMENTS.mentorsList.innerHTML = '';
-      }
-    },
-    updateMentorsList: function(mentorSnapshots) {
-      ELEMENTS.mentorsList.innerHTML = '';
-      if (mentorSnapshots) {
-        mentorSnapshots.forEach(function(mentorSnapshot) {
-          let node = ELEMENTS.mentorsListTemplate.cloneNode(true);
-          node.removeAttribute('id');
-          node.classList.remove('lpa-template');
-          node.querySelector('[data-field="name"]').innerText = mentorSnapshot.val().name;
-          node.querySelector('[data-field="bio"]').innerText = mentorSnapshot.val().bio;
-          ELEMENTS.mentorsList.appendChild(node);
-        });
-      }
-    },
-    updateAttendeesList: function(attendeeSnapshots) {
-      ELEMENTS.attendeesList.innerHTML = '';
-      if (attendeeSnapshots) {
-        attendeeSnapshots.forEach(function(attendeeSnapshot) {
-          let node = ELEMENTS.attendeesListTemplate.cloneNode(true);
-          node.removeAttribute('id');
-          node.classList.remove('lpa-template');
-          node.querySelector('[data-field="name"]').innerText = attendeeSnapshot.val().name;
-          ELEMENTS.attendeesList.appendChild(node);
-        });
-      }
-    },
-    showSubpage: function(subpageName) {
-      document.querySelectorAll('.lpa-subpage').forEach(function(subpage) {
-        subpage.classList.remove('lpa-active');
-      });
-      let subpage = document.getElementById('lpa-' + subpageName + '-subpage');
-      subpage.classList.add('lpa-active');
-    }
-  };
+(function(firebaseApi, authModule, UI) {
 
   /**
    * Event listeners.
    */
-  ELEMENTS.mainNav.addEventListener('click', function(e) {
+  UI.ELEMENTS.mainNav.addEventListener('click', function(e) {
     e.preventDefault();
     let subpageName = e.target.getAttribute('data-subpage');
     if (subpageName) {
       UI.showSubpage(subpageName);
     }
   });
-  ELEMENTS.signIn.addEventListener('click', authModule.authWithGoogle);
-  ELEMENTS.signOut.addEventListener('click', function(e) {
+  UI.ELEMENTS.signIn.addEventListener('click', authModule.authWithGoogle);
+  UI.ELEMENTS.signOut.addEventListener('click', function(e) {
     e.preventDefault();
     authModule.signOut();
   });
+  UI.ELEMENTS.datepicker.setAttribute('value', new Date().toISOString().slice(0, 10));
+  UI.ELEMENTS.datepicker.addEventListener('change', function(e) {
+    getSchedule(e.target.value);
+  });
+
+  function getMentorIdFromEmail(email) {
+    return email.replace(/\./g, "-");
+  }
+
+  function getSchedule(day) {
+    let mentorId = getMentorIdFromEmail(firebase.auth().currentUser.email);
+    firebaseApi.fetchSchedule(day, mentorId).then(UI.displaySchedule);
+  }
 
   firebase.auth().onAuthStateChanged(function(user) {
     UI.updateUser(user);
     if (user) {
-      // Fetch mentors from the backend.
-      firebase.database().ref('mentors/').once('value').then(function(snapshot) {
-        UI.updateMentorsList(snapshot);
-      });
-      // Fetch attendees from the backend.
-      firebase.database().ref('attendees/').once('value').then(function(snapshot) {
-        UI.updateAttendeesList(snapshot);
-      });
+      getSchedule(new Date().toISOString().slice(0, 10));
+      firebaseApi.fetchMentorsList().then(UI.updateMentorsList);
+      firebaseApi.fetchAttendeesList().then(UI.updateAttendeesList);
     }
   });
 
@@ -113,18 +60,18 @@
   }
 
   if (!navigator.onLine) {
-    ELEMENTS.message.innerHTML = 'You are in offline mode. Data may be stale.';
-    ELEMENTS.message.classList.remove('hide');
+    UI.ELEMENTS.message.innerHTML = 'You are in offline mode. Data may be stale.';
+    UI.ELEMENTS.message.classList.remove('hide');
   };
 
   window.addEventListener("offline", function(e) {
-    ELEMENTS.message.innerHTML = 'You are in offline mode. Data may be stale.';
-    ELEMENTS.message.classList.remove('hide');
+    UI.ELEMENTS.message.innerHTML = 'You are in offline mode. Data may be stale.';
+    UI.ELEMENTS.message.classList.remove('hide');
   }, false);
 
 
   window.addEventListener("online", function(e) {
-    ELEMENTS.message.classList.add('hide');
+    UI.ELEMENTS.message.classList.add('hide');
   }, false);
 
-})(firebase, authModule);
+})(firebaseApi, authModule, UI);
