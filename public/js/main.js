@@ -2,7 +2,7 @@
 // JS for the mentor Admin web app
 // Author: Ido Green ❄️
 // Date: 4/2016
-// V8.0
+// V0.9
 //
 // A 🐱 App
 //
@@ -916,10 +916,12 @@
         // we know it's the mentors and hours
         //getHourAsRange("hour-" + (i + 1)) 
         for (var i = 0; i < sessions.mentors.length; i++) {
-          scHtml += '<div class="panel panel-default"> <div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
+          if (sessions.mentors[i][0] != "na@na-com") {
+            scHtml += '<div class="panel panel-default"> <div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
             sessions.mentors[i][1] + ' | ' + sessions.mentors[i][3] + " - " + sessions.mentors[i][4] +
             '</h3> </div> <div class="panel-body">' +
-            'Location: ' + sessions.mentors[i][2] + ' </div> </div>';
+            'Location: ' + sessions.mentors[i][2] + ' </div> </div>';  
+          }
         }
         $("#mentor-schedule-list").html(scHtml);
       } else {
