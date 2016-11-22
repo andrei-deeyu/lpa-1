@@ -1,0 +1,22 @@
+{
+  "name": "lpa-1",
+  "version": "1.0.0",
+  "description": "![](https://developers.google.com/startups/images/logo-launch.svg) ## Overview",
+  "main": "cache-polyfill.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/greenido/lpa-1.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/greenido/lpa-1/issues"
+  },
+  "homepage": "https://github.com/greenido/lpa-1#readme",
+  "devDependencies": {
+    "gulp-webserver": "^0.9.1"
+  }
+}
