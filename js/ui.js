@@ -21,11 +21,20 @@ var UI = (function() {
     mentorsList: document.getElementById('lpa-mentors-list'),
     attendeesListTemplate: document.getElementById('lpa-attendees-list-template'),
     attendeesList: document.getElementById('lpa-attendees-list'),
+    startupsListTemplate: document.getElementById('lpa-startups-list-template'),
+    startupsList: document.getElementById('lpa-startups-list'),
     mainNav: document.getElementById('lpa-main-nav'),
     message: document.getElementById('lpa-message'),
     datepicker: document.getElementById('schedule-datepicker'),
     scheduleList: document.getElementById('lpa-schedule-list'),
-    scheduleListTemplate: document.getElementById('lpa-schedule-list-template')
+    scheduleListTemplate: document.getElementById('lpa-schedule-list-template'),
+    startupPageContent: document.getElementById('lpa-startup'),
+    startupPageTemplate: document.getElementById('lpa-startup-template'),
+    startupSurveyBtn: document.getElementById('lpa-startup-survey-btn'),
+    startupSurvey: document.getElementById('lpa-startup-survey'),
+    startupShowNotes: document.getElementById('lpa-startup-show-notes'),
+    startupNotesTemplate: document.getElementById('lpa-startup-notes-template'),
+    startupNotes: document.getElementById('lpa-startup-notes')
   };
 
   /**
@@ -67,17 +76,57 @@ var UI = (function() {
         });
       }
     },
+    updateStartupsList: function(startups) {
+      ELEMENTS.startupsList.innerHTML = '';
+      if (startups) {
+        startups.forEach(function(startup) {
+          let node = ELEMENTS.startupsListTemplate.cloneNode(true);
+          node.removeAttribute('id');
+          node.classList.remove('lpa-template');
+          node.setAttribute('data-key', startup.key);
+          node.querySelector('[data-field="name"]').innerText = startup.name;
+          node.querySelector('[data-field="description"]').innerText = startup.description;
+          node.querySelector('[data-field="country"]').innerText = startup.country;
+          node.querySelector('[data-field="city"]').innerText = startup.city;
+          ELEMENTS.startupsList.appendChild(node);
+        });
+      }
+    },
+    updateStartup: function(startup) {
+      ELEMENTS.startupPageContent.innerHTML = '';
+      let node = ELEMENTS.startupPageTemplate.cloneNode(true);
+      node.removeAttribute('id');
+      node.classList.remove('lpa-template');
+      node.querySelector('[data-field="name"]').innerText = startup.name;
+      node.querySelector('[data-field="country"]').innerText = startup.country;
+      ELEMENTS.startupPageContent.appendChild(node);
+    },
+    displayStartupNotes: function(sessions) {
+      ELEMENTS.startupNotes.innerHTML = '';
+      if (sessions) {
+        sessions.forEach(function(session) {
+          let node = ELEMENTS.startupNotesTemplate.cloneNode(true);
+          node.removeAttribute('id');
+          node.classList.remove('lpa-template');
+          node.querySelector('[data-field="date"]').innerText = session.date;
+          node.querySelector('[data-field="mentor"]').innerText = session.mentorKey;
+          node.querySelector('[data-field="notes"]').innerText = session.meetingNotes;
+          node.querySelector('[data-field="action-items"]').innerText = session.actionItems;
+          ELEMENTS.startupNotes.appendChild(node);
+        });
+      }
+    },
     showSubpage: function(subpageName) {
       document.querySelectorAll('.lpa-subpage').forEach(function(subpage) {
         subpage.classList.remove('lpa-active');
       });
       let subpage = document.getElementById('lpa-' + subpageName + '-subpage');
       subpage.classList.add('lpa-active');
+      return subpage;
     },
     displaySchedule: function(schedule) {
       ELEMENTS.scheduleList.innerHTML = '';
       if (schedule) {
-        console.log(Object.keys(schedule));
         let keys = Object.keys(schedule);
         keys.forEach(function(key) {
           let session = schedule[key];

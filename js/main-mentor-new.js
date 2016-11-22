@@ -9,7 +9,12 @@
  * TODO: Add Transition animations.
  * TODO: Use ES6 modules.
  */
+
+
+
 (function(firebaseApi, authModule, UI) {
+
+  const BASE_URL = '/index-mentor-new.html';
 
   /**
    * Event listeners.
@@ -31,6 +36,49 @@
     getSchedule(e.target.value);
   });
 
+  UI.ELEMENTS.startupShowNotes.addEventListener('click', function(e) {
+    UI.ELEMENTS.startupNotes.classList.toggle('hidden');
+    let startupKey = window.location.pathname.split('/')[3];
+    firebaseApi.fetchStartupNotes(startupKey).then(UI.displayStartupNotes);
+  });
+
+  UI.ELEMENTS.startupSurveyBtn.addEventListener('click', function(e) {
+    UI.ELEMENTS.startupSurvey.classList.remove('hidden');
+    UI.ELEMENTS.startupSurveyBtn.classList.add('hidden');
+  });
+
+  UI.ELEMENTS.startupSurvey.querySelector(
+    '#lpa-startup-survey-receptive').addEventListener('change', function(e) {
+    UI.ELEMENTS.startupSurvey.querySelector(
+      'span[for="lpa-startup-survey-receptive"]').innerHTML = e.target.value;
+  });
+
+  UI.ELEMENTS.startupSurvey.querySelector(
+    '#lpa-startup-survey-effective').addEventListener('change', function(e) {
+    UI.ELEMENTS.startupSurvey.querySelector(
+      'span[for="lpa-startup-survey-effective"]').innerHTML = e.target.value;
+  });
+
+  UI.ELEMENTS.startupSurvey.addEventListener('submit', function(e) {
+    e.preventDefault();
+    // TODO: implement save notes action.
+  });
+
+  UI.ELEMENTS.startupsList.addEventListener('click', function(e) {
+    var li = getParentNodeByType(e.target, 'LI');
+    if (li) {
+      var url = BASE_URL + '/startups/' + li.getAttribute('data-key');
+      go(url);
+    }
+  });
+
+  function getParentNodeByType(el, nodeType) {
+    while (el && el.tagName !== nodeType) {
+       el = el.parentNode;
+    }
+    return el;
+  }
+
   function getMentorIdFromEmail(email) {
     return email.replace(/\./g, "-");
   }
@@ -40,12 +88,26 @@
     firebaseApi.fetchSchedule(day, mentorId).then(UI.displaySchedule);
   }
 
+  function go(url) {
+    window.history.pushState(null, null, url);
+    var urlParts = url.split('/');
+    let subpageName = (urlParts[2] === 'startups' && urlParts[3]) ? 'startup' : urlParts[2];
+    let subpage = UI.showSubpage(subpageName);
+    let itemKey = urlParts[3];
+    let initPage = subpage.getAttribute('data-init');
+    if (initPage) {
+      let item = firebaseApi.CACHE[urlParts[2]][itemKey];
+      UI[initPage](item);
+    }
+  }
+
   firebase.auth().onAuthStateChanged(function(user) {
     UI.updateUser(user);
     if (user) {
       getSchedule(new Date().toISOString().slice(0, 10));
       firebaseApi.fetchMentorsList().then(UI.updateMentorsList);
       firebaseApi.fetchAttendeesList().then(UI.updateAttendeesList);
+      firebaseApi.fetchStartupsList().then(UI.updateStartupsList);
     }
   });
 

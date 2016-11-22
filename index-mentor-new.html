@@ -123,7 +123,25 @@
 
         <section class="lpa-subpage" id="lpa-startups-subpage">
           <h1>Startups</h1>
-          <p>Placeholder for startups page content.</p>
+          <ul class="mdl-list" id="lpa-startups-list"></ul>
+          <li class="mdl-list__item mdl-list__item--three-line lpa-template" id="lpa-startups-list-template">
+            <span class="mdl-list__item-primary-content">
+              <i class="material-icons mdl-list__item-avatar">person</i>
+              <span data-field="name">Placeholder name</span>
+              <span class="mdl-list__item-text-body" data-field="city">
+                Placeholder city.
+              </span>
+              <span class="mdl-list__item-text-body" data-field="country">
+                Placeholder country.
+              </span>
+              <span class="mdl-list__item-text-body" data-field="description">
+                Placeholder description.
+              </span>
+            </span>
+            <span class="mdl-list__item-secondary-content">
+              <a class="mdl-list__item-secondary-action" href="#"><i class="material-icons">star</i></a>
+            </span>
+          </li>
         </section>
 
         <section class="lpa-subpage" id="lpa-attendees-subpage">
@@ -146,7 +164,8 @@
 
         <section class="lpa-subpage" id="lpa-mentors-subpage">
         <h1>Mentors</h1>
-        <li class="mdl-list__item mdl-list__item--three-line lpa-template" id="lpa-mentors-list-template">
+        <li class="mdl-list__item mdl-list__item--three-line lpa-template"
+            id="lpa-mentors-list-template">
           <span class="mdl-list__item-primary-content">
             <i class="material-icons mdl-list__item-avatar">person</i>
             <span data-field="name">Placeholder name</span>
@@ -164,6 +183,85 @@
         <section class="lpa-subpage" id="lpa-profile-subpage">
           <h1>My profile</h1>
           <p>Placeholder for my profile page content.</p>
+        </section>
+
+        <section class="lpa-subpage" id="lpa-startup-subpage" data-init="updateStartup">
+          <h1>Startup</h1>
+
+          <div class="lpa-template" id="lpa-startup-template">
+            <div data-field="name">Placeholder name</div>
+            <div data-field="country">
+              Placeholder country.
+            </div>
+          </div>
+          <div id="lpa-startup"></div>
+
+          <button id="lpa-startup-survey-btn"
+              class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+              <i class="material-icons">note_add</i>
+          </button>
+
+          <form id="lpa-startup-survey" class="hidden">
+            <label for="">Were the attendees open and receptive? (1-5)</label>
+            <p style="width:300px">
+              <span for="lpa-startup-survey-receptive">3</span>
+              <input class="mdl-slider mdl-js-slider" type="range"
+                  id="lpa-startup-survey-receptive" min="1" max="5"
+                  value="3">
+            </p>
+            <label for="">Was the session effective? (1-5)</label>
+            <p style="width:300px">
+              <span for="lpa-startup-survey-effective">3</span>
+              <input class="mdl-slider mdl-js-slider" type="range"
+                  id="lpa-startup-survey-effective" min="1" max="5"
+                  value="3">
+            </p>
+            <p>
+              <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <textarea class="mdl-textfield__input" type="text" rows= "5" id="sample5" ></textarea>
+                <label class="mdl-textfield__label" for="sample5">What did you talk about?</label>
+              </div>
+            </p>
+            <p>
+              <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <textarea class="mdl-textfield__input" type="text" rows= "5" id="sample5" ></textarea>
+                <label class="mdl-textfield__label" for="sample5">What are the action items?</label>
+              </div>
+            </p>
+            <p>
+              <input type="file" accept="image/*" capture="camera"
+                  id="lpa-startup-survey-photos" class="lpa-fileinput-fab">
+              <button id="lpa-startup-survey-photos"
+                  class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect">
+                  <i class="material-icons">add_a_photo</i>
+              </button>
+              <label for="">Add photos</label>
+            </p>
+            <p>photo-preview-here</p>
+            <p>
+              <button id="lpa-startup-survey-submit"
+                  class="mdl-button mdl-js-button mdl-js-ripple-effect">
+                  submit
+              </button>
+            </p>
+          </form>
+
+          <a href="#" id="lpa-startup-show-notes">Historical notes</a>
+          <div class="lpa-template" id="lpa-startup-notes-template">
+            <div data-field="date">Placeholder name</div>
+            <div data-field="mentor">
+              Placeholder mentor.
+            </div>
+            <div data-field="notes">
+              Placeholder notes.
+            </div>
+            <div data-field="action-items">
+              Placeholder action-items.
+            </div>
+          </div>
+          <div id="lpa-startup-notes" class="hidden">
+          </div>
+
         </section>
 
         <div class="lpa-message hide" id="lpa-message"></div>
