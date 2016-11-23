@@ -42,9 +42,25 @@
     firebaseApi.fetchStartupNotes(startupKey).then(UI.displayStartupNotes);
   });
 
-  UI.ELEMENTS.startupSurveyBtn.addEventListener('click', function(e) {
-    UI.ELEMENTS.startupSurvey.classList.remove('hidden');
-    UI.ELEMENTS.startupSurveyBtn.classList.add('hidden');
+  if (!UI.ELEMENTS.startupSurvey.showModal) {
+    dialogPolyfill.registerDialog(UI.ELEMENTS.startupSurvey);
+  }
+
+  UI.ELEMENTS.startupSurvey.querySelector('.close').addEventListener('click', function() {
+    UI.ELEMENTS.startupSurvey.close();
+  });
+
+  UI.ELEMENTS.chooseStartup.addEventListener('click', function(e) {
+    let startupKey = e.target.getAttribute('data-key');
+    UI.resetSurvey(startupKey);
+  });
+
+  UI.ELEMENTS.startupSurveyBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+      dialog.showModal();
+      let startupKey = window.location.pathname.split('/')[3] || 'a startup';
+      UI.resetSurvey(startupKey);
+    });
   });
 
   UI.ELEMENTS.startupSurvey.querySelector(

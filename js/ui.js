@@ -31,10 +31,13 @@ var UI = (function() {
     startupPageContent: document.getElementById('lpa-startup'),
     startupPageTemplate: document.getElementById('lpa-startup-template'),
     startupSurveyBtn: document.getElementById('lpa-startup-survey-btn'),
+    startupSurveyBtns: document.querySelectorAll('.lpa-survey-btn'),
     startupSurvey: document.getElementById('lpa-startup-survey'),
     startupShowNotes: document.getElementById('lpa-startup-show-notes'),
     startupNotesTemplate: document.getElementById('lpa-startup-notes-template'),
-    startupNotes: document.getElementById('lpa-startup-notes')
+    startupNotes: document.getElementById('lpa-startup-notes'),
+    chooseStartupBtn: document.getElementById('lpa-choose-startup-btn'),
+    chooseStartup: document.getElementById('lpa-choose-startup')
   };
 
   /**
@@ -77,7 +80,10 @@ var UI = (function() {
       }
     },
     updateStartupsList: function(startups) {
+      // Update /startups page.
       ELEMENTS.startupsList.innerHTML = '';
+      // Update startups dropdown in the survey.
+      ELEMENTS.chooseStartup.innerHTML = '';
       if (startups) {
         startups.forEach(function(startup) {
           let node = ELEMENTS.startupsListTemplate.cloneNode(true);
@@ -89,7 +95,16 @@ var UI = (function() {
           node.querySelector('[data-field="country"]').innerText = startup.country;
           node.querySelector('[data-field="city"]').innerText = startup.city;
           ELEMENTS.startupsList.appendChild(node);
+          let li = document.createElement('li');
+          li.classList.add('mdl-menu__item');
+          li.setAttribute('data-key', startup.key);
+          li.innerHTML = startup.name;
+          ELEMENTS.chooseStartup.appendChild(li);
         });
+        ELEMENTS.chooseStartup.classList.add('mdl-menu',
+            'mdl-menu--bottom-right', 'mdl-js-menu', 'mdl-js-ripple-effect');
+        // Upgrade dynamicly created element to use MDL features.
+        componentHandler.upgradeElement(ELEMENTS.chooseStartup);
       }
     },
     updateStartup: function(startup) {
@@ -141,6 +156,12 @@ var UI = (function() {
       } else {
         ELEMENTS.scheduleList.innerHTML = '<li>Sorry, no sessions found for this date.</li>';
       }
+    },
+    resetSurvey: function(startupKey) {
+      ELEMENTS.startupSurvey.querySelector(
+          '.mdl-dialog__title').innerHTML = 'Add notes for ' + startupKey;
+      ELEMENTS.startupSurvey.querySelector(
+          '#lpa-startup-survey-startup').value = startupKey;
     }
   };
 

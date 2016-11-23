@@ -95,3 +95,7 @@ body {
   opacity: 0;
   position: absolute;
 }
+
+.lpa-dialog {
+  width: 500px;
+}
