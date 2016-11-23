@@ -57,7 +57,7 @@
 
   UI.ELEMENTS.startupSurveyBtns.forEach(btn => {
     btn.addEventListener('click', function() {
-      dialog.showModal();
+      UI.ELEMENTS.startupSurvey.showModal();
       let startupKey = window.location.pathname.split('/')[3] || 'a startup';
       UI.resetSurvey(startupKey);
     });
