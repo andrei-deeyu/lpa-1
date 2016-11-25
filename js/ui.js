@@ -30,13 +30,15 @@ var UI = (function() {
     scheduleListTemplate: document.getElementById('lpa-schedule-list-template'),
     startupPageContent: document.getElementById('lpa-startup'),
     startupPageTemplate: document.getElementById('lpa-startup-template'),
-    startupSurveyBtn: document.getElementById('lpa-startup-survey-btn'),
-    startupSurveyBtns: document.querySelectorAll('.lpa-survey-btn'),
-    startupSurvey: document.getElementById('lpa-startup-survey'),
+    surveyBtn: document.getElementById('lpa-survey-btn'),
+    surveyBtns: document.querySelectorAll('.lpa-survey-btn'),
+    survey: document.getElementById('lpa-survey'),
+    surveySubmit: document.getElementById('lpa-survey-submit'),
     startupShowNotes: document.getElementById('lpa-startup-show-notes'),
     startupNotesTemplate: document.getElementById('lpa-startup-notes-template'),
     startupNotes: document.getElementById('lpa-startup-notes'),
     chooseStartupBtn: document.getElementById('lpa-choose-startup-btn'),
+    chooseStartupMenu: document.getElementById('lpa-choose-startup-menu'),
     chooseStartup: document.getElementById('lpa-choose-startup')
   };
 
@@ -83,7 +85,7 @@ var UI = (function() {
       // Update /startups page.
       ELEMENTS.startupsList.innerHTML = '';
       // Update startups dropdown in the survey.
-      ELEMENTS.chooseStartup.innerHTML = '';
+      ELEMENTS.chooseStartupMenu.innerHTML = '';
       if (startups) {
         startups.forEach(function(startup) {
           let node = ELEMENTS.startupsListTemplate.cloneNode(true);
@@ -99,12 +101,12 @@ var UI = (function() {
           li.classList.add('mdl-menu__item');
           li.setAttribute('data-key', startup.key);
           li.innerHTML = startup.name;
-          ELEMENTS.chooseStartup.appendChild(li);
+          ELEMENTS.chooseStartupMenu.appendChild(li);
         });
-        ELEMENTS.chooseStartup.classList.add('mdl-menu',
+        ELEMENTS.chooseStartupMenu.classList.add('mdl-menu',
             'mdl-menu--bottom-right', 'mdl-js-menu', 'mdl-js-ripple-effect');
         // Upgrade dynamicly created element to use MDL features.
-        componentHandler.upgradeElement(ELEMENTS.chooseStartup);
+        componentHandler.upgradeElement(ELEMENTS.chooseStartupMenu);
       }
     },
     updateStartup: function(startup) {
@@ -141,10 +143,8 @@ var UI = (function() {
     },
     displaySchedule: function(schedule) {
       ELEMENTS.scheduleList.innerHTML = '';
-      if (schedule) {
-        let keys = Object.keys(schedule);
-        keys.forEach(function(key) {
-          let session = schedule[key];
+      if (schedule.length) {
+        schedule.forEach(function(session) {
           let node = ELEMENTS.scheduleListTemplate.cloneNode(true);
           node.removeAttribute('id');
           node.classList.remove('lpa-template');
@@ -152,16 +152,45 @@ var UI = (function() {
           node.querySelector('[data-field="location"]').innerText = session.location;
           node.querySelector('[data-field="startup"]').innerText = session.startup;
           ELEMENTS.scheduleList.appendChild(node);
+          node.querySelector('.lpa-survey-btn').addEventListener(
+              'click', UI.showSurvey.bind(null, session));
         });
       } else {
         ELEMENTS.scheduleList.innerHTML = '<li>Sorry, no sessions found for this date.</li>';
       }
     },
-    resetSurvey: function(startupKey) {
-      ELEMENTS.startupSurvey.querySelector(
+    showSurvey: function(session) {
+      //console.log('session', session.startup)
+      let startupKey = session ? session.startup : window.location.pathname.split('/')[3];
+      UI.resetSurvey(startupKey, session);
+      ELEMENTS.survey.showModal();
+    },
+    resetSurvey: function(startupKey, session) {
+      ELEMENTS.chooseStartup.classList.toggle('hidden', startupKey);
+      ELEMENTS.survey.querySelector(
+          '#lpa-survey-startup').value = startupKey;
+      startupKey = startupKey || 'a startup';
+      ELEMENTS.survey.querySelector(
           '.mdl-dialog__title').innerHTML = 'Add notes for ' + startupKey;
-      ELEMENTS.startupSurvey.querySelector(
-          '#lpa-startup-survey-startup').value = startupKey;
+      session = session || {
+        path: null,
+        date: null,
+        starttime: null,
+        endtime: null
+      };
+      let sessionText = session.date ?
+          'Session: ' + session.date + ' at ' + session.starttime :
+          'No session selected';
+      ELEMENTS.survey.querySelector(
+          '#lpa-survey-session-datetime').innerHTML = sessionText;
+      ELEMENTS.survey.querySelector(
+          '#lpa-survey-session').value = session.path;
+      ELEMENTS.survey.querySelector(
+          '#lpa-survey-date').value = session.date;
+      ELEMENTS.survey.querySelector(
+          '#lpa-survey-starttime').value = session.starttime;
+      ELEMENTS.survey.querySelector(
+          '#lpa-survey-endtime').value = session.endtime;
     }
   };
 

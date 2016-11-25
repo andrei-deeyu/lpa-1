@@ -4,12 +4,20 @@ var firebaseApi = (function() {
 
   let api = {
     CACHE: CACHE,
-    fetchSchedule: (day, mentorId) => new Promise(function(resolve) {
+    fetchSchedule: (day, mentorId) => new Promise(function(resolve, reject) {
       firebase.database()
         .ref('sessions/' + day + '/mentors/' + mentorId)
         .once('value')
-        .then(snapshot => {
-          resolve(snapshot.val());
+        .then(snapshots => {
+          let sessions = [];
+          snapshots.forEach(snapshot => {
+            let session = snapshot.val();
+            session.path = snapshot.ref.path.toString();
+            session.date = day;
+            session.mentorId = mentorId;
+            sessions.push(session);
+          });
+          resolve(sessions);
         });
     }),
     fetchMentorsList: () => new Promise(function(resolve) {
@@ -55,6 +63,23 @@ var firebaseApi = (function() {
           });
           resolve(CACHE.startups[startupKey].sessions);
         });
+    }),
+    saveSessionNotes: (note, startup, path) => new Promise(function(resolve) {
+      let pathParts = path.split('/');
+      // Save notes in 3 locations: mentor, startup, backup.
+      // e.g. /sessions/2016-10-19/mentors/ewa@gmail-com/hour-1/notes
+      let mentorNotesPath = path + '/notes';
+      // e.g. /sessions/2016-05-01/startups/Aliada/notes/ewa@gmail-com/hour-1
+      let startupNotesPath = [pathParts[0], pathParts[1], pathParts[2],
+          'startups', startup, 'notes', pathParts[4], pathParts[5]].join('/');
+      // e.g. /notes-backup/2016-06-08/startups/BankFacil/notes/e@g-com/hour-2
+      let backupNotesPath = ['', 'notes-backup', pathParts[2],
+          'startups', startup, 'notes', pathParts[4], pathParts[5]].join('/');
+      Promise.all([
+        firebase.database().ref(mentorNotesPath).set(note),
+        firebase.database().ref(startupNotesPath).set(note),
+        firebase.database().ref(backupNotesPath).set(note)
+      ]).then(resolve);
     })
   };
 

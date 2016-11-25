@@ -42,12 +42,12 @@
     firebaseApi.fetchStartupNotes(startupKey).then(UI.displayStartupNotes);
   });
 
-  if (!UI.ELEMENTS.startupSurvey.showModal) {
-    dialogPolyfill.registerDialog(UI.ELEMENTS.startupSurvey);
+  if (!UI.ELEMENTS.survey.showModal) {
+    dialogPolyfill.registerDialog(UI.ELEMENTS.survey);
   }
 
-  UI.ELEMENTS.startupSurvey.querySelector('.close').addEventListener('click', function() {
-    UI.ELEMENTS.startupSurvey.close();
+  UI.ELEMENTS.survey.querySelector('.close').addEventListener('click', function() {
+    UI.ELEMENTS.survey.close();
   });
 
   UI.ELEMENTS.chooseStartup.addEventListener('click', function(e) {
@@ -55,29 +55,44 @@
     UI.resetSurvey(startupKey);
   });
 
-  UI.ELEMENTS.startupSurveyBtns.forEach(btn => {
+  UI.ELEMENTS.surveyBtns.forEach(btn => {
     btn.addEventListener('click', function() {
-      UI.ELEMENTS.startupSurvey.showModal();
-      let startupKey = window.location.pathname.split('/')[3] || 'a startup';
-      UI.resetSurvey(startupKey);
+      UI.showSurvey();
     });
   });
 
-  UI.ELEMENTS.startupSurvey.querySelector(
-    '#lpa-startup-survey-receptive').addEventListener('change', function(e) {
-    UI.ELEMENTS.startupSurvey.querySelector(
-      'span[for="lpa-startup-survey-receptive"]').innerHTML = e.target.value;
+  UI.ELEMENTS.survey.querySelector(
+    '#lpa-survey-receptive').addEventListener('change', function(e) {
+    UI.ELEMENTS.survey.querySelector(
+      'span[for="lpa-survey-receptive"]').innerHTML = e.target.value;
   });
 
-  UI.ELEMENTS.startupSurvey.querySelector(
-    '#lpa-startup-survey-effective').addEventListener('change', function(e) {
-    UI.ELEMENTS.startupSurvey.querySelector(
-      'span[for="lpa-startup-survey-effective"]').innerHTML = e.target.value;
+  UI.ELEMENTS.survey.querySelector(
+    '#lpa-survey-effective').addEventListener('change', function(e) {
+    UI.ELEMENTS.survey.querySelector(
+      'span[for="lpa-survey-effective"]').innerHTML = e.target.value;
   });
 
-  UI.ELEMENTS.startupSurvey.addEventListener('submit', function(e) {
+  UI.ELEMENTS.surveySubmit.addEventListener('click', function(e) {
     e.preventDefault();
     // TODO: implement save notes action.
+    let fields = UI.ELEMENTS.survey.querySelector('form').elements;
+    let sessionPath = fields['lpa-survey-session'].value;
+    let startup = fields['lpa-survey-startup'].value;
+    let today = new Date();
+    let note = {
+      'actionItems' : fields['lpa-survey-actionitems'].value,
+      'date' : today.toISOString(),
+      'effective' : fields['lpa-survey-effective'].value,
+      'endtime' : fields['lpa-survey-endtime'].value,
+      'starttime' : fields['lpa-survey-starttime'].value,
+      'meetingNotes' : fields['lpa-survey-notes'].value,
+      'receptive' : fields['lpa-survey-receptive'].value,
+      'unixTime' : today.getTime()
+    }
+    firebaseApi.saveSessionNotes(note, startup, sessionPath).then(() => {
+      UI.ELEMENTS.survey.close();
+    });
   });
 
   UI.ELEMENTS.startupsList.addEventListener('click', function(e) {
