@@ -50,14 +50,16 @@
     UI.ELEMENTS.survey.close();
   });
 
-  UI.ELEMENTS.chooseStartup.addEventListener('click', function(e) {
+  UI.ELEMENTS.chooseStartupMenu.addEventListener('click', function(e) {
     let startupKey = e.target.getAttribute('data-key');
-    UI.resetSurvey(startupKey);
+    let mentorId = getMentorIdFromEmail(firebase.auth().currentUser.email);
+    UI.resetSurvey(startupKey, mentorId);
   });
 
   UI.ELEMENTS.surveyBtns.forEach(btn => {
     btn.addEventListener('click', function() {
-      UI.showSurvey();
+      let mentorId = getMentorIdFromEmail(firebase.auth().currentUser.email);
+      UI.showSurvey(null, mentorId);
     });
   });
 
@@ -73,6 +75,7 @@
       'span[for="lpa-survey-effective"]').innerHTML = e.target.value;
   });
 
+  UI.ELEMENTS.survey.addEventListener('submit', e => e.preventDefault());
   UI.ELEMENTS.surveySubmit.addEventListener('click', function(e) {
     e.preventDefault();
     // TODO: implement save notes action.

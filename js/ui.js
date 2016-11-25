@@ -159,38 +159,43 @@ var UI = (function() {
         ELEMENTS.scheduleList.innerHTML = '<li>Sorry, no sessions found for this date.</li>';
       }
     },
-    showSurvey: function(session) {
+    showSurvey: function(session, mentorId) {
       //console.log('session', session.startup)
       let startupKey = session ? session.startup : window.location.pathname.split('/')[3];
-      UI.resetSurvey(startupKey, session);
+      UI.resetSurvey(startupKey, mentorId, session);
       ELEMENTS.survey.showModal();
     },
-    resetSurvey: function(startupKey, session) {
-      ELEMENTS.chooseStartup.classList.toggle('hidden', startupKey);
+    resetSurvey: function(startupKey, mentorId, session) {
+      mentorId = mentorId || session.mentorId;
+      ELEMENTS.chooseStartup.classList.toggle('hidden', startupKey && session);
       ELEMENTS.survey.querySelector(
           '#lpa-survey-startup').value = startupKey;
       startupKey = startupKey || 'a startup';
       ELEMENTS.survey.querySelector(
           '.mdl-dialog__title').innerHTML = 'Add notes for ' + startupKey;
-      session = session || {
+      let today = new Date();
+      let todayIso = today.toISOString();
+      let sessionCopy = session || {
         path: null,
-        date: null,
-        starttime: null,
-        endtime: null
+        date: todayIso.slice(0, 10),
+        starttime: todayIso.slice(11, 16),
+        endtime: todayIso.slice(11, 16)
       };
-      let sessionText = session.date ?
-          'Session: ' + session.date + ' at ' + session.starttime :
-          'No session selected';
+      sessionCopy.path = ['sessions', sessionCopy.date, 'mentors',
+          mentorId, 'hour-' + today.getTime(), 'notes'].join('/');
+      let sessionText = session ?
+          'Session: ' + sessionCopy.date + ' at ' + sessionCopy.starttime :
+          'Unscheduled session: ' + sessionCopy.date + ' ' + sessionCopy.starttime;
       ELEMENTS.survey.querySelector(
           '#lpa-survey-session-datetime').innerHTML = sessionText;
       ELEMENTS.survey.querySelector(
-          '#lpa-survey-session').value = session.path;
+          '#lpa-survey-session').value = sessionCopy.path;
       ELEMENTS.survey.querySelector(
-          '#lpa-survey-date').value = session.date;
+          '#lpa-survey-date').value = sessionCopy.date;
       ELEMENTS.survey.querySelector(
-          '#lpa-survey-starttime').value = session.starttime;
+          '#lpa-survey-starttime').value = sessionCopy.starttime;
       ELEMENTS.survey.querySelector(
-          '#lpa-survey-endtime').value = session.endtime;
+          '#lpa-survey-endtime').value = sessionCopy.endtime;
     }
   };
 
