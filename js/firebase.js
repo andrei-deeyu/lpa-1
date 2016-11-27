@@ -2,7 +2,12 @@ var firebaseApi = (function() {
 
   let CACHE = {};
 
+  function getMentorIdFromEmail(email) {
+    return email.replace(/\./g, "-");
+  };
+
   let api = {
+    CURRENT_MENTOR_ID: null,
     CACHE: CACHE,
     fetchSchedule: (day, mentorId) => new Promise(function(resolve, reject) {
       firebase.database()
@@ -80,6 +85,10 @@ var firebaseApi = (function() {
         firebase.database().ref(startupNotesPath).set(note),
         firebase.database().ref(backupNotesPath).set(note)
       ]).then(resolve);
+    }),
+    getCurrentMentorSchedule: day => new Promise(function(resolve) {
+      let mentorId = firebaseApi.CURRENT_MENTOR_ID;
+      firebaseApi.fetchSchedule(day, mentorId).then(resolve);
     })
   };
 
@@ -90,6 +99,21 @@ var firebaseApi = (function() {
     storageBucket: "lpa-3-14341.appspot.com",
   };
   firebase.initializeApp(config);
+
+
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      api.CURRENT_MENTOR_ID = getMentorIdFromEmail(
+          firebase.auth().currentUser.email);
+      let today = new Date().toISOString().slice(0, 10);
+      api.getCurrentMentorSchedule(today).then(UI.displaySchedule);
+      api.fetchMentorsList().then(UI.updateMentorsList);
+      api.fetchAttendeesList().then(UI.updateAttendeesList);
+      api.fetchStartupsList().then(UI.updateStartupsList);
+    } else {
+      api.CURRENT_MENTOR_ID = null;
+    }
+  });
 
   return api;
 })();

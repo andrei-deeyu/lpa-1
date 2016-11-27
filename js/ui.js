@@ -9,7 +9,7 @@
  * TODO: Add Transition animations.
  * TODO: Use ES6 modules.
  */
-var UI = (function() {
+var UI = (function(firebaseApi, authModule) {
 
   /**
    * UI Elements cache.
@@ -40,6 +40,13 @@ var UI = (function() {
     chooseStartupBtn: document.getElementById('lpa-choose-startup-btn'),
     chooseStartupMenu: document.getElementById('lpa-choose-startup-menu'),
     chooseStartup: document.getElementById('lpa-choose-startup')
+  };
+
+  function getParentNodeByType(el, nodeType) {
+    while (el && el.tagName !== nodeType) {
+       el = el.parentNode;
+    }
+    return el;
   };
 
   /**
@@ -152,8 +159,9 @@ var UI = (function() {
           node.querySelector('[data-field="location"]').innerText = session.location;
           node.querySelector('[data-field="startup"]').innerText = session.startup;
           ELEMENTS.scheduleList.appendChild(node);
+          let mentorId = firebaseApi.CURRENT_MENTOR_ID;
           node.querySelector('.lpa-survey-btn').addEventListener(
-              'click', UI.showSurvey.bind(null, session));
+              'click', UI.showSurvey.bind(null, session, mentorId));
         });
       } else {
         ELEMENTS.scheduleList.innerHTML = '<li>Sorry, no sessions found for this date.</li>';
@@ -196,8 +204,97 @@ var UI = (function() {
           '#lpa-survey-starttime').value = sessionCopy.starttime;
       ELEMENTS.survey.querySelector(
           '#lpa-survey-endtime').value = sessionCopy.endtime;
+    },
+    addListeners: function() {
+      ELEMENTS.mainNav.addEventListener('click', function(e) {
+        e.preventDefault();
+        let subpageName = e.target.getAttribute('data-subpage');
+        if (subpageName) {
+          UI.showSubpage(subpageName);
+        }
+      });
+      ELEMENTS.signIn.addEventListener('click', authModule.authWithGoogle);
+      ELEMENTS.signOut.addEventListener('click', function(e) {
+        e.preventDefault();
+        authModule.signOut();
+      });
+      ELEMENTS.datepicker.setAttribute('value', new Date().toISOString().slice(0, 10));
+      ELEMENTS.datepicker.addEventListener('change', function(e) {
+        firebaseApi.getCurrentMentorSchedule(
+            e.target.value).then(UI.displaySchedule);
+      });
+
+      ELEMENTS.startupShowNotes.addEventListener('click', function(e) {
+        ELEMENTS.startupNotes.classList.toggle('hidden');
+        let startupKey = window.location.pathname.split('/')[3];
+        firebaseApi.fetchStartupNotes(startupKey).then(UI.displayStartupNotes);
+      });
+
+      if (!ELEMENTS.survey.showModal) {
+        dialogPolyfill.registerDialog(ELEMENTS.survey);
+      }
+
+      ELEMENTS.survey.querySelector('.close').addEventListener('click', function() {
+        ELEMENTS.survey.close();
+      });
+
+      ELEMENTS.chooseStartupMenu.addEventListener('click', function(e) {
+        let startupKey = e.target.getAttribute('data-key');
+        let mentorId = firebaseApi.CURRENT_MENTOR_ID;
+        UI.resetSurvey(startupKey, mentorId);
+      });
+
+      ELEMENTS.surveyBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          let mentorId = firebaseApi.CURRENT_MENTOR_ID;
+          UI.showSurvey(null, mentorId);
+        });
+      });
+
+      ELEMENTS.survey.querySelector(
+        '#lpa-survey-receptive').addEventListener('change', function(e) {
+        ELEMENTS.survey.querySelector(
+          'span[for="lpa-survey-receptive"]').innerHTML = e.target.value;
+      });
+
+      ELEMENTS.survey.querySelector(
+        '#lpa-survey-effective').addEventListener('change', function(e) {
+        ELEMENTS.survey.querySelector(
+          'span[for="lpa-survey-effective"]').innerHTML = e.target.value;
+      });
+
+      ELEMENTS.survey.addEventListener('submit', e => e.preventDefault());
+      ELEMENTS.surveySubmit.addEventListener('click', function(e) {
+        e.preventDefault();
+        // TODO: implement save notes action.
+        let fields = ELEMENTS.survey.querySelector('form').elements;
+        let sessionPath = fields['lpa-survey-session'].value;
+        let startup = fields['lpa-survey-startup'].value;
+        let today = new Date();
+        let note = {
+          'actionItems' : fields['lpa-survey-actionitems'].value,
+          'date' : today.toISOString(),
+          'effective' : fields['lpa-survey-effective'].value,
+          'endtime' : fields['lpa-survey-endtime'].value,
+          'starttime' : fields['lpa-survey-starttime'].value,
+          'meetingNotes' : fields['lpa-survey-notes'].value,
+          'receptive' : fields['lpa-survey-receptive'].value,
+          'unixTime' : today.getTime()
+        }
+        firebaseApi.saveSessionNotes(note, startup, sessionPath).then(() => {
+          ELEMENTS.survey.close();
+        });
+      });
+
+      ELEMENTS.startupsList.addEventListener('click', function(e) {
+        var li = getParentNodeByType(e.target, 'LI');
+        if (li) {
+          var url = BASE_URL + '/startups/' + li.getAttribute('data-key');
+          go(url);
+        }
+      });
     }
   };
 
   return UI;
-})();
+})(firebaseApi, authModule);
