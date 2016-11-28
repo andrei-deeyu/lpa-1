@@ -15,8 +15,6 @@ var UI = (function(firebaseApi, authModule) {
    * UI Elements cache.
    */
   const ELEMENTS = {
-    signOut: document.getElementById('lpa-sign-out'),
-    signIn: document.getElementById('lpa-sign-in'),
     mentorsListTemplate: document.getElementById('lpa-mentors-list-template'),
     mentorsList: document.getElementById('lpa-mentors-list'),
     attendeesListTemplate: document.getElementById('lpa-attendees-list-template'),
@@ -25,6 +23,7 @@ var UI = (function(firebaseApi, authModule) {
     startupsList: document.getElementById('lpa-startups-list'),
     mainNav: document.getElementById('lpa-main-nav'),
     mdlLayout: document.querySelector('.mdl-layout'),
+    drawer: document.getElementById('lpa-drawer'),
     drawerNav: document.getElementById('lpa-drawer-nav'),
     message: document.getElementById('lpa-message'),
     datepicker: document.getElementById('schedule-datepicker'),
@@ -63,6 +62,9 @@ var UI = (function(firebaseApi, authModule) {
       } else {
         UI.showSubpage('signin');
         ELEMENTS.mentorsList.innerHTML = '';
+      }
+      if (ELEMENTS.drawer.classList.contains('is-visible')) {
+        ELEMENTS.mdlLayout.MaterialLayout.toggleDrawer();
       }
     },
     updateMentorsList: function(mentorSnapshots) {
@@ -223,10 +225,17 @@ var UI = (function(firebaseApi, authModule) {
           ELEMENTS.mdlLayout.MaterialLayout.toggleDrawer();
         }
       });
-      ELEMENTS.signIn.addEventListener('click', authModule.authWithGoogle);
-      ELEMENTS.signOut.addEventListener('click', function(e) {
-        e.preventDefault();
-        authModule.signOut();
+      ELEMENTS.mdlLayout.querySelectorAll('.lpa-sign-in').forEach(el => {
+        el.addEventListener('click', e => {
+          e.preventDefault();
+          authModule.authWithGoogle();
+        });
+      });
+      ELEMENTS.mdlLayout.querySelectorAll('.lpa-sign-out').forEach(el => {
+        el.addEventListener('click', e => {
+          e.preventDefault();
+          authModule.signOut();
+        });
       });
       ELEMENTS.datepicker.setAttribute('value', new Date().toISOString().slice(0, 10));
       ELEMENTS.datepicker.addEventListener('change', function(e) {

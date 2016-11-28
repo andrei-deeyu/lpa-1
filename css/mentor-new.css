@@ -84,8 +84,16 @@ body {
   opacity: 1;
 }
 
-.lpa-signed-in .lpa-sign-in-nav {
-  display: none;
+.lpa-signed-in .lpa-sign-in {
+  display: none !important;
+}
+
+.lpa-sign-out {
+  opacity: 0;
+}
+
+.lpa-signed-in .lpa-sign-out {
+  opacity: 1;
 }
 
 .lpa-fileinput-fab {

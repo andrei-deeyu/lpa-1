@@ -56,7 +56,7 @@
         <span class="mdl-layout-title">Launchpad Mentor</span>
         <div class="mdl-layout-spacer"></div>
         <nav class="mdl-navigation lpa-main-nav" id="lpa-main-nav">
-          <a class="mdl-navigation__link" href="" id="lpa-sign-out">Sign out</a>
+          <a class="mdl-navigation__link lpa-sign-out" href="">Sign out</a>
           <a class="mdl-navigation__link" href="" data-subpage="schedule">Schedule</a>
           <a class="mdl-navigation__link" href="" data-subpage="startups">Startups</a>
           <a class="mdl-navigation__link" href="" data-subpage="attendees">Attendees</a>
@@ -64,7 +64,7 @@
           <a class="mdl-navigation__link" href="" data-subpage="profile">My Profile</a>
         </nav>
         <nav class="mdl-navigation lpa-sign-in-nav">
-          <a class="mdl-navigation__link" href="">Sign in</a>
+          <a class="mdl-navigation__link lpa-sign-in" href="">Sign in</a>
         </nav>
       </div>
       <!-- Bottom row, not visible on scroll -->
@@ -87,7 +87,8 @@
         <a class="mdl-navigation__link" href="">My Profile</a>
       </nav>
       <nav class="mdl-navigation">
-        <a class="mdl-navigation__link" href="">Sign in</a>
+        <a class="mdl-navigation__link lpa-sign-in" href="">Sign in</a>
+        <a class="mdl-navigation__link lpa-sign-out" href="">Sign out</a>
       </nav>
     </div>
 
@@ -97,7 +98,8 @@
 
         <section class="lpa-sign-in-section lpa-subpage lpa-active" id="lpa-signin-subpage">
           <p>Welcome to the mentor site! Please sign in to view your schedule.</p>
-          <button id="lpa-sign-in" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+          <button id="lpa-sign-in"
+              class="lpa-sign-in mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
             Sign in
           </button>
         </section>
