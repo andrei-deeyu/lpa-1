@@ -24,6 +24,8 @@ var UI = (function(firebaseApi, authModule) {
     startupsListTemplate: document.getElementById('lpa-startups-list-template'),
     startupsList: document.getElementById('lpa-startups-list'),
     mainNav: document.getElementById('lpa-main-nav'),
+    mdlLayout: document.querySelector('.mdl-layout'),
+    drawerNav: document.getElementById('lpa-drawer-nav'),
     message: document.getElementById('lpa-message'),
     datepicker: document.getElementById('schedule-datepicker'),
     scheduleList: document.getElementById('lpa-schedule-list'),
@@ -211,6 +213,14 @@ var UI = (function(firebaseApi, authModule) {
         let subpageName = e.target.getAttribute('data-subpage');
         if (subpageName) {
           UI.showSubpage(subpageName);
+        }
+      });
+      ELEMENTS.drawerNav.addEventListener('click', function(e) {
+        e.preventDefault();
+        let subpageName = e.target.getAttribute('data-subpage');
+        if (subpageName) {
+          UI.showSubpage(subpageName);
+          ELEMENTS.mdlLayout.MaterialLayout.toggleDrawer();
         }
       });
       ELEMENTS.signIn.addEventListener('click', authModule.authWithGoogle);
