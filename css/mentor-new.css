@@ -111,3 +111,7 @@ body {
 .mdl-list {
   width: 500px;
 }
+
+form .mdl-textfield {
+  display: block;
+}

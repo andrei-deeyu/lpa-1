@@ -8,6 +8,7 @@ var firebaseApi = (function() {
 
   let api = {
     CURRENT_MENTOR_ID: null,
+    CURRENT_MENTOR: null,
     CACHE: CACHE,
     fetchSchedule: (day, mentorId) => new Promise(function(resolve, reject) {
       firebase.database()
@@ -24,6 +25,12 @@ var firebaseApi = (function() {
           });
           resolve(sessions);
         });
+    }),
+    fetchMentor: mentorId => new Promise(function(resolve) {
+      firebase.database().ref('mentors/' + mentorId).once('value').then(snapshot => {
+        firebaseApi.CURRENT_MENTOR = snapshot.val();
+        resolve(firebaseApi.CURRENT_MENTOR);
+      });
     }),
     fetchMentorsList: () => new Promise(function(resolve) {
       firebase.database().ref('mentors/').once('value').then(snapshots => {
@@ -55,19 +62,20 @@ var firebaseApi = (function() {
         });
     }),
     fetchStartupNotes: (startupKey) => new Promise(function(resolve) {
-      firebase.database().ref('/notes-backup/startups/' + startupKey).once('value').then(snapshots => {
-          CACHE.startups[startupKey].sessions = [];
-          snapshots.forEach(snapshot => {
-            let notes = snapshot.val().notes;
-            Object.keys(notes).forEach(mentorKey => {
-              Object.keys(notes[mentorKey]).forEach(hourKey => {
-                notes[mentorKey][hourKey].mentorKey = mentorKey;
-                CACHE.startups[startupKey].sessions.push(notes[mentorKey][hourKey]);
-              })
+      firebase.database().ref('notes-backup/startups/' + startupKey).once(
+          'value').then(snapshots => {
+        CACHE.startups[startupKey].sessions = [];
+        snapshots.forEach(snapshot => {
+          let notes = snapshot.val().notes;
+          Object.keys(notes).forEach(mentorKey => {
+            Object.keys(notes[mentorKey]).forEach(hourKey => {
+              notes[mentorKey][hourKey].mentorKey = mentorKey;
+              CACHE.startups[startupKey].sessions.push(notes[mentorKey][hourKey]);
             })
-          });
-          resolve(CACHE.startups[startupKey].sessions);
+          })
         });
+        resolve(CACHE.startups[startupKey].sessions);
+      });
     }),
     saveSessionNotes: (note, startup, path) => new Promise(function(resolve) {
       let pathParts = path.split('/');
@@ -85,6 +93,10 @@ var firebaseApi = (function() {
         firebase.database().ref(startupNotesPath).set(note),
         firebase.database().ref(backupNotesPath).set(note)
       ]).then(resolve);
+    }),
+    saveMentor: (mentorId, mentor) => new Promise(function(resolve) {
+      let mentorPath = 'mentors/' + mentorId;
+      firebase.database().ref(mentorPath).set(mentor).then(resolve);
     }),
     getCurrentMentorSchedule: day => new Promise(function(resolve) {
       let mentorId = firebaseApi.CURRENT_MENTOR_ID;

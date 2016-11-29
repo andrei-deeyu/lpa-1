@@ -31,7 +31,12 @@
     }
   }
 
-  firebase.auth().onAuthStateChanged(UI.updateUser);
+  firebase.auth().onAuthStateChanged(user => {
+    firebaseApi.fetchMentor(firebaseApi.CURRENT_MENTOR_ID).then(mentor => {
+      UI.updateMentor();
+    }).catch(e=>console.log(e));
+    UI.updateUser(user);
+  });
 
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/service-worker.js').then(function(registration) {

@@ -40,7 +40,9 @@ var UI = (function(firebaseApi, authModule) {
     startupNotes: document.getElementById('lpa-startup-notes'),
     chooseStartupBtn: document.getElementById('lpa-choose-startup-btn'),
     chooseStartupMenu: document.getElementById('lpa-choose-startup-menu'),
-    chooseStartup: document.getElementById('lpa-choose-startup')
+    chooseStartup: document.getElementById('lpa-choose-startup'),
+    profileForm: document.getElementById('lpa-profile-form'),
+    profileSubmit: document.getElementById('lpa-profile-submit')
   };
 
   function getParentNodeByType(el, nodeType) {
@@ -66,6 +68,23 @@ var UI = (function(firebaseApi, authModule) {
       if (ELEMENTS.drawer.classList.contains('is-visible')) {
         ELEMENTS.mdlLayout.MaterialLayout.toggleDrawer();
       }
+    },
+    updateMentor: () => {
+      let fields = ELEMENTS.profileForm;
+      let mentor = firebaseApi.CURRENT_MENTOR;
+      fields['lpa-profile-name'].value = mentor.name || '';
+      fields['lpa-profile-email'].value = mentor.email || '';
+      fields['lpa-profile-phone'].value = mentor.phone || '';
+      fields['lpa-profile-country'].value = mentor.country || '';
+      fields['lpa-profile-city'].value = mentor.city || '';
+      fields['lpa-profile-twitter'].value = mentor.twitter || '';
+      fields['lpa-profile-bio'].innerHTML = mentor.bio || '';
+      fields['lpa-profile-funfact'].innerHTML = mentor.funFact || '';
+      fields['lpa-profile-expertise'].innerHTML = mentor.expertise || '';
+      fields['lpa-profile-linkedin'].value = mentor.linkedin || '';
+      fields['lpa-profile-site'].value = mentor.site || '';
+      fields['lpa-profile-pictureurl'].value = mentor.pic || '';
+      fields['lpa-profile-comments'].value = mentor.comments || '';
     },
     updateMentorsList: function(mentorSnapshots) {
       ELEMENTS.mentorsList.innerHTML = '';
@@ -311,6 +330,30 @@ var UI = (function(firebaseApi, authModule) {
           var url = BASE_URL + '/startups/' + li.getAttribute('data-key');
           go(url);
         }
+      });
+      ELEMENTS.profileSubmit.addEventListener('click', function(e) {
+        let fields = ELEMENTS.profileForm.elements;
+        let mentorId = firebaseApi.CURRENT_MENTOR_ID;
+        let mentor = {
+          'name': fields['lpa-profile-name'].value,
+          'email': fields['lpa-profile-email'].value, // should be not editable?
+          'phone': fields['lpa-profile-phone'].value,
+          'country': fields['lpa-profile-country'].value,
+          'city': fields['lpa-profile-city'].value,
+          //'domain': fields['lpa-profile-name'].value,
+          //'domainSec': $("#form-domain-sec-select option':selected").text(),
+          'twitter': fields['lpa-profile-twitter'].value,
+          'bio': fields['lpa-profile-bio'].value,
+          'funFact': fields['lpa-profile-funfact'].value,
+          'expertise': fields['lpa-profile-expertise'].value,
+          'linkedin': fields['lpa-profile-linkedin'].value,
+          'site': fields['lpa-profile-site'].value,
+          'pic': fields['lpa-profile-pictureurl'].value,
+          'comments': fields['lpa-profile-comments'].value,
+          'unixTime': new Date().getTime(),
+          'date': new Date().toISOString()
+        };
+        firebaseApi.saveMentor(mentorId, mentor);
       });
     }
   };
