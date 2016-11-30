@@ -115,3 +115,7 @@ body {
 form .mdl-textfield {
   display: block;
 }
+
+.lpa-survey-img {
+  max-width: 100px;
+}

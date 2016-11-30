@@ -42,7 +42,9 @@ var UI = (function(firebaseApi, authModule) {
     chooseStartupMenu: document.getElementById('lpa-choose-startup-menu'),
     chooseStartup: document.getElementById('lpa-choose-startup'),
     profileForm: document.getElementById('lpa-profile-form'),
-    profileSubmit: document.getElementById('lpa-profile-submit')
+    profileSubmit: document.getElementById('lpa-profile-submit'),
+    camera: document.getElementById('lpa-camera'),
+    cameraPreview: document.getElementById('lpa-camera-preview')
   };
 
   function getParentNodeByType(el, nodeType) {
@@ -308,6 +310,10 @@ var UI = (function(firebaseApi, authModule) {
         let fields = ELEMENTS.survey.querySelector('form').elements;
         let sessionPath = fields['lpa-survey-session'].value;
         let startup = fields['lpa-survey-startup'].value;
+        let imgs = [];
+        ELEMENTS.survey.querySelectorAll('.lpa-survey-img').forEach(img => {
+          imgs.push(img.src);
+        });
         let today = new Date();
         let note = {
           'actionItems' : fields['lpa-survey-actionitems'].value,
@@ -317,6 +323,7 @@ var UI = (function(firebaseApi, authModule) {
           'starttime' : fields['lpa-survey-starttime'].value,
           'meetingNotes' : fields['lpa-survey-notes'].value,
           'receptive' : fields['lpa-survey-receptive'].value,
+          'imgs': imgs,
           'unixTime' : today.getTime()
         }
         firebaseApi.saveSessionNotes(note, startup, sessionPath).then(() => {
@@ -355,8 +362,25 @@ var UI = (function(firebaseApi, authModule) {
         };
         firebaseApi.saveMentor(mentorId, mentor);
       });
+      ELEMENTS.camera.addEventListener('change', e => {
+        let file = e.target.files[0];
+        let link = document.createElement('a');
+        link.setAttribute('target', '_blank');
+        ELEMENTS.cameraPreview.appendChild(link);
+        let img = document.createElement('img');
+        img.classList.add('lpa-survey-img');
+        img.src = URL.createObjectURL(file);
+        let progressCallback = function(snapshot) {
+            let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            link.innerHTML = Math.round(progress) + '%';
+        };
+        let completeCallback = function(snapshot) {
+          link.setAttribute('href', snapshot.downloadURL);
+          ELEMENTS.cameraPreview.appendChild(img);
+        };
+        firebaseApi.uploadImage(file, progressCallback, completeCallback);
+      });
     }
   };
-
   return UI;
 })(firebaseApi, authModule);

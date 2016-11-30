@@ -101,7 +101,18 @@ var firebaseApi = (function() {
     getCurrentMentorSchedule: day => new Promise(function(resolve) {
       let mentorId = firebaseApi.CURRENT_MENTOR_ID;
       firebaseApi.fetchSchedule(day, mentorId).then(resolve);
-    })
+    }),
+    uploadImage: (file, progressCallback, completeCallback) =>  {
+      let metadata = {
+        contentType: 'image/jpeg'
+      };
+      let errorCallback = null;
+      let task = firebase.storage().ref().child('images/' + file.name).put(file, metadata);
+      task.on(firebase.storage.TaskEvent.STATE_CHANGED,
+        progressCallback, errorCallback, function() {
+          completeCallback(task.snapshot)
+        });
+    }
   };
 
   var config = {
