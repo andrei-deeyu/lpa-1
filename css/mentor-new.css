@@ -119,3 +119,12 @@ form .mdl-textfield {
 .lpa-survey-img {
   max-width: 100px;
 }
+
+#lpa-camera-preview a {
+  display: inline-block;
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  text-align: center;
+  background-size: cover;
+}

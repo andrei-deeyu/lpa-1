@@ -367,16 +367,15 @@ var UI = (function(firebaseApi, authModule) {
         let link = document.createElement('a');
         link.setAttribute('target', '_blank');
         ELEMENTS.cameraPreview.appendChild(link);
-        let img = document.createElement('img');
-        img.classList.add('lpa-survey-img');
-        img.src = URL.createObjectURL(file);
+        let imgUrl = URL.createObjectURL(file);
+        link.setAttribute('style', 'background-image: url(\'' + imgUrl + '\')');
         let progressCallback = function(snapshot) {
             let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             link.innerHTML = Math.round(progress) + '%';
         };
         let completeCallback = function(snapshot) {
           link.setAttribute('href', snapshot.downloadURL);
-          ELEMENTS.cameraPreview.appendChild(img);
+          link.innerHTML = '';
         };
         firebaseApi.uploadImage(file, progressCallback, completeCallback);
       });
