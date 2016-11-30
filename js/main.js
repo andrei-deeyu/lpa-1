@@ -38,11 +38,13 @@
   // AUTH fun
   // start the connection with firebase DB
   var config = {
-    apiKey: "AIzaSyDImJzAqBmZVXdaK55jVfRuoaHVLBDFgxU",
-    authDomain: "lpa-1.firebaseapp.com",
-    databaseURL: "https://lpa-1.firebaseio.com",
-    storageBucket: "project-1969056342883930904.appspot.com",
-  };
+    apiKey: "AIzaSyDqCyeurfP9lw5oN6-UhLS3VUDvUBBamrQ",
+    authDomain: "lpa-mex.firebaseapp.com",
+    databaseURL: "https://lpa-mex.firebaseio.com",
+    storageBucket: "lpa-mex.appspot.com",
+    messagingSenderId: "133369152659"
+  };  
+
   // Initialize Firebase
   firebase.initializeApp(config);
   var ref = firebase.database().ref();
@@ -1559,10 +1561,12 @@
   });
 
   //
-  // TODO: change this! quickly please.
+  // TODO: change this! quickly please. It's working just to the same day changes.
   //
   function moveMentorBack(mentorEmail) {
-    var oldRef = firebase.database().ref("2016-09-27-mentors/" + mentorEmail);
+    var curUnixTime = new Date().getTime();
+    var disTime = new Date().toJSON().slice(0, 10);
+    var oldRef = firebase.database().ref(disTime + "-mentors/" + mentorEmail);
     var newRef = firebase.database().ref("mentors/" + mentorEmail);
     moveFBnode(oldRef, newRef); 
     bootbox.alert(mentorEmail + " just did a comeback!");
