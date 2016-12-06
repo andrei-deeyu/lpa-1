@@ -52,7 +52,8 @@ body {
 }
 
 .lpa-header {
-  background: url(../img/city-hd.jpeg) center/cover;
+  /*background: url(../img/city-hd.jpeg) center/cover;*/
+  background: url(../img/lpa-header.jpg) center/cover;
   min-height: 230px;
 }
 
@@ -88,14 +89,6 @@ body {
   display: none !important;
 }
 
-.lpa-sign-out {
-  opacity: 0;
-}
-
-.lpa-signed-in .lpa-sign-out {
-  opacity: 1;
-}
-
 .lpa-fileinput-fab {
   width: 56px;
   height: 56px;
@@ -127,4 +120,22 @@ form .mdl-textfield {
   overflow: hidden;
   text-align: center;
   background-size: cover;
+}
+
+footer a {
+  text-decoration: none;
+  color: #fff;
+}
+
+header::before {
+  position: absolute;
+  content: "";
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 230px;
+  *background: linear-gradient(rgba(66, 66, 66, 0.8), transparent);
+  *background: linear-gradient(rgba(0, 128, 145, 0.8), transparent);
+  *background: linear-gradient(rgba(0,0 , 0, 0.8), transparent);
+  background: linear-gradient(rgba(63, 87, 99, 0.8), transparent);
 }

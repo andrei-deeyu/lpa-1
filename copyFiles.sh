@@ -1,4 +1,5 @@
 echo "-- Copy files to public dir --"
+mkdir -p public
 cp *.html public/
 cp -R js/ public/js/
 cp sw.js public/sw.js
