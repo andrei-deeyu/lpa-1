@@ -233,7 +233,8 @@ var UI = (function(firebaseApi, authModule) {
     addListeners: function() {
       ELEMENTS.mainNav.addEventListener('click', function(e) {
         e.preventDefault();
-        let subpageName = e.target.getAttribute('data-subpage');
+        let linkEl = getParentNodeByType(e.target, 'A');
+        let subpageName = linkEl.getAttribute('data-subpage');
         if (subpageName) {
           UI.showSubpage(subpageName);
         }
