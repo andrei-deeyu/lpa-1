@@ -111,7 +111,6 @@
   //
   function loginWithGoogle() {
     $("#spin").show();
-
     firebase.auth().signInWithPopup(provider).then(function(result) {
       $("#spin").hide();
       var token = result.credential.accessToken;
@@ -157,8 +156,8 @@
   //
   // logout action
   //
-  $("#logout-but").click(function() {
-    firebase.auth().signOut().then(function() {
+  $("#logout-div").on('click', "#logout-but", function(ev) {
+      firebase.auth().signOut().then(function() {
       logoutUI();
     }, function(error) {
       console.log("Could not sign-out. err: " + error);
@@ -699,9 +698,8 @@
   // Save mentors
   //
   $("#form-save-mentor").click(function() {
-    var authData = ref.getAuth();
-    if (authData) {
-      console.log("User " + authData.uid + " is logged in with " + authData.provider);
+    if (authUserData) {
+      console.log("User: " + authUserData.uid + " is logged in with " + authUserData.email);
     } else {
       console.log("User is logged out");
       $("#alert-warning-sign-in").show();
