@@ -48,20 +48,14 @@
 
 <body>
 
-  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+  <div class="mdl-layout mdl-js-layout">
     <header class="mdl-layout__header mdl-layout__header--waterfall lpa-header">
       <!-- Top row, always visible -->
       <div class="mdl-layout__header-row">
         <!-- Title -->
         <span class="mdl-layout-title">Launchpad Mentor</span>
         <div class="mdl-layout-spacer"></div>
-        <nav class="mdl-navigation lpa-main-nav" id="lpa-main-nav">
-
-          <a class="mdl-navigation__link" href="" data-subpage="schedule">Schedule</a>
-          <a class="mdl-navigation__link" href="" data-subpage="startups">Startups</a>
-          <a class="mdl-navigation__link" href="" data-subpage="attendees">Attendees</a>
-          <a class="mdl-navigation__link" href="" data-subpage="mentors">Mentors</a>
-          <a class="mdl-navigation__link" href="" data-subpage="guidelines">Guidelines</a>
+        <nav class="mdl-navigation lpa-sign-out-nav">
           <a class="mdl-navigation__link" href="" data-subpage="profile"><i class="material-icons">account_circle</i></a>
           <a class="mdl-navigation__link lpa-sign-out" href=""><i class="material-icons">exit_to_app</i></a>
         </nav>
@@ -73,15 +67,17 @@
       <div class="mdl-layout__header-row">
         <div>
           <span class="lpa-header-title">Launchpad Bootcamp 2016</span>
-          <span class="lpa-header-info">SEPTEMBER 9-10, 2016</span>
-          <span class="lpa-header-info">Join the startup community. Be a mentor!</span>
+          <span class="lpa-header-info">San Francisco, September 9-10, 2016</span>
         </div>
       </div>
 
       <div class="mdl-layout__header-row">
-        <div class="mdl-layout-spacer"></div>
-        <!-- Navigation -->
-        <div>bottom row</div>
+        <nav class="mdl-navigation lpa-main-nav" id="lpa-main-nav">
+          <a class="mdl-navigation__link" href="" data-subpage="schedule"><i class="material-icons">event</i></a>
+          <a class="mdl-navigation__link" href="" data-subpage="startups">Startups</a>
+          <a class="mdl-navigation__link" href="" data-subpage="attendees">Attendees</a>
+          <a class="mdl-navigation__link" href="" data-subpage="mentors">Mentors</a>
+        </nav>
       </div>
 
     </header>
@@ -101,7 +97,13 @@
       </nav>
     </div>
 
+
+    <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" id="lpa-survey-btn">
+        <i class="material-icons">note_add</i>
+    </button>
     <main class="mdl-layout__content">
+
+
 
       <div class="lpa-page-content">
 
@@ -137,11 +139,6 @@
               </span>
             </li>
           </ul>
-
-          <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored lpa-survey-btn">
-              <i class="material-icons">note_add</i>
-          </button>
-
         </section>
 
         <section class="lpa-subpage" id="lpa-startups-subpage">
@@ -481,11 +478,13 @@
           <li><a href="https://events.withgoogle.com/bootcamp-class-2/">Bootcamp</a></li>
         </ul>
       </div>
+      <!--
       <div class="mdl-mini-footer__right-section">
         <button class="mdl-mini-footer__social-btn"></button>
         <button class="mdl-mini-footer__social-btn"></button>
         <button class="mdl-mini-footer__social-btn"></button>
       </div>
+    -->
     </footer>
 
   </div>

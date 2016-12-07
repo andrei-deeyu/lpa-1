@@ -25,6 +25,7 @@ body {
   top: 0;
   width: 100%;
   z-index: -1;
+  box-sizing: border-box;
   /* Add break points */
   padding: 20px 80px;
   opacity: 0;
@@ -54,19 +55,32 @@ body {
 .lpa-header {
   /*background: url(../img/city-hd.jpeg) center/cover;*/
   background: url(../img/lpa-header.jpg) center/cover;
-  min-height: 230px;
+}
+
+@media screen and (max-width: 1024px) {
+  .mdl-layout__header {
+      display: block;
+      max-height: 56px;
+  }
+}
+
+
+
+.mdl-layout__header-row {
+  z-index: 1;
 }
 
 .lpa-header-info {
-  font-size: 1.1em;
+  font-size: 1em;
   display: block;
-  padding: .1em 0;
+
+  padding: 0.2em;
 }
 
 .lpa-header-title {
   font-size: 1.5em;
+  padding: 0.2em;
   display: block;
-  padding: 4em 0 1em 0;
 }
 
 .lpa-main-nav {
@@ -89,6 +103,14 @@ body {
   display: none !important;
 }
 
+.lpa-sign-out-nav {
+  display: none;
+}
+
+.lpa-signed-in .lpa-sign-out-nav {
+  display: flex;
+}
+
 .lpa-fileinput-fab {
   width: 56px;
   height: 56px;
@@ -97,12 +119,34 @@ body {
   position: absolute;
 }
 
+
+@media screen and (max-width: 1024px) {
+  .mdl-layout__drawer-button {
+      color: #fff;
+  }
+}
+
+
+.lpa-survey-btn {
+  margin: -4px auto 4px auto
+}
+
+
+#lpa-survey-btn {
+  position: relative;
+  top: -26px;
+  z-index: 99;
+  margin-right: 136px;
+}
+
+
+
 .lpa-dialog {
   width: 500px;
 }
 
 .mdl-list {
-  width: 500px;
+  max-width: 500px;
 }
 
 form .mdl-textfield {
@@ -127,15 +171,62 @@ footer a {
   color: #fff;
 }
 
+.mdl-layout__tab-bar {
+  height: auto;
+  width: 100%;
+}
+
+.is-small-screen .mdl-layout__header--waterfall {
+    max-height: 192px;
+}
+
+.is-small-screen .mdl-layout__header--waterfall.is-compact {
+    max-height: 64px;
+}
+
+header.is-compact::before {
+  height: 64px;
+  *background: rgb(63, 87, 99);
+}
+
 header::before {
   position: absolute;
   content: "";
   top: 0;
   left: 0;
   width: 100%;
-  min-height: 230px;
-  *background: linear-gradient(rgba(66, 66, 66, 0.8), transparent);
-  *background: linear-gradient(rgba(0, 128, 145, 0.8), transparent);
-  *background: linear-gradient(rgba(0,0 , 0, 0.8), transparent);
+  height: 192px;  /* 3x64 3 header rows */
   background: linear-gradient(rgba(63, 87, 99, 0.8), transparent);
+}
+
+.is-small-screen header::before {
+  height: 168px;  /* 3x64 3 header rows */
+}
+
+.mdl-layout__header-row .mdl-navigation__link {
+  padding: 0 12px;
+}
+
+@media screen and (max-width: 660px) {
+  #lpa-survey-btn {
+    position: absolute;
+    bottom: 110px;
+    margin-right: 0;
+    right: 48px;
+    top: auto;
+  }
+
+  .lpa-subpage {
+    padding: 24px 48px;
+  }
+
+  .lpa-dialog {
+    width: 100%;
+    margin: 0;
+    box-sizing: border-box;
+    top: 0;
+    left: 0;
+    right: 0;
+    left: 0;
+  }
 }

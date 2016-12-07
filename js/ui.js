@@ -171,6 +171,7 @@ var UI = (function(firebaseApi, authModule) {
       });
       let subpage = document.getElementById('lpa-' + subpageName + '-subpage');
       subpage.classList.add('lpa-active');
+      window.scrollTo(0, 0);
       return subpage;
     },
     displaySchedule: function(schedule) {
@@ -285,13 +286,10 @@ var UI = (function(firebaseApi, authModule) {
         UI.resetSurvey(startupKey, mentorId);
       });
 
-      ELEMENTS.surveyBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-          let mentorId = firebaseApi.CURRENT_MENTOR_ID;
-          UI.showSurvey(null, mentorId);
-        });
+      ELEMENTS.surveyBtn.addEventListener('click', function() {
+        let mentorId = firebaseApi.CURRENT_MENTOR_ID;
+        UI.showSurvey(null, mentorId);
       });
-
       ELEMENTS.survey.querySelector(
         '#lpa-survey-receptive').addEventListener('change', function(e) {
         ELEMENTS.survey.querySelector(
