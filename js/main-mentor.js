@@ -156,9 +156,8 @@
   //
   // logout action
   //
-  $("#logout-but").click(function() {
-    firebase.auth().signOut().then(function() {
-      // Sign-out successful
+  $("#logout-div").on('click', "#logout-but", function(ev) {
+      firebase.auth().signOut().then(function() {
       logoutUI();
     }, function(error) {
       console.log("Could not sign-out. err: " + error);
@@ -702,7 +701,7 @@
   //
   $("#form-save-mentor").click(function() {
     if (authUserData) {
-      console.log("User " + authUserData.uid + " is logged in with " + authUserData.provider);
+      console.log("User " + authUserData.uid + " is logged in with " + authUserData.email);
     } else {
       console.log("User is logged out");
       $("#alert-warning-sign-in").show();
