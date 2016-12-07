@@ -63,4 +63,5 @@
     UI.ELEMENTS.message.classList.add('hide');
   }, false);
 
+  
 })(firebaseApi, authModule, UI);

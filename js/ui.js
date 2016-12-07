@@ -9,7 +9,9 @@
  * TODO: Add Transition animations.
  * TODO: Use ES6 modules.
  */
-var UI = (function(firebaseApi, authModule) {
+var UI = (function(firebaseApi, authModule, router) {
+
+  const BASE_URL = '/index-mentor-new.html';
 
   /**
    * UI Elements cache.
@@ -22,6 +24,7 @@ var UI = (function(firebaseApi, authModule) {
     startupsListTemplate: document.getElementById('lpa-startups-list-template'),
     startupsList: document.getElementById('lpa-startups-list'),
     mainNav: document.getElementById('lpa-main-nav'),
+    userNav: document.getElementById('lpa-user-nav'),
     mdlLayout: document.querySelector('.mdl-layout'),
     drawer: document.getElementById('lpa-drawer'),
     drawerNav: document.getElementById('lpa-drawer-nav'),
@@ -52,6 +55,29 @@ var UI = (function(firebaseApi, authModule) {
        el = el.parentNode;
     }
     return el;
+  };
+
+  function go(url) {
+    window.history.pushState(null, null, url);
+    var urlParts = url.split('/');
+    let subpageName = (urlParts[2] === 'startups' && urlParts[3]) ? 'startup' : urlParts[2];
+    let subpage = UI.showSubpage(subpageName);
+    let itemKey = urlParts[3];
+    let initPage = subpage.getAttribute('data-init');
+    if (initPage) {
+      let item = firebaseApi.CACHE[urlParts[2]][itemKey];
+      UI[initPage](item);
+    }
+  };
+
+  function navigate(e) {
+    e.preventDefault();
+    let linkEl = getParentNodeByType(e.target, 'A');
+    let subpageName = linkEl.getAttribute('data-subpage');
+    if (subpageName) {
+      window.history.pushState(null, null, BASE_URL + '/' + subpageName);
+      UI.showSubpage(subpageName);
+    }
   };
 
   /**
@@ -232,21 +258,11 @@ var UI = (function(firebaseApi, authModule) {
           '#lpa-survey-endtime').value = sessionCopy.endtime;
     },
     addListeners: function() {
-      ELEMENTS.mainNav.addEventListener('click', function(e) {
-        e.preventDefault();
-        let linkEl = getParentNodeByType(e.target, 'A');
-        let subpageName = linkEl.getAttribute('data-subpage');
-        if (subpageName) {
-          UI.showSubpage(subpageName);
-        }
-      });
+      ELEMENTS.mainNav.addEventListener('click', navigate);
+      ELEMENTS.userNav.addEventListener('click', navigate);
       ELEMENTS.drawerNav.addEventListener('click', function(e) {
-        e.preventDefault();
-        let subpageName = e.target.getAttribute('data-subpage');
-        if (subpageName) {
-          UI.showSubpage(subpageName);
-          ELEMENTS.mdlLayout.MaterialLayout.toggleDrawer();
-        }
+        navigate(e);
+        ELEMENTS.mdlLayout.MaterialLayout.toggleDrawer();
       });
       ELEMENTS.mdlLayout.querySelectorAll('.lpa-sign-in').forEach(el => {
         el.addEventListener('click', e => {
@@ -381,4 +397,4 @@ var UI = (function(firebaseApi, authModule) {
     }
   };
   return UI;
-})(firebaseApi, authModule);
+})(firebaseApi, authModule, router);
