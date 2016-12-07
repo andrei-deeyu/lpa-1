@@ -18,5 +18,8 @@
   "homepage": "https://github.com/greenido/lpa-1#readme",
   "devDependencies": {
     "gulp-webserver": "^0.9.1"
+  },
+  "dependencies": {
+    "dialog-polyfill": "^0.4.5"
   }
 }
