@@ -227,7 +227,13 @@ header::before {
   background: rgb(255,171,64);
 }
 
-@media screen and (max-width: 660px) {
+@media screen and (max-width: 520px) {
+  .lpa-main-nav {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 700px) {
   #lpa-survey-btn {
     position: absolute;
     bottom: 110px;
