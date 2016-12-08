@@ -70,17 +70,21 @@
           <span class="lpa-header-info">San Francisco, September 9-10, 2016</span>
         </div>
       </div>
-
       <div class="mdl-layout__header-row">
-        <nav class="mdl-navigation lpa-main-nav" id="lpa-main-nav">
-          <a class="mdl-navigation__link" href="#schedule" data-subpage="schedule"><i class="material-icons">event</i></a>
-          <a class="mdl-navigation__link" href="startups" data-subpage="startups">Startups</a>
-          <a class="mdl-navigation__link" href="" data-subpage="attendees">Attendees</a>
-          <a class="mdl-navigation__link" href="" data-subpage="mentors">Mentors</a>
-        </nav>
+        <div class="mdl-layout-spacer"></div>
       </div>
 
     </header>
+
+    <div class="mdl-tabs mdl-js-tabs">
+      <nav class="mdl-tabs__tab-bar mdl-navigation lpa-main-nav" id="lpa-main-nav">
+        <a class="mdl-tabs__tab mdl-navigation__link lpa-tab" href="#schedule" data-subpage="schedule"><i class="material-icons">event</i></a>
+        <a class="mdl-tabs__tab mdl-navigation__link lpa-tab" href="startups" data-subpage="startups">Startups</a>
+        <a class="mdl-tabs__tab mdl-navigation__link lpa-tab" href="" data-subpage="attendees">Attendees</a>
+        <a class="mdl-tabs__tab mdl-navigation__link lpa-tab" href="" data-subpage="mentors">Mentors</a>
+      </nav>
+    </div>
+
     <div class="mdl-layout__drawer" id="lpa-drawer">
       <span class="mdl-layout-title">Launchpad</span>
       <nav class="mdl-navigation" id="lpa-drawer-nav">

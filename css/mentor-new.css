@@ -85,6 +85,17 @@ body {
 
 .lpa-main-nav {
   opacity: 0;
+  background: #607D8B;
+  color: #fff;
+  padding-left: 48px;
+  -webkit-justify-content: inherit;
+  -ms-flex-pack: inherit;
+  justify-content: inherit;
+}
+
+.lpa-main-nav a {
+  color: #fff;
+  font-weight: normal;
 }
 
 .lpa-signed-in .lpa-sign-in-section {
@@ -205,6 +216,15 @@ header::before {
 
 .mdl-layout__header-row .mdl-navigation__link {
   padding: 0 12px;
+}
+
+.mdl-tabs.is-upgraded .mdl-tabs__tab.is-active {
+  color: #fff;
+}
+
+.mdl-tabs.is-upgraded .mdl-tabs__tab.is-active::after {
+  height: 4px;
+  background: rgb(255,171,64);
 }
 
 @media screen and (max-width: 660px) {

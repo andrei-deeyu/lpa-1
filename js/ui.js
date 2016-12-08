@@ -259,7 +259,12 @@ var UI = (function(firebaseApi, authModule, router) {
     },
     addListeners: function() {
       ELEMENTS.mainNav.addEventListener('click', navigate);
-      ELEMENTS.userNav.addEventListener('click', navigate);
+      ELEMENTS.userNav.addEventListener('click', e => {
+        ELEMENTS.mainNav.querySelectorAll('.is-active').forEach(function(link) {
+          link.classList.remove('is-active');
+        });
+        navigate(e);
+      });
       ELEMENTS.drawerNav.addEventListener('click', function(e) {
         navigate(e);
         ELEMENTS.mdlLayout.MaterialLayout.toggleDrawer();
