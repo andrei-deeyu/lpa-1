@@ -245,12 +245,6 @@ main {
   margin-top: -52px;
 }
 
-@media screen and (max-width: 520px) {
-  .lpa-main-nav {
-    display: none;
-  }
-}
-
 @media screen and (max-width: 700px) {
   #lpa-survey-btn {
     position: absolute;
@@ -278,6 +272,42 @@ main {
     right: 0;
     left: 0;
   }
+}
+
+@media screen and (max-width: 340px) {
+  .lpa-signed-in .lpa-user-nav {
+    display: none;
+  }
+
+  .lpa-subpage {
+    padding: 12px 24px;
+  }
+}
+
+
+@media screen and (max-width: 520px) {
+
+  .lpa-header-title,
+  .lpa-header-info {
+    display:none;
+  }
+
+  .lpa-main-nav {
+    display: none;
+  }
+
+  .mdl-mini-footer {
+    padding: 18px 16px;
+  }
+
+  .mdl-mini-footer .mdl-logo {
+    display: none;
+  }
+
+  #lpa-survey-btn {
+    bottom: 32px;
+  }
+
 }
 
 .lpa-survey-error {
