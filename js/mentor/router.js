@@ -40,7 +40,6 @@ var router = (function(firebaseApi, authModule) {
       let subpage = UI.showSubpage(name);
       let initPage = subpage.getAttribute('data-init');
       if (initPage) {
-        console.log(firebaseApi.CACHE)
         let item = firebaseApi.CACHE[subpageName][itemKey];
         UI[initPage](item);
       }
@@ -49,7 +48,9 @@ var router = (function(firebaseApi, authModule) {
 
   window.addEventListener("popstate", function(e) {
     let urlParts = window.location.pathname.split('/');
-    router.go(urlParts[2], urlParts[3]);
+    if (urlParts.length > 2) {
+      router.go(urlParts[2], urlParts[3]);
+    }
   }, false);
 
   return router;

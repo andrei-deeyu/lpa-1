@@ -5,7 +5,7 @@ var authModule = (function(firebaseAuth) {
 
   return {
     authWithGoogle: function() {
-      auth.signInWithPopup(provider).then(function(result) {
+      auth.signInWithRedirect(provider).then(function(result) {
         // User signed in!
       }).catch(function(error) {
         // An error occurred

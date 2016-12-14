@@ -17,20 +17,7 @@
   const BASE_URL = '/index-mentor-new.html';
 
   UI.addListeners();
-
-  function go(url) {
-    window.history.pushState(null, null, url);
-    var urlParts = url.split('/');
-    let subpageName = (urlParts[2] === 'startups' && urlParts[3]) ? 'startup' : urlParts[2];
-    let subpage = UI.showSubpage(subpageName);
-    let itemKey = urlParts[3];
-    let initPage = subpage.getAttribute('data-init');
-    if (initPage) {
-      let item = firebaseApi.CACHE[urlParts[2]][itemKey];
-      UI[initPage](item);
-    }
-  }
-
+  
   firebase.auth().onAuthStateChanged(user => {
     firebaseApi.fetchMentor(firebaseApi.CURRENT_MENTOR_ID).then(mentor => {
       UI.updateMentor();
@@ -63,5 +50,5 @@
     UI.ELEMENTS.message.classList.add('hide');
   }, false);
 
-  
+
 })(firebaseApi, authModule, UI);

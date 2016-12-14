@@ -59,6 +59,7 @@ var UI = (function(firebaseApi, authModule, router) {
     return el;
   };
 
+
   function go(url) {
     window.history.pushState(null, null, url);
     var urlParts = url.split('/');
@@ -101,7 +102,7 @@ var UI = (function(firebaseApi, authModule, router) {
     },
     updateMentor: () => {
       let fields = ELEMENTS.profileForm;
-      let mentor = firebaseApi.CURRENT_MENTOR;
+      let mentor = firebaseApi.CURRENT_MENTOR || {};
       fields['lpa-profile-name'].value = mentor.name || '';
       fields['lpa-profile-email'].value = mentor.email || '';
       fields['lpa-profile-phone'].value = mentor.phone || '';
@@ -194,9 +195,10 @@ var UI = (function(firebaseApi, authModule, router) {
       }
     },
     showSubpage: function(subpageName) {
-      document.querySelectorAll('.lpa-subpage').forEach(function(subpage) {
-        subpage.classList.remove('lpa-active');
-      });
+      let subpages = document.querySelectorAll('.lpa-subpage');
+      for (var i = 0; i < subpages.length; i++) {
+        subpages[i].classList.remove('lpa-active');
+      }
       let subpage = document.getElementById('lpa-' + subpageName + '-subpage');
       subpage.classList.add('lpa-active');
       window.scrollTo(0, 0);
@@ -240,7 +242,6 @@ var UI = (function(firebaseApi, authModule, router) {
       let today = new Date();
       let todayIso = today.toISOString();
       ELEMENTS.survey.session = session;
-      console.log(session)
       let sessionText = session ?
           'Session: ' + session.date + ' at ' + session.starttime :
           'Unscheduled session: ' + todayIso.slice(0, 10) + ' ' + todayIso.slice(11, 16);
@@ -263,27 +264,30 @@ var UI = (function(firebaseApi, authModule, router) {
     addListeners: function() {
       ELEMENTS.mainNav.addEventListener('click', navigate);
       ELEMENTS.userNav.addEventListener('click', e => {
-        ELEMENTS.mainNav.querySelectorAll('.is-active').forEach(function(link) {
-          link.classList.remove('is-active');
-        });
+        let links = ELEMENTS.mainNav.querySelectorAll('.is-active');
+        for (var i = 0; i < links.length; i++) {
+          links[i].classList.remove('is-active');
+        }
         navigate(e);
       });
       ELEMENTS.drawerNav.addEventListener('click', function(e) {
         navigate(e);
         ELEMENTS.mdlLayout.MaterialLayout.toggleDrawer();
       });
-      ELEMENTS.mdlLayout.querySelectorAll('.lpa-sign-in').forEach(el => {
-        el.addEventListener('click', e => {
+      let signInEls = ELEMENTS.mdlLayout.querySelectorAll('.lpa-sign-in');
+      for (var i = 0; i < signInEls.length; i++) {
+        signInEls[i].addEventListener('click', e => {
           e.preventDefault();
           authModule.authWithGoogle();
         });
-      });
-      ELEMENTS.mdlLayout.querySelectorAll('.lpa-sign-out').forEach(el => {
-        el.addEventListener('click', e => {
+      }
+      let signOutEls = ELEMENTS.mdlLayout.querySelectorAll('.lpa-sign-out');
+      for (var i = 0; i < signOutEls.length; i++) {
+        signOutEls[i].addEventListener('click', e => {
           e.preventDefault();
           authModule.signOut();
         });
-      });
+      }
       ELEMENTS.datepicker.setAttribute('value', new Date().toISOString().slice(0, 10));
       ELEMENTS.datepicker.addEventListener('change', function(e) {
         firebaseApi.getCurrentMentorSchedule(
@@ -335,9 +339,10 @@ var UI = (function(firebaseApi, authModule, router) {
         let session = ELEMENTS.survey.session;
         let startup = fields['lpa-survey-startup'].value;
         let imgs = [];
-        ELEMENTS.survey.querySelectorAll('.lpa-survey-img').forEach(img => {
-          imgs.push(img.src);
-        });
+        let imgEls = ELEMENTS.mdlLayout.querySelectorAll('.lpa-survey-img');
+        for (var i = 0; i < imgEls.length; i++) {
+          imgs.push(imgEls[i].src);
+        }
         let today = new Date();
         let note = {
           'actionItems' : fields['lpa-survey-actionitems'].value,

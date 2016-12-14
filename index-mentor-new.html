@@ -78,8 +78,8 @@
 
     <div class="mdl-tabs mdl-js-tabs">
       <nav class="mdl-tabs__tab-bar mdl-navigation lpa-main-nav" id="lpa-main-nav">
-        <a class="mdl-tabs__tab mdl-navigation__link lpa-tab" href="#schedule" data-subpage="schedule"><i class="material-icons">event</i></a>
-        <a class="mdl-tabs__tab mdl-navigation__link lpa-tab" href="startups" data-subpage="startups">Startups</a>
+        <a class="mdl-tabs__tab mdl-navigation__link lpa-tab" href="" data-subpage="schedule"><i class="material-icons">event</i></a>
+        <a class="mdl-tabs__tab mdl-navigation__link lpa-tab" href="" data-subpage="startups">Startups</a>
         <a class="mdl-tabs__tab mdl-navigation__link lpa-tab" href="" data-subpage="attendees">Attendees</a>
         <a class="mdl-tabs__tab mdl-navigation__link lpa-tab" href="" data-subpage="mentors">Mentors</a>
       </nav>
@@ -106,8 +106,6 @@
         <i class="material-icons">note_add</i>
     </button>
     <main class="mdl-layout__content">
-
-
 
       <div class="lpa-page-content">
 
@@ -386,86 +384,86 @@
 
         <div class="lpa-message hide" id="lpa-message"></div>
 
-        <dialog class="mdl-dialog lpa-dialog" id="lpa-survey">
-          <h4 class="mdl-dialog__title">Add notes for a startup</h4>
-          <div class="mdl-dialog__content">
-
-            <p id="lpa-survey-session-datetime"></p>
-
-            <form>
-              <input class="hidden" type="text"
-                  id="lpa-survey-session">
-              <input class="hidden" type="text"
-                  id="lpa-survey-date">
-              <input class="hidden" type="text"
-                  id="lpa-survey-starttime">
-              <input class="hidden" type="text"
-                  id="lpa-survey-endtime">
-              <p id="lpa-choose-startup" class="hidden">
-                <label for="">Change startup:</label>
-                <button id="lpa-choose-startup-btn"
-                      class="mdl-button mdl-js-button mdl-button--icon">
-                  <i class="material-icons">more_vert</i>
-                </button>
-                <input class="hidden" type="text"
-                    id="lpa-survey-startup">
-                <span class="lpa-survey-error hidden">Please choose a startup</span>
-                <ul id="lpa-choose-startup-menu"
-                    for="lpa-choose-startup-btn">
-                </ul>
-              </p>
-
-              <label for="">Were the attendees open and receptive? (1-5)</label>
-              <p style="width:300px">
-                <span for="lpa-survey-receptive">3</span>
-                <input class="mdl-slider mdl-js-slider" type="range"
-                    id="lpa-survey-receptive" min="1" max="5"
-                    value="3">
-              </p>
-              <label for="">Was the session effective? (1-5)</label>
-              <p style="width:300px">
-                <span for="lpa-survey-effective">3</span>
-                <input class="mdl-slider mdl-js-slider" type="range"
-                    id="lpa-survey-effective" min="1" max="5"
-                    value="3">
-              </p>
-              <p>
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                  <textarea class="mdl-textfield__input"
-                      type="text" rows= "5"
-                      id="lpa-survey-notes"></textarea>
-                  <label class="mdl-textfield__label" for="sample5">What did you talk about?</label>
-                </div>
-              </p>
-              <p>
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                  <textarea class="mdl-textfield__input"
-                      type="text" rows= "5"
-                      id="lpa-survey-actionitems"></textarea>
-                  <label class="mdl-textfield__label" for="sample5">What are the action items?</label>
-                </div>
-              </p>
-              <p>
-                <input type="file" accept="image/*" capture="camera"
-                    id="lpa-camera" class="lpa-fileinput-fab">
-                <button id="lpa-survey-photos"
-                    class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect">
-                    <i class="material-icons">add_a_photo</i>
-                </button>
-                <label for="">Add photos</label>
-              </p>
-              <div id="lpa-camera-preview">
-              </div>
-            </form>
-          </div>
-          <div class="mdl-dialog__actions">
-            <button type="button" class="mdl-button" id="lpa-survey-submit">Submit</button>
-            <button type="button" class="mdl-button close">Cancel</button>
-          </div>
-        </dialog>
-
       </div>
     </main>
+
+    <dialog class="mdl-dialog lpa-dialog" id="lpa-survey">
+      <h4 class="mdl-dialog__title">Add notes for a startup</h4>
+      <div class="mdl-dialog__content">
+
+        <p id="lpa-survey-session-datetime"></p>
+
+        <form>
+          <input class="hidden" type="text"
+              id="lpa-survey-session">
+          <input class="hidden" type="text"
+              id="lpa-survey-date">
+          <input class="hidden" type="text"
+              id="lpa-survey-starttime">
+          <input class="hidden" type="text"
+              id="lpa-survey-endtime">
+          <p id="lpa-choose-startup" class="hidden">
+            <label for="">Change startup:</label>
+            <button id="lpa-choose-startup-btn"
+                  class="mdl-button mdl-js-button mdl-button--icon">
+              <i class="material-icons">more_vert</i>
+            </button>
+            <input class="hidden" type="text"
+                id="lpa-survey-startup">
+            <span class="lpa-survey-error hidden">Please choose a startup</span>
+            <ul id="lpa-choose-startup-menu"
+                for="lpa-choose-startup-btn">
+            </ul>
+          </p>
+
+          <label for="">Were the attendees open and receptive? (1-5)</label>
+          <p style="width:300px">
+            <span for="lpa-survey-receptive">3</span>
+            <input class="mdl-slider mdl-js-slider" type="range"
+                id="lpa-survey-receptive" min="1" max="5"
+                value="3">
+          </p>
+          <label for="">Was the session effective? (1-5)</label>
+          <p style="width:300px">
+            <span for="lpa-survey-effective">3</span>
+            <input class="mdl-slider mdl-js-slider" type="range"
+                id="lpa-survey-effective" min="1" max="5"
+                value="3">
+          </p>
+          <p>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+              <textarea class="mdl-textfield__input"
+                  type="text" rows= "5"
+                  id="lpa-survey-notes"></textarea>
+              <label class="mdl-textfield__label" for="sample5">What did you talk about?</label>
+            </div>
+          </p>
+          <p>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+              <textarea class="mdl-textfield__input"
+                  type="text" rows= "5"
+                  id="lpa-survey-actionitems"></textarea>
+              <label class="mdl-textfield__label" for="sample5">What are the action items?</label>
+            </div>
+          </p>
+          <p>
+            <input type="file" accept="image/*" capture="camera"
+                id="lpa-camera" class="lpa-fileinput-fab">
+            <button id="lpa-survey-photos"
+                class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect">
+                <i class="material-icons">add_a_photo</i>
+            </button>
+            <label for="">Add photos</label>
+          </p>
+          <div id="lpa-camera-preview">
+          </div>
+        </form>
+      </div>
+      <div class="mdl-dialog__actions">
+        <button type="button" class="mdl-button" id="lpa-survey-submit">Submit</button>
+        <button type="button" class="mdl-button close">Cancel</button>
+      </div>
+    </dialog>
 
     <footer class="mdl-mini-footer">
       <div class="mdl-mini-footer__left-section">
@@ -509,10 +507,10 @@
 
   <!-- TODO: concatenate for production -->
   <script src="/dialog-polyfill.js"></script>
-  <script src="/js/firebase.js"></script>
-  <script src="/js/auth.js"></script>
-  <script src="/js/router.js"></script>
-  <script src="/js/ui.js"></script>
-  <script src="/js/main-mentor-new.js"></script>
+  <script src="/dist/js/firebase.js"></script>
+  <script src="/dist/js/auth.js"></script>
+  <script src="/dist/js/router.js"></script>
+  <script src="/dist/js/ui.js"></script>
+  <script src="/dist/js/main-mentor-new.js"></script>
 </body>
 </html>
