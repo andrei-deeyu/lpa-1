@@ -93,6 +93,16 @@ body {
   justify-content: inherit;
 }
 
+.mdl-tabs__tab-bar {
+  opacity: 0;
+  background: #607D8B;
+  color: #fff;
+  padding-left: 48px;
+  -webkit-justify-content: inherit;
+  -ms-flex-pack: inherit;
+  justify-content: inherit;
+}
+
 .lpa-main-nav a {
   color: #fff;
   font-weight: normal;
@@ -148,9 +158,12 @@ body {
   top: -26px;
   z-index: 99;
   margin-right: 136px;
+  display: none;
 }
 
-
+.lpa-signed-in #lpa-survey-btn {
+  display: block;
+}
 
 .lpa-dialog {
   width: 500px;
@@ -185,6 +198,7 @@ footer a {
 .mdl-layout__tab-bar {
   height: auto;
   width: 100%;
+  background: #607D8B;
 }
 
 .is-small-screen .mdl-layout__header--waterfall {
@@ -227,6 +241,10 @@ header::before {
   background: rgb(255,171,64);
 }
 
+main {
+  margin-top: -52px;
+}
+
 @media screen and (max-width: 520px) {
   .lpa-main-nav {
     display: none;
@@ -241,6 +259,11 @@ header::before {
     right: 48px;
     top: auto;
   }
+
+  main {
+    margin-top: 0px;
+  }
+
 
   .lpa-subpage {
     padding: 24px 48px;
