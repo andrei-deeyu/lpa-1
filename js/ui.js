@@ -38,6 +38,8 @@ var UI = (function(firebaseApi, authModule, router) {
     surveyBtns: document.querySelectorAll('.lpa-survey-btn'),
     survey: document.getElementById('lpa-survey'),
     surveySubmit: document.getElementById('lpa-survey-submit'),
+    surveyNotesField: document.getElementById('lpa-survey-notes'),
+    surveyActionItemsField: document.getElementById('lpa-survey-actionitems'),
     startupShowNotes: document.getElementById('lpa-startup-show-notes'),
     startupNotesTemplate: document.getElementById('lpa-startup-notes-template'),
     startupNotes: document.getElementById('lpa-startup-notes'),
@@ -213,49 +215,50 @@ var UI = (function(firebaseApi, authModule, router) {
           ELEMENTS.scheduleList.appendChild(node);
           let mentorId = firebaseApi.CURRENT_MENTOR_ID;
           node.querySelector('.lpa-survey-btn').addEventListener(
-              'click', UI.showSurvey.bind(null, session, mentorId));
+              'click', UI.showSurvey.bind(null, session));
         });
       } else {
         ELEMENTS.scheduleList.innerHTML = '<li>Sorry, no sessions found for this date.</li>';
       }
     },
-    showSurvey: function(session, mentorId) {
-      //console.log('session', session.startup)
-      let startupKey = session ? session.startup : window.location.pathname.split('/')[3];
-      UI.resetSurvey(startupKey, mentorId, session);
+    showSurvey: function(session) {
+      UI.resetSurvey(session);
       ELEMENTS.survey.showModal();
     },
-    resetSurvey: function(startupKey, mentorId, session) {
-      mentorId = mentorId || session.mentorId;
-      ELEMENTS.chooseStartup.classList.toggle('hidden', startupKey && session);
+    resetSurvey: function(session) {
+      let startup = session ? session.startup : window.location.pathname.split('/')[3];
+      if (startup) {
+        ELEMENTS.survey.querySelector(
+            '#lpa-survey-startup').value = startup;
+        ELEMENTS.chooseStartup.classList.add('hidden');
+      } else {
+        ELEMENTS.chooseStartup.classList.remove('hidden');
+      }
+      startup = startup || 'a startup';
       ELEMENTS.survey.querySelector(
-          '#lpa-survey-startup').value = startupKey;
-      startupKey = startupKey || 'a startup';
-      ELEMENTS.survey.querySelector(
-          '.mdl-dialog__title').innerHTML = 'Add notes for ' + startupKey;
+          '.mdl-dialog__title').innerHTML = 'Add notes for ' + startup;
       let today = new Date();
       let todayIso = today.toISOString();
-      let sessionCopy = session || {
-        path: null,
-        date: todayIso.slice(0, 10),
-        starttime: todayIso.slice(11, 16),
-        endtime: todayIso.slice(11, 16)
-      };
-      sessionCopy.path = ['sessions', sessionCopy.date, 'mentors',
-          mentorId, 'hour-' + today.getTime(), 'notes'].join('/');
+      ELEMENTS.survey.session = session;
+      console.log(session)
       let sessionText = session ?
-          'Session: ' + sessionCopy.date + ' at ' + sessionCopy.starttime :
-          'Unscheduled session: ' + sessionCopy.date + ' ' + sessionCopy.starttime;
+          'Session: ' + session.date + ' at ' + session.starttime :
+          'Unscheduled session: ' + todayIso.slice(0, 10) + ' ' + todayIso.slice(11, 16);
       ELEMENTS.survey.querySelector(
           '#lpa-survey-session-datetime').innerHTML = sessionText;
-      ELEMENTS.survey.querySelector(
-          '#lpa-survey-session').value = sessionCopy.path;
-      ELEMENTS.survey.querySelector(
-          '#lpa-survey-date').value = sessionCopy.date;
-      ELEMENTS.survey.querySelector(
-          '#lpa-survey-starttime').value = sessionCopy.starttime;
-      ELEMENTS.survey.querySelector(
-          '#lpa-survey-endtime').value = sessionCopy.endtime;
+      let notes = session ? session.notes : {};
+        ELEMENTS.survey.querySelector(
+            '#lpa-survey-receptive').value = notes.receptive || 3;
+        ELEMENTS.survey.querySelector(
+            '#lpa-survey-effective').value = notes.effective || 3;
+        ELEMENTS.surveyNotesField.innerHTML = notes.meetingNotes || '';
+        ELEMENTS.surveyNotesField.parentNode.classList.toggle(
+          'is-dirty', notes.meetingNotes);
+        ELEMENTS.surveyActionItemsField.innerHTML = notes.actionitems || '';
+        ELEMENTS.surveyNotesField.parentNode.classList.toggle(
+          'is-dirty', !!notes.meetingNotes);
+      ELEMENTS.surveyNotesField.parentNode.classList.remove('is-invalid');
+      ELEMENTS.survey.querySelector('.lpa-survey-error').classList.add('hidden');
     },
     addListeners: function() {
       ELEMENTS.mainNav.addEventListener('click', navigate);
@@ -303,13 +306,15 @@ var UI = (function(firebaseApi, authModule, router) {
 
       ELEMENTS.chooseStartupMenu.addEventListener('click', function(e) {
         let startupKey = e.target.getAttribute('data-key');
-        let mentorId = firebaseApi.CURRENT_MENTOR_ID;
-        UI.resetSurvey(startupKey, mentorId);
+        ELEMENTS.survey.querySelector(
+            '#lpa-survey-startup').value = startupKey;
+        ELEMENTS.survey.querySelector(
+            '.mdl-dialog__title').innerHTML = 'Add notes for ' + startupKey;
       });
 
       ELEMENTS.surveyBtn.addEventListener('click', function() {
         let mentorId = firebaseApi.CURRENT_MENTOR_ID;
-        UI.showSurvey(null, mentorId);
+        UI.showSurvey();
       });
       ELEMENTS.survey.querySelector(
         '#lpa-survey-receptive').addEventListener('change', function(e) {
@@ -326,9 +331,8 @@ var UI = (function(firebaseApi, authModule, router) {
       ELEMENTS.survey.addEventListener('submit', e => e.preventDefault());
       ELEMENTS.surveySubmit.addEventListener('click', function(e) {
         e.preventDefault();
-        // TODO: implement save notes action.
         let fields = ELEMENTS.survey.querySelector('form').elements;
-        let sessionPath = fields['lpa-survey-session'].value;
+        let session = ELEMENTS.survey.session;
         let startup = fields['lpa-survey-startup'].value;
         let imgs = [];
         ELEMENTS.survey.querySelectorAll('.lpa-survey-img').forEach(img => {
@@ -345,10 +349,23 @@ var UI = (function(firebaseApi, authModule, router) {
           'receptive' : fields['lpa-survey-receptive'].value,
           'imgs': imgs,
           'unixTime' : today.getTime()
+        };
+
+        let valid = true;
+        if (!fields['lpa-survey-notes'].value) {
+          fields['lpa-survey-notes'].parentNode.classList.add('is-invalid');
+          valid = false;
         }
-        firebaseApi.saveSessionNotes(note, startup, sessionPath).then(() => {
-          ELEMENTS.survey.close();
-        });
+        if (!startup) {
+          ELEMENTS.survey.querySelector(
+              '.lpa-survey-error').classList.remove('hidden');
+          valid = false;
+        }
+        if (valid) {
+          firebaseApi.saveSessionNotes(note, startup, session).then(() => {
+            ELEMENTS.survey.close();
+          });
+        }
       });
 
       ELEMENTS.startupsList.addEventListener('click', function(e) {

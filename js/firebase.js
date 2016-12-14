@@ -77,22 +77,43 @@ var firebaseApi = (function() {
         resolve(CACHE.startups[startupKey].sessions);
       });
     }),
-    saveSessionNotes: (note, startup, path) => new Promise(function(resolve) {
-      let pathParts = path.split('/');
+    saveSessionNotes: (note, startup, session) => new Promise(function(resolve) {
+      let today = new Date();
+      let sessionDate = today.toISOString().slice(0, 10);
+      let hourId = 'hour-' + today.getTime();
+      let sessionPath = session ? session.path : ['', 'sessions',
+          sessionDate,'mentors', api.CURRENT_MENTOR_ID, hourId].join('/');
       // Save notes in 3 locations: mentor, startup, backup.
       // e.g. /sessions/2016-10-19/mentors/ewa@gmail-com/hour-1/notes
-      let mentorNotesPath = path + '/notes';
+      let mentorNotesPath = sessionPath + '/notes';
       // e.g. /sessions/2016-05-01/startups/Aliada/notes/ewa@gmail-com/hour-1
-      let startupNotesPath = [pathParts[0], pathParts[1], pathParts[2],
-          'startups', startup, 'notes', pathParts[4], pathParts[5]].join('/');
+      let startupNotesPath = ['', 'sessions', sessionDate, 'startups',
+          startup, 'notes', api.CURRENT_MENTOR_ID, hourId].join('/');
       // e.g. /notes-backup/2016-06-08/startups/BankFacil/notes/e@g-com/hour-2
-      let backupNotesPath = ['', 'notes-backup', pathParts[2],
-          'startups', startup, 'notes', pathParts[4], pathParts[5]].join('/');
-      Promise.all([
-        firebase.database().ref(mentorNotesPath).set(note),
-        firebase.database().ref(startupNotesPath).set(note),
-        firebase.database().ref(backupNotesPath).set(note)
-      ]).then(resolve);
+      let backupNotesPath = ['', 'notes-backup', sessionDate, 'startups',
+          startup, 'notes', api.CURRENT_MENTOR_ID, hourId].join('/');
+      if (!session) {
+        session = {
+          location: 'Ad hoc',
+          name: firebase.auth().currentUser.displayName,
+          starttime: today.getHours() + ':00',
+          startup: startup,
+          notes: note
+        };
+        today.setHours(today.getHours() + 1);
+        session.endtime = today.getHours() + ':00';
+        Promise.all([
+          firebase.database().ref(sessionPath).set(session),
+          firebase.database().ref(startupNotesPath).set(note),
+          firebase.database().ref(backupNotesPath).set(note)
+        ]).then(resolve);
+      } else {
+        Promise.all([
+          firebase.database().ref(mentorNotesPath).set(note),
+          firebase.database().ref(startupNotesPath).set(note),
+          firebase.database().ref(backupNotesPath).set(note)
+        ]).then(resolve);
+      }
     }),
     saveMentor: (mentorId, mentor) => new Promise(function(resolve) {
       let mentorPath = 'mentors/' + mentorId;
