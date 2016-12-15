@@ -753,17 +753,17 @@
       }, 1500);
       return;
     }
-    if (tel.length < 10) {
-      $("#phoneError").html("Please give a phone - So we can call you late at night");
-      $("#phoneError").removeClass("sr-only");
-      $("#phoneError").addClass("alert");
-      $("#form-name-field").focus();
-      setTimeout(function() {
-        $("#phoneError").removeClass("alert");
-        $("#phoneError").addClass("sr-only");
-      }, 1500);
-      return;
-    }
+    // if (tel.length < 10) {
+    //   $("#phoneError").html("Please give a phone - So we can call you late at night");
+    //   $("#phoneError").removeClass("sr-only");
+    //   $("#phoneError").addClass("alert");
+    //   $("#form-name-field").focus();
+    //   setTimeout(function() {
+    //     $("#phoneError").removeClass("alert");
+    //     $("#phoneError").addClass("sr-only");
+    //   }, 1500);
+    //   return;
+    // }
 
     var curUnixTime = new Date().getTime();
     var disTime = new Date().toJSON().slice(0, 21);
