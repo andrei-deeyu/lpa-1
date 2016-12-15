@@ -156,6 +156,19 @@ var UI = (function(firebaseApi, authModule, router) {
           node.removeAttribute('id');
           node.classList.remove('lpa-template');
           node.querySelector('[data-field="name"]').innerText = attendeeSnapshot.name;
+          node.querySelector('[data-field="role"]').innerText = attendeeSnapshot.role;
+          node.querySelector('[data-field="startup"]').innerText = attendeeSnapshot.startup;
+          node.querySelector('[data-field="funfact"]').innerText = attendeeSnapshot.funfact || '';
+          //node.querySelector('[data-field="pic"]').innerText = attendeeSnapshot.funfact;
+          node.querySelector('[data-field="email"]').setAttribute(
+              'href', 'mailto:' + attendeeSnapshot.email);
+          node.querySelector('[data-field="linkedin"]').setAttribute(
+              'href', 'https://pl.linkedin.com/in/' + attendeeSnapshot.linkedin);
+          if (attendeeSnapshot.pic) {
+            let pic = node.querySelector('[data-field="pic"]');
+            pic.innerHTML = '';
+            pic.style = 'background: url("'+ attendeeSnapshot.pic + '") center/cover;';
+          }
           ELEMENTS.attendeesList.appendChild(node);
         });
       }

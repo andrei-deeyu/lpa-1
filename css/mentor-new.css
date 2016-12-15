@@ -57,6 +57,7 @@ body {
   background: url(../img/lpa-header.jpg) center/cover;
 }
 
+
 @media screen and (max-width: 1024px) {
   .mdl-layout__header {
       display: block;
@@ -155,8 +156,12 @@ body {
   font-weight: bold;
 }
 
+.lpa-attendee-name {
+  font-size: 1.1em;
+  font-weight: 400;
+}
+
 .lpa-startups-from {
-  font-size: 1em;
   color: #708090;
 }
 
@@ -165,6 +170,8 @@ body {
 }
 
 .lpa-startups-from,
+.lpa-attendee-name,
+.lpa-startups-desc,
 .lpa-startups-size,
 .lpa-startups-founded {
   margin-bottom: 0;
@@ -284,6 +291,17 @@ a.lpa-icon-big {
   margin: 12px;
 }
 
+.mdl-list .lpa-icon-big {
+  margin: 4px;
+}
+
+@media screen and (min-width: 800px) {
+  .mdl-list__item .mdl-list__item-secondary-content {
+    flex-flow: row;
+  }
+}
+
+
 #lpa-startup-show-notes {
   text-decoration: none;
 }
@@ -307,6 +325,13 @@ a.lpa-icon-big {
   background: url('../img/twitter.png') center/cover;
   width: 24px;
   height: 24px;
+  display: inline-block;
+}
+
+.lpa-icon-linkedin {
+  background: url('../img/linkedin-box.png') center/cover;
+  width: 48px;
+  height: 48px;
   display: inline-block;
 }
 

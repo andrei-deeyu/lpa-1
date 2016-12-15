@@ -188,16 +188,26 @@
           <h1>Attendees</h1>
           <ul class="mdl-list" id="lpa-attendees-list">
           </ul>
-          <li class="mdl-list__item mdl-list__item--three-line lpa-template" id="lpa-attendees-list-template">
+          <li class="mdl-list__item lpa-template" id="lpa-attendees-list-template">
             <span class="mdl-list__item-primary-content">
-              <i class="material-icons mdl-list__item-avatar">person</i>
-              <span data-field="name">Placeholder name</span>
-              <span class="mdl-list__item-text-body" data-field="bio">
-                Placeholder bio.
-              </span>
+              <i class="material-icons mdl-list__item-avatar" data-field="pic">person</i>
+              <div>
+                <p data-field="name" class="lpa-attendee-name">Placeholder name</p>
+                <p class="lpa-startups-from">
+                  <span data-field="role">
+                    Placeholder role.
+                  </span> at <span data-field="startup">
+                    Placeholder startup.
+                  </span>
+                </p>
+                <p class="mdl-list__item-text-body lpa-startups-desc" data-field="funfact">
+                  Placeholder funfact.
+                </p>
+              </div>
             </span>
             <span class="mdl-list__item-secondary-content">
-              <a class="mdl-list__item-secondary-action" href="#"><i class="material-icons">star</i></a>
+              <a class="mdl-list__item-secondary-action" data-field="email"><i class="material-icons lpa-icon-big">email</i></a>
+              <a class="mdl-list__item-secondary-action" data-field="linkedin"><i class="lpa-icon lpa-icon-big lpa-icon-linkedin"></i></a>
             </span>
           </li>
         </section>
