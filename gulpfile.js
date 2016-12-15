@@ -16,4 +16,6 @@ gulp.task('serve', ['build'], function() {
       livereload: true,
       fallback: 'index-mentor-new.html'
     }));
+
+  gulp.watch(['js/mentor/**'], ['build']);
 });

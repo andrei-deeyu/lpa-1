@@ -13,6 +13,9 @@ var UI = (function(firebaseApi, authModule, router) {
 
   const BASE_URL = '/index-mentor-new.html';
 
+  const YOUTUBE_REGEX = /www\.youtube\.com\/watch\?v\=(\w+)\&*.*/;
+  const VIMEO_REGEX = /www\.vimeo\.com\/(\w+)\&*.*/;
+
   /**
    * UI Elements cache.
    */
@@ -83,6 +86,21 @@ var UI = (function(firebaseApi, authModule, router) {
     }
   };
 
+  function fillStartupTemplate(template, startup) {
+    let node = template.cloneNode(true);
+    node.removeAttribute('id');
+    node.classList.remove('lpa-template');
+    node.setAttribute('data-key', startup.key);
+    node.querySelector('[data-field="name"]').innerText = startup.name;
+    node.querySelector('[data-field="description"]').innerText = startup.description;
+    node.querySelector('[data-field="country"]').innerText = startup.country;
+    node.querySelector('[data-field="city"]').innerText = startup.city;
+    node.querySelector('[data-field="founded"]').innerText = startup.dateFounded;
+    node.querySelector('[data-field="size"]').innerText = startup.numEmployees + ' employees';
+    node.querySelector('[data-field="logo"]').src = startup.logo;
+    return node;
+  }
+
   /**
    * Component responsible for HTML modification.
    */
@@ -149,14 +167,7 @@ var UI = (function(firebaseApi, authModule, router) {
       ELEMENTS.chooseStartupMenu.innerHTML = '';
       if (startups) {
         startups.forEach(function(startup) {
-          let node = ELEMENTS.startupsListTemplate.cloneNode(true);
-          node.removeAttribute('id');
-          node.classList.remove('lpa-template');
-          node.setAttribute('data-key', startup.key);
-          node.querySelector('[data-field="name"]').innerText = startup.name;
-          node.querySelector('[data-field="description"]').innerText = startup.description;
-          node.querySelector('[data-field="country"]').innerText = startup.country;
-          node.querySelector('[data-field="city"]').innerText = startup.city;
+          let node = fillStartupTemplate(ELEMENTS.startupsListTemplate, startup);
           ELEMENTS.startupsList.appendChild(node);
           let li = document.createElement('li');
           li.classList.add('mdl-menu__item');
@@ -172,11 +183,37 @@ var UI = (function(firebaseApi, authModule, router) {
     },
     updateStartup: function(startup) {
       ELEMENTS.startupPageContent.innerHTML = '';
-      let node = ELEMENTS.startupPageTemplate.cloneNode(true);
-      node.removeAttribute('id');
-      node.classList.remove('lpa-template');
-      node.querySelector('[data-field="name"]').innerText = startup.name;
-      node.querySelector('[data-field="country"]').innerText = startup.country;
+      let node = fillStartupTemplate(ELEMENTS.startupPageTemplate, startup);
+      node.querySelector('[data-field="twitter"]').setAttribute(
+          'href', 'https://twitter.com/' + startup.twitter);
+      let video;
+      if (startup.video) {
+        let youtubeIdMatch = startup.video.match(YOUTUBE_REGEX);
+        if (youtubeIdMatch && youtubeIdMatch[1]) {
+          video = document.createElement('iframe');
+          video.setAttribute('height', 315);
+          video.setAttribute('width', 560);
+          video.setAttribute('src', 'https://www.youtube.com/embed/' + youtubeIdMatch[1]);
+        }
+        let vimeoIdMatch = startup.video.match(VIMEO_REGEX);
+        if (vimeoIdMatch && vimeoIdMatch[1]) {
+          video = document.createElement('iframe');
+          video.setAttribute('height', 427);
+          video.setAttribute('width', 640);
+          video.setAttribute('src', 'https://player.vimeo.com/video/' + vimeoIdMatch[1]);
+        }
+        if (!youtubeIdMatch && !vimeoIdMatch) {
+          video = document.createElement('a');
+          video.classList.add('material-icons', 'lpa-icon-big');
+          video.innerHTML = 'movie';
+          if (!startup.video.startsWith('http')) {
+            startup.video = 'http://' + startup.video;
+          }
+          video.setAttribute('href', startup.video);
+          video.setAttribute('target', '_blank');
+        }
+        node.appendChild(video);
+      }
       ELEMENTS.startupPageContent.appendChild(node);
     },
     displayStartupNotes: function(sessions) {
@@ -186,7 +223,7 @@ var UI = (function(firebaseApi, authModule, router) {
           let node = ELEMENTS.startupNotesTemplate.cloneNode(true);
           node.removeAttribute('id');
           node.classList.remove('lpa-template');
-          node.querySelector('[data-field="date"]').innerText = session.date;
+          node.querySelector('[data-field="date"]').innerText = session.date.slice(0, 10);
           node.querySelector('[data-field="mentor"]').innerText = session.mentorKey;
           node.querySelector('[data-field="notes"]').innerText = session.meetingNotes;
           node.querySelector('[data-field="action-items"]').innerText = session.actionItems;
@@ -295,6 +332,7 @@ var UI = (function(firebaseApi, authModule, router) {
       });
 
       ELEMENTS.startupShowNotes.addEventListener('click', function(e) {
+        ELEMENTS.startupShowNotes.classList.toggle('lpa-open');
         ELEMENTS.startupNotes.classList.toggle('hidden');
         let startupKey = window.location.pathname.split('/')[3];
         firebaseApi.fetchStartupNotes(startupKey).then(UI.displayStartupNotes);

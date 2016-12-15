@@ -120,7 +120,6 @@
 
         <section class="lpa-subpage" id="lpa-schedule-subpage">
           <h1>Schedule</h1>
-          <p>Placeholder for schedule page content.</p>
 
           Select the day:  <input id="schedule-datepicker" type="date"/>
 
@@ -146,22 +145,41 @@
         <section class="lpa-subpage" id="lpa-startups-subpage">
           <h1>Startups</h1>
           <ul class="mdl-list" id="lpa-startups-list"></ul>
-          <li class="mdl-list__item mdl-list__item--three-line lpa-template" id="lpa-startups-list-template">
+          <li class="mdl-list__item lpa-template" id="lpa-startups-list-template">
             <span class="mdl-list__item-primary-content">
-              <i class="material-icons mdl-list__item-avatar">person</i>
-              <span data-field="name">Placeholder name</span>
-              <span class="mdl-list__item-text-body" data-field="city">
-                Placeholder city.
-              </span>
-              <span class="mdl-list__item-text-body" data-field="country">
-                Placeholder country.
-              </span>
-              <span class="mdl-list__item-text-body" data-field="description">
-                Placeholder description.
-              </span>
+              <img data-field="logo" class="lpa-startups-logo" src=""/>
+              <div>
+                <p data-field="name" class="lpa-startups-name">Placeholder name</p>
+                <p class="lpa-startups-from">
+                  <span data-field="city">
+                    Placeholder city.
+                  </span>,
+                  <span data-field="country" class="lpa-startups-from">
+                    Placeholder country.
+                  </span>
+                </p>
+                <p class="lpa-startups-founded">Founded on <span data-field="founded">
+                    Placeholder founded.
+                  </span>
+                </p>
+                <p class="lpa-startups-size">
+                  Size: <span data-field="size">
+                    Placeholder size.
+                  </span>
+                </p>
+
+                <p class="mdl-list__item-text-body lpa-startups-desc" data-field="description">
+                  Placeholder description.
+                </p>
+              </div>
+
+
             </span>
             <span class="mdl-list__item-secondary-content">
-              <a class="mdl-list__item-secondary-action" href="#"><i class="material-icons">star</i></a>
+              <!--
+              <a class="mdl-list__item-secondary-action" href="#"><i class="material-icons lpa-icon">insert_drive_file</i></a>
+              <a class="mdl-list__item-secondary-action" href="#"><i class="lpa-icon lpa-icon-twitter"></i></a>
+            -->
             </span>
           </li>
         </section>
@@ -278,30 +296,56 @@
         <section class="lpa-subpage" id="lpa-startup-subpage" data-init="updateStartup">
           <h1>Startup</h1>
 
+
           <div class="lpa-template" id="lpa-startup-template">
-            <div data-field="name">Placeholder name</div>
-            <div data-field="country">
-              Placeholder country.
+            <img data-field="logo" class="lpa-startups-logo" src=""/>
+            <div>
+              <p data-field="name" class="lpa-startups-name">Placeholder name</p>
+              <p class="lpa-startups-from">
+                <span data-field="city">
+                  Placeholder city.
+                </span>,
+                <span data-field="country" class="lpa-startups-from">
+                  Placeholder country.
+                </span>
+              </p>
+              <p class="lpa-startups-founded">Founded on <span data-field="founded">
+                  Placeholder founded.
+                </span>
+              </p>
+              <p class="lpa-startups-size">
+                Size: <span data-field="size">
+                  Placeholder size.
+                </span>
+              </p>
+
+              <p class="mdl-list__item-text-body lpa-startups-desc" data-field="description">
+                Placeholder description.
+              </p>
+              <p>
+                <a data-field="twitter"><i class="material-icons lpa-icon-twitter"></i></a>
+              </p>
             </div>
           </div>
           <div id="lpa-startup"></div>
-
-          <button class="lpa-survey-btn mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
-              <i class="material-icons">note_add</i>
-          </button>
-
           <a href="#" id="lpa-startup-show-notes">Historical notes</a>
-          <div class="lpa-template" id="lpa-startup-notes-template">
-            <div data-field="date">Placeholder name</div>
-            <div data-field="mentor">
-              Placeholder mentor.
-            </div>
-            <div data-field="notes">
-              Placeholder notes.
-            </div>
-            <div data-field="action-items">
-              Placeholder action-items.
-            </div>
+          <div class="lpa-template lpa-startup-note" id="lpa-startup-notes-template">
+            <p class="lpa-startups-from">
+              <span data-field="date">Placeholder date</span> by
+              <span data-field="mentor">
+                Placeholder mentor.
+              </span>
+            </p>
+            <p>
+              <span data-field="notes">
+                Placeholder notes.
+              </span>
+            </p>
+            <p>
+              <span data-field="action-items">
+                Placeholder action-items.
+              </span>
+            </p>
           </div>
           <div id="lpa-startup-notes" class="hidden">
           </div>
