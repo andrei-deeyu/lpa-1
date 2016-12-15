@@ -156,12 +156,12 @@ body {
   font-weight: bold;
 }
 
-.lpa-attendee-name {
+.lpa-list-name {
   font-size: 1.1em;
   font-weight: 400;
 }
 
-.lpa-startups-from {
+.lpa-list-annotation {
   color: #708090;
 }
 
@@ -169,12 +169,40 @@ body {
   font-style: italic;
 }
 
-.lpa-startups-from,
-.lpa-attendee-name,
+.lpa-list-name,
+.lpa-list-annotation,
 .lpa-startups-desc,
 .lpa-startups-size,
 .lpa-startups-founded {
   margin-bottom: 0;
+}
+
+.mdl-list__item-avatar {
+  flex-shrink: 0;
+}
+
+.mdl-list__item-avatar.lpa-mentor-avatar {
+  width: 80px;
+  height: 80px;
+  text-align: center;
+  line-height: 80px;
+}
+
+.lpa-mentors-list .mdl-list__item .mdl-list__item-primary-content {
+  align-items: flex-start;
+}
+
+.lpa-icons-grid {
+  width: 60px;
+  height: 60px;
+  padding: 10px;
+}
+
+.lpa-icons-grid a {
+  width: 30px;
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
 }
 
 

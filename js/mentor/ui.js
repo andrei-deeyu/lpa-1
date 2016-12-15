@@ -143,8 +143,20 @@ var UI = (function(firebaseApi, authModule, router) {
           node.removeAttribute('id');
           node.classList.remove('lpa-template');
           node.querySelector('[data-field="name"]').innerText = mentorSnapshot.name;
-          node.querySelector('[data-field="bio"]').innerText = mentorSnapshot.bio;
+          node.querySelector('[data-field="city"]').innerText = mentorSnapshot.city;
+          node.querySelector('[data-field="country"]').innerText = mentorSnapshot.country;
+          node.querySelector('[data-field="domain"]').innerText = mentorSnapshot.domain;
+          node.querySelector('[data-field="domainsec"]').innerText = mentorSnapshot.domainSec;
+          node.querySelector('[data-field="expertise"]').innerText = mentorSnapshot.expertise;
           ELEMENTS.mentorsList.appendChild(node);
+          if (mentorSnapshot.pic) {
+            if (mentorSnapshot.pic.indexOf('http') != 0) {
+              mentorSnapshot.pic = 'http://' + mentorSnapshot.pic;
+            }
+            let pic = node.querySelector('[data-field="pic"]');
+            pic.innerText = ' ';
+            pic.setAttribute('style', 'background: url("'+ mentorSnapshot.pic + '") center/cover;');
+          }
         });
       }
     },

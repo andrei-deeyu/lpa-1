@@ -35,7 +35,9 @@ var firebaseApi = (function() {
     fetchMentorsList: () => new Promise(function(resolve) {
       firebase.database().ref('mentors/').once('value').then(snapshots => {
           let values = [];
-          snapshots.forEach(snapshot => values.push(snapshot.val()));
+          snapshots.forEach(snapshot => {
+            values.push(snapshot.val());
+          });
           resolve(values);
         });
     }),
