@@ -20,6 +20,7 @@ var UI = (function(firebaseApi, authModule, router) {
    * UI Elements cache.
    */
   const ELEMENTS = {
+    main: document.getElementById('lpa-main'),
     mentorsListTemplate: document.getElementById('lpa-mentors-list-template'),
     mentorsList: document.getElementById('lpa-mentors-list'),
     attendeesListTemplate: document.getElementById('lpa-attendees-list-template'),
@@ -263,7 +264,7 @@ var UI = (function(firebaseApi, authModule, router) {
       }
       let subpage = document.getElementById('lpa-' + subpageName + '-subpage');
       subpage.classList.add('lpa-active');
-      window.scrollTo(0, 0);
+      ELEMENTS.main.scrollTo(0, 0);
       return subpage;
     },
     displaySchedule: function(schedule) {
