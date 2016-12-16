@@ -63,27 +63,19 @@ var UI = (function(firebaseApi, authModule, router) {
     return el;
   };
 
-
-  function go(url) {
-    window.history.pushState(null, null, url);
-    var urlParts = url.split('/');
-    let subpageName = (urlParts[2] === 'startups' && urlParts[3]) ? 'startup' : urlParts[2];
-    let subpage = UI.showSubpage(subpageName);
-    let itemKey = urlParts[3];
-    let initPage = subpage.getAttribute('data-init');
-    if (initPage) {
-      let item = firebaseApi.CACHE[urlParts[2]][itemKey];
-      UI[initPage](item);
-    }
-  };
-
-  function navigate(e) {
+  function navigate(e, opt_elType) {
     e.preventDefault();
-    let linkEl = getParentNodeByType(e.target, 'A');
+    let elType = opt_elType || 'A';
+    let linkEl = getParentNodeByType(e.target, elType);
     let subpageName = linkEl.getAttribute('data-subpage');
     if (subpageName) {
-      window.history.pushState(null, null, BASE_URL + '/' + subpageName);
-      UI.showSubpage(subpageName);
+      let url = BASE_URL + '/' + subpageName;
+      let itemKey = linkEl.getAttribute('data-key');
+      if (itemKey) {
+        url = url + '/' + itemKey;
+      }
+      window.history.pushState(null, null, url);
+      UI.showSubpage(subpageName, itemKey);
     }
   };
 
@@ -194,6 +186,7 @@ var UI = (function(firebaseApi, authModule, router) {
       if (startups) {
         startups.forEach(function(startup) {
           let node = fillStartupTemplate(ELEMENTS.startupsListTemplate, startup);
+          node.setAttribute('data-subpage', 'startup');
           ELEMENTS.startupsList.appendChild(node);
           let li = document.createElement('li');
           li.classList.add('mdl-menu__item');
@@ -207,8 +200,12 @@ var UI = (function(firebaseApi, authModule, router) {
         componentHandler.upgradeElement(ELEMENTS.chooseStartupMenu);
       }
     },
-    updateStartup: function(startup) {
+    updateStartup: function(startupKey) {
+      let startup = firebaseApi.CACHE['startups'][startupKey];
       ELEMENTS.startupPageContent.innerHTML = '';
+      ELEMENTS.startupShowNotes.classList.remove('lpa-open');
+      ELEMENTS.startupNotes.innerHTML = '';
+      ELEMENTS.startupNotes.classList.add('hidden');
       let node = fillStartupTemplate(ELEMENTS.startupPageTemplate, startup);
       node.querySelector('[data-field="twitter"]').setAttribute(
           'href', 'https://twitter.com/' + startup.twitter);
@@ -257,12 +254,13 @@ var UI = (function(firebaseApi, authModule, router) {
         });
       }
     },
-    showSubpage: function(subpageName) {
+    showSubpage: function(subpageName, itemKey) {
       let subpages = document.querySelectorAll('.lpa-subpage');
       for (var i = 0; i < subpages.length; i++) {
         subpages[i].classList.remove('lpa-active');
       }
       let subpage = document.getElementById('lpa-' + subpageName + '-subpage');
+      PAGES[subpageName] && PAGES[subpageName].init && PAGES[subpageName].init(itemKey);
       subpage.classList.add('lpa-active');
       ELEMENTS.main.scrollTo(0, 0);
       return subpage;
@@ -358,6 +356,7 @@ var UI = (function(firebaseApi, authModule, router) {
       });
 
       ELEMENTS.startupShowNotes.addEventListener('click', function(e) {
+        e.preventDefault();
         ELEMENTS.startupShowNotes.classList.toggle('lpa-open');
         ELEMENTS.startupNotes.classList.toggle('hidden');
         let startupKey = window.location.pathname.split('/')[3];
@@ -438,11 +437,7 @@ var UI = (function(firebaseApi, authModule, router) {
       });
 
       ELEMENTS.startupsList.addEventListener('click', function(e) {
-        var li = getParentNodeByType(e.target, 'LI');
-        if (li) {
-          var url = BASE_URL + '/startups/' + li.getAttribute('data-key');
-          go(url);
-        }
+        navigate(e, 'LI');
       });
       ELEMENTS.profileSubmit.addEventListener('click', function(e) {
         let fields = ELEMENTS.profileForm.elements;
@@ -485,6 +480,12 @@ var UI = (function(firebaseApi, authModule, router) {
         };
         firebaseApi.uploadImage(file, progressCallback, completeCallback);
       });
+    }
+  };
+
+  const PAGES = {
+    'startup': {
+      init: UI.updateStartup
     }
   };
   return UI;
