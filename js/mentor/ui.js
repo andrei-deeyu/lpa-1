@@ -79,6 +79,23 @@ var UI = (function(firebaseApi, authModule, router) {
     }
   };
 
+  function populateText(node, fields, obj) {
+    for (var i = 0; i < fields.length; i++) {
+      let selector = '[data-field="' + fields[i].toLowerCase() + '"]';
+      node.querySelector(selector).innerText = obj[fields[i]];
+
+    }
+  };
+
+  function populateLinks(node, fields) {
+    for (var i = 0; i < fields.length; i++) {
+      if (fields[i][1]) {
+        let selector = '[data-field="' + fields[i][0].toLowerCase() + '"]';
+        node.querySelector(selector).href = fields[i][1];
+      }
+    }
+  };
+
   function fillStartupTemplate(template, startup) {
     let node = template.cloneNode(true);
     node.removeAttribute('id');
@@ -135,12 +152,14 @@ var UI = (function(firebaseApi, authModule, router) {
           let node = ELEMENTS.mentorsListTemplate.cloneNode(true);
           node.removeAttribute('id');
           node.classList.remove('lpa-template');
-          node.querySelector('[data-field="name"]').innerText = mentorSnapshot.name;
-          node.querySelector('[data-field="city"]').innerText = mentorSnapshot.city;
-          node.querySelector('[data-field="country"]').innerText = mentorSnapshot.country;
-          node.querySelector('[data-field="domain"]').innerText = mentorSnapshot.domain;
-          node.querySelector('[data-field="domainsec"]').innerText = mentorSnapshot.domainSec;
-          node.querySelector('[data-field="expertise"]').innerText = mentorSnapshot.expertise;
+          populateText(node, ['name', 'city', 'country', 'domain', 'domainsec',
+            'expertise'], mentorSnapshot);
+          populateLinks(node, [
+            ['site', mentorSnapshot.site],
+            ['email', 'mailoto:' + mentorSnapshot.email],
+            ['twitter', 'https://twitter.com/' + mentorSnapshot.twitter],
+            ['linkedin', 'https://pl.linkedin.com/in/' + mentorSnapshot.linkedin]
+          ]);
           ELEMENTS.mentorsList.appendChild(node);
           if (mentorSnapshot.pic) {
             if (mentorSnapshot.pic.indexOf('http') != 0) {
