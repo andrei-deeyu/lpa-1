@@ -123,19 +123,19 @@ var UI = (function(firebaseApi, authModule, router) {
     updateMentor: () => {
       let fields = ELEMENTS.profileForm;
       let mentor = firebaseApi.CURRENT_MENTOR || {};
-      fields['lpa-profile-name'].value = mentor.name || '';
-      fields['lpa-profile-email'].value = mentor.email || '';
-      fields['lpa-profile-phone'].value = mentor.phone || '';
-      fields['lpa-profile-country'].value = mentor.country || '';
-      fields['lpa-profile-city'].value = mentor.city || '';
-      fields['lpa-profile-twitter'].value = mentor.twitter || '';
-      fields['lpa-profile-bio'].innerHTML = mentor.bio || '';
-      fields['lpa-profile-funfact'].innerHTML = mentor.funFact || '';
-      fields['lpa-profile-expertise'].innerHTML = mentor.expertise || '';
-      fields['lpa-profile-linkedin'].value = mentor.linkedin || '';
-      fields['lpa-profile-site'].value = mentor.site || '';
-      fields['lpa-profile-pictureurl'].value = mentor.pic || '';
-      fields['lpa-profile-comments'].value = mentor.comments || '';
+      let fieldNames = ['name', 'email', 'phone', 'country', 'city', 'twitter',
+        'linkedin', 'site', 'comments', 'pic'];
+      for (var i = 0; i < fieldNames.length; i++) {
+        let field = fields['lpa-profile-' + fieldNames[i]];
+        field.value = mentor[fieldNames[i]] || '';
+        field.parentNode.MaterialTextfield.checkDirty();
+      }
+      fieldNames = ['bio', 'funfact', 'expertise'];
+      for (var i = 0; i < fieldNames.length; i++) {
+        let field = fields['lpa-profile-' + fieldNames[i]];
+        field.inerHTML = mentor[fieldNames[i]] || '';
+        field.parentNode.MaterialTextfield.checkDirty();
+      }
     },
     updateMentorsList: function(mentorSnapshots) {
       ELEMENTS.mentorsList.innerHTML = '';
@@ -460,7 +460,7 @@ var UI = (function(firebaseApi, authModule, router) {
           'expertise': fields['lpa-profile-expertise'].value,
           'linkedin': fields['lpa-profile-linkedin'].value,
           'site': fields['lpa-profile-site'].value,
-          'pic': fields['lpa-profile-pictureurl'].value,
+          'pic': fields['lpa-profile-pic'].value,
           'comments': fields['lpa-profile-comments'].value,
           'unixTime': new Date().getTime(),
           'date': new Date().toISOString()
