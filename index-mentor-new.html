@@ -150,6 +150,8 @@
         <li class="mdl-list__item" id="lpa-mentors-list-template">
           <span class="mdl-list__item-primary-content">
             <div>
+              <!-- Background in case the pic is 404 -->
+              <i class="material-icons mdl-list__item-avatar lpa-mentor-avatar">person</i>
               <i class="material-icons mdl-list__item-avatar lpa-mentor-avatar" data-field="pic">person</i>
               <div class="lpa-icons-grid">
                 <div>
@@ -467,7 +469,9 @@
     <template id="tmpl-attendees-list">
       <li class="mdl-list__item lpa-template">
         <span class="mdl-list__item-primary-content">
-          <i class="material-icons mdl-list__item-avatar" data-field="pic">person</i>
+          <!-- Background in case the pic is 404 -->
+          <i class="material-icons mdl-list__item-avatar">person</i>
+          <i class="material-icons mdl-list__item-avatar lpa-attendee-avatar" data-field="pic">person</i>
           <div>
             <p data-field="name" class="lpa-list-name">Placeholder name</p>
             <p class="lpa-list-annotation">

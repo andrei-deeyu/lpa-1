@@ -190,6 +190,12 @@ template {
   height: 60px;
   text-align: center;
   line-height: 60px;
+  position: absolute;
+}
+
+.lpa-attendee-avatar {
+  margin-left: -56px;
+
 }
 
 .lpa-mentors-list .mdl-list__item .mdl-list__item-primary-content {
@@ -199,7 +205,7 @@ template {
 .lpa-icons-grid {
   width: 60px;
   height: 60px;
-  padding: 10px 0;
+  padding: 70px 20px 0 0;
 }
 
 .lpa-icons-grid a {
