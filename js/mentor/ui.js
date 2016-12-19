@@ -21,11 +21,8 @@ var UI = (function(firebaseApi, authModule, router) {
    */
   const ELEMENTS = {
     main: document.getElementById('lpa-main'),
-    mentorsListTemplate: document.getElementById('lpa-mentors-list-template'),
     mentorsList: document.getElementById('lpa-mentors-list'),
-    attendeesListTemplate: document.getElementById('lpa-attendees-list-template'),
     attendeesList: document.getElementById('lpa-attendees-list'),
-    startupsListTemplate: document.getElementById('lpa-startups-list-template'),
     startupsList: document.getElementById('lpa-startups-list'),
     mainNav: document.getElementById('lpa-main-nav'),
     userNav: document.getElementById('lpa-user-nav'),
@@ -35,9 +32,7 @@ var UI = (function(firebaseApi, authModule, router) {
     message: document.getElementById('lpa-message'),
     datepicker: document.getElementById('schedule-datepicker'),
     scheduleList: document.getElementById('lpa-schedule-list'),
-    scheduleListTemplate: document.getElementById('lpa-schedule-list-template'),
     startupPageContent: document.getElementById('lpa-startup'),
-    startupPageTemplate: document.getElementById('lpa-startup-template'),
     surveyBtn: document.getElementById('lpa-survey-btn'),
     surveyBtns: document.querySelectorAll('.lpa-survey-btn'),
     survey: document.getElementById('lpa-survey'),
@@ -45,7 +40,6 @@ var UI = (function(firebaseApi, authModule, router) {
     surveyNotesField: document.getElementById('lpa-survey-notes'),
     surveyActionItemsField: document.getElementById('lpa-survey-actionitems'),
     startupShowNotes: document.getElementById('lpa-startup-show-notes'),
-    startupNotesTemplate: document.getElementById('lpa-startup-notes-template'),
     startupNotes: document.getElementById('lpa-startup-notes'),
     chooseStartupBtn: document.getElementById('lpa-choose-startup-btn'),
     chooseStartupMenu: document.getElementById('lpa-choose-startup-menu'),
@@ -54,6 +48,15 @@ var UI = (function(firebaseApi, authModule, router) {
     profileSubmit: document.getElementById('lpa-profile-submit'),
     camera: document.getElementById('lpa-camera'),
     cameraPreview: document.getElementById('lpa-camera-preview')
+  };
+
+  const TEMPLATES = {
+    mentorsListTemplate: document.getElementById('tmpl-mentors-list'),
+    attendeesListTemplate: document.getElementById('tmpl-attendees-list'),
+    startupsListTemplate: document.getElementById('tmpl-startups-list'),
+    startupTemplate: document.getElementById('tmpl-startup'),
+    startupNoteTemplate: document.getElementById('tmpl-startup-note'),
+    scheduleListTemplate: document.getElementById('tmpl-schedule-list')
   };
 
   function getParentNodeByType(el, nodeType) {
@@ -79,34 +82,23 @@ var UI = (function(firebaseApi, authModule, router) {
     }
   };
 
-  function populateText(node, fields, obj) {
+  /**
+   * @param {Element} node Node template to fill in.
+   * @param {Array} fields List of field names to be populated.
+   * @param {Object} obj Source of data. Keys correspond to field names.
+   * @param {string} attr Attribute/method to use to set the value of the field.
+   */
+  function populate(node, fields, obj, attr) {
     for (var i = 0; i < fields.length; i++) {
       let selector = '[data-field="' + fields[i].toLowerCase() + '"]';
-      node.querySelector(selector).innerText = obj[fields[i]];
-
-    }
-  };
-
-  function populateLinks(node, fields) {
-    for (var i = 0; i < fields.length; i++) {
-      if (fields[i][1]) {
-        let selector = '[data-field="' + fields[i][0].toLowerCase() + '"]';
-        node.querySelector(selector).href = fields[i][1];
-      }
+      node.querySelector(selector)[attr] = obj[fields[i]] || '';
     }
   };
 
   function fillStartupTemplate(template, startup) {
-    let node = template.cloneNode(true);
-    node.removeAttribute('id');
-    node.classList.remove('lpa-template');
-    node.setAttribute('data-key', startup.key);
-    node.querySelector('[data-field="name"]').innerText = startup.name;
-    node.querySelector('[data-field="description"]').innerText = startup.description;
-    node.querySelector('[data-field="country"]').innerText = startup.country;
-    node.querySelector('[data-field="city"]').innerText = startup.city;
-    node.querySelector('[data-field="founded"]').innerText = startup.dateFounded;
-    node.querySelector('[data-field="size"]').innerText = startup.numEmployees + ' employees';
+    let node = template.content.cloneNode(true);
+    populate(node, ['name', 'description', 'country', 'city', 'dateFounded', 'numEmployees'],
+        startup, 'innerText');
     node.querySelector('[data-field="logo"]').src = startup.logo;
     return node;
   }
@@ -149,23 +141,23 @@ var UI = (function(firebaseApi, authModule, router) {
       ELEMENTS.mentorsList.innerHTML = '';
       if (mentorSnapshots) {
         mentorSnapshots.forEach(function(mentorSnapshot) {
-          let node = ELEMENTS.mentorsListTemplate.cloneNode(true);
-          node.removeAttribute('id');
-          node.classList.remove('lpa-template');
-          populateText(node, ['name', 'city', 'country', 'domain', 'domainsec',
-            'expertise'], mentorSnapshot);
-          populateLinks(node, [
-            ['site', mentorSnapshot.site],
-            ['email', 'mailoto:' + mentorSnapshot.email],
-            ['twitter', 'https://twitter.com/' + mentorSnapshot.twitter],
-            ['linkedin', 'https://pl.linkedin.com/in/' + mentorSnapshot.linkedin]
-          ]);
+          let node = TEMPLATES.mentorsListTemplate.content.cloneNode(true);
+          let links = {
+            'site': mentorSnapshot.site,
+            'email': 'mailoto:' + mentorSnapshot.email,
+            'twitter': 'https://twitter.com/' + mentorSnapshot.twitter,
+            'linkedin': 'https://pl.linkedin.com/in/' + mentorSnapshot.linkedin
+          };
+          populate(node, ['site', 'email', 'twitter', 'linkedin'],
+                   links, 'href');
+          populate(node, ['name', 'city', 'country', 'domain', 'domainSec',
+                   'expertise'], mentorSnapshot, 'innerText');
+          let pic = node.querySelector('[data-field="pic"]');
           ELEMENTS.mentorsList.appendChild(node);
           if (mentorSnapshot.pic) {
             if (mentorSnapshot.pic.indexOf('http') != 0) {
               mentorSnapshot.pic = 'http://' + mentorSnapshot.pic;
             }
-            let pic = node.querySelector('[data-field="pic"]');
             pic.innerText = ' ';
             pic.setAttribute('style', 'background: url("'+ mentorSnapshot.pic + '") center/cover;');
           }
@@ -176,24 +168,20 @@ var UI = (function(firebaseApi, authModule, router) {
       ELEMENTS.attendeesList.innerHTML = '';
       if (attendeeSnapshots) {
         attendeeSnapshots.forEach(function(attendeeSnapshot) {
-          let node = ELEMENTS.attendeesListTemplate.cloneNode(true);
-          node.removeAttribute('id');
-          node.classList.remove('lpa-template');
-          node.querySelector('[data-field="name"]').innerText = attendeeSnapshot.name;
-          node.querySelector('[data-field="role"]').innerText = attendeeSnapshot.role;
-          node.querySelector('[data-field="startup"]').innerText = attendeeSnapshot.startup;
-          node.querySelector('[data-field="funfact"]').innerText = attendeeSnapshot.funfact || '';
-          //node.querySelector('[data-field="pic"]').innerText = attendeeSnapshot.funfact;
-          node.querySelector('[data-field="email"]').setAttribute(
-              'href', 'mailto:' + attendeeSnapshot.email);
-          node.querySelector('[data-field="linkedin"]').setAttribute(
-              'href', 'https://pl.linkedin.com/in/' + attendeeSnapshot.linkedin);
+          let node = TEMPLATES.attendeesListTemplate.content.cloneNode(true);
+          populate(node, ['name', 'role', 'startup', 'funfact'],
+                   attendeeSnapshot, 'innerText');
+          let links = {
+            'email': 'mailto:' + attendeeSnapshot.email,
+            'linkedin': 'https://pl.linkedin.com/in/' + attendeeSnapshot.linkedin
+          };
+          populate(node, ['email', 'linkedin'], links, 'href');
+          let pic = node.querySelector('[data-field="pic"]');
+          ELEMENTS.attendeesList.appendChild(node);
           if (attendeeSnapshot.pic) {
-            let pic = node.querySelector('[data-field="pic"]');
             pic.innerHTML = '';
             pic.style = 'background: url("'+ attendeeSnapshot.pic + '") center/cover;';
           }
-          ELEMENTS.attendeesList.appendChild(node);
         });
       }
     },
@@ -204,9 +192,11 @@ var UI = (function(firebaseApi, authModule, router) {
       ELEMENTS.chooseStartupMenu.innerHTML = '';
       if (startups) {
         startups.forEach(function(startup) {
-          let node = fillStartupTemplate(ELEMENTS.startupsListTemplate, startup);
-          node.setAttribute('data-subpage', 'startup');
+          let node = fillStartupTemplate(TEMPLATES.startupsListTemplate, startup);
+          let nodeEl = node.firstElementChild;
           ELEMENTS.startupsList.appendChild(node);
+          nodeEl.setAttribute('data-key', startup.key);
+          nodeEl.setAttribute('data-subpage', 'startup');
           let li = document.createElement('li');
           li.classList.add('mdl-menu__item');
           li.setAttribute('data-key', startup.key);
@@ -225,7 +215,9 @@ var UI = (function(firebaseApi, authModule, router) {
       ELEMENTS.startupShowNotes.classList.remove('lpa-open');
       ELEMENTS.startupNotes.innerHTML = '';
       ELEMENTS.startupNotes.classList.add('hidden');
-      let node = fillStartupTemplate(ELEMENTS.startupPageTemplate, startup);
+      let node = fillStartupTemplate(TEMPLATES.startupTemplate, startup);
+      let nodeEl = node.firstElementChild;
+      nodeEl.setAttribute('data-key', startup.key);
       node.querySelector('[data-field="twitter"]').setAttribute(
           'href', 'https://twitter.com/' + startup.twitter);
       let video;
@@ -262,13 +254,10 @@ var UI = (function(firebaseApi, authModule, router) {
       ELEMENTS.startupNotes.innerHTML = '';
       if (sessions) {
         sessions.forEach(function(session) {
-          let node = ELEMENTS.startupNotesTemplate.cloneNode(true);
-          node.removeAttribute('id');
-          node.classList.remove('lpa-template');
-          node.querySelector('[data-field="date"]').innerText = session.date.slice(0, 10);
-          node.querySelector('[data-field="mentor"]').innerText = session.mentorKey;
-          node.querySelector('[data-field="notes"]').innerText = session.meetingNotes;
-          node.querySelector('[data-field="action-items"]').innerText = session.actionItems;
+          let node = TEMPLATES.startupNoteTemplate.content.cloneNode(true);
+          session.date = session.date.slice(0, 10);
+          populate(node, ['date', 'mentorKey', 'meetingNotes', 'actionItems'],
+                   session, 'innerText');
           ELEMENTS.startupNotes.appendChild(node);
         });
       }
@@ -288,16 +277,12 @@ var UI = (function(firebaseApi, authModule, router) {
       ELEMENTS.scheduleList.innerHTML = '';
       if (schedule.length) {
         schedule.forEach(function(session) {
-          let node = ELEMENTS.scheduleListTemplate.cloneNode(true);
-          node.removeAttribute('id');
-          node.classList.remove('lpa-template');
-          node.querySelector('[data-field="starttime"]').innerText = session.starttime;
-          node.querySelector('[data-field="location"]').innerText = session.location;
-          node.querySelector('[data-field="startup"]').innerText = session.startup;
-          ELEMENTS.scheduleList.appendChild(node);
+          let node = TEMPLATES.scheduleListTemplate.content.cloneNode(true);
+          populate(node, ['starttime', 'location', 'startup'], session, 'innerText');
           let mentorId = firebaseApi.CURRENT_MENTOR_ID;
-          node.querySelector('.lpa-survey-btn').addEventListener(
+          node.firstElementChild.querySelector('.lpa-survey-btn').addEventListener(
               'click', UI.showSurvey.bind(null, session));
+          ELEMENTS.scheduleList.appendChild(node);
         });
       } else {
         ELEMENTS.scheduleList.innerHTML = '<li>Sorry, no sessions found for this date.</li>';
