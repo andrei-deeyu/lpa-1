@@ -17,7 +17,7 @@
   const BASE_URL = '/index-mentor-new.html';
 
   UI.addListeners();
-  
+
   firebase.auth().onAuthStateChanged(user => {
     firebaseApi.fetchMentor(firebaseApi.CURRENT_MENTOR_ID).then(mentor => {
       UI.updateMentor();
@@ -49,6 +49,5 @@
   window.addEventListener("online", function(e) {
     UI.ELEMENTS.message.classList.add('hide');
   }, false);
-
 
 })(firebaseApi, authModule, UI);

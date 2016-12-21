@@ -26,7 +26,7 @@ var UI = (function(firebaseApi, authModule, router) {
     startupsList: document.getElementById('lpa-startups-list'),
     mainNav: document.getElementById('lpa-main-nav'),
     userNav: document.getElementById('lpa-user-nav'),
-    mdlLayout: document.querySelector('.mdl-layout'),
+    mdlLayout: document.querySelector('.lpa-layout'),
     drawer: document.getElementById('lpa-drawer'),
     drawerNav: document.getElementById('lpa-drawer-nav'),
     message: document.getElementById('lpa-message'),

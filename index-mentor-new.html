@@ -42,13 +42,14 @@
   <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.blue_grey-orange.min.css" />
 
   <link rel="stylesheet" href="/dialog-polyfill.css" />
-  <link rel="stylesheet" href="/css/mentor-new.css" />
+  <link rel="stylesheet" href="/dist/css/mentor-new.css" />
   <script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
+
 </head>
 
 <body>
 
-  <div class="mdl-layout mdl-js-layout">
+  <div class="lpa-layout mdl-js-layout">
     <header class="mdl-layout__header mdl-layout__header--waterfall lpa-header">
       <!-- Top row, always visible -->
       <div class="mdl-layout__header-row">
@@ -76,7 +77,7 @@
 
     </header>
 
-    <div class="mdl-tabs mdl-js-tabs">
+    <div class="mdl-tabs mdl-js-tabs lpa-tabs">
       <nav class="mdl-tabs__tab-bar mdl-navigation lpa-main-nav" id="lpa-main-nav">
         <a class="mdl-tabs__tab mdl-navigation__link lpa-tab" href="#lpa-tab" data-subpage="schedule"><i class="material-icons">event</i></a>
         <a class="mdl-tabs__tab mdl-navigation__link lpa-tab" href="#lpa-tab" data-subpage="startups">Startups</a>
@@ -106,7 +107,7 @@
     <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" id="lpa-survey-btn">
         <i class="material-icons">note_add</i>
     </button>
-    <main class="mdl-layout__content" id="lpa-main">
+    <main class="mdl-layout__content lpa-main" id="lpa-main">
 
       <div class="lpa-page-content">
 
@@ -282,7 +283,7 @@
         <section class="lpa-subpage" id="lpa-startup-subpage">
           <h1>Startup</h1>
           <div id="lpa-startup"></div>
-          <a href="#" id="lpa-startup-show-notes">Historical notes</a>
+          <a href="#" class="lpa-zippy" id="lpa-startup-show-notes">Historical notes</a>
           <div id="lpa-startup-notes" class="hidden">
           </div>
 
@@ -445,7 +446,7 @@
       </div>
     </dialog>
 
-    <footer class="mdl-mini-footer">
+    <footer class="mdl-mini-footer lpa-footer">
       <div class="mdl-mini-footer__left-section">
         <div class="mdl-logo">
           <a href="https://developers.google.com/startups/accelerator/">Launchpad Accelerator</a>
@@ -482,7 +483,7 @@
                 Placeholder startup.
               </span>
             </p>
-            <p class="mdl-list__item-text-body lpa-startups-desc" data-field="funfact">
+            <p class="mdl-list__item-text-body lpa-list-desc" data-field="funfact">
               Placeholder funfact.
             </p>
           </div>
@@ -518,7 +519,7 @@
             </span>
           </p>
 
-          <p class="mdl-list__item-text-body lpa-startups-desc" data-field="description">
+          <p class="mdl-list__item-text-body lpa-list-desc" data-field="description">
             Placeholder description.
           </p>
         </div>
@@ -538,7 +539,7 @@
     <div>
       <img data-field="logo" class="lpa-startups-logo" src=""/>
       <div>
-        <p data-field="name" class="lpa-startups-name">Placeholder name</p>
+        <p data-field="name" class="lpa-list-name">Placeholder name</p>
         <p class="lpa-list-annotation">
           <span data-field="city">
             Placeholder city.
@@ -557,7 +558,7 @@
           </span>
         </p>
 
-        <p class="mdl-list__item-text-body lpa-startups-desc" data-field="description">
+        <p class="mdl-list__item-text-body lpa-list-desc" data-field="description">
           Placeholder description.
         </p>
         <p>
@@ -626,6 +627,8 @@
   ga('create', 'UA-76781519-1', 'auto');
   ga('send', 'pageview');
   </script>
+
+
 
   <!-- TODO: concatenate for production -->
   <script src="/dialog-polyfill.js"></script>

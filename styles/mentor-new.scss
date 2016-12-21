@@ -8,19 +8,28 @@ template {
   display: none !important;
 }
 
-
-
-.lpa-message {
-  background-color: yellow;
-  padding: 5px 80px;
-  transition: transform 0.3s cubic-bezier(0, 0, 0.3, 1);
-  position: absolute;
-  width: 100%;
-
+@media screen and (max-width: 1024px) {
+  .mdl-layout__drawer-button {
+      color: #fff;
+  }
 }
 
-.lpa-message.hide {
-  transform: translateY(-50px);
+
+/* Layout */
+
+.lpa-main {
+  width: 100%;
+  display: block;
+  position: fixed;
+  overflow-x: scroll;
+  height: 100%;
+}
+
+.lpa-footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 1;
 }
 
 .lpa-subpage {
@@ -44,28 +53,51 @@ template {
   font-size: 1.5em;
 }
 
-.lpa-page-content {
-  position: relative;
-  width: 100%;
+.lpa-main-nav {
+  opacity: 0;
+  background: #607D8B;
+  color: #fff;
+  padding-left: 48px;
+  -webkit-justify-content: inherit;
+  -ms-flex-pack: inherit;
+  justify-content: inherit;
 }
 
 .lpa-sign-in-section {
-  height: 100px;
   padding: 30px;
   text-align: center;
   background: rgb(0, 188, 212);
 }
 
 .lpa-header {
-  /*background: url(../img/city-hd.jpeg) center/cover;*/
-  background: url(../img/lpa-header.jpg) center/cover;
+  background-color: #607D8B;
+  background-image: url('/img/lpa-header.jpg');
+  background-position: center;
+  background-size: cover;
+  height: 192px;
+}
+
+@media screen and (max-width: 1024px) {
+  .mdl-layout__header {
+      max-height: 192px;
+  }
+}
+
+.mdl-tabs, .mdl-tabs__tab-bar {
+    background: #607D8B;
+    height: 48px;
+}
+
+.mdl-layout__header {
+    display: block;
+    max-height: 192px;
 }
 
 
 @media screen and (max-width: 1024px) {
   .mdl-layout__header {
       display: block;
-      max-height: 56px;
+      *max-height: 56px;
   }
 }
 
@@ -76,7 +108,6 @@ template {
 .lpa-header-info {
   font-size: 1em;
   display: block;
-
   padding: 0.2em;
 }
 
@@ -84,16 +115,6 @@ template {
   font-size: 1.5em;
   padding: 0.2em;
   display: block;
-}
-
-.lpa-main-nav {
-  opacity: 0;
-  background: #607D8B;
-  color: #fff;
-  padding-left: 48px;
-  -webkit-justify-content: inherit;
-  -ms-flex-pack: inherit;
-  justify-content: inherit;
 }
 
 .mdl-tabs__tab-bar {
@@ -111,158 +132,12 @@ template {
   font-weight: normal;
 }
 
-.lpa-signed-in .lpa-sign-in-section {
-  opacity: 0;
-}
-
-.lpa-signed-in .lpa-page-content {
-  position: relative;
-}
-
-.lpa-signed-in .lpa-main-nav {
-  opacity: 1;
-}
-
-.lpa-signed-in .lpa-sign-in {
-  display: none !important;
-}
-
-.lpa-sign-out-nav {
-  display: none;
-}
-
-.lpa-signed-in .lpa-sign-out-nav {
-  display: flex;
-}
-
-.lpa-fileinput-fab {
-  width: 56px;
-  height: 56px;
-  z-index: 999;
-  opacity: 0;
-  position: absolute;
-}
-
-.mdl-list__item,
-.mdl-list__item-primary-content,
-.mdl-list__item mdl-list__item--three-line {
-  height: inherit;
-  padding: 16px 0;
-}
-
-.lpa-startups-logo {
-  max-width: 100px;
-  margin: 12px 24px 12px 0;
-}
-
-.lpa-startups-name {
-  font-size: 1.2em;
-  font-weight: bold;
-}
-
-.lpa-list-name {
-  font-size: 1.1em;
-  font-weight: 400;
-}
-
-.lpa-list-annotation {
-  color: #708090;
-}
-
-.lpa-startups-desc {
-  font-style: italic;
-}
-
-.lpa-list-name,
-.lpa-list-annotation,
-.lpa-startups-desc,
-.lpa-startups-size,
-.lpa-startups-founded {
-  margin-bottom: 0;
-}
-
-.mdl-list__item-avatar {
-  flex-shrink: 0;
-}
-
-.mdl-list__item-avatar.lpa-mentor-avatar {
-  width: 60px;
-  height: 60px;
-  text-align: center;
-  line-height: 60px;
-  position: absolute;
-}
-
-.lpa-attendee-avatar {
-  margin-left: -56px;
-
-}
-
-.lpa-mentors-list .mdl-list__item .mdl-list__item-primary-content {
-  align-items: flex-start;
-}
-
-.lpa-icons-grid {
-  width: 60px;
-  height: 60px;
-  padding: 70px 20px 0 0;
-}
-
-.lpa-icons-grid a {
-  width: 30px;
-  display: table-cell;
-  text-align: center;
-  vertical-align: middle;
-}
-
-
-@media screen and (max-width: 1024px) {
-  .mdl-layout__drawer-button {
-      color: #fff;
-  }
-}
-
-
-.lpa-survey-btn {
-  margin: -4px auto 4px auto
-}
-
-
 #lpa-survey-btn {
-  position: relative;
-  top: -26px;
+  position: absolute;
+  margin-top: -26px;
   z-index: 99;
-  margin-right: 136px;
+  right: 136px;
   display: none;
-}
-
-.lpa-signed-in #lpa-survey-btn {
-  display: block;
-}
-
-.lpa-dialog {
-  width: 500px;
-}
-
-.mdl-list {
-  max-width: 700px;
-}
-
-form .mdl-textfield {
-  display: block;
-}
-
-.lpa-survey-img {
-  max-width: 100px;
-}
-
-#lpa-camera-preview a {
-  display: inline-block;
-  width: 100px;
-  height: 100px;
-  overflow: hidden;
-  text-align: center;
-  background-size: cover;
 }
 
 footer a {
@@ -316,8 +191,159 @@ header::before {
   background: rgb(255,171,64);
 }
 
-main {
-  margin-top: -52px;
+
+/* Components */
+.lpa-message {
+  background-color: yellow;
+  padding: 5px 80px;
+  transition: transform 0.3s cubic-bezier(0, 0, 0.3, 1);
+  position: absolute;
+  width: 100%;
+}
+
+.lpa-message.hide {
+  transform: translateY(-50px);
+}
+
+.lpa-zippy {
+  text-decoration: none;
+}
+
+.lpa-zippy::before {
+  width: 18px;
+  height: 10px;
+  display: inline-block;
+  content: '+';
+}
+
+.lpa-zippy.lpa-open::before {
+  content: '-';
+}
+
+/* Components end */
+
+
+/* Sign in */
+
+.lpa-sign-out,
+.lpa-user-nav {
+  display: none !important;
+}
+
+.lpa-signed-in {
+
+  .lpa-sign-in {
+    display: none !important;
+  }
+
+  .lpa-user-nav {
+    display: flex;
+  }
+
+  .lpa-sign-out {
+    display: block !important;
+  }
+
+  .lpa-main-nav {
+    opacity: 1;
+  }
+
+  #lpa-survey-btn {
+    display: block;
+  }
+}
+
+/* Sign in end */
+
+.lpa-fileinput-fab {
+  width: 56px;
+  height: 56px;
+  z-index: 999;
+  opacity: 0;
+  position: absolute;
+}
+
+/* Lists */
+.mdl-list {
+  max-width: 700px;
+}
+
+.mdl-list__item,
+.mdl-list__item-primary-content,
+.mdl-list__item mdl-list__item--three-line {
+  height: inherit;
+  padding: 16px 0;
+}
+
+.lpa-startups-logo {
+  max-width: 100px;
+  margin: 12px 24px 12px 0;
+}
+
+.lpa-list-name {
+  font-size: 1.1em;
+  font-weight: 400;
+}
+
+.lpa-list-annotation {
+  color: #708090;
+}
+
+.lpa-list-desc {
+  font-style: italic;
+}
+
+.lpa-list-name,
+.lpa-list-annotation,
+.lpa-list-desc,
+.lpa-startups-size,
+.lpa-startups-founded {
+  margin-bottom: 0;
+}
+
+.mdl-list__item-avatar {
+  flex-shrink: 0;
+}
+
+.mdl-list__item-avatar.lpa-mentor-avatar {
+  width: 60px;
+  height: 60px;
+  text-align: center;
+  line-height: 60px;
+  position: absolute;
+}
+
+.lpa-attendee-avatar {
+  margin-left: -56px;
+}
+
+.lpa-mentors-list .mdl-list__item .mdl-list__item-primary-content {
+  align-items: flex-start;
+}
+
+.lpa-icons-grid {
+  width: 60px;
+  height: 60px;
+  padding: 70px 20px 0 0;
+}
+
+.lpa-icons-grid a {
+  width: 30px;
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+}
+
+span[data-field="city"]:not(:empty)::after {
+    content: ", ";
+}
+
+.lpa-startups-size:empty {
+    display: none;
+}
+
+span[data-field="numemployees"]:not(:empty)::after {
+    content: " employees";
 }
 
 a.lpa-icon-big {
@@ -339,35 +365,54 @@ a.lpa-icon-big {
   }
 }
 
+/* Lists end */
+/* Survey */
 
-#lpa-startup-show-notes {
-  text-decoration: none;
+.lpa-dialog {
+  width: 500px;
 }
 
-#lpa-startup-show-notes::before {
-  width: 18px;
-  height: 10px;
+.lpa-survey-btn {
+  margin: -4px auto 4px auto
+}
+
+form .mdl-textfield {
+  display: block;
+}
+
+.lpa-survey-img {
+  max-width: 100px;
+}
+
+#lpa-camera-preview a {
   display: inline-block;
-  content: '+';
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  text-align: center;
+  background-size: cover;
 }
 
-#lpa-startup-show-notes.lpa-open::before {
-  content: '-';
+.lpa-survey-error {
+  color: #d50000;
+  font-size: 12px;
 }
+
+/* end survey */
 
 .lpa-startup-note {
   margin: 24px 0;
 }
 
 .lpa-icon-twitter {
-  background: url('../img/twitter.png') center/cover;
+  background: url('/img/twitter.png') center/cover;
   width: 24px;
   height: 24px;
   display: inline-block;
 }
 
 .lpa-icon-linkedin {
-  background: url('../img/linkedin-box.png') center/cover;
+  background: url('/img/linkedin-box.png') center/cover;
   width: 48px;
   height: 48px;
   display: inline-block;
@@ -423,7 +468,7 @@ a.lpa-icon-big {
     display:none;
   }
 
-  .lpa-main-nav {
+  .lpa-tabs {
     display: none;
   }
 
@@ -439,21 +484,4 @@ a.lpa-icon-big {
     bottom: 32px;
   }
 
-}
-
-.lpa-survey-error {
-  color: #d50000;
-  font-size: 12px;
-}
-
-span[data-field="city"]:not(:empty)::after {
-    content: ", ";
-}
-
-.lpa-startups-size:empty {
-    display: none;
-}
-
-span[data-field="numemployees"]:not(:empty)::after {
-    content: " employees";
 }
