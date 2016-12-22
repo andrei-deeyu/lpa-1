@@ -320,10 +320,10 @@ var UI = (function(firebaseApi, authModule, router) {
         ELEMENTS.surveyNotesField.innerHTML = notes.meetingNotes || '';
         ELEMENTS.surveyNotesField.parentNode.classList.toggle(
           'is-dirty', notes.meetingNotes);
-        ELEMENTS.surveyActionItemsField.innerHTML = notes.actionitems || '';
-        ELEMENTS.surveyNotesField.parentNode.classList.toggle(
-          'is-dirty', !!notes.meetingNotes);
-      ELEMENTS.surveyNotesField.parentNode.classList.remove('is-invalid');
+        ELEMENTS.surveyActionItemsField.innerHTML = notes.actionItems || '';
+        ELEMENTS.surveyActionItemsField.parentNode.classList.toggle(
+          'is-dirty', !!notes.actionItems);
+      ELEMENTS.surveyActionItemsField.parentNode.classList.remove('is-invalid');
       ELEMENTS.survey.querySelector('.lpa-survey-error').classList.add('hidden');
     },
     addListeners: function() {
