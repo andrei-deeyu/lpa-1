@@ -156,8 +156,9 @@
   //
   // logout action
   //
-  $("#logout-div").on('click', "#logout-but", function(ev) {
-      firebase.auth().signOut().then(function() {
+  $("#logout-but").click(function() {
+    firebase.auth().signOut().then(function() {
+      // Sign-out successful
       logoutUI();
     }, function(error) {
       console.log("Could not sign-out. err: " + error);
@@ -216,7 +217,7 @@
                 <br><h5> <label>Was the session effective? (1-5)</label></h5><br> \
                 <input type="text" class="note-slider" id="note-effective-' + key + '" name="note-effective" data-provide="slider" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide"> \
                 <br><br> \
-            <b>What did you talk about?</b> \
+            <b>What did you talked about?</b> \
             <textarea id="' + key + '" class="form-control col-lg-10 meeting-notes-text" data-key="' + meetingNotesKey +
             '" data-startup="' + startupNotesKey + '" data-notes-backup="' + startupBackupNotesKey +
             '" data-starttime="' + scData.starttime + '" data-endtime="' + scData.endtime + '" name="meeting-notes">' +
@@ -701,7 +702,7 @@
   //
   $("#form-save-mentor").click(function() {
     if (authUserData) {
-      console.log("User " + authUserData.uid + " is logged in with " + authUserData.email);
+      console.log("User " + authUserData.uid + " is logged in with " + authUserData.provider);
     } else {
       console.log("User is logged out");
       $("#alert-warning-sign-in").show();
@@ -752,17 +753,17 @@
       }, 1500);
       return;
     }
-    // if (tel.length < 10) {
-    //   $("#phoneError").html("Please give a phone - So we can call you late at night");
-    //   $("#phoneError").removeClass("sr-only");
-    //   $("#phoneError").addClass("alert");
-    //   $("#form-name-field").focus();
-    //   setTimeout(function() {
-    //     $("#phoneError").removeClass("alert");
-    //     $("#phoneError").addClass("sr-only");
-    //   }, 1500);
-    //   return;
-    // }
+    if (tel.length < 10) {
+      $("#phoneError").html("Please give a phone - So we can call you late at night");
+      $("#phoneError").removeClass("sr-only");
+      $("#phoneError").addClass("alert");
+      $("#form-name-field").focus();
+      setTimeout(function() {
+        $("#phoneError").removeClass("alert");
+        $("#phoneError").addClass("sr-only");
+      }, 1500);
+      return;
+    }
 
     var curUnixTime = new Date().getTime();
     var disTime = new Date().toJSON().slice(0, 21);
