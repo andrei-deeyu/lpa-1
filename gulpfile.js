@@ -4,6 +4,10 @@ const babel = require('gulp-babel');
 const dom = require('gulp-dom');
 const sass = require('gulp-sass');
 const newer = require('gulp-newer');
+const cssnano = require('gulp-cssnano');
+const sourcemaps = require('gulp-sourcemaps');
+const concat = require('gulp-concat');
+
 
 gulp.task('build', ['styles', 'js']);
 
@@ -19,7 +23,7 @@ gulp.task('serve', ['build'], function() {
   gulp.src('.')
     .pipe(webserver({
       livereload: true,
-      fallback: 'index-mentor-new.html'
+      fallback: 'dist/index-mentor-new.html'
     }));
 
   gulp.watch(['js/mentor/**'], ['build']);
@@ -28,7 +32,7 @@ gulp.task('serve', ['build'], function() {
 
 // Compile and automatically prefix stylesheets
 gulp.task('styles', () => {
-  const AUTOPREFIXER_BROWSERS = [
+  /*const AUTOPREFIXER_BROWSERS = [
     'ie >= 10',
     'ie_mob >= 10',
     'ff >= 30',
@@ -38,23 +42,39 @@ gulp.task('styles', () => {
     'ios >= 7',
     'android >= 4.4',
     'bb >= 10'
-  ];
+  ];*/
 
-  // For best performance, don't add Sass partials to `gulp.src`
   return gulp.src([
+    'lib/dialog-polyfill.css',
+    'lib/material.blue_grey-orange.min.css',
     'styles/**/*.scss'
   ])
     .pipe(newer('dist/css'))
-    //.pipe($.sourcemaps.init())
+    .pipe(sourcemaps.init())
     .pipe(sass({
       precision: 10
     }).on('error', sass.logError))
     //.pipe($.autoprefixer(AUTOPREFIXER_BROWSERS))
+    .pipe(concat('mentor.css'))
+    .pipe(cssnano())
+    .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('dist/css'))
-    // Concatenate and minify styles
-    /*.pipe($.if('*.css', $.cssnano()))
-    .pipe($.size({title: 'styles'}))
-    .pipe($.sourcemaps.write('./'))
-    .pipe(gulp.dest('dist/styles'))
-    .pipe(gulp.dest('.tmp/styles'));*/
+});
+
+var gutil = require('gulp-util');
+var critical = require('critical').stream;
+
+// Generate & Inline Critical-path CSS
+gulp.task('critical', ['styles'], function () {
+  return gulp.src('index-mentor-new.html')
+    .pipe(critical({
+      base: 'dist/',
+      inline: true,
+      minify: true,
+      css: [
+        'dist/css/mentor.css'
+      ]
+    }))
+    .on('error', function(err) { gutil.log(gutil.colors.red(err.message)); })
+    .pipe(gulp.dest('dist'));
 });

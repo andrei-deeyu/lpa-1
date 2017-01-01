@@ -242,8 +242,8 @@ header::before {
     display: flex;
   }
 
-  .lpa-sign-out,
-  .mdl-layout__drawer .mdl-navigation .mdl-navigation__link.lpa-sign-out {
+  .mdl-layout__drawer .mdl-navigation .mdl-navigation__link.lpa-sign-out,
+  .lpa-sign-out {
     display: block;
   }
 
