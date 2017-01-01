@@ -45,7 +45,7 @@ gulp.task('styles', () => {
   ];*/
 
   return gulp.src([
-    'lib/dialog-polyfill.css',
+    'node_modules/dialog-polyfill/dialog-polyfill.css',
     'lib/material.blue_grey-orange.min.css',
     'styles/**/*.scss'
   ])
