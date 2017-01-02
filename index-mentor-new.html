@@ -40,6 +40,16 @@
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="/dist/css/mentor.css" />
+  <script>
+  function loadHeader() {
+    document.getElementById('lpa-header').classList.add('lpa-loaded');
+  };
+  </script>
+  <link rel="preload" href="/img/lpa-header_1x.jpg" as="image" media="(max-width: 1600px)" onload="loadHeader()">
+  <link rel="preload" href="/img/lpa-header_2x.jpg" as="image" media="(min-width: 1600px)" onload="loadHeader()">
+  <noscript><link rel="stylesheet" href="/dist/css/mentor.css"></noscript>
+
+
   <script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
 
 </head>
@@ -47,7 +57,7 @@
 <body>
 
   <div class="lpa-layout mdl-js-layout">
-    <header class="lpa-header">
+    <header id="lpa-header" class="lpa-header">
       <!-- Top row, always visible -->
       <div class="mdl-layout__header-row">
         <!-- Title -->

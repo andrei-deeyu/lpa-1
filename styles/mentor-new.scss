@@ -71,10 +71,21 @@ template {
 
 .lpa-header {
   background-color: #607D8B;
-  background-image: url('/img/lpa-header.jpg');
   background-position: center;
   background-size: cover;
   height: 192px;
+}
+
+@media (max-width: 1600px) {
+  .lpa-header.lpa-loaded {
+    background-image: url('/img/lpa-header_1x.jpg');
+  }
+}
+
+@media (min-width: 1600px) {
+  .lpa-header.lpa-loaded {
+    background-image: url('/img/lpa-header_2x.jpg');
+  }
 }
 
 @media screen and (max-width: 1024px) {

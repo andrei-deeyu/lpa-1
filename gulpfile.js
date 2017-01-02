@@ -7,9 +7,24 @@ const newer = require('gulp-newer');
 const cssnano = require('gulp-cssnano');
 const sourcemaps = require('gulp-sourcemaps');
 const concat = require('gulp-concat');
+const cache = require('gulp-cache');
+const imagemin = require('gulp-imagemin');
 
 
-gulp.task('build', ['styles', 'js']);
+gulp.task('build', ['critical', 'js', 'images']);
+
+gulp.task('images', () =>
+  gulp.src([
+    'img/lpa-header_1x.jpg',
+    'img/lpa-header_2x.jpg'
+  ])
+    .pipe(imagemin({
+      progressive: true,
+      interlaced: true
+    }))
+    .pipe(gulp.dest('dist/img'))
+    //.pipe(size({title: 'images'}))
+);
 
 gulp.task('js', () => {
   return gulp.src('js/mentor/**')
@@ -27,7 +42,7 @@ gulp.task('serve', ['build'], function() {
     }));
 
   gulp.watch(['js/mentor/**'], ['build']);
-  gulp.watch(['styles/**'], ['styles']);
+  gulp.watch(['styles/**'], ['critical']);
 });
 
 // Compile and automatically prefix stylesheets
