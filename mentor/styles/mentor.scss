@@ -78,13 +78,13 @@ template {
 
 @media (max-width: 1600px) {
   .lpa-header.lpa-loaded {
-    background-image: url('/img/lpa-header_1x.jpg');
+    background-image: url('/mentor/img/lpa-header_1x.jpg');
   }
 }
 
 @media (min-width: 1600px) {
   .lpa-header.lpa-loaded {
-    background-image: url('/img/lpa-header_2x.jpg');
+    background-image: url('/mentor/img/lpa-header_2x.jpg');
   }
 }
 
@@ -419,14 +419,14 @@ form .mdl-textfield {
 }
 
 .lpa-icon-twitter {
-  background: url('/img/twitter.png') center/cover;
+  background: url('/mentor/img/twitter.png') center/cover;
   width: 24px;
   height: 24px;
   display: inline-block;
 }
 
 .lpa-icon-linkedin {
-  background: url('/img/linkedin-box.png') center/cover;
+  background: url('/mentor/img/linkedin-box.png') center/cover;
   width: 48px;
   height: 48px;
   display: inline-block;

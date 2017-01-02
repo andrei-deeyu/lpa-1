@@ -26,7 +26,7 @@ gulp.task('images', () =>
       progressive: true,
       interlaced: true
     }))
-    .pipe(gulp.dest('dist/img'))
+    .pipe(gulp.dest('dist/mentor/img'))
     .pipe(size({title: 'images'}))
 );
 
@@ -48,7 +48,7 @@ gulp.task('js', () => {
     .pipe(sourcemaps.init())
     .pipe(concat('mentor.js'))
     .pipe(sourcemaps.write('.'))
-    .pipe(gulp.dest('dist/js'));
+    .pipe(gulp.dest('dist/mentor/js'));
 });
 
 // Compile and automatically prefix stylesheets
@@ -70,7 +70,7 @@ gulp.task('styles', () => {
     path.join(ROOT_DIR, 'lib', 'material.blue_grey-orange.min.css'),
     path.join(ROOT_DIR, 'styles', '**/*.scss')
   ])
-    .pipe(newer('dist/css'))
+    .pipe(newer('dist/mentor/css'))
     .pipe(sourcemaps.init())
     .pipe(sass({
       precision: 10
@@ -79,7 +79,7 @@ gulp.task('styles', () => {
     .pipe(concat('mentor.css'))
     .pipe(cssnano())
     .pipe(sourcemaps.write('.'))
-    .pipe(gulp.dest('dist/css'))
+    .pipe(gulp.dest('dist/mentor/css'))
 });
 
 
@@ -87,15 +87,15 @@ gulp.task('styles', () => {
 gulp.task('critical', ['styles'], function () {
   return gulp.src(path.join(ROOT_DIR, 'templates', 'index.html'))
     .pipe(critical({
-      base: 'dist/',
+      base: 'dist/mentor',
       inline: true,
       minify: true,
       css: [
-        'dist/css/mentor.css'
+        'dist/mentor/css/mentor.css'
       ]
     }))
     .on('error', function(err) { gutil.log(gutil.colors.red(err.message)); })
-    .pipe(gulp.dest('dist'));
+    .pipe(gulp.dest('dist/mentor/'));
 });
 
 gulp.task('build', ['critical', 'js', 'images']);
@@ -104,7 +104,7 @@ gulp.task('serve', ['build'], function() {
   gulp.src('dist')
     .pipe(webserver({
       livereload: true,
-      fallback: 'index.html'
+      fallback: 'mentor/index.html'
     }));
 
   gulp.watch(['mentor/js/**'], ['js']);
