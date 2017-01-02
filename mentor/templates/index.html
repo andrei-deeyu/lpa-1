@@ -39,7 +39,7 @@
   <meta name=twitter:creator content=@greenido>
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-  <link rel="stylesheet" href="/dist/css/mentor.css" />
+  <link rel="stylesheet" href="/css/mentor.css" />
   <script>
   function loadHeader() {
     document.getElementById('lpa-header').classList.add('lpa-loaded');
@@ -47,8 +47,6 @@
   </script>
   <link rel="preload" href="/img/lpa-header_1x.jpg" as="image" media="(max-width: 1600px)" onload="loadHeader()">
   <link rel="preload" href="/img/lpa-header_2x.jpg" as="image" media="(min-width: 1600px)" onload="loadHeader()">
-  <noscript><link rel="stylesheet" href="/dist/css/mentor.css"></noscript>
-
 
   <script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
 
@@ -634,15 +632,6 @@
   ga('create', 'UA-76781519-1', 'auto');
   ga('send', 'pageview');
   </script>
-
-
-
-  <!-- TODO: concatenate for production -->
-  <script src="/dialog-polyfill.js"></script>
-  <script src="/dist/js/firebase.js"></script>
-  <script src="/dist/js/auth.js"></script>
-  <script src="/dist/js/router.js"></script>
-  <script src="/dist/js/ui.js"></script>
-  <script src="/dist/js/main-mentor-new.js"></script>
+  <script src="/js/mentor.js"></script>
 </body>
 </html>

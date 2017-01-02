@@ -11,10 +11,6 @@
  */
 var router = (function(firebaseApi, authModule) {
 
-  const BASE_URL = '/index-mentor-new.html';
-
-
-
   function getParentNodeByType(el, nodeType) {
     while (el && el.tagName !== nodeType) {
        el = el.parentNode;
@@ -22,14 +18,12 @@ var router = (function(firebaseApi, authModule) {
     return el;
   };
 
-
-
   function navigate(e) {
     e.preventDefault();
     let linkEl = getParentNodeByType(e.target, 'A');
     let subpageName = linkEl.getAttribute('data-subpage');
     if (subpageName) {
-      window.history.pushState(null, null, BASE_URL + '/' + subpageName);
+      window.history.pushState(null, null, subpageName);
       UI.showSubpage(subpageName);
     }
   };

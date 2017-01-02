@@ -9,40 +9,46 @@ const sourcemaps = require('gulp-sourcemaps');
 const concat = require('gulp-concat');
 const cache = require('gulp-cache');
 const imagemin = require('gulp-imagemin');
+const size = require('gulp-size');
+const gutil = require('gulp-util');
+const critical = require('critical').stream;
 
 
-gulp.task('build', ['critical', 'js', 'images']);
+const path = require('path');
+
+const ROOT_DIR = 'mentor';
+
+
 
 gulp.task('images', () =>
-  gulp.src([
-    'img/lpa-header_1x.jpg',
-    'img/lpa-header_2x.jpg'
-  ])
+  gulp.src(path.join(ROOT_DIR, 'img/**/*'))
     .pipe(imagemin({
       progressive: true,
       interlaced: true
     }))
     .pipe(gulp.dest('dist/img'))
-    //.pipe(size({title: 'images'}))
+    .pipe(size({title: 'images'}))
 );
 
 gulp.task('js', () => {
-  return gulp.src('js/mentor/**')
+  // Order matters!
+  var scripts = [
+    '/node_modules/dialog-polyfill/dialog-polyfill.js',
+    path.join(ROOT_DIR, 'js', 'firebase.js'),
+    path.join(ROOT_DIR, 'js', 'auth.js'),
+    path.join(ROOT_DIR, 'js', 'router.js'),
+    path.join(ROOT_DIR, 'js', 'ui.js'),
+    path.join(ROOT_DIR, 'js', 'main-mentor-new.js')
+  ]
+
+  return gulp.src(scripts)
     .pipe(babel({
         presets: ['es2015']
     }))
+    .pipe(sourcemaps.init())
+    .pipe(concat('mentor.js'))
+    .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('dist/js'));
-});
-
-gulp.task('serve', ['build'], function() {
-  gulp.src('.')
-    .pipe(webserver({
-      livereload: true,
-      fallback: 'dist/index-mentor-new.html'
-    }));
-
-  gulp.watch(['js/mentor/**'], ['build']);
-  gulp.watch(['styles/**'], ['critical']);
 });
 
 // Compile and automatically prefix stylesheets
@@ -61,8 +67,8 @@ gulp.task('styles', () => {
 
   return gulp.src([
     'node_modules/dialog-polyfill/dialog-polyfill.css',
-    'lib/material.blue_grey-orange.min.css',
-    'styles/**/*.scss'
+    path.join(ROOT_DIR, 'lib', 'material.blue_grey-orange.min.css'),
+    path.join(ROOT_DIR, 'styles', '**/*.scss')
   ])
     .pipe(newer('dist/css'))
     .pipe(sourcemaps.init())
@@ -76,12 +82,10 @@ gulp.task('styles', () => {
     .pipe(gulp.dest('dist/css'))
 });
 
-var gutil = require('gulp-util');
-var critical = require('critical').stream;
 
 // Generate & Inline Critical-path CSS
 gulp.task('critical', ['styles'], function () {
-  return gulp.src('index-mentor-new.html')
+  return gulp.src(path.join(ROOT_DIR, 'templates', 'index.html'))
     .pipe(critical({
       base: 'dist/',
       inline: true,
@@ -92,4 +96,18 @@ gulp.task('critical', ['styles'], function () {
     }))
     .on('error', function(err) { gutil.log(gutil.colors.red(err.message)); })
     .pipe(gulp.dest('dist'));
+});
+
+gulp.task('build', ['critical', 'js', 'images']);
+
+gulp.task('serve', ['build'], function() {
+  gulp.src('dist')
+    .pipe(webserver({
+      livereload: true,
+      fallback: 'index.html'
+    }));
+
+  gulp.watch(['mentor/js/**'], ['js']);
+  gulp.watch(['mentor/styles/**'], ['critical']);
+  gulp.watch(['mentor/templates/**'], ['critical']);
 });
