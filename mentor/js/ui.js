@@ -180,7 +180,7 @@ var UI = (function(firebaseApi, authModule, router) {
           ELEMENTS.attendeesList.appendChild(node);
           if (attendeeSnapshot.pic) {
             pic.innerHTML = '';
-            pic.style = 'background: url("'+ attendeeSnapshot.pic + '") center/cover;';
+            pic.setAttribute('style', 'background: url("'+ attendeeSnapshot.pic + '") center/cover;');
           }
         });
       }
