@@ -103,7 +103,7 @@ gulp.task('build', ['critical', 'js', 'images']);
 gulp.task('serve', ['build'], function() {
   gulp.src('dist')
     .pipe(webserver({
-      livereload: true,
+      //livereload: true,
       fallback: 'mentor/index.html'
     }));
 
