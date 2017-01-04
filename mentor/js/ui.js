@@ -11,8 +11,6 @@
  */
 var UI = (function(firebaseApi, authModule, router) {
 
-  const BASE_URL = '/index-mentor-new.html';
-
   const YOUTUBE_REGEX = /www\.youtube\.com\/watch\?v\=(\w+)\&*.*/;
   const VIMEO_REGEX = /www\.vimeo\.com\/(\w+)\&*.*/;
 
@@ -72,7 +70,7 @@ var UI = (function(firebaseApi, authModule, router) {
     let linkEl = getParentNodeByType(e.target, elType);
     let subpageName = linkEl.getAttribute('data-subpage');
     if (subpageName) {
-      let url = BASE_URL + '/' + subpageName;
+      let url = subpageName;
       let itemKey = linkEl.getAttribute('data-key');
       if (itemKey) {
         url = url + '/' + itemKey;
