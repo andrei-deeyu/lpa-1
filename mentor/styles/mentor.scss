@@ -33,20 +33,22 @@ template {
 }
 
 .lpa-subpage {
-  transition: opacity 0.6s cubic-bezier(0, 0, 0.3, 1);
+  transition: opacity 0.6s cubic-bezier(0, 0, 0.3, 1), max-height 0.6s;
   position: absolute;
   top: 0;
   width: 100%;
-  z-index: -1;
   box-sizing: border-box;
-  /* Add break points */
   padding: 20px 80px;
   opacity: 0;
+  max-height: 0;
+  overflow: hidden;
 }
 
 .lpa-subpage.lpa-active {
   opacity: 1;
-  z-index: 0;
+  max-height: 6000px;
+  overflow: visible;
+  margin-bottom: 400px;
 }
 
 .lpa-subpage h1 {
@@ -71,10 +73,26 @@ template {
 
 .lpa-header {
   background-color: #607D8B;
-  background-image: url('/img/lpa-header.jpg');
   background-position: center;
   background-size: cover;
   height: 192px;
+  color: #fff;
+
+  .mdl-layout__header-row {
+    position: relative;
+  }
+}
+
+@media (max-width: 1600px) {
+  .lpa-header.lpa-loaded {
+    background-image: url('/mentor/img/lpa-header_1x.jpg');
+  }
+}
+
+@media (min-width: 1600px) {
+  .lpa-header.lpa-loaded {
+    background-image: url('/mentor/img/lpa-header_2x.jpg');
+  }
 }
 
 @media screen and (max-width: 1024px) {
@@ -151,31 +169,22 @@ footer a {
   background: #607D8B;
 }
 
-.is-small-screen .mdl-layout__header--waterfall {
-    max-height: 192px;
-}
-
-.is-small-screen .mdl-layout__header--waterfall.is-compact {
-    max-height: 64px;
-}
-
-.mdl-layout__header--waterfall.is-compact::before {
-  max-height: 64px;
-  background: linear-gradient(rgba(63, 87, 99, 0.8), transparent);
-}
-
 header::before {
   position: absolute;
   content: "";
   top: 0;
   left: 0;
   width: 100%;
-  height: 192px;  /* 3x64 3 header rows */
+  height: 192px;
   background: linear-gradient(rgba(63, 87, 99, 0.8), transparent);
 }
 
 .is-small-screen header::before {
   height: 168px;  /* 3x64 3 header rows */
+}
+
+.mdl-layout__header.is-compact::before {
+  max-height: 56px;
 }
 
 .mdl-layout__header-row .mdl-navigation__link {
@@ -242,8 +251,8 @@ header::before {
     display: flex;
   }
 
-  .lpa-sign-out,
-  .mdl-layout__drawer .mdl-navigation .mdl-navigation__link.lpa-sign-out {
+  .mdl-layout__drawer .mdl-navigation .mdl-navigation__link.lpa-sign-out,
+  .lpa-sign-out {
     display: block;
   }
 
@@ -408,14 +417,14 @@ form .mdl-textfield {
 }
 
 .lpa-icon-twitter {
-  background: url('/img/twitter.png') center/cover;
+  background: url('/mentor/img/twitter.png') center/cover;
   width: 24px;
   height: 24px;
   display: inline-block;
 }
 
 .lpa-icon-linkedin {
-  background: url('/img/linkedin-box.png') center/cover;
+  background: url('/mentor/img/linkedin-box.png') center/cover;
   width: 48px;
   height: 48px;
   display: inline-block;
