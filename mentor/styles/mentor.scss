@@ -195,6 +195,18 @@ header::before {
   color: #fff;
 }
 
+.mdl-tabs.is-upgraded .mdl-tabs__tab::after {
+  height: 4px;
+  width: 0%;
+  display: block;
+  content: " ";
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  background: transparent;
+  transition: width 1s cubic-bezier(.4,0,1,1) !important;
+}
+
 .mdl-tabs.is-upgraded .mdl-tabs__tab.is-active::after {
   height: 4px;
   background: rgb(255,171,64);
