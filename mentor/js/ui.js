@@ -270,7 +270,10 @@ var UI = (function(firebaseApi, authModule, router) {
       let subpage = document.getElementById('lpa-' + subpageName + '-subpage');
       PAGES[subpageName] && PAGES[subpageName].init && PAGES[subpageName].init(itemKey);
       subpage.classList.add('lpa-active');
-      ELEMENTS.main.scrollTo(0, 0);
+      if (ELEMENTS.main.scrollTo) {
+        ELEMENTS.main.scrollTo(0, 0);
+      };
+      ELEMENTS.main.scrollIntoView();
       return subpage;
     },
     displaySchedule: function(schedule) {
