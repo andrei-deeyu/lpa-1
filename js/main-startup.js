@@ -37,11 +37,11 @@
   // start the connection with firebase DB
   //
   var config = {
-    apiKey: "AIzaSyDImJzAqBmZVXdaK55jVfRuoaHVLBDFgxU",
-    authDomain: "lpa-1.firebaseapp.com",
-    databaseURL: "https://lpa-1.firebaseio.com",
-    storageBucket: "project-1969056342883930904.appspot.com",
-    messagingSenderId: "575025255250"
+    apiKey: "AIzaSyBvG3yy3rA6BQa-TV80D8wvXxw-LBT9Uew",
+    authDomain: "lpa-br-2.firebaseapp.com",
+    databaseURL: "https://lpa-br-2.firebaseio.com",
+    storageBucket: "lpa-br-2.appspot.com",
+    messagingSenderId: "582822905321"
   };
   // Initialize Firebase
   firebase.initializeApp(config);
