@@ -11,6 +11,8 @@
  */
 var router = (function(firebaseApi, authModule) {
 
+  const BASE_URL = '/mentor';
+
   function getParentNodeByType(el, nodeType) {
     while (el && el.tagName !== nodeType) {
        el = el.parentNode;
@@ -22,8 +24,9 @@ var router = (function(firebaseApi, authModule) {
     e.preventDefault();
     let linkEl = getParentNodeByType(e.target, 'A');
     let subpageName = linkEl.getAttribute('data-subpage');
+    let url = BASE_URL + '/' + subpageName;
     if (subpageName) {
-      window.history.pushState(null, null, subpageName);
+      window.history.pushState(null, null, url);
       UI.showSubpage(subpageName);
     }
   };

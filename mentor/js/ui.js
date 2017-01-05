@@ -14,6 +14,8 @@ var UI = (function(firebaseApi, authModule, router) {
   const YOUTUBE_REGEX = /www\.youtube\.com\/watch\?v\=(\w+)\&*.*/;
   const VIMEO_REGEX = /www\.vimeo\.com\/(\w+)\&*.*/;
 
+  const BASE_URL = '/mentor';
+
   /**
    * UI Elements cache.
    */
@@ -70,7 +72,7 @@ var UI = (function(firebaseApi, authModule, router) {
     let linkEl = getParentNodeByType(e.target, elType);
     let subpageName = linkEl.getAttribute('data-subpage');
     if (subpageName) {
-      let url = subpageName;
+      let url = BASE_URL + '/' + subpageName;
       let itemKey = linkEl.getAttribute('data-key');
       if (itemKey) {
         url = url + '/' + itemKey;
@@ -178,7 +180,7 @@ var UI = (function(firebaseApi, authModule, router) {
           ELEMENTS.attendeesList.appendChild(node);
           if (attendeeSnapshot.pic) {
             pic.innerHTML = '';
-            pic.style = 'background: url("'+ attendeeSnapshot.pic + '") center/cover;';
+            pic.setAttribute('style', 'background: url("'+ attendeeSnapshot.pic + '") center/cover;');
           }
         });
       }
@@ -268,7 +270,10 @@ var UI = (function(firebaseApi, authModule, router) {
       let subpage = document.getElementById('lpa-' + subpageName + '-subpage');
       PAGES[subpageName] && PAGES[subpageName].init && PAGES[subpageName].init(itemKey);
       subpage.classList.add('lpa-active');
-      ELEMENTS.main.scrollTo(0, 0);
+      if (ELEMENTS.main.scrollTo) {
+        ELEMENTS.main.scrollTo(0, 0);
+      };
+      ELEMENTS.main.scrollIntoView();
       return subpage;
     },
     displaySchedule: function(schedule) {

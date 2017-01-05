@@ -44,6 +44,12 @@
   function loadHeader() {
     document.getElementById('lpa-header').classList.add('lpa-loaded');
   };
+  // Feature detect link.preload feature.
+  var script = document.createElement('link');
+  script.rel = 'preload';
+  if (!('preload' in script)) {
+    document.addEventListener('DOMContentLoaded', loadHeader);
+  }
   </script>
   <link rel="preload" href="img/lpa-header_1x.jpg" as="image" media="(max-width: 1600px)" onload="loadHeader()">
   <link rel="preload" href="img/lpa-header_2x.jpg" as="image" media="(min-width: 1600px)" onload="loadHeader()">
@@ -301,7 +307,7 @@
             </ol>
             <h4><a id="Most_importantly_76"></a>Most importantly</h4>
             <p><strong>Have fun!</strong> If you have fun, everyone will benefit the most!</p>
-            <p><img src="img/lpa-logo-305x80.png" alt="lpa logo" /></p>
+            <p><img src="/mentor/img/lpa-logo-305x80.png" alt="lpa logo" /></p>
 
         </section>
 

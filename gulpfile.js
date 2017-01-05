@@ -33,7 +33,7 @@ gulp.task('images', () =>
 gulp.task('js', () => {
   // Order matters!
   var scripts = [
-    '/node_modules/dialog-polyfill/dialog-polyfill.js',
+    'node_modules/dialog-polyfill/dialog-polyfill.js',
     path.join(ROOT_DIR, 'js', 'firebase.js'),
     path.join(ROOT_DIR, 'js', 'auth.js'),
     path.join(ROOT_DIR, 'js', 'router.js'),
