@@ -7,6 +7,7 @@ cp -R js/ public/js/
 cp sw.js public/sw.js
 cp cache-polyfill.js public/cache-polyfill.js
 cp -R css/ public/css/
+cp -R fonts/ public/fonts/
 cp -R img/ public/img/
 
 rm -R public/mentor

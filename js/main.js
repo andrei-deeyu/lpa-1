@@ -37,13 +37,14 @@
   //
   // AUTH fun
   // start the connection with firebase DB
-  var config = {
-    apiKey: "AIzaSyDImJzAqBmZVXdaK55jVfRuoaHVLBDFgxU",
-    authDomain: "lpa-1.firebaseapp.com",
-    databaseURL: "https://lpa-1.firebaseio.com",
-    storageBucket: "project-1969056342883930904.appspot.com",
-  };
   // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyBP_N88VISYIBgN6L5N0l_xCwyTCf7410U",
+    authDomain: "lpa-br-1.firebaseapp.com",
+    databaseURL: "https://lpa-br-1.firebaseio.com",
+    storageBucket: "lpa-br-1.appspot.com",
+    messagingSenderId: "221194143639"
+  };
   firebase.initializeApp(config);
   var ref = firebase.database().ref();
   authUserData = null;
