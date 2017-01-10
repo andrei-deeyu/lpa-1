@@ -18,11 +18,31 @@
 
   UI.addListeners();
 
+  function sendGaEvent(category, action, label) {
+    ga('send', {
+      hitType: 'event',
+      eventCategory: category,
+      eventAction: action,
+      eventLabel: label
+    });
+  };
+
   firebase.auth().onAuthStateChanged(user => {
-    firebaseApi.fetchMentor(firebaseApi.CURRENT_MENTOR_ID).then(mentor => {
-      UI.updateMentor();
-    }).catch(e=>console.log(e));
     UI.updateUser(user);
+    if (user) {
+      sendGaEvent('sign-in-mentor', 'authenticated user.uid: ' + user.uid,
+          'authentication: ' + firebaseApi.CURRENT_MENTOR_ID);
+      firebaseApi.fetchMentor(firebaseApi.CURRENT_MENTOR_ID).then(mentor => {
+        UI.updateMentor();
+      }).catch(error => {
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'check-mentor',
+          eventAction: 'fetch-not-registered-mentor',
+          eventLabel: 'key: ' + firebaseApi.CURRENT_MENTOR_ID
+        });
+      });
+    }
   });
 
   if ('serviceWorker' in navigator) {
@@ -49,5 +69,14 @@
   window.addEventListener("online", function(e) {
     UI.ELEMENTS.message.classList.add('hide');
   }, false);
+
+  window.onerror = function(msg, url, lineNumber) {
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'mentor-gen-error',
+      eventAction: 'msg: ' + msg,
+      eventLabel: 'url: ' + url + " line: " + lineNumber
+    });
+  };
 
 })(firebaseApi, authModule, UI);

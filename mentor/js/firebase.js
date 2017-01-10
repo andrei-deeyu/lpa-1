@@ -26,10 +26,15 @@ var firebaseApi = (function() {
           resolve(sessions);
         });
     }),
-    fetchMentor: mentorId => new Promise(function(resolve) {
+    fetchMentor: mentorId => new Promise(function(resolve, reject) {
       firebase.database().ref('mentors/' + mentorId).once('value').then(snapshot => {
-        firebaseApi.CURRENT_MENTOR = snapshot.val();
-        resolve(firebaseApi.CURRENT_MENTOR);
+        let mentor = snapshot.val();
+        if (mentor) {
+          firebaseApi.CURRENT_MENTOR = snapshot.val();
+          resolve(firebaseApi.CURRENT_MENTOR);
+        } else {
+          reject();
+        }
       });
     }),
     fetchMentorsList: () => new Promise(function(resolve) {
@@ -104,12 +109,24 @@ var firebaseApi = (function() {
         };
         today.setHours(today.getHours() + 1);
         session.endtime = today.getHours() + ':00';
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'startup-notes-mentor',
+          eventAction: 'save-notes-ad-hoc-meeting',
+          eventLabel: 'keyToNotesBackup: ' + backupNotesPath
+        });
         Promise.all([
           firebase.database().ref(sessionPath).set(session),
           firebase.database().ref(startupNotesPath).set(note),
           firebase.database().ref(backupNotesPath).set(note)
         ]).then(resolve);
       } else {
+        ga('send', {
+            hitType: 'event',
+            eventCategory: 'startup-notes-mentor',
+            eventAction: 'save-notes',
+            eventLabel: 'keyToNotesBackup: ' + backupNotesPath
+        });
         Promise.all([
           firebase.database().ref(mentorNotesPath).set(note),
           firebase.database().ref(startupNotesPath).set(note),

@@ -59,6 +59,15 @@ var UI = (function(firebaseApi, authModule, router) {
     scheduleListTemplate: document.getElementById('tmpl-schedule-list')
   };
 
+  function sendGaEvent(category, action, label) {
+    ga('send', {
+      hitType: 'event',
+      eventCategory: category,
+      eventAction: action,
+      eventLabel: label
+    });
+  };
+
   function getParentNodeByType(el, nodeType) {
     while (el && el.tagName !== nodeType) {
        el = el.parentNode;
@@ -289,6 +298,8 @@ var UI = (function(firebaseApi, authModule, router) {
         });
       } else {
         ELEMENTS.scheduleList.innerHTML = '<li>Sorry, no sessions found for this date.</li>';
+        sendGaEvent('schedule-mentor',
+            'reload-empty-schedule: ' + firebaseApi.CURRENT_MENTOR_ID);
       }
     },
     showSurvey: function(session) {
@@ -358,6 +369,9 @@ var UI = (function(firebaseApi, authModule, router) {
       }
       ELEMENTS.datepicker.setAttribute('value', new Date().toISOString().slice(0, 10));
       ELEMENTS.datepicker.addEventListener('change', function(e) {
+        sendGaEvent('schedule-mentor',
+            'reload-schedule: ' + firebaseApi.CURRENT_MENTOR_ID,
+            'for day: ' + e.target.value);
         firebaseApi.getCurrentMentorSchedule(
             e.target.value).then(UI.displaySchedule);
       });
@@ -367,6 +381,7 @@ var UI = (function(firebaseApi, authModule, router) {
         ELEMENTS.startupShowNotes.classList.toggle('lpa-open');
         ELEMENTS.startupNotes.classList.toggle('hidden');
         let startupKey = window.location.pathname.split('/')[3];
+        sendGaEvent('startup-notes-mentor', 'fetch-notes', 'startup: ' + startupKey);
         firebaseApi.fetchStartupNotes(startupKey).then(UI.displayStartupNotes);
       });
 
@@ -468,6 +483,8 @@ var UI = (function(firebaseApi, authModule, router) {
           'unixTime': new Date().getTime(),
           'date': new Date().toISOString()
         };
+        sendGaEvent('save-mentor', 'save-mentor-info-fields',
+          'key: ' + firebaseApi.CURRENT_MENTOR_ID);
         firebaseApi.saveMentor(mentorId, mentor);
       });
       ELEMENTS.camera.addEventListener('change', e => {
