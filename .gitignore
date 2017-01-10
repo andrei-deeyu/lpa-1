@@ -7,7 +7,7 @@ IDs.txt
 
 *.sublime-workspace
 node_modules
-public/**
+public
 dist
 **/.DS_Store
 
