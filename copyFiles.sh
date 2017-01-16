@@ -8,6 +8,7 @@ cp sw.js public/sw.js
 cp service-worker.js public/service-worker.js
 cp cache-polyfill.js public/cache-polyfill.js
 cp -R css/ public/css/
+cp -R fonts/ public/fonts/
 cp -R img/ public/img/
 
 rm -R public/mentor
