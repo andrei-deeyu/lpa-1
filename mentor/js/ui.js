@@ -75,6 +75,13 @@ var UI = (function(firebaseApi, authModule, router) {
     return el;
   };
 
+  function createCameraTile() {
+    let link = document.createElement('a');
+    link.setAttribute('target', '_blank');
+    link.classList.add('lpa-survey-img');
+    return link;
+  };
+
   function navigate(e, opt_elType) {
     e.preventDefault();
     let elType = opt_elType || 'A';
@@ -327,16 +334,25 @@ var UI = (function(firebaseApi, authModule, router) {
       ELEMENTS.survey.querySelector(
           '#lpa-survey-session-datetime').innerHTML = sessionText;
       let notes = session ? session.notes : {};
-        ELEMENTS.survey.querySelector(
-            '#lpa-survey-receptive').value = notes.receptive || 3;
-        ELEMENTS.survey.querySelector(
-            '#lpa-survey-effective').value = notes.effective || 3;
-        ELEMENTS.surveyNotesField.innerHTML = notes.meetingNotes || '';
-        ELEMENTS.surveyNotesField.parentNode.classList.toggle(
-          'is-dirty', notes.meetingNotes);
-        ELEMENTS.surveyActionItemsField.innerHTML = notes.actionItems || '';
-        ELEMENTS.surveyActionItemsField.parentNode.classList.toggle(
-          'is-dirty', !!notes.actionItems);
+      ELEMENTS.cameraPreview.innerHTML = '';
+      if (notes.imgs) {
+        for (var i = 0; i < notes.imgs.length; i++) {
+          let link = createCameraTile();
+          ELEMENTS.cameraPreview.appendChild(link);
+          link.setAttribute('style', 'background-image: url(\'' + notes.imgs[i] + '\')');
+          link.setAttribute('href', notes.imgs[i]);
+        }
+      }
+      ELEMENTS.survey.querySelector(
+          '#lpa-survey-receptive').value = notes.receptive || 3;
+      ELEMENTS.survey.querySelector(
+          '#lpa-survey-effective').value = notes.effective || 3;
+      ELEMENTS.surveyNotesField.innerHTML = notes.meetingNotes || '';
+      ELEMENTS.surveyNotesField.parentNode.classList.toggle(
+        'is-dirty', notes.meetingNotes);
+      ELEMENTS.surveyActionItemsField.innerHTML = notes.actionItems || '';
+      ELEMENTS.surveyActionItemsField.parentNode.classList.toggle(
+        'is-dirty', !!notes.actionItems);
       ELEMENTS.surveyActionItemsField.parentNode.classList.remove('is-invalid');
       ELEMENTS.survey.querySelector('.lpa-survey-error').classList.add('hidden');
     },
@@ -424,9 +440,9 @@ var UI = (function(firebaseApi, authModule, router) {
         let session = ELEMENTS.survey.session;
         let startup = fields['lpa-survey-startup'].value;
         let imgs = [];
-        let imgEls = ELEMENTS.mdlLayout.querySelectorAll('.lpa-survey-img');
+        let imgEls = ELEMENTS.survey.querySelectorAll('.lpa-survey-img');
         for (var i = 0; i < imgEls.length; i++) {
-          imgs.push(imgEls[i].src);
+          imgs.push(imgEls[i].href);
         }
         let today = new Date();
         let note = {
@@ -440,7 +456,6 @@ var UI = (function(firebaseApi, authModule, router) {
           'imgs': imgs,
           'unixTime' : today.getTime()
         };
-
         let valid = true;
         if (!fields['lpa-survey-notes'].value) {
           fields['lpa-survey-notes'].parentNode.classList.add('is-invalid');
@@ -489,8 +504,7 @@ var UI = (function(firebaseApi, authModule, router) {
       });
       ELEMENTS.camera.addEventListener('change', e => {
         let file = e.target.files[0];
-        let link = document.createElement('a');
-        link.setAttribute('target', '_blank');
+        let link = createCameraTile();
         ELEMENTS.cameraPreview.appendChild(link);
         let imgUrl = URL.createObjectURL(file);
         link.setAttribute('style', 'background-image: url(\'' + imgUrl + '\')');
@@ -501,7 +515,9 @@ var UI = (function(firebaseApi, authModule, router) {
         let completeCallback = function(snapshot) {
           link.setAttribute('href', snapshot.downloadURL);
           link.innerHTML = '';
+          ELEMENTS.surveySubmit.disabled = false;
         };
+        ELEMENTS.surveySubmit.disabled = true;
         firebaseApi.uploadImage(file, progressCallback, completeCallback);
       });
     }
