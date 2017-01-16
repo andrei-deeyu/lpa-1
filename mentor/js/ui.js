@@ -139,10 +139,10 @@ var UI = (function(firebaseApi, authModule, router) {
         field.value = mentor[fieldNames[i]] || '';
         field.parentNode.MaterialTextfield.checkDirty();
       }
-      fieldNames = ['bio', 'funfact', 'expertise'];
+      fieldNames = ['bio', 'funFact', 'expertise'];
       for (var i = 0; i < fieldNames.length; i++) {
-        let field = fields['lpa-profile-' + fieldNames[i]];
-        field.inerHTML = mentor[fieldNames[i]] || '';
+        let field = fields['lpa-profile-' + fieldNames[i].toLowerCase()];
+        field.innerHTML = mentor[fieldNames[i]] || '';
         field.parentNode.MaterialTextfield.checkDirty();
       }
     },
