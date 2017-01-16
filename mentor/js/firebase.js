@@ -161,18 +161,34 @@ var firebaseApi = (function() {
     databaseURL: "https://lpa-3-14341.firebaseio.com/",
     storageBucket: "lpa-3-14341.appspot.com",
   };
+  /*var config = {
+    apiKey: "AIzaSyDImJzAqBmZVXdaK55jVfRuoaHVLBDFgxU",
+    authDomain: "lpa-1.firebaseapp.com",
+    databaseURL: "https://lpa-1.firebaseio.com",
+    storageBucket: "project-1969056342883930904.appspot.com",
+  };*/
   firebase.initializeApp(config);
 
 
   firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
       api.CURRENT_MENTOR_ID = getMentorIdFromEmail(
-          firebase.auth().currentUser.email);
+          user.providerData[0].email);
       let today = new Date().toISOString().slice(0, 10);
       api.getCurrentMentorSchedule(today).then(UI.displaySchedule);
       api.fetchMentorsList().then(UI.updateMentorsList);
       api.fetchAttendeesList().then(UI.updateAttendeesList);
       api.fetchStartupsList().then(UI.updateStartupsList);
+      api.fetchMentor(api.CURRENT_MENTOR_ID)
+        .then(UI.updateMentor)
+        .catch(error => {
+          ga('send', {
+            hitType: 'event',
+            eventCategory: 'check-mentor',
+            eventAction: 'fetch-not-registered-mentor',
+            eventLabel: 'key: ' + firebaseApi.CURRENT_MENTOR_ID
+          });
+        });
     } else {
       api.CURRENT_MENTOR_ID = null;
     }
