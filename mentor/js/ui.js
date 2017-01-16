@@ -82,6 +82,13 @@ var UI = (function(firebaseApi, authModule, router) {
     return link;
   };
 
+  function resetTextField(field, value) {
+    field.innerHTML = value || '';
+    field.value = value || '';
+    field.parentNode.classList.toggle('is-dirty', field.value);
+    field.parentNode.classList.remove('is-invalid');
+  }
+
   function navigate(e, opt_elType) {
     e.preventDefault();
     let elType = opt_elType || 'A';
@@ -300,7 +307,7 @@ var UI = (function(firebaseApi, authModule, router) {
           populate(node, ['starttime', 'location', 'startup'], session, 'innerText');
           let mentorId = firebaseApi.CURRENT_MENTOR_ID;
           node.firstElementChild.querySelector('.lpa-survey-btn').addEventListener(
-              'click', UI.showSurvey.bind(null, session));
+              'click', UI.showSurvey.bind(null, session.path));
           ELEMENTS.scheduleList.appendChild(node);
         });
       } else {
@@ -309,17 +316,18 @@ var UI = (function(firebaseApi, authModule, router) {
             'reload-empty-schedule: ' + firebaseApi.CURRENT_MENTOR_ID);
       }
     },
-    showSurvey: function(session) {
-      UI.resetSurvey(session);
+    showSurvey: function(sessionPath) {
+      UI.resetSurvey(sessionPath);
       ELEMENTS.survey.showModal();
     },
-    resetSurvey: function(session) {
+    resetSurvey: function(sessionPath) {
+      let session = firebaseApi.CACHE.sessions[sessionPath] || null;
       let startup = session ? session.startup : window.location.pathname.split('/')[3];
       if (startup) {
-        ELEMENTS.survey.querySelector(
-            '#lpa-survey-startup').value = startup;
+        ELEMENTS.survey.querySelector('#lpa-survey-startup').value = startup;
         ELEMENTS.chooseStartup.classList.add('hidden');
       } else {
+        ELEMENTS.survey.querySelector('#lpa-survey-startup').value = null;
         ELEMENTS.chooseStartup.classList.remove('hidden');
       }
       startup = startup || 'a startup';
@@ -347,13 +355,8 @@ var UI = (function(firebaseApi, authModule, router) {
           '#lpa-survey-receptive').value = notes.receptive || 3;
       ELEMENTS.survey.querySelector(
           '#lpa-survey-effective').value = notes.effective || 3;
-      ELEMENTS.surveyNotesField.innerHTML = notes.meetingNotes || '';
-      ELEMENTS.surveyNotesField.parentNode.classList.toggle(
-        'is-dirty', notes.meetingNotes);
-      ELEMENTS.surveyActionItemsField.innerHTML = notes.actionItems || '';
-      ELEMENTS.surveyActionItemsField.parentNode.classList.toggle(
-        'is-dirty', !!notes.actionItems);
-      ELEMENTS.surveyActionItemsField.parentNode.classList.remove('is-invalid');
+      resetTextField(ELEMENTS.surveyNotesField, notes.meetingNotes);
+      resetTextField(ELEMENTS.surveyActionItemsField, notes.actionItems);
       ELEMENTS.survey.querySelector('.lpa-survey-error').classList.add('hidden');
     },
     addListeners: function() {

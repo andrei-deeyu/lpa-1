@@ -16,12 +16,15 @@ var firebaseApi = (function() {
         .once('value')
         .then(snapshots => {
           let sessions = [];
+          CACHE.sessions = CACHE.sessions || {};
           snapshots.forEach(snapshot => {
             let session = snapshot.val();
             session.path = snapshot.ref.path.toString();
+            CACHE.sessions[session.path] = session;
             session.date = day;
             session.mentorId = mentorId;
             sessions.push(session);
+            CACHE.sessions[session.path] = session;
           });
           resolve(sessions);
         });
@@ -119,7 +122,10 @@ var firebaseApi = (function() {
           firebase.database().ref(sessionPath).set(session),
           firebase.database().ref(startupNotesPath).set(note),
           firebase.database().ref(backupNotesPath).set(note)
-        ]).then(resolve);
+        ]).then((out) => {
+          CACHE.sessions[sessionPath] = session;
+          resolve(session);
+        });
       } else {
         ga('send', {
             hitType: 'event',
@@ -131,7 +137,10 @@ var firebaseApi = (function() {
           firebase.database().ref(mentorNotesPath).set(note),
           firebase.database().ref(startupNotesPath).set(note),
           firebase.database().ref(backupNotesPath).set(note)
-        ]).then(resolve);
+        ]).then((out) => {
+          CACHE.sessions[sessionPath].notes = note;
+          resolve(session);
+        });
       }
     }),
     saveMentor: (mentorId, mentor) => new Promise(function(resolve) {
