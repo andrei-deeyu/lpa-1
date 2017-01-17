@@ -34,10 +34,15 @@ var firebaseApi = (function() {
         let mentor = snapshot.val();
         if (mentor) {
           firebaseApi.CURRENT_MENTOR = snapshot.val();
-          resolve(firebaseApi.CURRENT_MENTOR);
         } else {
-          reject();
+          ga('send', {
+            hitType: 'event',
+            eventCategory: 'check-mentor',
+            eventAction: 'fetch-not-registered-mentor',
+            eventLabel: 'key: ' + mentorId
+          });
         }
+        resolve(firebaseApi.CURRENT_MENTOR);
       });
     }),
     fetchMentorsList: () => new Promise(function(resolve) {
@@ -181,25 +186,29 @@ var firebaseApi = (function() {
 
   firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
+      ga('send', {
+        hitType: 'event',
+        eventCategory: 'sign-in-mentor',
+        eventAction: 'authenticated user.uid: ' + user.uid,
+        eventLabel: 'authentication: ' + firebaseApi.CURRENT_MENTOR_ID
+      });
       api.CURRENT_MENTOR_ID = getMentorIdFromEmail(
           user.providerData[0].email);
-      let today = new Date().toISOString().slice(0, 10);
-      api.getCurrentMentorSchedule(today).then(UI.displaySchedule);
-      api.fetchMentorsList().then(UI.updateMentorsList);
-      api.fetchAttendeesList().then(UI.updateAttendeesList);
-      api.fetchStartupsList().then(UI.updateStartupsList);
       api.fetchMentor(api.CURRENT_MENTOR_ID)
-        .then(UI.updateMentor)
-        .catch(error => {
-          ga('send', {
-            hitType: 'event',
-            eventCategory: 'check-mentor',
-            eventAction: 'fetch-not-registered-mentor',
-            eventLabel: 'key: ' + firebaseApi.CURRENT_MENTOR_ID
-          });
+        .then(() => {
+          UI.updateUser(user);
+          UI.updateMentor();
+          let today = new Date().toISOString().slice(0, 10);
+          api.getCurrentMentorSchedule(today).then(UI.displaySchedule);
+          api.fetchMentorsList().then(UI.updateMentorsList);
+          api.fetchAttendeesList().then(UI.updateAttendeesList);
+          api.fetchStartupsList().then(UI.updateStartupsList);
         });
     } else {
       api.CURRENT_MENTOR_ID = null;
+      api.CURRENT_MENTOR = null;
+      UI.updateUser(user);
+      UI.updateMentor();
     }
   });
 

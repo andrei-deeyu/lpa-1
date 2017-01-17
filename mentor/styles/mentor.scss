@@ -65,7 +65,8 @@ template {
   justify-content: inherit;
 }
 
-.lpa-sign-in-section {
+.lpa-sign-in-section,
+.lpa-unregistered-section {
   padding: 30px;
   text-align: center;
   background: rgb(0, 188, 212);
@@ -265,6 +266,25 @@ header::before {
   .mdl-layout__drawer .mdl-navigation .mdl-navigation__link.lpa-sign-out,
   .lpa-sign-out {
     display: block;
+  }
+}
+
+.lpa-profile-btn {
+  visibility: hidden;
+}
+
+.mdl-layout__drawer-button {
+  visibility: hidden;
+}
+
+.lpa-registered {
+
+  .mdl-layout__drawer-button {
+    visibility: visible;
+  }
+
+  .lpa-profile-btn {
+    visibility: visible;
   }
 
   .lpa-main-nav {
