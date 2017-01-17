@@ -27,14 +27,6 @@
     });
   };
 
-  firebase.auth().onAuthStateChanged(user => {
-    UI.updateUser(user);
-    if (user) {
-      sendGaEvent('sign-in-mentor', 'authenticated user.uid: ' + user.uid,
-          'authentication: ' + firebaseApi.CURRENT_MENTOR_ID);
-    }
-  });
-
   /*if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
       // Registration was successful

@@ -133,8 +133,14 @@ var UI = (function(firebaseApi, authModule, router) {
     ELEMENTS: ELEMENTS,
     updateUser: function(user) {
       document.body.classList.toggle('lpa-signed-in', !!user);
+      document.body.classList.toggle(
+          'lpa-registered', !!firebaseApi.CURRENT_MENTOR);
       if (user) {
-        UI.showSubpage('schedule');
+        if (!firebaseApi.CURRENT_MENTOR) {
+          UI.showSubpage('unregistered');
+        } else {
+          UI.showSubpage('schedule');
+        }
       } else {
         UI.showSubpage('signin');
         ELEMENTS.mentorsList.innerHTML = '';
