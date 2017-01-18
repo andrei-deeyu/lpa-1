@@ -347,7 +347,7 @@ var UI = (function(firebaseApi, authModule, router) {
           'Unscheduled session: ' + todayIso.slice(0, 10) + ' ' + todayIso.slice(11, 16);
       ELEMENTS.survey.querySelector(
           '#lpa-survey-session-datetime').innerHTML = sessionText;
-      let notes = session ? session.notes : {};
+      let notes = session && session.notes ? session.notes : {};
       ELEMENTS.cameraPreview.innerHTML = '';
       if (notes.imgs) {
         for (var i = 0; i < notes.imgs.length; i++) {
