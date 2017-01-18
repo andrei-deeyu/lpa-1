@@ -600,9 +600,9 @@
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
           attData.name + '<img src="' + picUrl + '" class="att-pic-card" alt="attendee picture"/>' +
           '</h3> </div> <div class="panel-body att-edit" data-key="' + key + '"><h4>' + attData.startup + role + '</h4>' +
-          "<b>email:</b> <a href='mailto:" + attData.email + "' target='_blank'>" + attData.email + "</a>" +
-          '<br><b>Linkedin:</b> <a href="http://www.linkedin.com/in/' + attData.linkedin + '" target="_blank">' +
-          attData.linkedin + '</a><br><b>Fun Fact:</b> ' + attData.funFact +
+          "<b>email: </b> <a href='mailto:" + attData.email + "' target='_blank'>" + attData.email + "</a>" +
+          '<br><b>Linkedin: </b> <a href="http://www.linkedin.com/in/' + attData.linkedin + '" target="_blank">' +
+          attData.linkedin + '</a><br><b>Fun Fact: </b> ' + attData.funFact +
           ' </div> </div>'
         );
       });
