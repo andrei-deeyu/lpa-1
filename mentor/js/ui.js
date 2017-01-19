@@ -357,10 +357,12 @@ var UI = (function(firebaseApi, authModule, router) {
           link.setAttribute('href', notes.imgs[i]);
         }
       }
-      ELEMENTS.survey.querySelector(
-          '#lpa-survey-receptive').value = notes.receptive || 3;
-      ELEMENTS.survey.querySelector(
-          '#lpa-survey-effective').value = notes.effective || 3;
+      let receptiveEl = ELEMENTS.survey.querySelector('#lpa-survey-receptive');
+      receptiveEl.value = notes.receptive || 3;
+      receptiveEl.MaterialSlider.change();
+      let effectiveEl = ELEMENTS.survey.querySelector('#lpa-survey-effective');
+      effectiveEl.value = notes.effective || 3;
+      effectiveEl.MaterialSlider.change();
       resetTextField(ELEMENTS.surveyNotesField, notes.meetingNotes);
       resetTextField(ELEMENTS.surveyActionItemsField, notes.actionItems);
       ELEMENTS.survey.querySelector('.lpa-survey-error').classList.add('hidden');
