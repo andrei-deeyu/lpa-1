@@ -830,12 +830,12 @@
               mentorData.twitter + " </a>";
           }
           var funFact = "";
-          if (mentorData.funFact) {
+          if (mentorData.funFact && mentorData.funFact.length > 3) {
             funFact = "<h5>Fun Fact: " + mentorData.funFact + "</h5>";
           }
           var site = "";
           if (mentorData.site) {
-            site = "<br><b>Fun Fact:</b> " + mentorData.site ;
+            site = "<br><b>Site:</b> <a target='_blank' href='" + mentorData.site + "'>" + mentorData.site +  "</a>";
           }
           var linkedin = "";
           if (mentorData.linkedin && mentorData.linkedin.length > 4) {
