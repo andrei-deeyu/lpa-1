@@ -824,6 +824,29 @@
           if (mentorData.bio && mentorData.bio != undefined) {
             mBio = (mentorData.bio).replace(/\n/g, "<br>");
           }
+          var twitterStr = "";
+          if (mentorData.twitter) {
+            twitterStr = "<br><Br><b>Twitter: </b><a target='_blank' href='https://twitter.com/" + mentorData.twitter + "'>" + 
+              mentorData.twitter + " </a>";
+          }
+          var funFact = "";
+          if (mentorData.funFact) {
+            funFact = "<h5>Fun Fact: " + mentorData.funFact + "</h5>";
+          }
+          var site = "";
+          if (mentorData.site) {
+            site = "<br><b>Fun Fact:</b> " + mentorData.site ;
+          }
+          var linkedin = "";
+          if (mentorData.linkedin && mentorData.linkedin.length > 4) {
+            //http://www.linkedin.com/in/"
+            linkedin = "<br><b>Linkedin:</b> <a href='" + mentorData.linkedin + "' target='_blank'>" +
+              mentorData.linkedin + " </a>";
+          }
+          var expertiseStr = "";
+          if (mentorData.expertise) {
+            expertiseStr = "<br><b>Expertise</b> " + mentorData.expertise ;
+          }
           $("#mentors-list").append(
             '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
             mentorData.name + '<img src="' + mPicUrl + '" class="att-pic-card" alt="mentor picture" /> ' +
@@ -833,7 +856,7 @@
             '"> <h5><a href="mailto:' + mentorData.email + '" target="_blank">' + mentorData.email + '</a></h5>' +
             '<b>Phone:</b> <a href="tel:' + mentorData.phone + '">' + mentorData.phone + "</a><br>" +
             '<b>Domain:</b> ' + mentorData.domain + ' - <b>Secondary:</b> ' + mentorData.domainSec +
-            '<h4><b>Expertise</b></h4> ' + mentorData.expertise +
+            expertiseStr + twitterStr + linkedin + funFact + site +
             '<h4><b>Bio</b></h4> ' + mBio + ' </div> </div>'
           );
         }
