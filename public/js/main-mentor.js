@@ -436,11 +436,19 @@
                 var tmpMentorDetails = '<button class="btn btn-sm btn-info fetch-mentor-button" data-key="' + tmpMentorEmail + '">' +
                   tmpMentorEmailStr + '</button>';
 
+                var imgsHTML = "<br>";
+                if (val.imgs) {
+                  for (var i = 0; i < val.imgs.length; i++) {
+                  imgsHTML += '<a href="' + val.imgs[i] +
+                    '" target="_blank" class="pic-link"> <img height="130" class="pic-src" src="' + val.imgs[i] + '"> </a>';
+                  }
+                }
+
                 html += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
                   keyDate + " | " + meetingTime + ' </h3> </div> <div class="panel-body">' +
                   '<b>Mentor:</b> ' + tmpMentorDetails + '<br><b>Updated At: </b>' + noteDate +
                   '<p><b>Meeting Notes:</b><br>' + notesHtml + '</p>' +
-                  '<b>Action Items:</b> ' + actionItemsHtml +
+                  '<b>Action Items:</b> ' + actionItemsHtml + imgsHTML +
                   ' </div> </div>';
               });
             }
@@ -830,12 +838,12 @@
               mentorData.twitter + " </a>";
           }
           var funFact = "";
-          if (mentorData.funFact) {
+          if (mentorData.funFact && mentorData.funFact.length > 3) {
             funFact = "<h5>Fun Fact: " + mentorData.funFact + "</h5>";
           }
           var site = "";
           if (mentorData.site) {
-            site = "<br><b>Fun Fact:</b> " + mentorData.site ;
+            site = "<br><b>Site:</b> <a target='_blank' href='" + mentorData.site + "'>" + mentorData.site +  "</a>";
           }
           var linkedin = "";
           if (mentorData.linkedin && mentorData.linkedin.length > 4) {

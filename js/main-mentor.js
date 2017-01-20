@@ -436,11 +436,19 @@
                 var tmpMentorDetails = '<button class="btn btn-sm btn-info fetch-mentor-button" data-key="' + tmpMentorEmail + '">' +
                   tmpMentorEmailStr + '</button>';
 
+                var imgsHTML = "<br>";
+                if (val.imgs) {
+                  for (var i = 0; i < val.imgs.length; i++) {
+                  imgsHTML += '<a href="' + val.imgs[i] +
+                    '" target="_blank" class="pic-link"> <img height="130" class="pic-src" src="' + val.imgs[i] + '"> </a>';
+                  }
+                }
+
                 html += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
                   keyDate + " | " + meetingTime + ' </h3> </div> <div class="panel-body">' +
                   '<b>Mentor:</b> ' + tmpMentorDetails + '<br><b>Updated At: </b>' + noteDate +
                   '<p><b>Meeting Notes:</b><br>' + notesHtml + '</p>' +
-                  '<b>Action Items:</b> ' + actionItemsHtml +
+                  '<b>Action Items:</b> ' + actionItemsHtml + imgsHTML +
                   ' </div> </div>';
               });
             }
