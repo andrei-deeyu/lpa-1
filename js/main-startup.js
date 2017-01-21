@@ -444,9 +444,35 @@
           var divDetailKey = key.replace("@", "");
           var mBio = "";
           if (mentorData.bio && mentorData.bio != undefined) {
-            mBio = (mentorData.bio).replace(/\n/g, "<br>");
+            mBio = '<h4><b>Bio</b></h4> ' + (mentorData.bio).replace(/\n/g, "<br>");
           }
+          var twitterStr = "";
+          if (mentorData.twitter) {
+            twitterStr = "<br><Br><b>Twitter: </b><a target='_blank' href='https://twitter.com/" + mentorData.twitter + "'>" + 
+              mentorData.twitter + " </a>";
+          }
+          var funFact = "";
+          if (mentorData.funFact && mentorData.funFact.length > 3) {
+            funFact = "<h5>Fun Fact: " + mentorData.funFact + "</h5>";
+          }
+          var site = "";
+          if (mentorData.site) {
+            site = "<br><b>Site:</b> <a target='_blank' href='" + mentorData.site + "'>" + mentorData.site +  "</a>";
+          }
+          var linkedin = "";
+          if (mentorData.linkedin && mentorData.linkedin.length > 4) {
+            var linkedinUrl = mentorData.linkedin;
+            if (mentorData.linkedin.indexOf("www.linkedin.com") < 0) {
+              linkedinUrl = "http://www.linkedin.com/in/" + mentorData.linkedin;
+            }
 
+            linkedin = "<br><b>Linkedin:</b> <a href='" + linkedinUrl + "' target='_blank'>" +
+              mentorData.linkedin + " </a>";
+          }
+          var expertiseStr = "";
+          if (mentorData.expertise) {
+            expertiseStr = "<br><b>Expertise</b> " + mentorData.expertise ;
+          }
           $("#mentors-list").append(
             '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
             mentorData.name + '<img src="' + mPicUrl + '" class="att-pic-card" alt="mentor picture" /> ' +
@@ -454,13 +480,12 @@
             '" aria-expanded="false" aria-controls="collapseMentorDetails"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span></button>' +
             '</h3> </div> <div id="mentor-panel-' + divDetailKey + '" class="panel-body mentor-edit collapse" data-key="' + key +
             '"> <h5><a href="mailto:' + mentorData.email + '" target="_blank">' + mentorData.email + '</a></h5>' +
-            '<b>Phone:</b> <a href="tel:' + mentorData.phone + '">' + mentorData.phone + '</a><br>' +
+            '<b>Phone:</b> <a href="tel:' + mentorData.phone + '">' + mentorData.phone + "</a><br>" +
             '<b>Domain:</b> ' + mentorData.domain + ' - <b>Secondary:</b> ' + mentorData.domainSec +
-            '<h4><b>Expertise</b></h4> ' + mentorData.expertise +
-            '<h4><b>Bio</b></h4> ' + mBio + ' </div> </div>'
+            expertiseStr + twitterStr + linkedin + funFact + site +
+            mBio + ' </div> </div>'
           );
         }
-
       });
     });
   }
@@ -596,13 +621,26 @@
         } else {
           role = " | " + role;
         }
+        var funFact = "";
+        if (attData.funFact && attData.funFact.length > 3) {
+          funFact = "<br><b>Fun Fact: </b>" + attData.funFact;
+        }
+        var linkedin = "";
+        if (attData.linkedin && attData.linkedin.length > 4) {
+          var linkedinUrl = attData.linkedin;
+          if (attData.linkedin.indexOf("www.linkedin.com") < 0) {
+            linkedinUrl = "http://www.linkedin.com/in/" + attData.linkedin;
+          }
+          linkedin = "<br><b>Linkedin:</b> <a href='" + linkedinUrl + "' target='_blank'>" +
+            attData.linkedin + " </a>";
+        }
+
         $("#att-list").append(
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
           attData.name + '<img src="' + picUrl + '" class="att-pic-card" alt="attendee picture"/>' +
           '</h3> </div> <div class="panel-body att-edit" data-key="' + key + '"><h4>' + attData.startup + role + '</h4>' +
           "<b>email: </b> <a href='mailto:" + attData.email + "' target='_blank'>" + attData.email + "</a>" +
-          '<br><b>Linkedin: </b> <a href="http://www.linkedin.com/in/' + attData.linkedin + '" target="_blank">' +
-          attData.linkedin + '</a><br><b>Fun Fact: </b> ' + attData.funFact +
+          linkedin + funFact +
           ' </div> </div>'
         );
       });

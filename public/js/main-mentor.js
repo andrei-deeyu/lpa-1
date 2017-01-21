@@ -830,7 +830,7 @@
           var divDetailKey = key.replace("@", "");
           var mBio = "";
           if (mentorData.bio && mentorData.bio != undefined) {
-            mBio = (mentorData.bio).replace(/\n/g, "<br>");
+            mBio = '<h4><b>Bio</b></h4> ' + (mentorData.bio).replace(/\n/g, "<br>");
           }
           var twitterStr = "";
           if (mentorData.twitter) {
@@ -847,8 +847,12 @@
           }
           var linkedin = "";
           if (mentorData.linkedin && mentorData.linkedin.length > 4) {
-            //http://www.linkedin.com/in/"
-            linkedin = "<br><b>Linkedin:</b> <a href='" + mentorData.linkedin + "' target='_blank'>" +
+            var linkedinUrl = mentorData.linkedin;
+            if (mentorData.linkedin.indexOf("www.linkedin.com") < 0) {
+              linkedinUrl = "http://www.linkedin.com/in/" + mentorData.linkedin;
+            }
+
+            linkedin = "<br><b>Linkedin:</b> <a href='" + linkedinUrl + "' target='_blank'>" +
               mentorData.linkedin + " </a>";
           }
           var expertiseStr = "";
@@ -865,7 +869,7 @@
             '<b>Phone:</b> <a href="tel:' + mentorData.phone + '">' + mentorData.phone + "</a><br>" +
             '<b>Domain:</b> ' + mentorData.domain + ' - <b>Secondary:</b> ' + mentorData.domainSec +
             expertiseStr + twitterStr + linkedin + funFact + site +
-            '<h4><b>Bio</b></h4> ' + mBio + ' </div> </div>'
+            mBio + ' </div> </div>'
           );
         }
 
