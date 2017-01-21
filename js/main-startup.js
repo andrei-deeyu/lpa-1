@@ -446,6 +446,13 @@
           if (mentorData.bio && mentorData.bio != undefined) {
             mBio = '<h4><b>Bio</b></h4> ' + (mentorData.bio).replace(/\n/g, "<br>");
           }
+          var geoLoc = "";
+          if (mentorData.country) {
+            geoLoc += "<br><b>From: </b> " + mentorData.country;
+          }
+          if (mentorData.city) {
+            geoLoc += " , " + mentorData.city; 
+          }
           var twitterStr = "";
           if (mentorData.twitter) {
             twitterStr = "<br><Br><b>Twitter: </b><a target='_blank' href='https://twitter.com/" + mentorData.twitter + "'>" + 
@@ -475,7 +482,7 @@
           }
           var expertiseStr = "";
           if (mentorData.expertise) {
-            expertiseStr = "<br><b>Expertise</b> " + mentorData.expertise ;
+            expertiseStr = "<br><b>Expertise: </b> " + mentorData.expertise ;
           }
           $("#mentors-list").append(
             '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
@@ -486,7 +493,7 @@
             '"> <h5><a href="mailto:' + mentorData.email + '" target="_blank">' + mentorData.email + '</a></h5>' +
             '<b>Phone:</b> <a href="tel:' + mentorData.phone + '">' + mentorData.phone + "</a><br>" +
             '<b>Domain:</b> ' + mentorData.domain + ' - <b>Secondary:</b> ' + mentorData.domainSec +
-            expertiseStr + twitterStr + linkedin + funFact + site +
+            geoLoc + expertiseStr + twitterStr + linkedin + funFact + site +
             mBio + ' </div> </div>'
           );
         }
