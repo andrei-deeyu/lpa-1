@@ -457,12 +457,16 @@
           }
           var site = "";
           if (mentorData.site) {
-            site = "<br><b>Site:</b> <a target='_blank' href='" + mentorData.site + "'>" + mentorData.site +  "</a>";
+            var siteUrl = mentorData.site;
+            if (mentorData.site.indexOf("http") < 0) {
+              siteUrl = "https://" + siteUrl;
+            }
+            site = "<br><b>Site:</b> <a target='_blank' href='" + siteUrl + "'>" + mentorData.site +  "</a>";
           }
           var linkedin = "";
           if (mentorData.linkedin && mentorData.linkedin.length > 4) {
             var linkedinUrl = mentorData.linkedin;
-            if (mentorData.linkedin.indexOf("www.linkedin.com") < 0) {
+            if (mentorData.linkedin.indexOf("linkedin.com") < 0) {
               linkedinUrl = "http://www.linkedin.com/in/" + mentorData.linkedin;
             }
 
