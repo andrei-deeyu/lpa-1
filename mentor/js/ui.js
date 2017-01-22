@@ -496,6 +496,7 @@ var UI = (function(firebaseApi, authModule, router) {
         navigate(e, 'LI');
       });
       ELEMENTS.profileSubmit.addEventListener('click', function(e) {
+        e.target.innerHTML = 'Saving...';
         let fields = ELEMENTS.profileForm.elements;
         let mentorId = firebaseApi.CURRENT_MENTOR_ID;
         let mentor = {
@@ -519,7 +520,10 @@ var UI = (function(firebaseApi, authModule, router) {
         };
         sendGaEvent('save-mentor', 'save-mentor-info-fields',
           'key: ' + firebaseApi.CURRENT_MENTOR_ID);
-        firebaseApi.saveMentor(mentorId, mentor);
+        firebaseApi.saveMentor(mentorId, mentor).then( () => {
+          e.target.innerHTML = 'Submit';
+          ELEMENTS.profileForm.querySelector('#lpa-profile-confirm').innerHTML = 'Profile saved.'
+        });
       });
       ELEMENTS.camera.addEventListener('change', e => {
         let file = e.target.files[0];
