@@ -287,6 +287,14 @@ var UI = (function(firebaseApi, authModule, router) {
           session.date = session.date.slice(0, 10);
           populate(node, ['date', 'mentorKey', 'meetingNotes', 'actionItems'],
                    session, 'innerText');
+          if (session.imgs) {
+            for (var i = 0; i < session.imgs.length; i++) {
+              let link = createCameraTile();
+              node.appendChild(link);
+              link.setAttribute('style', 'background-image: url(\'' + session.imgs[i] + '\')');
+              link.setAttribute('href', session.imgs[i]);
+            }
+          }
           ELEMENTS.startupNotes.appendChild(node);
         });
       }

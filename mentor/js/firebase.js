@@ -104,9 +104,9 @@ var firebaseApi = (function() {
       // e.g. /sessions/2016-05-01/startups/Aliada/notes/ewa@gmail-com/hour-1
       let startupNotesPath = ['', 'sessions', sessionDate, 'startups',
           startup, 'notes', api.CURRENT_MENTOR_ID, hourId].join('/');
-      // e.g. /notes-backup/2016-06-08/startups/BankFacil/notes/e@g-com/hour-2
-      let backupNotesPath = ['', 'notes-backup', sessionDate, 'startups',
-          startup, 'notes', api.CURRENT_MENTOR_ID, hourId].join('/');
+      // e.g. /notes-backup/startups/Aliada/2016-10-17/notes/greenido@gmail-com/hour-1476728831043
+      let backupNotesPath = ['', 'notes-backup', 'startups', startup,
+          sessionDate, 'notes', api.CURRENT_MENTOR_ID, hourId].join('/');
       if (!session) {
         session = {
           location: 'Ad hoc',
@@ -169,12 +169,12 @@ var firebaseApi = (function() {
     }
   };
 
-  // var config = {
-  //   apiKey: "AIzaSyBhd3NDwiqErIPa5Py55Mp0mpa2Jd4atrk",
-  //   authDomain: "lpa-3.firebaseapp.com",
-  //   databaseURL: "https://lpa-3-14341.firebaseio.com/",
-  //   storageBucket: "lpa-3-14341.appspot.com",
-  // };
+  /*var config = {
+     apiKey: "AIzaSyBhd3NDwiqErIPa5Py55Mp0mpa2Jd4atrk",
+     authDomain: "lpa-3.firebaseapp.com",
+     databaseURL: "https://lpa-3-14341.firebaseio.com/",
+     storageBucket: "lpa-3-14341.appspot.com",
+  };*/
   var config = {
     apiKey: "AIzaSyDImJzAqBmZVXdaK55jVfRuoaHVLBDFgxU",
     authDomain: "lpa-1.firebaseapp.com",
