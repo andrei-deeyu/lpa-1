@@ -221,7 +221,7 @@
                 <input type="text" class="note-slider" id="note-effective-' + tKey + '" name="note-effective" data-provide="slider" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide"> \
                 <br><br> \
             <h5>Meeting Notes</h5>What did you talk about? Any action items? \
-            <textarea id="' + tKey + '" class="form-control col-lg-10 meeting-notes-text" data-notes-backup="' + startupBackupNotesKey +
+            <textarea id="' + tKey + '" placeholder="Focus on primary purpose / challenge and please elaborate." class="form-control col-lg-10 meeting-notes-text" data-notes-backup="' + startupBackupNotesKey +
               '" data-starttime="' + startTime + '" data-endtime="' + endTime + '" name="meeting-notes">' +
               '</textarea>  <br><button class="btn btn-warning meeting-save-button">Save Notes</button> </p> </div> </div> </div>';
           }

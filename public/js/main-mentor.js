@@ -217,7 +217,7 @@
                 <input type="text" class="note-slider" id="note-effective-' + key + '" name="note-effective" data-provide="slider" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide"> \
                 <br><br> \
             <b>What did you talk about?</b> \
-            <textarea id="' + key + '" class="form-control col-lg-10 meeting-notes-text" data-key="' + meetingNotesKey +
+            <textarea id="' + key + '" placeholder="Focus on primary purpose / challenge and please elaborate." class="form-control col-lg-10 meeting-notes-text" data-key="' + meetingNotesKey +
             '" data-startup="' + startupNotesKey + '" data-notes-backup="' + startupBackupNotesKey +
             '" data-starttime="' + scData.starttime + '" data-endtime="' + scData.endtime + '" name="meeting-notes">' +
             '</textarea>  <br><b>What are the action items?</b> \
@@ -266,13 +266,13 @@
         '" name="note-effective" data-provide="slider" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide"> \
       <br><br> \
       What did you talked about? \
-      <textarea id="' + key + '" class="form-control col-lg-10 meeting-notes-text" data-key="' + meetingNotesKey +
+      <textarea id="' + key + '" placeholder="Focus on primary purpose / challenge and please elaborate." class="form-control col-lg-10 meeting-notes-text" data-key="' + meetingNotesKey +
         '" data-startup="' + startupNotesKey + '" data-notes-backup="' + startupBackupNotesKey +
         '" data-starttime="' + startTime + '" data-endtime="' + endTime + '" name="meeting-notes">' +
         '</textarea>  <br>What are the action items? \
       <textarea id="ai-' + key + '" class="form-control col-lg-10 meeting-notes-text" data-key="ai-' + meetingNotesKey +
         '" data-startup="ai-' + startupNotesKey + '" data-notes-backup="ai-' + startupBackupNotesKey +
-        '" name="meeting-notes"> </textarea> <h5>Photos</h5> ' +
+        '" name="meeting-notes" > </textarea> <h5>Photos</h5> ' +
         '<div class="row">' +
         '<div class="col-lg-5 col-md-5 col-sm-5 img-1-upload"> <label for="camera-1" class="cam-label-but"> <span class="glyphicon glyphicon-camera"></span> Camera </label> \
         <input type="file" accept="image/*" capture="camera" id="camera-1" class="camera-but"> </div> \
