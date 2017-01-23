@@ -272,3 +272,8 @@ td {
   background: rgba(44, 77, 181, 0.3);
   border-radius: 20px;
 }
+.col-centered {
+    float: none;
+    margin: 0 auto;
+    text-align: center;
+}

@@ -310,6 +310,9 @@
     var curUnixTime = new Date().getTime();
     var disTime = new Date().toJSON().slice(0, 21);
 
+    // We hold the open/close button to trigger it when the save operation is done.
+    var closingButton = $(this).parent().parent().find('button')[1];
+
     // save under notes for backup in case we re-set the schedule
     ref.child("notes-backup").child(keyToNotesBackup).set({
       receptive: listenVal,
@@ -325,6 +328,7 @@
       } else {
         console.log(keyToNotesBackup + " notes Saved to backup!");
         $(".save-alert").show();
+        closingButton.click();
         setTimeout(function() {
           $(".save-alert").hide();
         }, 2500);
