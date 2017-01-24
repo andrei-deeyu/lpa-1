@@ -977,13 +977,26 @@
         } else {
           role = " | " + role;
         }
+        var linkedin = "";
+        if (attData.linkedin && attData.linkedin.length > 4) {
+          var linkedinUrl = attData.linkedin;
+          if (attData.linkedin.indexOf("linkedin.com") < 0) {
+            linkedinUrl = "http://www.linkedin.com/in/" + attData.linkedin;
+          }
+          linkedin = "<br><b>Linkedin:</b> <a href='" + linkedinUrl + "' target='_blank'>" +
+              attData.linkedin + " </a>";
+        }
+        var funFact = "";
+        if (attData.funFact) {
+          funFact = '<br><b>Fun Fact: </b> ' + attData.funFact;
+        }
+
         $("#att-list").append(
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
           attData.name + '<img src="' + picUrl + '" class="att-pic-card" alt="attendee picture"/> ' +
           '</h3> </div> <div class="panel-body att-edit" data-key="' + key + '"> <h4>' + attData.startup +
-          role + '</h4>' + "<b>email:</b><a href='mailto:" + attData.email + "' target='_blank'>" + attData.email + "</a>" +
-          '<br><b>Linkedin:</b> <a href="http://www.linkedin.com/in/' +
-          attData.linkedin + '" target="_blank">' + attData.linkedin + '</a><br><b>Fun Fact:</b> ' + attData.funFact +
+          role + '</h4>' + "<b>email: </b><a href='mailto:" + attData.email + "' target='_blank'>" + attData.email + "</a>" +
+          linkedin + funFact +
           ' </div> </div>'
         );
       });
