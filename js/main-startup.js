@@ -413,7 +413,7 @@
         }
         if (startupData.video && startupData.video.length > 5) {
           var videoLink = addhttp(startupData.video);
-          videoButton = '&nbsp; <a href="' + videoLink + '" target="_blank" class="btn btn-sm btn-info">Intro Clip</a>  ';
+          videoButton = '&nbsp; <a href="' + videoLink + '" target="_blank" class="btn  btn-info"> <span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span></a>  ';
         }
         $("#startups-list").append(
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +

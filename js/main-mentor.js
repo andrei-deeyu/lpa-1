@@ -672,7 +672,7 @@
         var videoButton = "";
         if (startupData.video && startupData.video.length > 5) {
           var videoLink = addhttp(startupData.video);
-          videoButton = '<a href="' + videoLink + '" target="_blank" class="btn btn-info ">Intro Clip</a>  ';
+          videoButton = '<a href="' + videoLink + '" target="_blank" class="btn btn-info "> <span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span> </a>  ';
         }
         var twitterLink = "";
         if (startupData.twitter && startupData.twitter.length > 2) {
@@ -681,7 +681,7 @@
         var onePagerButton = "";
         if (startupData.historyUrl && startupData.historyUrl.length > 4) {
           var onePagerLink = addhttp(startupData.historyUrl);
-          onePagerButton = '<a href="' + onePagerLink + '" target="_blank" class="btn btn-info">First Day Evaluation</a>  ';
+          onePagerButton = '<a href="' + onePagerLink + '" target="_blank" class="btn btn-info">1-Pager</a>  ';
         }
         $("#startups-list").append(
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
@@ -689,7 +689,7 @@
           '</h3> </div> <div class="panel-body startup-edit" data-key="' + key + '"> <div class="startup-card-desc">' + startupData.description +
           '</div><b>From: </b>' + startupData.country + '  ' + startupData.city +
           '<b> Founded: </b>' + founded + '<br><b>Employees: </b>' + startupData.numEmployees +
-          twitterLink + '<br>' + videoButton + '&nbsp;&nbsp;' + onePagerButton +
+          twitterLink + '<br><br>' + videoButton + '&nbsp;&nbsp;' + onePagerButton +
           '&nbsp;&nbsp;&nbsp;<button class="btn btn-warning fetch-notes-button" data-key="' +
           startupData.name + '">Notes</button> </div> </div>'
         );
