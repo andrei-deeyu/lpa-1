@@ -411,14 +411,18 @@
         if (startupData.twitter && startupData.twitter.length > 2) {
           twitterLink = '&nbsp;&nbsp;<b>Twitter:</b> <a href="http://twitter.com/' + startupData.twitter + '" target="_blank">' + startupData.twitter + '</a>';
         }
+        if (startupData.video && startupData.video.length > 5) {
+          var videoLink = addhttp(startupData.video);
+          videoButton = '&nbsp; <a href="' + videoLink + '" target="_blank" class="btn btn-sm btn-info">Intro Clip</a>  ';
+        }
         $("#startups-list").append(
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
-          startupData.name + "&nbsp;&nbsp;<img src='" + startupLogoUrl + "' class='logo-img' alt='startup logo'>" +
+          startupData.name + "&nbsp;&nbsp;<img src='" + startupLogoUrl + "' class='logo-img' alt='startup logo'>" + videoButton + 
           '</h3> </div> <div class="panel-body startup-edit" data-key="' + key + '"> <div class="startup-card-desc">' +
-          startupData.description + '</div><b>From:</b> ' +
+          startupData.description + '</div><br><b>From:</b> ' +
           startupData.country + '  ' + startupData.city +
-          '<b>  Founded:</b> ' + startupData.dateFounded + '</b><br><b>Employees:</b> ' + startupData.numEmployees + twitterLink +
-          ' </div> </div>'
+          '<b>  Founded:</b> ' + startupData.dateFounded + '</b><br><b>Employees:</b> ' + startupData.numEmployees + 
+          twitterLink  + ' </div> </div>'
         );
       });
       var selHtml = getStartupSelect();
@@ -732,11 +736,11 @@
   // check for online / lie-fi / offline
   window.addEventListener("offline", function(e) {
     console.log('You are OFFLINE');
-    $("#online-status").html(" Offline");
+    //$("#online-status").html(" Offline");
   }, false);
 
   window.addEventListener("online", function(e) {
     console.log("we are back online!");
-    $("#online-status").html(" Online");
+    //$("#online-status").html(" Online");
   }, false);
 })();
