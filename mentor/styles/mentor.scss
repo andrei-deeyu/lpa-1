@@ -348,12 +348,29 @@ header::before {
   flex-shrink: 0;
 }
 
+.lpa-mentor-avatar-wrapper {
+  width: 80px;
+  flex-shrink: 0;
+}
+
 .mdl-list__item-avatar.lpa-mentor-avatar {
   width: 60px;
   height: 60px;
   text-align: center;
   line-height: 60px;
   position: absolute;
+}
+
+.material-icons > svg {
+  vertical-align: top;
+}
+
+.lpa-domain {
+  margin: 20px 0;
+}
+
+p[data-field="expertise"]::before {
+    content: "Expertise: ";
 }
 
 .lpa-attendee-avatar {

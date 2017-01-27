@@ -75,6 +75,13 @@ var UI = (function(firebaseApi, authModule, router) {
     return el;
   };
 
+  function linkify(link) {
+    if (link.indexOf('http') != 0) {
+      link = 'http://' + link;
+    }
+    return link;
+  };
+
   function createCameraTile() {
     let link = document.createElement('a');
     link.setAttribute('target', '_blank');
@@ -114,13 +121,17 @@ var UI = (function(firebaseApi, authModule, router) {
   function populate(node, fields, obj, attr) {
     for (var i = 0; i < fields.length; i++) {
       let selector = '[data-field="' + fields[i].toLowerCase() + '"]';
-      node.querySelector(selector)[attr] = obj[fields[i]] || '';
+      if (obj[fields[i]]) {
+        let el = node.querySelector(selector);
+        el[attr] = obj[fields[i]] || '';
+        el.classList.remove('hidden');
+      }
     }
   };
 
   function fillStartupTemplate(template, startup) {
     let node = template.content.cloneNode(true);
-    let fields = ['name', 'description', 'country', 'city', 'dateFounded', 'numEmployees'];
+    let fields = ['name', 'description', 'country', 'city', 'dateFoundedYear', 'numEmployees'];
     populate(node, fields, startup, 'innerText');
     node.querySelector('[data-field="logo"]').src = startup.logo;
     node.querySelector('[data-field="historyurl"]').href = startup.historyUrl;
@@ -174,22 +185,34 @@ var UI = (function(firebaseApi, authModule, router) {
           let node = TEMPLATES.mentorsListTemplate.content.cloneNode(true);
           let links = {
             'site': mentorSnapshot.site,
-            'email': 'mailoto:' + mentorSnapshot.email,
-            'twitter': 'https://twitter.com/' + mentorSnapshot.twitter,
-            'linkedin': 'https://pl.linkedin.com/in/' + mentorSnapshot.linkedin
+            'email': mentorSnapshot.email,
+            'twitter': mentorSnapshot.twitter,
+            'linkedin': mentorSnapshot.linkedin
           };
+          if (links.email) {
+            links.email = 'mailoto:' + links.email;
+          }
+          if (links.site) {
+            links.site = linkify(mentorSnapshot.site);
+          }
+          if (links.linkedin && links.linkedin.indexOf('linkedin.com') === -1) {
+            links.linkedin = 'https://linkedin.com/in/' + links.linkedin;
+          }
+          if (links.twitter && links.twitter.indexOf('@') === 0) {
+            links.twitter = links.twitter.replace('@', '');
+          }
+          if (links.twitter && links.twitter.indexOf('twitter.com') === -1) {
+            links.twitter = 'https://twitter.com/' + links.twitter;
+          }
           populate(node, ['site', 'email', 'twitter', 'linkedin'],
                    links, 'href');
           populate(node, ['name', 'city', 'country', 'domain', 'domainSec',
-                   'expertise'], mentorSnapshot, 'innerText');
+                   'expertise', 'bio'], mentorSnapshot, 'innerText');
           let pic = node.querySelector('[data-field="pic"]');
           ELEMENTS.mentorsList.appendChild(node);
           if (mentorSnapshot.pic) {
-            if (mentorSnapshot.pic.indexOf('http') != 0) {
-              mentorSnapshot.pic = 'http://' + mentorSnapshot.pic;
-            }
             pic.innerText = ' ';
-            pic.setAttribute('style', 'background: url("'+ mentorSnapshot.pic + '") center/cover;');
+            pic.setAttribute('style', 'background: url("'+ linkify(mentorSnapshot.pic) + '") center/cover;');
           }
         });
       }
