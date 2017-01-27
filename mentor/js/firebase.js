@@ -70,6 +70,9 @@ var firebaseApi = (function() {
           snapshots.forEach(snapshot => {
             let startup = snapshot.val();
             startup.key = snapshot.key;
+            if (startup.dateFounded) {
+              startup.dateFoundedYear = startup.dateFounded.split('-')[0];
+            }
             CACHE.startups[startup.key] = startup;
             values.push(startup);
           });

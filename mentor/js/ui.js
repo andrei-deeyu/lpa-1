@@ -120,7 +120,7 @@ var UI = (function(firebaseApi, authModule, router) {
 
   function fillStartupTemplate(template, startup) {
     let node = template.content.cloneNode(true);
-    let fields = ['name', 'description', 'country', 'city', 'dateFounded', 'numEmployees'];
+    let fields = ['name', 'description', 'country', 'city', 'dateFoundedYear', 'numEmployees'];
     populate(node, fields, startup, 'innerText');
     node.querySelector('[data-field="logo"]').src = startup.logo;
     node.querySelector('[data-field="historyurl"]').href = startup.historyUrl;
