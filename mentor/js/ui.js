@@ -121,9 +121,9 @@ var UI = (function(firebaseApi, authModule, router) {
   function populate(node, fields, obj, attr) {
     for (var i = 0; i < fields.length; i++) {
       let selector = '[data-field="' + fields[i].toLowerCase() + '"]';
+      let el = node.querySelector(selector);
+      el[attr] = obj[fields[i]] || '';
       if (obj[fields[i]]) {
-        let el = node.querySelector(selector);
-        el[attr] = obj[fields[i]] || '';
         el.classList.remove('hidden');
       }
     }
@@ -334,7 +334,7 @@ var UI = (function(firebaseApi, authModule, router) {
       if (ELEMENTS.main.scrollTo) {
         ELEMENTS.main.scrollTo(0, 0);
       };
-      ELEMENTS.main.scrollIntoView();
+      ELEMENTS.main.scrollTop = 0;
       return subpage;
     },
     displaySchedule: function(schedule) {

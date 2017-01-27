@@ -48,7 +48,7 @@ template {
   opacity: 1;
   max-height: 6000px;
   overflow: visible;
-  margin-bottom: 400px;
+  padding-bottom: 200px;
 }
 
 .lpa-subpage h1 {
@@ -65,8 +65,8 @@ template {
   justify-content: inherit;
 }
 
-.lpa-sign-in-section,
-.lpa-unregistered-section {
+.lpa-sign-in-section.lpa-active,
+.lpa-unregistered-section.lpa-active {
   padding: 30px;
   text-align: center;
   background: rgb(0, 188, 212);
@@ -321,6 +321,7 @@ header::before {
 .lpa-startups-logo {
   max-width: 100px;
   margin: 12px 24px 12px 0;
+  flex-shrink: 0;
 }
 
 .lpa-list-name {
