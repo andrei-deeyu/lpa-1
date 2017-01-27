@@ -401,6 +401,9 @@ var UI = (function(firebaseApi, authModule, router) {
     },
     addListeners: function() {
       ELEMENTS.mainNav.addEventListener('click', navigate);
+      ELEMENTS.mdlLayout.querySelector('.lpa-help-link').addEventListener('click', navigate);
+
+      ELEMENTS.mainNav.addEventListener('click', navigate);
       ELEMENTS.userNav.addEventListener('click', e => {
         let links = ELEMENTS.mainNav.querySelectorAll('.is-active');
         for (var i = 0; i < links.length; i++) {
