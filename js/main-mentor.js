@@ -487,10 +487,10 @@
       bootbox.alert("<h4>Please fill the notes and write in few sentences what you talked about.</h4>");
       return;
     }
-    if (actionItems.length < 3) {
-      bootbox.alert("<h4>Please write the action items that you gave the startups.</h4>");
-      return;
-    }
+    // if (actionItems.length < 3) {
+    //   bootbox.alert("<h4>Please write the action items that you gave the startups.</h4>");
+    //   return;
+    // }
     var sliders = thisElem.parent().find('input');
     var receptiveVal = $("#" + sliders[0].id).slider('getValue');
     var effectiveVal = $("#" + sliders[1].id).slider('getValue');
