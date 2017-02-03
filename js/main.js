@@ -1441,6 +1441,8 @@
         );
       });
       gotDataForSchedule++;
+      console.log("We got " + mentorsList.length + " mentors. ");
+      $("#mentor-export-div").html("<h3>Loaded " + mentorsList.length + " mentors</h3>");
     });
   }
 
@@ -1684,6 +1686,7 @@
     var readRef = firebase.database().ref("attendees");
     readRef.orderByKey().on("value", function(snapshot) {
       $("#att-list").html("");
+      var attCount = 0;
       snapshot.forEach(function(childSnapshot) {
         var key = childSnapshot.key;
         var attData = childSnapshot.val();
@@ -1692,6 +1695,7 @@
         if (role === undefined || role === null) {
           role = "";
         }
+        attCount++;
         $("#att-list").append(
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
           attData.name + '<img src="' + picUrl + '" class="att-pic-card" alt="attendee picture"/>' +
@@ -1705,6 +1709,7 @@
           attData.linkedin + "' target='_blank'>" + attData.linkedin + '</a> </div> </div>'
         );
       });
+      $("#att-list-meta-data").html("<h3>Loaded " + attCount + " Attendees</h3>");
     });
   }
 
