@@ -14,28 +14,39 @@
   <title>LPA - Mentor</title>
   <meta name="description" content="A note for our LPA">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel=manifest href=manifest.json>
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel=manifest href=manifest-m.json>
   <meta name=mobile-web-app-capable content=yes>
   <meta name=application-name content="LPA-1">
   <link rel=icon sizes=192x192 href=img/pencil-192.png>
   <meta name=apple-mobile-web-app-capable content=yes>
   <meta name=apple-mobile-web-app-status-bar-style content=black>
   <meta name=apple-mobile-web-app-title content="LPA">
-  <link rel=apple-touch-icon href=img/pencil-192.png>
+  
   <meta name=msapplication-TileImage content=img/pencil-144.png>
   <meta name=msapplication-TileColor content=#2196F3>
   <meta name=theme-color content=#2196F3>
   <meta property=og:title content="LPA">
   <meta property=og:type content=website>
+<<<<<<< HEAD
   <meta property=og:image content=https://lpa-space.firebaseapp.com/img/pencil-192.png>
   <meta property=og:url content="https://lpa-space.firebaseapp.com/">
   <meta property=og:description content="Our LPA web app! Smile!">
+=======
+  <meta property=og:image content=https://lpa-1.firebaseapp.com/img/pencil-192.png>
+  <meta property=og:url content="https://lpa-1.firebaseapp.com/">
+  <meta property=og:description content="Our LPA mentors web app">
+>>>>>>> master
   <meta name=twitter:card content=summary>
   <meta name=twitter:url content="https://lpa-space.firebaseapp.com">
   <meta name=twitter:title content="LPA">
+<<<<<<< HEAD
   <meta name=twitter:description content="Our LPA web app! Smile!">
   <meta name=twitter:image content=https://lpa-space.firebaseapp.com/img/pencil-192.png>
+=======
+  <meta name=twitter:description content="Our LPA mentors web app">
+  <meta name=twitter:image content=https://lpa-1.firebaseapp.com/img/pencil-192.png>
+>>>>>>> master
   <meta name=twitter:creator content=@greenido>
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
@@ -66,7 +77,7 @@
           <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="#"><img src="img/lpa-logo-40.jpg" alt="lpa logo" class="lpa-logo" /></a>
-        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 centered alert alert-success save-alert">
+        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 col-centered alert alert-success save-alert">
           <strong>Saved!</strong>
         </div>
       </div>
@@ -115,7 +126,7 @@
               <div class="col-md-12 col-lg-12 col-sm-12 text-center">
                 Day:
                 <input type="date" class="schedule-day-x  text-center" id="schedule-day-1">
-                <button id="sc-reload-button" class="btn btn-warning">Reload</button>
+                <button id="sc-reload-button" class="btn btn-info">Reload</button>
               </div>
             </div>
             <div class="row">
@@ -224,19 +235,26 @@
                     <option>UX</option>
                     <option>Tech</option>
                     <option>Product</option>
+                    <option>Google Product</option>
                     <option>Marketing</option>
                     <option>Business</option>
+                    <option>Monetization</option>
+                    <option>Fundraising</option>
                   </select>
                 </div>
                 <!-- more -->
                 <label for="form-domain-sec-select">Secondary Domain</label>
                 <div class="input-group">
                   <select id="form-domain-sec-select" class="selectpicker" data-style="btn-info">
+                     <option>N/A</option>
                     <option>UX</option>
                     <option>Tech</option>
                     <option>Product</option>
+                    <option>Google Product</option>
                     <option>Marketing</option>
                     <option>Business</option>
+                    <option>Monetization</option>
+                    <option>Fundraising</option>
                   </select>
                 </div>
                 <div class="form-group">
@@ -258,7 +276,7 @@
                 <label for="form-expertise">Expertise</label>
                 <textarea class="form-control col-lg-6" id="form-expertise" name="expertise"></textarea>
                 <br>
-                <label for="form-linkedin-url">Your LinkedIn</label>
+                <label for="form-linkedin-url">LinkedIn</label>
                 <div class="input-group">
                   <span class="input-group-addon" id="form-linkedin-url-pre">http://www.linkedin.com/in/</span>
                   <input type="text" class="form-control" id="form-linkedin-url">
@@ -279,7 +297,7 @@
                   <button id="form-cancel-mentor" class="btn btn-default">Clear</button>
                   <button id="form-save-mentor" type="submit" class="btn btn-success">Save</button>
                 </div>
-                <div class="col-lg-2 col-md-2 col-sm-2 col-offset-4 centered alert alert-success save-alert">
+                <div class="col-lg-5 col-md-5 col-sm-5 col-offset-4 col-centered alert alert-success save-alert">
                   <strong>Saved!</strong>
                 </div>
                 <div id="alert-warning-sign-in" class="col-lg-3 col-md-3 col-sm-3 col-offset-4 centered alert alert-danger">
@@ -455,7 +473,7 @@
       </li>
       <li data-id="s-tab-li" data-button="Next" data-options="tipAnimation:fade">
         <h2>Startups</h2>
-        <p>See which startups are part of this LPA</p>
+        <p>Learn about the startups in this LPA class</p>
       </li>
       <li data-id="mentors-tab-li" data-button="Next" data-options="tipLocation:right">
         <h2>Mentors</h2>
