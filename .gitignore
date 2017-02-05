@@ -9,3 +9,9 @@ IDs.txt
 
 node_modules/*
 
+node_modules
+public
+dist
+**/.DS_Store
+
+.vscode/launch.json

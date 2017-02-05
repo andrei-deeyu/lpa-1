@@ -4,7 +4,7 @@
 The goal of these apps is to enable us to run a LPA event(s).
 We got three web apps:
 
-* [Admin Web App](https://lpa-1.firebaseapp.com/) - Used by the organizers to set the schedule for the mentors and startups. 
+* [Admin Web App](https://lpa-1.firebaseapp.com/) - Used by the organizers to set the schedule for the mentors and startups.
   * The mentors and attendees emails/names should be added to the system so they will be 'white listed'.
   * The startups' details should be filled.
   * The schedule per day of the LPA.
@@ -32,6 +32,14 @@ Please use: [Open an issue](https://github.com/greenido/lpa-1/issues)
 Also check: https://status.firebase.google.com/ just to be on the safe side.
 
 -----
+## Build and run locally
+
+Make sure you have gulp installed (`npm install -g gulp`).
+
+`npm install`
+`gulp serve`
+
+-----
 ## ToDos
 
 ### General
@@ -47,26 +55,26 @@ Also check: https://status.firebase.google.com/ just to be on the safe side.
 ### Sing-in
 * [x] Enable an option to use Google
 
-### Help 
+### Help
 * [ ] Add mailto explanation for Chrome: chrome://settings/handlers
 * [x] Add an intro to show the function/power user options in the app.
 
 -----
 
 ![LPA PWA](https://lpa-1.firebaseapp.com/img/lion-hd.jpeg)
-####A lion runs the fastest when he is hungry. 
+####A lion runs the fastest when he is hungry.
 -----
 
 ## Data Model
 
-### Mentor 
+### Mentor
 * Key: email (but with '-' instead of '.')
 * Name
 * Email
 * Domain (ux, tech, product, marketing)
 * Expertise - free text
 * LinkedIn Url
-* Personal website Url 
+* Personal website Url
 * Country
 * City
 * Picture Url
@@ -78,8 +86,8 @@ Also check: https://status.firebase.google.com/ just to be on the safe side.
 * Country
 * City
 * Fund raised
-* Number of employees 
-* Date founded. 
+* Number of employees
+* Date founded.
 * Logo Url
 * Team photo Url
 * Application Video Url
@@ -99,13 +107,13 @@ Also check: https://status.firebase.google.com/ just to be on the safe side.
 * Name
 * Address (free format)
 * Comments
-* unixTime (when it was added/updated) 
+* unixTime (when it was added/updated)
 
 
 ### Session
 
 #### This view is used by our attendee app
-* Key: date (yyyy-mm-dd) / startups / startup name 
+* Key: date (yyyy-mm-dd) / startups / startup name
   * comments (for the day)
   * mentors
     * 0-8
@@ -113,13 +121,13 @@ Also check: https://status.firebase.google.com/ just to be on the safe side.
       * mentor name
 
 #### This view is used by our mentor app
-* Key: date (yyyy-mm-dd) / mentors / mentor email 
+* Key: date (yyyy-mm-dd) / mentors / mentor email
   * hours (1-9)
     * startup name
     * mentor name
-    * notes 
+    * notes
       * meeting notes
-      * unixTime 
+      * unixTime
       * date
 
 ### Notes
@@ -129,8 +137,8 @@ Also check: https://status.firebase.google.com/ just to be on the safe side.
         * attendee email
           * hour of session
             * date
-            * effective 
-            * meetingNotes 
+            * effective
+            * meetingNotes
             * mentorName
             * receptive
             * unixTime
@@ -159,4 +167,3 @@ Unless required by applicable law or agreed to in writing, software distributed 
 Please note: this is not a Google product
 
 [![Analytics](https://ga-beacon.appspot.com/UA-65622529-1/LPA-1/)](https://github.com/igrigorik/ga-beacon)
-

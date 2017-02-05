@@ -15,7 +15,7 @@
   <meta name="description" content="A note for our LPA">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-  <link rel=manifest href=manifest.json>
+  <link rel=manifest href=manifest-s.json>
   <meta name=mobile-web-app-capable content=yes>
   <meta name=application-name content="LPA-1">
   <link rel=icon sizes=192x192 href=img/pencil-192.png>
@@ -65,7 +65,7 @@
           <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="#"><img src="img/lpa-logo-40.jpg" alt="lpa logo" class="lpa-logo" /></a>
-        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 centered alert alert-success save-alert">
+        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 col-centered alert alert-success save-alert">
           <strong>Saved!</strong>
         </div>
       </div>
@@ -84,9 +84,7 @@
           <span id='spin'><i class="fa fa-spinner fa-spin"></i></span>
         </form>
         <div id="logout-div"></div>
-        <form class='navbar-form navbar-right' role='form'>
-          <button id="online-status" type="button" class="btn btn-info " disabled>Online</button>
-        </form>
+        
       </div>
       <!--/.navbar-collapse -->
     </div>
@@ -196,7 +194,7 @@
   <div class="input-group">
     <input type="text" class="form-control" id="att-role" placeholder="CEO, CTO, etc.">
   </div>
-  <label for="att-linkedin-url">Your LinkedIn</label>
+  <label for="att-linkedin-url">LinkedIn</label>
   <div class="input-group">
     <span class="input-group-addon" id="att-linkedin-url-pre">http://www.linkedin.com/in/</span>
     <input type="text" class="form-control" id="att-linkedin-url">
@@ -213,7 +211,7 @@
   <div class="action-buttons">
     <button id="att-save-button" type="submit" class="btn btn-success">Save</button>
   </div>
-  <div class="col-lg-2 col-md-2 col-sm-2 col-offset-4 centered alert alert-success save-alert">
+  <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 col-offset-4 col-centered alert alert-success save-alert">
     <strong>Saved!</strong>
   </div>
   </div>
@@ -249,7 +247,6 @@
           <hr>
           <p>
             <a href="https://github.com/greenido/lpa-1-issues/issues/new" class="btn btn-success" target="_blank">Feedback</a>
-            <a href="https://events.withgoogle.com/bootcamp-class-2" class="btn btn-warning" target="_blank">Bootcamp</a>
           </p>
         </div>
       </div>
@@ -258,9 +255,9 @@
   <!-- Help Content -->
   <ol id="joyRideTipContent">
     <li data-id="y-tab-li" data-button="Next" data-options="tipAnimation:fade">
-      <h2>You The Attendee</h2>
-      <p>First time you here?
-        <h5>1. Please fill all the details.<br>2. Sign in (at the top right corner)</h5>
+      <h2>Your profile</h2>
+      <p>First time you are here?
+        <h5>Please fill in all your profile details.</h5>
       </p>
     </li>
     <li data-id="m-schedule-tab" data-button="Next" data-options="tipLocation:left;tipAnimation:fade">
@@ -269,7 +266,7 @@
     </li>
     <li data-id="s-tab-li" data-button="Next" data-options="tipAnimation:fade">
       <h2>Startups</h2>
-      <p>See which startups are part of this LPA</p>
+      <p>Learn about the other LPA startups</p>
     </li>
     <li data-id="mentors-tab-li" data-button="Next" data-options="tipLocation:right">
       <h2>Mentors</h2>
@@ -277,7 +274,7 @@
     </li>
     <li data-id="a-tab-li" data-button="Done" data-options="tipLocation:right">
       <h2>Attendees</h2>
-      <p>See the other attendees' details. <br>Btw, you might want to 'Add to home screen' this app. It will help you get it quicker on your next session!</p>
+      <p>See the other attendees' details. <br>Btw, you might want to 'Add to home screen' this app. It will help you get to it quicker on your next session!</p>
     </li>
     <!--   <li data-id="chat-tab-li" data-button="Done" data-options="tipLocation:right">
       <h2>Conversation</h2>
