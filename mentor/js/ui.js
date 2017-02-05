@@ -59,12 +59,42 @@ var UI = (function(firebaseApi, authModule, router) {
     scheduleListTemplate: document.getElementById('tmpl-schedule-list')
   };
 
+  function sendGaEvent(category, action, label) {
+    ga('send', {
+      hitType: 'event',
+      eventCategory: category,
+      eventAction: action,
+      eventLabel: label
+    });
+  };
+
   function getParentNodeByType(el, nodeType) {
     while (el && el.tagName !== nodeType) {
        el = el.parentNode;
     }
     return el;
   };
+
+  function linkify(link) {
+    if (link.indexOf('http') != 0) {
+      link = 'http://' + link;
+    }
+    return link;
+  };
+
+  function createCameraTile() {
+    let link = document.createElement('a');
+    link.setAttribute('target', '_blank');
+    link.classList.add('lpa-survey-img');
+    return link;
+  };
+
+  function resetTextField(field, value) {
+    field.innerHTML = value || '';
+    field.value = value || '';
+    field.parentNode.classList.toggle('is-dirty', field.value);
+    field.parentNode.classList.remove('is-invalid');
+  }
 
   function navigate(e, opt_elType) {
     e.preventDefault();
@@ -91,15 +121,20 @@ var UI = (function(firebaseApi, authModule, router) {
   function populate(node, fields, obj, attr) {
     for (var i = 0; i < fields.length; i++) {
       let selector = '[data-field="' + fields[i].toLowerCase() + '"]';
-      node.querySelector(selector)[attr] = obj[fields[i]] || '';
+      let el = node.querySelector(selector);
+      el[attr] = obj[fields[i]] || '';
+      if (obj[fields[i]]) {
+        el.classList.remove('hidden');
+      }
     }
   };
 
   function fillStartupTemplate(template, startup) {
     let node = template.content.cloneNode(true);
-    populate(node, ['name', 'description', 'country', 'city', 'dateFounded', 'numEmployees'],
-        startup, 'innerText');
+    let fields = ['name', 'description', 'country', 'city', 'dateFoundedYear', 'numEmployees'];
+    populate(node, fields, startup, 'innerText');
     node.querySelector('[data-field="logo"]').src = startup.logo;
+    node.querySelector('[data-field="historyurl"]').href = startup.historyUrl;
     return node;
   }
 
@@ -110,8 +145,14 @@ var UI = (function(firebaseApi, authModule, router) {
     ELEMENTS: ELEMENTS,
     updateUser: function(user) {
       document.body.classList.toggle('lpa-signed-in', !!user);
+      document.body.classList.toggle(
+          'lpa-registered', !!firebaseApi.CURRENT_MENTOR);
       if (user) {
-        UI.showSubpage('schedule');
+        if (!firebaseApi.CURRENT_MENTOR) {
+          UI.showSubpage('unregistered');
+        } else {
+          UI.showSubpage('schedule');
+        }
       } else {
         UI.showSubpage('signin');
         ELEMENTS.mentorsList.innerHTML = '';
@@ -130,10 +171,10 @@ var UI = (function(firebaseApi, authModule, router) {
         field.value = mentor[fieldNames[i]] || '';
         field.parentNode.MaterialTextfield.checkDirty();
       }
-      fieldNames = ['bio', 'funfact', 'expertise'];
+      fieldNames = ['bio', 'funFact', 'expertise'];
       for (var i = 0; i < fieldNames.length; i++) {
-        let field = fields['lpa-profile-' + fieldNames[i]];
-        field.inerHTML = mentor[fieldNames[i]] || '';
+        let field = fields['lpa-profile-' + fieldNames[i].toLowerCase()];
+        field.innerHTML = mentor[fieldNames[i]] || '';
         field.parentNode.MaterialTextfield.checkDirty();
       }
     },
@@ -144,22 +185,34 @@ var UI = (function(firebaseApi, authModule, router) {
           let node = TEMPLATES.mentorsListTemplate.content.cloneNode(true);
           let links = {
             'site': mentorSnapshot.site,
-            'email': 'mailoto:' + mentorSnapshot.email,
-            'twitter': 'https://twitter.com/' + mentorSnapshot.twitter,
-            'linkedin': 'https://pl.linkedin.com/in/' + mentorSnapshot.linkedin
+            'email': mentorSnapshot.email,
+            'twitter': mentorSnapshot.twitter,
+            'linkedin': mentorSnapshot.linkedin
           };
+          if (links.email) {
+            links.email = 'mailoto:' + links.email;
+          }
+          if (links.site) {
+            links.site = linkify(mentorSnapshot.site);
+          }
+          if (links.linkedin && links.linkedin.indexOf('linkedin.com') === -1) {
+            links.linkedin = 'https://linkedin.com/in/' + links.linkedin;
+          }
+          if (links.twitter && links.twitter.indexOf('@') === 0) {
+            links.twitter = links.twitter.replace('@', '');
+          }
+          if (links.twitter && links.twitter.indexOf('twitter.com') === -1) {
+            links.twitter = 'https://twitter.com/' + links.twitter;
+          }
           populate(node, ['site', 'email', 'twitter', 'linkedin'],
                    links, 'href');
           populate(node, ['name', 'city', 'country', 'domain', 'domainSec',
-                   'expertise'], mentorSnapshot, 'innerText');
+                   'expertise', 'bio'], mentorSnapshot, 'innerText');
           let pic = node.querySelector('[data-field="pic"]');
           ELEMENTS.mentorsList.appendChild(node);
           if (mentorSnapshot.pic) {
-            if (mentorSnapshot.pic.indexOf('http') != 0) {
-              mentorSnapshot.pic = 'http://' + mentorSnapshot.pic;
-            }
             pic.innerText = ' ';
-            pic.setAttribute('style', 'background: url("'+ mentorSnapshot.pic + '") center/cover;');
+            pic.setAttribute('style', 'background: url("'+ linkify(mentorSnapshot.pic) + '") center/cover;');
           }
         });
       }
@@ -258,6 +311,14 @@ var UI = (function(firebaseApi, authModule, router) {
           session.date = session.date.slice(0, 10);
           populate(node, ['date', 'mentorKey', 'meetingNotes', 'actionItems'],
                    session, 'innerText');
+          if (session.imgs) {
+            for (var i = 0; i < session.imgs.length; i++) {
+              let link = createCameraTile();
+              node.appendChild(link);
+              link.setAttribute('style', 'background-image: url(\'' + session.imgs[i] + '\')');
+              link.setAttribute('href', session.imgs[i]);
+            }
+          }
           ELEMENTS.startupNotes.appendChild(node);
         });
       }
@@ -273,7 +334,7 @@ var UI = (function(firebaseApi, authModule, router) {
       if (ELEMENTS.main.scrollTo) {
         ELEMENTS.main.scrollTo(0, 0);
       };
-      ELEMENTS.main.scrollIntoView();
+      ELEMENTS.main.scrollTop = 0;
       return subpage;
     },
     displaySchedule: function(schedule) {
@@ -284,24 +345,27 @@ var UI = (function(firebaseApi, authModule, router) {
           populate(node, ['starttime', 'location', 'startup'], session, 'innerText');
           let mentorId = firebaseApi.CURRENT_MENTOR_ID;
           node.firstElementChild.querySelector('.lpa-survey-btn').addEventListener(
-              'click', UI.showSurvey.bind(null, session));
+              'click', UI.showSurvey.bind(null, session.path));
           ELEMENTS.scheduleList.appendChild(node);
         });
       } else {
         ELEMENTS.scheduleList.innerHTML = '<li>Sorry, no sessions found for this date.</li>';
+        sendGaEvent('schedule-mentor',
+            'reload-empty-schedule: ' + firebaseApi.CURRENT_MENTOR_ID);
       }
     },
-    showSurvey: function(session) {
-      UI.resetSurvey(session);
+    showSurvey: function(sessionPath) {
+      UI.resetSurvey(sessionPath);
       ELEMENTS.survey.showModal();
     },
-    resetSurvey: function(session) {
+    resetSurvey: function(sessionPath) {
+      let session = firebaseApi.CACHE.sessions[sessionPath] || null;
       let startup = session ? session.startup : window.location.pathname.split('/')[3];
       if (startup) {
-        ELEMENTS.survey.querySelector(
-            '#lpa-survey-startup').value = startup;
+        ELEMENTS.survey.querySelector('#lpa-survey-startup').value = startup;
         ELEMENTS.chooseStartup.classList.add('hidden');
       } else {
+        ELEMENTS.survey.querySelector('#lpa-survey-startup').value = null;
         ELEMENTS.chooseStartup.classList.remove('hidden');
       }
       startup = startup || 'a startup';
@@ -315,21 +379,30 @@ var UI = (function(firebaseApi, authModule, router) {
           'Unscheduled session: ' + todayIso.slice(0, 10) + ' ' + todayIso.slice(11, 16);
       ELEMENTS.survey.querySelector(
           '#lpa-survey-session-datetime').innerHTML = sessionText;
-      let notes = session ? session.notes : {};
-        ELEMENTS.survey.querySelector(
-            '#lpa-survey-receptive').value = notes.receptive || 3;
-        ELEMENTS.survey.querySelector(
-            '#lpa-survey-effective').value = notes.effective || 3;
-        ELEMENTS.surveyNotesField.innerHTML = notes.meetingNotes || '';
-        ELEMENTS.surveyNotesField.parentNode.classList.toggle(
-          'is-dirty', notes.meetingNotes);
-        ELEMENTS.surveyActionItemsField.innerHTML = notes.actionItems || '';
-        ELEMENTS.surveyActionItemsField.parentNode.classList.toggle(
-          'is-dirty', !!notes.actionItems);
-      ELEMENTS.surveyActionItemsField.parentNode.classList.remove('is-invalid');
+      let notes = session && session.notes ? session.notes : {};
+      ELEMENTS.cameraPreview.innerHTML = '';
+      if (notes.imgs) {
+        for (var i = 0; i < notes.imgs.length; i++) {
+          let link = createCameraTile();
+          ELEMENTS.cameraPreview.appendChild(link);
+          link.setAttribute('style', 'background-image: url(\'' + notes.imgs[i] + '\')');
+          link.setAttribute('href', notes.imgs[i]);
+        }
+      }
+      let receptiveEl = ELEMENTS.survey.querySelector('#lpa-survey-receptive');
+      receptiveEl.value = notes.receptive || 3;
+      receptiveEl.MaterialSlider.change();
+      let effectiveEl = ELEMENTS.survey.querySelector('#lpa-survey-effective');
+      effectiveEl.value = notes.effective || 3;
+      effectiveEl.MaterialSlider.change();
+      resetTextField(ELEMENTS.surveyNotesField, notes.meetingNotes);
+      resetTextField(ELEMENTS.surveyActionItemsField, notes.actionItems);
       ELEMENTS.survey.querySelector('.lpa-survey-error').classList.add('hidden');
     },
     addListeners: function() {
+      ELEMENTS.mainNav.addEventListener('click', navigate);
+      ELEMENTS.mdlLayout.querySelector('.lpa-help-link').addEventListener('click', navigate);
+
       ELEMENTS.mainNav.addEventListener('click', navigate);
       ELEMENTS.userNav.addEventListener('click', e => {
         let links = ELEMENTS.mainNav.querySelectorAll('.is-active');
@@ -358,6 +431,9 @@ var UI = (function(firebaseApi, authModule, router) {
       }
       ELEMENTS.datepicker.setAttribute('value', new Date().toISOString().slice(0, 10));
       ELEMENTS.datepicker.addEventListener('change', function(e) {
+        sendGaEvent('schedule-mentor',
+            'reload-schedule: ' + firebaseApi.CURRENT_MENTOR_ID,
+            'for day: ' + e.target.value);
         firebaseApi.getCurrentMentorSchedule(
             e.target.value).then(UI.displaySchedule);
       });
@@ -367,6 +443,7 @@ var UI = (function(firebaseApi, authModule, router) {
         ELEMENTS.startupShowNotes.classList.toggle('lpa-open');
         ELEMENTS.startupNotes.classList.toggle('hidden');
         let startupKey = window.location.pathname.split('/')[3];
+        sendGaEvent('startup-notes-mentor', 'fetch-notes', 'startup: ' + startupKey);
         firebaseApi.fetchStartupNotes(startupKey).then(UI.displayStartupNotes);
       });
 
@@ -409,9 +486,9 @@ var UI = (function(firebaseApi, authModule, router) {
         let session = ELEMENTS.survey.session;
         let startup = fields['lpa-survey-startup'].value;
         let imgs = [];
-        let imgEls = ELEMENTS.mdlLayout.querySelectorAll('.lpa-survey-img');
+        let imgEls = ELEMENTS.survey.querySelectorAll('.lpa-survey-img');
         for (var i = 0; i < imgEls.length; i++) {
-          imgs.push(imgEls[i].src);
+          imgs.push(imgEls[i].href);
         }
         let today = new Date();
         let note = {
@@ -425,7 +502,6 @@ var UI = (function(firebaseApi, authModule, router) {
           'imgs': imgs,
           'unixTime' : today.getTime()
         };
-
         let valid = true;
         if (!fields['lpa-survey-notes'].value) {
           fields['lpa-survey-notes'].parentNode.classList.add('is-invalid');
@@ -447,6 +523,7 @@ var UI = (function(firebaseApi, authModule, router) {
         navigate(e, 'LI');
       });
       ELEMENTS.profileSubmit.addEventListener('click', function(e) {
+        e.target.innerHTML = 'Saving...';
         let fields = ELEMENTS.profileForm.elements;
         let mentorId = firebaseApi.CURRENT_MENTOR_ID;
         let mentor = {
@@ -468,12 +545,16 @@ var UI = (function(firebaseApi, authModule, router) {
           'unixTime': new Date().getTime(),
           'date': new Date().toISOString()
         };
-        firebaseApi.saveMentor(mentorId, mentor);
+        sendGaEvent('save-mentor', 'save-mentor-info-fields',
+          'key: ' + firebaseApi.CURRENT_MENTOR_ID);
+        firebaseApi.saveMentor(mentorId, mentor).then( () => {
+          e.target.innerHTML = 'Submit';
+          ELEMENTS.profileForm.querySelector('#lpa-profile-confirm').innerHTML = 'Profile saved.'
+        });
       });
       ELEMENTS.camera.addEventListener('change', e => {
         let file = e.target.files[0];
-        let link = document.createElement('a');
-        link.setAttribute('target', '_blank');
+        let link = createCameraTile();
         ELEMENTS.cameraPreview.appendChild(link);
         let imgUrl = URL.createObjectURL(file);
         link.setAttribute('style', 'background-image: url(\'' + imgUrl + '\')');
@@ -484,7 +565,9 @@ var UI = (function(firebaseApi, authModule, router) {
         let completeCallback = function(snapshot) {
           link.setAttribute('href', snapshot.downloadURL);
           link.innerHTML = '';
+          ELEMENTS.surveySubmit.disabled = false;
         };
+        ELEMENTS.surveySubmit.disabled = true;
         firebaseApi.uploadImage(file, progressCallback, completeCallback);
       });
     }

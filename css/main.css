@@ -87,6 +87,7 @@ label {
 
 .logo-img {
   height: 40px;
+  width: 40px;
   border-radius: 50%;
 }
 
@@ -271,4 +272,9 @@ td {
   padding: 0.8em;
   background: rgba(44, 77, 181, 0.3);
   border-radius: 20px;
+}
+.col-centered {
+    float: none;
+    margin: 0 auto;
+    text-align: center;
 }

@@ -16,19 +16,32 @@ var firebaseApi = (function() {
         .once('value')
         .then(snapshots => {
           let sessions = [];
+          CACHE.sessions = CACHE.sessions || {};
           snapshots.forEach(snapshot => {
             let session = snapshot.val();
             session.path = snapshot.ref.path.toString();
+            CACHE.sessions[session.path] = session;
             session.date = day;
             session.mentorId = mentorId;
             sessions.push(session);
+            CACHE.sessions[session.path] = session;
           });
           resolve(sessions);
         });
     }),
-    fetchMentor: mentorId => new Promise(function(resolve) {
+    fetchMentor: mentorId => new Promise(function(resolve, reject) {
       firebase.database().ref('mentors/' + mentorId).once('value').then(snapshot => {
-        firebaseApi.CURRENT_MENTOR = snapshot.val();
+        let mentor = snapshot.val();
+        if (mentor) {
+          firebaseApi.CURRENT_MENTOR = snapshot.val();
+        } else {
+          ga('send', {
+            hitType: 'event',
+            eventCategory: 'check-mentor',
+            eventAction: 'fetch-not-registered-mentor',
+            eventLabel: 'key: ' + mentorId
+          });
+        }
         resolve(firebaseApi.CURRENT_MENTOR);
       });
     }),
@@ -57,6 +70,9 @@ var firebaseApi = (function() {
           snapshots.forEach(snapshot => {
             let startup = snapshot.val();
             startup.key = snapshot.key;
+            if (startup.dateFounded) {
+              startup.dateFoundedYear = startup.dateFounded.split('-')[0];
+            }
             CACHE.startups[startup.key] = startup;
             values.push(startup);
           });
@@ -91,9 +107,9 @@ var firebaseApi = (function() {
       // e.g. /sessions/2016-05-01/startups/Aliada/notes/ewa@gmail-com/hour-1
       let startupNotesPath = ['', 'sessions', sessionDate, 'startups',
           startup, 'notes', api.CURRENT_MENTOR_ID, hourId].join('/');
-      // e.g. /notes-backup/2016-06-08/startups/BankFacil/notes/e@g-com/hour-2
-      let backupNotesPath = ['', 'notes-backup', sessionDate, 'startups',
-          startup, 'notes', api.CURRENT_MENTOR_ID, hourId].join('/');
+      // e.g. /notes-backup/startups/Aliada/2016-10-17/notes/greenido@gmail-com/hour-1476728831043
+      let backupNotesPath = ['', 'notes-backup', 'startups', startup,
+          sessionDate, 'notes', api.CURRENT_MENTOR_ID, hourId].join('/');
       if (!session) {
         session = {
           location: 'Ad hoc',
@@ -104,17 +120,35 @@ var firebaseApi = (function() {
         };
         today.setHours(today.getHours() + 1);
         session.endtime = today.getHours() + ':00';
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'startup-notes-mentor',
+          eventAction: 'save-notes-ad-hoc-meeting',
+          eventLabel: 'keyToNotesBackup: ' + backupNotesPath
+        });
         Promise.all([
           firebase.database().ref(sessionPath).set(session),
           firebase.database().ref(startupNotesPath).set(note),
           firebase.database().ref(backupNotesPath).set(note)
-        ]).then(resolve);
+        ]).then((out) => {
+          CACHE.sessions[sessionPath] = session;
+          resolve(session);
+        });
       } else {
+        ga('send', {
+            hitType: 'event',
+            eventCategory: 'startup-notes-mentor',
+            eventAction: 'save-notes',
+            eventLabel: 'keyToNotesBackup: ' + backupNotesPath
+        });
         Promise.all([
           firebase.database().ref(mentorNotesPath).set(note),
           firebase.database().ref(startupNotesPath).set(note),
           firebase.database().ref(backupNotesPath).set(note)
-        ]).then(resolve);
+        ]).then((out) => {
+          CACHE.sessions[sessionPath].notes = note;
+          resolve(session);
+        });
       }
     }),
     saveMentor: (mentorId, mentor) => new Promise(function(resolve) {
@@ -138,26 +172,48 @@ var firebaseApi = (function() {
     }
   };
 
+  /*var config = {
+     apiKey: "AIzaSyBhd3NDwiqErIPa5Py55Mp0mpa2Jd4atrk",
+     authDomain: "lpa-3.firebaseapp.com",
+     databaseURL: "https://lpa-3-14341.firebaseio.com/",
+     storageBucket: "lpa-3-14341.appspot.com",
+  };*/
   var config = {
-    apiKey: "AIzaSyBhd3NDwiqErIPa5Py55Mp0mpa2Jd4atrk",
-    authDomain: "lpa-3.firebaseapp.com",
-    databaseURL: "https://lpa-3-14341.firebaseio.com/",
-    storageBucket: "lpa-3-14341.appspot.com",
+    apiKey: "AIzaSyDImJzAqBmZVXdaK55jVfRuoaHVLBDFgxU",
+    authDomain: "lpa-1.firebaseapp.com",
+    databaseURL: "https://lpa-1.firebaseio.com",
+    storageBucket: "project-1969056342883930904.appspot.com",
   };
   firebase.initializeApp(config);
 
-
+  //
+  //
+  //
   firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
+      ga('send', {
+        hitType: 'event',
+        eventCategory: 'sign-in-mentor',
+        eventAction: 'authenticated user.uid: ' + user.uid,
+        eventLabel: 'authentication: ' + firebaseApi.CURRENT_MENTOR_ID
+      });
       api.CURRENT_MENTOR_ID = getMentorIdFromEmail(
-          firebase.auth().currentUser.email);
-      let today = new Date().toISOString().slice(0, 10);
-      api.getCurrentMentorSchedule(today).then(UI.displaySchedule);
-      api.fetchMentorsList().then(UI.updateMentorsList);
-      api.fetchAttendeesList().then(UI.updateAttendeesList);
-      api.fetchStartupsList().then(UI.updateStartupsList);
+          user.providerData[0].email);
+      api.fetchMentor(api.CURRENT_MENTOR_ID)
+        .then(() => {
+          UI.updateUser(user);
+          UI.updateMentor();
+          let today = new Date().toISOString().slice(0, 10);
+          api.getCurrentMentorSchedule(today).then(UI.displaySchedule);
+          api.fetchMentorsList().then(UI.updateMentorsList);
+          api.fetchAttendeesList().then(UI.updateAttendeesList);
+          api.fetchStartupsList().then(UI.updateStartupsList);
+        });
     } else {
       api.CURRENT_MENTOR_ID = null;
+      api.CURRENT_MENTOR = null;
+      UI.updateUser(user);
+      UI.updateMentor();
     }
   });
 

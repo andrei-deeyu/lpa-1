@@ -48,7 +48,7 @@ template {
   opacity: 1;
   max-height: 6000px;
   overflow: visible;
-  margin-bottom: 400px;
+  padding-bottom: 400px;
 }
 
 .lpa-subpage h1 {
@@ -65,7 +65,8 @@ template {
   justify-content: inherit;
 }
 
-.lpa-sign-in-section {
+.lpa-sign-in-section.lpa-active,
+.lpa-unregistered-section.lpa-active {
   padding: 30px;
   text-align: center;
   background: rgb(0, 188, 212);
@@ -266,6 +267,25 @@ header::before {
   .lpa-sign-out {
     display: block;
   }
+}
+
+.lpa-profile-btn {
+  visibility: hidden;
+}
+
+.mdl-layout__drawer-button {
+  visibility: hidden;
+}
+
+.lpa-registered {
+
+  .mdl-layout__drawer-button {
+    visibility: visible;
+  }
+
+  .lpa-profile-btn {
+    visibility: visible;
+  }
 
   .lpa-main-nav {
     opacity: 1;
@@ -301,6 +321,7 @@ header::before {
 .lpa-startups-logo {
   max-width: 100px;
   margin: 12px 24px 12px 0;
+  flex-shrink: 0;
 }
 
 .lpa-list-name {
@@ -328,12 +349,29 @@ header::before {
   flex-shrink: 0;
 }
 
+.lpa-mentor-avatar-wrapper {
+  width: 80px;
+  flex-shrink: 0;
+}
+
 .mdl-list__item-avatar.lpa-mentor-avatar {
   width: 60px;
   height: 60px;
   text-align: center;
   line-height: 60px;
   position: absolute;
+}
+
+.material-icons > svg {
+  vertical-align: top;
+}
+
+.lpa-domain {
+  margin: 20px 0;
+}
+
+p[data-field="expertise"]::before {
+    content: "Expertise: ";
 }
 
 .lpa-attendee-avatar {
@@ -404,16 +442,19 @@ form .mdl-textfield {
 }
 
 .lpa-survey-img {
-  max-width: 100px;
-}
-
-#lpa-camera-preview a {
   display: inline-block;
   width: 100px;
+  max-width: 100px;
   height: 100px;
   overflow: hidden;
   text-align: center;
   background-size: cover;
+}
+
+#lpa-profile-confirm {
+  font-size: 12px;
+  color: #ffab40;
+  margin: 1em;
 }
 
 .lpa-survey-error {
