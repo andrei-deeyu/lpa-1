@@ -1060,14 +1060,15 @@
   //
   // Catch errors and send them to GA
   //
-  window.onerror = function(msg, url, lineNumber) {
-    console.log("Err:" + msg + " url: " + url + " line: " + lineNumber);
+  window.onerror = function(msg, url, lineNumber, colNum, error) {
+    console.log("Err:" + JSON.stringify(msg) + " Err: " + JSON.stringify(error.stack) + " url: " + JSON.stringify(url) + " line: " + lineNumber);
     ga('send', {
       hitType: 'event',
-      eventCategory: 'mentor-gen-error',
-      eventAction: 'msg: ' + msg,
-      eventLabel: 'url: ' + url + " line: " + lineNumber
+      eventCategory: 'admin-gen-error',
+      eventAction: 'msg: ' + msg + " Err: " + JSON.stringify(error.stack),
+      eventLabel: 'url: ' + url + " line: " + lineNumber + " col: " + colNum
     });
+    return true;
   };
 
   //
