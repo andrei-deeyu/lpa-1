@@ -1,7 +1,7 @@
 {
   "projects": {
     "default": "project-1969056342883930904",
-    "lpa-br": "lpa-br"
+    "lpa-br": "lpa-br",
     "development": "lpa-3-14341"
   }
 }
