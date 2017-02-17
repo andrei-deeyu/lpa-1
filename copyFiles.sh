@@ -14,7 +14,7 @@ cp -R img/ public/img/
 
 rm -R public/mentor
 cp -R dist/mentor public/mentor
-cp manifest.json public/manifest.json
+cp manifest*.json public/
 
 echo "-- push it to firebase --"
 firebase deploy
