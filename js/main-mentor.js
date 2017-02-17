@@ -655,13 +655,38 @@
   }
 
   //
+  // Filtering the startups base on the text
+  //
+  $('#startups-list').on('keyup', '#search-startups-text', function(event) {
+    filterStartups();
+  });
+  
+  //
+  //
+  //
+  function filterStartups() {
+    var filter = $('#search-startups-text').val().toUpperCase();
+    //console.log("looking for: " + filter);
+    
+    $('.startup-name').each(function(i, obj) {
+      var startupName = obj.childNodes[0].textContent.toUpperCase();
+      if (startupName.indexOf(filter) > -1) {
+          obj.parentElement.parentElement.style.display = "";
+      } else {
+          obj.parentElement.parentElement.style.display = "none";
+      }
+    });
+  }
+
+  //
   // Read the list of startups and display it
   //
   function readStartups(authData) {
     var readRef = firebase.database().ref("startups");
     readRef.orderByKey().on("value", function(snapshot) {
       //console.log("The Startups: " + JSON.stringify(snapshot.val()));
-      $("#startups-list").html("");
+      
+      $("#startups-list").html('<div class="input-group search-field-group"> <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span> </div> <input type="text" id="search-startups-text" class="form-control" placeholder="Find Startups..."> </div>');
       startupNameList = [];
       snapshot.forEach(function(childSnapshot) {
         var key = childSnapshot.key;
@@ -684,7 +709,7 @@
           onePagerButton = '<a href="' + onePagerLink + '" target="_blank" class="btn btn-info">1-Pager</a>  ';
         }
         $("#startups-list").append(
-          '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
+          '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title startup-name">' +
           startupData.name + "&nbsp;&nbsp;<img src='" + startupLogoUrl + "' class='logo-img' alt='startup logo'>" +
           '</h3> </div> <div class="panel-body startup-edit" data-key="' + key + '"> <div class="startup-card-desc">' + startupData.description +
           '</div><b>From: </b>' + startupData.country + '  ' + startupData.city +
@@ -815,13 +840,35 @@
   });
 
   //
+  // Filtering the mentors base on the text
+  //
+  $('#mentors-list').on('keyup', '#search-mentors-text', function(event) {
+    filterMentors();
+  });
+  
+  //
+  //
+  //
+  function filterMentors() {
+    var filter = $('#search-mentors-text').val().toUpperCase();
+    $('.mentor-name-div').each(function(i, obj) {
+      var startupName = obj.childNodes[0].textContent.toUpperCase();
+      if (startupName.indexOf(filter) > -1) {
+          obj.parentElement.parentElement.style.display = "";
+      } else {
+          obj.parentElement.parentElement.style.display = "none";
+      }
+    });
+  }
+
+  //
   // read the list of mentors and display it
   //
   function readMentors(authData) {
     var readRef = firebase.database().ref("mentors");
     readRef.orderByKey().on("value", function(snapshot) {
       //console.log("The mentors: " + JSON.stringify(snapshot.val()));
-      $("#mentors-list").html("");
+      $("#mentors-list").html('<div class="input-group search-field-group mentor-search-group"> <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span> </div> <input type="text" id="search-mentors-text" class="form-control" placeholder="Find Mentors..."> </div>');
       snapshot.forEach(function(childSnapshot) {
         var key = childSnapshot.key;
         var mentorData = childSnapshot.val();
@@ -867,7 +914,7 @@
             expertiseStr = "<br><b>Expertise: </b> " + mentorData.expertise ;
           }
           $("#mentors-list").append(
-            '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
+            '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title mentor-name-div">' +
             mentorData.name + '<img src="' + mPicUrl + '" class="att-pic-card" alt="mentor picture" /> ' +
             ' &nbsp; &nbsp;<button class="btn" type="button" data-toggle="collapse" data-target="#mentor-panel-' + divDetailKey +
             '" aria-expanded="false" aria-controls="collapseMentorDetails"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span></button>' +
@@ -961,12 +1008,34 @@
   //////////////////////////////////////////////////////////////////////////////
 
   //
+  // Filtering the attendees base on the text
+  //
+  $('#att-list').on('keyup', '#search-att-text', function(event) {
+    filterAttendees();
+  });
+  
+  //
+  //
+  //
+  function filterAttendees() {
+    var filter = $('#search-att-text').val().toUpperCase();
+    $('.att-name-div').each(function(i, obj) {
+      var startupName = obj.childNodes[0].textContent.toUpperCase();
+      if (startupName.indexOf(filter) > -1) {
+          obj.parentElement.parentElement.style.display = "";
+      } else {
+          obj.parentElement.parentElement.style.display = "none";
+      }
+    });
+  }
+
+  //
   // read the list of Attendees and display it
   //
   function readAttendees(authData) {
     var readRef = firebase.database().ref("/attendees/");
     readRef.orderByKey().on("value", function(snapshot) {
-      $("#att-list").html("");
+      $("#att-list").html('<div class="input-group search-field-group"> <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span> </div> <input type="text" id="search-att-text" class="form-control" placeholder="Find Attendees..."> </div>');
       snapshot.forEach(function(childSnapshot) {
         var key = childSnapshot.key;
         var attData = childSnapshot.val();
@@ -992,7 +1061,7 @@
         }
 
         $("#att-list").append(
-          '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
+          '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title att-name-div">' +
           attData.name + '<img src="' + picUrl + '" class="att-pic-card" alt="attendee picture"/> ' +
           '</h3> </div> <div class="panel-body att-edit" data-key="' + key + '"> <h4>' + attData.startup +
           role + '</h4>' + "<b>email: </b><a href='mailto:" + attData.email + "' target='_blank'>" + attData.email + "</a>" +
