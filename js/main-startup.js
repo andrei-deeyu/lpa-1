@@ -36,10 +36,8 @@
   // AUTH fun
   // start the connection with firebase DB
   //
-<<<<<<< HEAD
+
   var END_POINT_URL = "https://lpa-space.firebaseio.com";
-=======
->>>>>>> master
   var config = {
     apiKey: "AIzaSyBZWmUQWKU1vs--CMbITX8lawdmCslHaJs",
     authDomain: "lpa-space.firebaseapp.com",

@@ -1004,6 +1004,18 @@
   //
   $("#st-save-button").click(function() {
     var name = $("#st-name-field").val();
+    var englishAlphabetAndWhiteSpace = /[A-Za-z ]/g;
+    if ( !englishAlphabetAndWhiteSpace.test(name)) {
+      $("#st-nameError").html("Please give a name in English.");
+      $("#st-nameError").removeClass("sr-only");
+      $("#st-nameError").addClass("alert");
+      $("#st-name-field").focus();
+      setTimeout(function() {
+        $("#st-nameError").removeClass("alert");
+        $("#st-nameError").addClass("sr-only");
+      }, 1500);
+      return;
+    }
     // we can't have spaces - easy life (for now)
     name = name.replace(/\s/g, "-");
     name = name.replace(/\./g, "-");
@@ -1158,7 +1170,7 @@
               eventAction: 'delete',
               eventLabel: 'removing: ' + key + " by: " + authUserData.uid
             });
-            console.log('Synchronization succeeded - mentor was removed');
+            console.log('Synchronization succeeded - startup was removed');
             $("#startups-list").html('<div id="loading-startup"><h2><i class="fa fa-spinner fa-spin"></i> </h2></div>');
             readStartups(authUserData);
           }
@@ -1442,6 +1454,8 @@
         );
       });
       gotDataForSchedule++;
+      console.log("We got " + mentorsList.length + " mentors. ");
+      $("#mentor-export-div").html("<h3>Loaded " + mentorsList.length + " mentors</h3>");
     });
   }
 
@@ -1685,6 +1699,7 @@
     var readRef = firebase.database().ref("attendees");
     readRef.orderByKey().on("value", function(snapshot) {
       $("#att-list").html("");
+      var attCount = 0;
       snapshot.forEach(function(childSnapshot) {
         var key = childSnapshot.key;
         var attData = childSnapshot.val();
@@ -1693,6 +1708,7 @@
         if (role === undefined || role === null) {
           role = "";
         }
+        attCount++;
         $("#att-list").append(
           '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
           attData.name + '<img src="' + picUrl + '" class="att-pic-card" alt="attendee picture"/>' +
@@ -1706,6 +1722,7 @@
           attData.linkedin + "' target='_blank'>" + attData.linkedin + '</a> </div> </div>'
         );
       });
+      $("#att-list-meta-data").html("<h3>Loaded " + attCount + " Attendees</h3>");
     });
   }
 
@@ -1818,13 +1835,13 @@
   //
   // Catch errors and send them to GA
   //
-  window.onerror = function(msg, url, lineNumber) {
-    console.log("Err:" + JSON.stringify(msg) + " url: " + JSON.stringify(url) + " line: " + lineNumber);
+  window.onerror = function(msg, url, lineNumber, colNum, error) {
+    console.log("Err:" + JSON.stringify(msg) + " Err: " + JSON.stringify(error.stack) + " url: " + JSON.stringify(url) + " line: " + lineNumber);
     ga('send', {
       hitType: 'event',
       eventCategory: 'admin-gen-error',
-      eventAction: 'msg: ' + msg,
-      eventLabel: 'url: ' + url + " line: " + lineNumber
+      eventAction: 'msg: ' + msg + " Err: " + JSON.stringify(error.stack),
+      eventLabel: 'url: ' + url + " line: " + lineNumber + " col: " + colNum
     });
     return true;
   };

@@ -37,10 +37,7 @@
   // AUTH fun
   // start the connection with Firebase
   //
-<<<<<<< HEAD
   var END_POINT_URL = "https://lpa-space.firebaseio.com";
-=======
->>>>>>> master
   var config = {
     apiKey: "AIzaSyBZWmUQWKU1vs--CMbITX8lawdmCslHaJs",
     authDomain: "lpa-space.firebaseapp.com",
@@ -273,18 +270,11 @@
         '" data-starttime="' + startTime + '" data-endtime="' + endTime + '" name="meeting-notes">' +
         '</textarea>  <br>What are the action items? \
       <textarea id="ai-' + key + '" class="form-control col-lg-10 meeting-notes-text" data-key="ai-' + meetingNotesKey +
-<<<<<<< HEAD
       '" data-startup="ai-' + startupNotesKey + '" data-notes-backup="ai-' + startupBackupNotesKey +
       '" name="meeting-notes"> </textarea> <h5>Photos</h5> ' +
       '<div class="row">' + 
       '<div class="col-lg-5 col-md-5 col-sm-5 img-1-upload"> <label for="camera-1" class="cam-label-but"> <span class="glyphicon glyphicon-camera"></span> Camera </label> \
-=======
-        '" data-startup="ai-' + startupNotesKey + '" data-notes-backup="ai-' + startupBackupNotesKey +
-        '" name="meeting-notes" > </textarea> <h5>Photos</h5> ' +
-        '<div class="row">' +
-        '<div class="col-lg-5 col-md-5 col-sm-5 img-1-upload"> <label for="camera-1" class="cam-label-but"> <span class="glyphicon glyphicon-camera"></span> Camera </label> \
->>>>>>> master
-        <input type="file" accept="image/*" capture="camera" id="camera-1" class="camera-but"> </div> \
+      <input type="file" accept="image/*" capture="camera" id="camera-1" class="camera-but"> </div> \
       <div class="col-lg-3 col-md-3 col-sm-3" id="img-place-holder" data-imgs-num="1"> </div> \
       </div> \
         <button id="adhoc-save-but">Save</button</p>',
@@ -386,15 +376,9 @@
       if (noteData != null && noteData.imgs) {
         var imgsHTML = "";
         for (var i = 0; i < noteData.imgs.length; i++) {
-<<<<<<< HEAD
-          imgsHTML += '<a id="pic-' + (i+1) + textareaKey + '-link" href="' + noteData.imgs[i] + 
-          '" target="_blank" class="pic-link"> <img id="pic-' + 
-          (i+1) + textareaKey + '" height="80" class="pic-src" src="' + noteData.imgs[i] + '"> </a>';
-=======
           imgsHTML += '<a id="pic-' + (i + 1) + textareaKey + '-link" href="' + noteData.imgs[i] +
             '" target="_blank" class="pic-link"> <img id="pic-' +
             (i + 1) + textareaKey + '" height="130" class="pic-src" src="' + noteData.imgs[i] + '"> </a>';
->>>>>>> master
         }
         $("#" + imgsKey).html(imgsHTML);
         $("#" + imgsKey).attr('data-imgs-num', i);
@@ -748,11 +732,7 @@
   //
   $("#form-save-mentor").click(function() {
     if (authUserData) {
-<<<<<<< HEAD
-      console.log("User: " + authUserData.uid + " is logged in with " + authUserData.email);
-=======
       console.log("User " + authUserData.uid + " is logged in with " + authUserData.email);
->>>>>>> master
     } else {
       console.log("User is logged out");
       $("#alert-warning-sign-in").show();
