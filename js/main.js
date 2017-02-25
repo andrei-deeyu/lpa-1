@@ -1454,7 +1454,7 @@
       });
       gotDataForSchedule++;
       console.log("We got " + mentorsList.length + " mentors. ");
-      $("#mentor-export-div").html("<h3>Loaded " + mentorsList.length + " mentors</h3>");
+      $("#mentor-export-div-meta").html("<h3>Loaded " + mentorsList.length + " mentors</h3>");
     });
   }
 
