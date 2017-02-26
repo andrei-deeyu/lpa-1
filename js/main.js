@@ -211,7 +211,6 @@
           }
         });
       }
-      
       var startupComments = $("#sc-comments-" + startupKey).val();
       //console.log("Saving startup: " + startupName + " Comments:" + startupComments + " Mentors: " + mentorPerHour);
       // save the sessions per startup
@@ -257,7 +256,7 @@
         var html = '<label for="schedule-backup-sel">Backups</label> <div class="input-group"> <select id="schedule-backup-sel">';
         $.each(backups, function(key, sData) {
           html += '<option>' + key + '</option>';
-        }); 
+        });
         html += "</select> &nbsp;&nbsp; <button id='reload-schedule-backup-but' class='btn btn-info'>Reload</button> </div>";
         $("#schedule-ops").html(html);
       }
@@ -287,13 +286,13 @@
     $('body').scrollTop(60);
   }
 
-  // 
+  //
   // Remove all the backups from localstorage
   //
   $("#remove-allbackups").click(function() {
     removeAllbackups();
   });
-  
+
   //
   //
   //
@@ -392,7 +391,6 @@
   // reload the schedule from firebase
   //
   function reloadSchedule(readRef) {
-    
     readRef.orderByKey().once("value", function(snapshot) {
       if (isInSaveOperation) {
         console.log("no no not yet - still writing to firebase");
@@ -521,7 +519,7 @@
   }
 
   //
-  // Util function to get a list of mentors in a select 
+  // Util function to get a list of mentors in a select
   //
   function getMentorsSelect(htmlObjId) {
     var html = '<select id="' + htmlObjId + '" class="mentor-selector">';
@@ -549,11 +547,9 @@
 
   //////////////////////////////////////////////////////////////////////////////
   // Notes viewer per startup
-  // TODO: per mentor?
   //////////////////////////////////////////////////////////////////////////////
-  
   //
-  // reload mentor's notes 
+  // reload mentor's notes
   //
   $("#notes-per-mentor-reload-button").click(function() {
     // Fetch the startup notes
@@ -602,7 +598,7 @@
                       //dataSet.push([x, mentor, "n/a", hour, effective, receptive, actionItems, mNotes]);
                       tblHtml += "<tr><td>" + x + "</td><td>" + mentor + "</td><td>N/A" + "</td><td>" +
                         hour + "</td><td>" + effective + "</td><td>" + receptive + "</td><td>" +
-                        actionItems + "</td><td>" + mNotes + "</td></tr>";  
+                        actionItems + "</td><td>" + mNotes + "</td></tr>";
                     }
                   }
                 }
@@ -615,7 +611,7 @@
           //console.log("======= " + dataSet);
         } else {
           bootbox.alert("Could not find notes for " + curMentor);
-        }  
+        }
       }).then( buildNotesTbl(tblHtml), errorBuildingNotesTable());
     });
   }
@@ -643,7 +639,7 @@
   }
 
   //
-  // TODO: better job with errors here.
+  // TODO: better job with errors here
   //
   function errorBuildingNotesTable() {
     console.log("Error in building the notes table.");
@@ -743,7 +739,7 @@
     });
   }
 
-  // 
+  //
   // Export All the notes trigger
   //
   $("#notes-viewer-export-all-button").click(function() {
@@ -914,13 +910,13 @@
           '</h3> </div> <div class="panel-body admin-comments-for-day">' + commentsForTheDay + '</div> </div>';
 
         // we know it's the mentors and hours
-        //getHourAsRange("hour-" + (i + 1)) 
+        //getHourAsRange("hour-" + (i + 1))
         for (var i = 0; i < sessions.mentors.length; i++) {
           if (sessions.mentors[i][0] != "na@na-com") {
             scHtml += '<div class="panel panel-default"> <div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
             sessions.mentors[i][1] + ' | ' + sessions.mentors[i][3] + " - " + sessions.mentors[i][4] +
             '</h3> </div> <div class="panel-body">' +
-            'Location: ' + sessions.mentors[i][2] + ' </div> </div>';  
+            'Location: ' + sessions.mentors[i][2] + ' </div> </div>';
           }
         }
         $("#mentor-schedule-list").html(scHtml);
@@ -985,7 +981,7 @@
   // =Startups
   //////////////////////////////////////////////////////////////////////////////
   //
-  // get list of startups in a select 
+  // get list of startups in a select
   //
   function getStartupSelect(selId, classForSelect) {
 

@@ -1,6 +1,6 @@
 //
 // JS for the attendee web app
-// Author: Ido Green 
+// Author: Ido Green
 // Date: 4/2016
 // V0.95
 //
@@ -96,7 +96,7 @@
   });
 
   //
-  // Logout UI 
+  // Logout UI
   //
   function logoutUI() {
     $("#sc-reload-button").prop('disabled', true);

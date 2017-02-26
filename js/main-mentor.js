@@ -1,6 +1,6 @@
 //
 // JS for the mentor web app
-// Author: Ido Green 
+// Author: Ido Green
 // Date: 4/2016
 // V0.95
 //
@@ -191,7 +191,7 @@
         //console.log("The sessions: " + JSON.stringify(sessions));
         var html = "";
         $.each(sessions, function(key, scData) {
-          // per startup set the mentors + comments. 
+          // per startup set the mentors + comments
           // key: hour-1 up to hour-9
           var meetingNotesKey = scDay + "/mentors/" + curMentorEmail + "/" + key + "/notes";
           var startupNotesKey = scDay + "/startups/" + scData.startup + "/notes/" + curMentorEmail + "/" + key;
