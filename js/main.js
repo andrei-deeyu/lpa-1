@@ -2,7 +2,7 @@
 // JS for the mentor Admin web app
 // Author: Ido Green ❄️
 // Date: 4/2016
-// V0.9
+// V0.95
 //
 // A 🐱 App
 //
@@ -47,39 +47,6 @@
   firebase.initializeApp(config);
   var ref = firebase.database().ref();
   authUserData = null;
-
-  //
-  //
-  //
-  firebase.auth().onAuthStateChanged(function(user) {
-    if (user) {
-      authUserData = user;
-      $("#sc-save-button").show();
-      //localStorage.setItem("lpa1-authData", JSON.stringify(authData));
-      console.log("User " + user.uid + " is logged in with " + user.provider);
-      if ( (user.email).indexOf("idog@") > -1 ) {
-        $("#gen-op-tab-li").show();
-      }
-
-      ga('send', {
-        hitType: 'event',
-        eventCategory: 'sign-in-admin',
-        eventAction: 'authenticated user.uid: ' + user.uid + ' email: ' + authUserData.email,
-        eventLabel: 'authentication'
-      });
-      $("#login-form").hide();
-      $("#logout-div").html("<form class='navbar-form navbar-right' role='form'><button id='logout-but' class='btn btn-success'>Logout</button> </form>");
-      readMentors(user);
-      readStartups(user);
-      readAttendees(user);
-      readLocations(user);
-    } else {
-      console.log("User is logged out");
-      $("#login-form").show();
-      $("#spin").hide();
-      $("#logout-div").html("");
-    }
-  });
 
   //
   // Sign in user/password
@@ -136,6 +103,39 @@
     });
     return false;
   }
+
+  //
+  //
+  //
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      authUserData = user;
+      $("#sc-save-button").show();
+      //localStorage.setItem("lpa1-authData", JSON.stringify(authData));
+      console.log("User " + user.uid + " is logged in with " + user.provider);
+      if ( (user.email).indexOf(atob("aWRvZw==")) > -1 ) {
+        $("#gen-op-tab-li").show();
+      }
+
+      ga('send', {
+        hitType: 'event',
+        eventCategory: 'sign-in-admin',
+        eventAction: 'authenticated user.uid: ' + user.uid + ' email: ' + authUserData.email,
+        eventLabel: 'authentication'
+      });
+      $("#login-form").hide();
+      $("#logout-div").html("<form class='navbar-form navbar-right' role='form'><button id='logout-but' class='btn btn-success'>Logout</button> </form>");
+      readMentors(user);
+      readStartups(user);
+      readAttendees(user);
+      readLocations(user);
+    } else {
+      console.log("User is logged out");
+      $("#login-form").show();
+      $("#spin").hide();
+      $("#logout-div").html("");
+    }
+  });
 
   //
   // logout
