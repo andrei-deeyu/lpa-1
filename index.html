@@ -245,9 +245,6 @@
                 <div id="mentors-list">
                   <img src="img/spin-82.svg" alt="spinner" />
                 </div>
-                <div id="mentor-export-div">
-                    <button id="export-all-mentors-button" class="btn btn-info">Export All Mentors</button>
-                </div>
                 <img src="img/little-men.jpeg" class="img-background-max">
               </div>
             </div>
@@ -531,9 +528,6 @@
               <div class="col-sm-5 col-md-5 col-lg-2  notes-header">
                 <button id="notes-viewer-reload-button" class="btn btn-info">Reload All Startup's Notes</button>
               </div>
-              <div class="col-sm-5 col-md-5 col-lg-2  notes-header">
-                <button id="notes-viewer-export-all-button" class="btn btn-warning">Export All Notes</button>
-              </div>
             </div>
             <div class="row">
               <div id="mentor-notes-viewer" class="col-sm-3 col-md-3 col-lg-3 notes-header">
@@ -568,6 +562,10 @@
               <div class="col-sm-4 col-md-4 col-lg-4 notes-header">
                 <h4>Attendees Utils</h4>
                 <button id="gen-ops-remove-all-att-button" class="btn btn-warning">Remove All Attendees</button>
+                <br><br>
+                <div id="att-export-div">
+                    <button id="export-all-att-button" class="btn btn-info">Export All Attendees</button>
+                </div>
               </div>
               <div class="col-sm-6 col-md-6 col-lg6 notes-header">
                 <!-- email for mentor to do a comeback -->
@@ -582,6 +580,10 @@
                 </div>
                 <button id="move-back-mentor-button" class="btn btn-info">Move back</button>
                 <button id="remove-all-mentors-button" class="btn btn-warning">Remove All Mentors</button>
+                <div id="mentor-export-div">
+                    <div id="mentor-export-div-meta"></div>
+                    <button id="export-all-mentors-button" class="btn btn-info">Export All Mentors</button>
+                </div>
               </div>
             </div>
             <div class="row">
@@ -590,6 +592,12 @@
                 <button id="gen-ops-remove-all-startups-button" class="btn btn-warning">Remove All Startups</button>
               </div>
             </div>
+            <div class="row">
+                <div class="col-sm-5 col-md-5 col-lg-2  notes-header">
+                    <button id="notes-viewer-export-all-button" class="btn btn-info">Export All Notes</button>
+                </div>
+            </div>
+
           </div>
           <!-- end of tabs -->
         </div>
@@ -605,7 +613,7 @@
           <h4 class="modal-title">Oppss... A little problam</h4>
         </div>
         <div class="modal-body">
-          <h3>Check again your email/password.</h3>
+          <h3>Check again your email and password.</h3>
           <p>If you can't login please check with the organizers</p>
         </div>
         <div class="modal-footer">
@@ -685,6 +693,7 @@
   })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
   ga('create', 'UA-76781519-2', 'auto');
+  ga('set', 'transport', 'beacon');
   ga('send', 'pageview');
   </script>
   <script src="js/main.js"></script>

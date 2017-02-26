@@ -278,3 +278,10 @@ td {
     margin: 0 auto;
     text-align: center;
 }
+
+.input-group.search-field-group {
+    padding-bottom: 0.5em;
+}
+.mentor-search-group {
+  padding-top: 0.5em;
+}
