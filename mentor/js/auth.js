@@ -8,8 +8,13 @@ var authModule = (function(firebaseAuth) {
       auth.signInWithRedirect(provider).then(function(result) {
         // User signed in!
       }).catch(function(error) {
-        // An error occurred
-        console.log(error);
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'sign-in-mentor',
+          eventAction: 'sign-in-button',
+          eventLabel: 'authentication failed. errCode: ' + error.code +
+            ' msg: ' + error.message + ' email: ' + error.email + ' credential: ' + error.credential
+        });
       });
     },
 

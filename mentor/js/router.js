@@ -45,7 +45,7 @@ var router = (function(firebaseApi, authModule) {
 
   window.addEventListener("popstate", function(e) {
     let urlParts = window.location.pathname.split('/');
-    if (urlParts.length > 2) {
+    if (urlParts.length > 2 && urlParts[3]) {
       router.go(urlParts[2], urlParts[3]);
     }
   }, false);

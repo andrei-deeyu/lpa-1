@@ -15,7 +15,7 @@
   <meta name="description" content="A note for our LPA">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-  <link rel=manifest href=manifest.json>
+  <link rel=manifest href=manifest-s.json>
   <meta name=mobile-web-app-capable content=yes>
   <meta name=application-name content="LPA-1">
   <link rel=icon sizes=192x192 href=img/pencil-192.png>
@@ -65,7 +65,7 @@
           <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="#"><img src="img/lpa-logo-40.jpg" alt="lpa logo" class="lpa-logo" /></a>
-        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 centered alert alert-success save-alert">
+        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 col-centered alert alert-success save-alert">
           <strong>Saved!</strong>
         </div>
       </div>
@@ -84,9 +84,7 @@
           <span id='spin'><i class="fa fa-spinner fa-spin"></i></span>
         </form>
         <div id="logout-div"></div>
-        <form class='navbar-form navbar-right' role='form'>
-          <button id="online-status" type="button" class="btn btn-info " disabled>Online</button>
-        </form>
+        
       </div>
       <!--/.navbar-collapse -->
     </div>
@@ -213,7 +211,7 @@
   <div class="action-buttons">
     <button id="att-save-button" type="submit" class="btn btn-success">Save</button>
   </div>
-  <div class="col-lg-2 col-md-2 col-sm-2 col-offset-4 centered alert alert-success save-alert">
+  <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 col-offset-4 col-centered alert alert-success save-alert">
     <strong>Saved!</strong>
   </div>
   </div>
@@ -249,7 +247,6 @@
           <hr>
           <p>
             <a href="https://github.com/greenido/lpa-1-issues/issues/new" class="btn btn-success" target="_blank">Feedback</a>
-            <a href="https://events.withgoogle.com/bootcamp-class-2" class="btn btn-warning" target="_blank">Bootcamp</a>
           </p>
         </div>
       </div>
@@ -310,6 +307,7 @@
   })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
   ga('create', 'UA-76781519-2', 'auto');
+  ga('set', 'transport', 'beacon');
   ga('send', 'pageview');
   </script>
   <script src="js/main-startup.js"></script>

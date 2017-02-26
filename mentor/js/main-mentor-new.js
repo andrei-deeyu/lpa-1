@@ -18,14 +18,16 @@
 
   UI.addListeners();
 
-  firebase.auth().onAuthStateChanged(user => {
-    firebaseApi.fetchMentor(firebaseApi.CURRENT_MENTOR_ID).then(mentor => {
-      UI.updateMentor();
-    }).catch(e=>console.log(e));
-    UI.updateUser(user);
-  });
+  function sendGaEvent(category, action, label) {
+    ga('send', {
+      hitType: 'event',
+      eventCategory: category,
+      eventAction: action,
+      eventLabel: label
+    });
+  };
 
-  if ('serviceWorker' in navigator) {
+  /*if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
       // Registration was successful
       console.log('ServiceWorker registration successful with scope: ', registration.scope);
@@ -33,7 +35,7 @@
       // registration failed :(
       console.log('ServiceWorker registration failed: ', err);
     });
-  }
+  }*/
 
   if (!navigator.onLine) {
     UI.ELEMENTS.message.innerHTML = 'You are in offline mode. Data may be stale.';
@@ -49,5 +51,14 @@
   window.addEventListener("online", function(e) {
     UI.ELEMENTS.message.classList.add('hide');
   }, false);
+
+  window.onerror = function(msg, url, lineNumber) {
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'mentor-gen-error',
+      eventAction: 'msg: ' + msg,
+      eventLabel: 'url: ' + url + " line: " + lineNumber
+    });
+  };
 
 })(firebaseApi, authModule, UI);

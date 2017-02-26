@@ -15,7 +15,7 @@
   <meta name="description" content="A note for our LPA">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-  <link rel=manifest href=manifest.json>
+  <link rel=manifest href=manifest-m.json>
   <meta name=mobile-web-app-capable content=yes>
   <meta name=application-name content="LPA-1">
   <link rel=icon sizes=192x192 href=img/pencil-192.png>
@@ -66,7 +66,7 @@
           <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="#"><img src="img/lpa-logo-40.jpg" alt="lpa logo" class="lpa-logo" /></a>
-        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 centered alert alert-success save-alert">
+        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 col-centered alert alert-success save-alert">
           <strong>Saved!</strong>
         </div>
       </div>
@@ -181,8 +181,8 @@
                   <label for="form-name-field" class="sr-only">Name</label>
                   <div class="input-group">
                     <div class="input-group-addon"><span class="glyphicon glyphicon-user"></span></div>
-                    <input type="text" class="form-control" id="form-name-field" value="" placeholder="Name" autocomplete="name" required>
-                  </div>
+                      <input type="text" class="form-control" id="form-name-field" value="" placeholder="Name" autocomplete="name" required>
+                    </div>
                 </div>
                 <!-- email field -->
                 <div class="form-group">
@@ -224,19 +224,26 @@
                     <option>UX</option>
                     <option>Tech</option>
                     <option>Product</option>
+                    <option>Google Product</option>
                     <option>Marketing</option>
                     <option>Business</option>
+                    <option>Monetization</option>
+                    <option>Fundraising</option>
                   </select>
                 </div>
                 <!-- more -->
                 <label for="form-domain-sec-select">Secondary Domain</label>
                 <div class="input-group">
                   <select id="form-domain-sec-select" class="selectpicker" data-style="btn-info">
+                     <option>N/A</option>
                     <option>UX</option>
                     <option>Tech</option>
                     <option>Product</option>
+                    <option>Google Product</option>
                     <option>Marketing</option>
                     <option>Business</option>
+                    <option>Monetization</option>
+                    <option>Fundraising</option>
                   </select>
                 </div>
                 <div class="form-group">
@@ -279,7 +286,7 @@
                   <button id="form-cancel-mentor" class="btn btn-default">Clear</button>
                   <button id="form-save-mentor" type="submit" class="btn btn-success">Save</button>
                 </div>
-                <div class="col-lg-2 col-md-2 col-sm-2 col-offset-4 centered alert alert-success save-alert">
+                <div class="col-lg-5 col-md-5 col-sm-5 col-offset-4 col-centered alert alert-success save-alert">
                   <strong>Saved!</strong>
                 </div>
                 <div id="alert-warning-sign-in" class="col-lg-3 col-md-3 col-sm-3 col-offset-4 centered alert alert-danger">
@@ -318,7 +325,6 @@
           <p>
             <button type="button" class="btn btn-info" data-toggle="modal" data-target="#guideline-modal">Guidelines</button>
             <a href="https://github.com/greenido/lpa-1-issues/issues/new" class="btn btn-success" target="_blank">Feedback</a>
-            <a href="https://events.withgoogle.com/bootcamp-class-2" class="btn btn-warning" target="_blank">Bootcamp</a>
           </p>
         </div>
       </footer>
@@ -498,6 +504,7 @@
     })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
     ga('create', 'UA-76781519-2', 'auto');
+    ga('set', 'transport', 'beacon');
     ga('send', 'pageview');
     </script>
     <script src="js/main-mentor.js"></script>
