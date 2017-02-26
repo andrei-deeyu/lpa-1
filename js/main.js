@@ -1455,7 +1455,7 @@
       });
       gotDataForSchedule++;
       console.log("We got " + mentorsList.length + " mentors. ");
-      $("#mentor-export-div").html("<h3>Loaded " + mentorsList.length + " mentors</h3>");
+      $("#mentor-export-div-meta").html("<h3>Loaded " + mentorsList.length + " mentors</h3>");
     });
   }
 
@@ -1590,6 +1590,9 @@
     exportAllMentors();
   });
 
+  //
+  // Export mentors to CSV
+  //
   function exportAllMentors() {
      var readRef = firebase.database().ref("mentors");
     readRef.orderByChild("name").once("value", function(snapshot) {  
@@ -1827,6 +1830,42 @@
       }
     });
   });
+
+  // 
+  // Export all attendees to CSV trigger
+  //
+  $("#export-all-att-button").click(function() {
+    exportAllAttendees();
+  });
+
+  //
+  // Export attendess to CSV
+  //
+  function exportAllAttendees() {
+     var readRef = firebase.database().ref("attendees");
+    readRef.orderByChild("name").once("value", function(snapshot) {  
+      ga('send', {
+        hitType: 'event',
+        eventCategory: 'gen-opts',
+        eventAction: 'admin-export-all-attendess',
+        eventLabel: "Admin user.uid: " + authUserData.uid + " email: " + authUserData.email + " was exporting all attendees"
+      }); 
+      var total = 0;   
+      var csvStr = "name, email, statup, role, linedin, fun-fact, picture \n";
+      snapshot.forEach(function(childSnapshot) {
+        var key = childSnapshot.key;
+        var att = childSnapshot.val();
+        var mPicUrl = addhttp(att.pic);
+        //console.log("key(email): " + key + " data: " + att);
+        var divDetailKey = key.replace("@", "");
+        csvStr += att.name + "," + att.email + "," + att.startup + "," + att.role + "," + 
+        att.linkedin + "," + cleanForCSV(att.funFact) + "," + att.pic + "\n";
+        total++;
+      });
+      window.location.href = 'data:text/csv;charset=UTF-8,' + encodeURIComponent(csvStr);
+      bootbox.alert("All " + total +" Attendees were exported. Enjoy!");
+    });
+  }
 
   //////////////////////////////////////////////////////////////////////////////////
   // Utils
