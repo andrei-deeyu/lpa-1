@@ -156,9 +156,8 @@
   //
   // logout action
   //
-  $("#logout-but").click(function() {
-    firebase.auth().signOut().then(function() {
-      // Sign-out successful
+  $("#logout-div").on('click', "#logout-but", function(ev) {
+      firebase.auth().signOut().then(function() {
       logoutUI();
     }, function(error) {
       console.log("Could not sign-out. err: " + error);
@@ -217,8 +216,8 @@
                 <br><h5> <label>Was the session effective? (1-5)</label></h5><br> \
                 <input type="text" class="note-slider" id="note-effective-' + key + '" name="note-effective" data-provide="slider" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide"> \
                 <br><br> \
-            <b>What did you talked about?</b> \
-            <textarea id="' + key + '" class="form-control col-lg-10 meeting-notes-text" data-key="' + meetingNotesKey +
+            <b>What did you talk about?</b> \
+            <textarea id="' + key + '" placeholder="Focus on primary purpose / challenge and please elaborate." class="form-control col-lg-10 meeting-notes-text" data-key="' + meetingNotesKey +
             '" data-startup="' + startupNotesKey + '" data-notes-backup="' + startupBackupNotesKey +
             '" data-starttime="' + scData.starttime + '" data-endtime="' + scData.endtime + '" name="meeting-notes">' +
             '</textarea>  <br><b>What are the action items?</b> \
@@ -267,13 +266,13 @@
         '" name="note-effective" data-provide="slider" data-slider-min="1" data-slider-max="5" data-slider-step="1" data-slider-value="3" data-slider-tooltip="hide"> \
       <br><br> \
       What did you talked about? \
-      <textarea id="' + key + '" class="form-control col-lg-10 meeting-notes-text" data-key="' + meetingNotesKey +
+      <textarea id="' + key + '" placeholder="Focus on primary purpose / challenge and please elaborate." class="form-control col-lg-10 meeting-notes-text" data-key="' + meetingNotesKey +
         '" data-startup="' + startupNotesKey + '" data-notes-backup="' + startupBackupNotesKey +
         '" data-starttime="' + startTime + '" data-endtime="' + endTime + '" name="meeting-notes">' +
         '</textarea>  <br>What are the action items? \
       <textarea id="ai-' + key + '" class="form-control col-lg-10 meeting-notes-text" data-key="ai-' + meetingNotesKey +
         '" data-startup="ai-' + startupNotesKey + '" data-notes-backup="ai-' + startupBackupNotesKey +
-        '" name="meeting-notes"> </textarea> <h5>Photos</h5> ' +
+        '" name="meeting-notes" > </textarea> <h5>Photos</h5> ' +
         '<div class="row">' +
         '<div class="col-lg-5 col-md-5 col-sm-5 img-1-upload"> <label for="camera-1" class="cam-label-but"> <span class="glyphicon glyphicon-camera"></span> Camera </label> \
         <input type="file" accept="image/*" capture="camera" id="camera-1" class="camera-but"> </div> \
@@ -437,11 +436,19 @@
                 var tmpMentorDetails = '<button class="btn btn-sm btn-info fetch-mentor-button" data-key="' + tmpMentorEmail + '">' +
                   tmpMentorEmailStr + '</button>';
 
+                var imgsHTML = "<br>";
+                if (val.imgs) {
+                  for (var i = 0; i < val.imgs.length; i++) {
+                  imgsHTML += '<a href="' + val.imgs[i] +
+                    '" target="_blank" class="pic-link"> <img height="130" class="pic-src" src="' + val.imgs[i] + '"> </a>';
+                  }
+                }
+
                 html += '<div class="panel panel-default"> <div class="panel-heading"> <h3 class="panel-title">' +
                   keyDate + " | " + meetingTime + ' </h3> </div> <div class="panel-body">' +
                   '<b>Mentor:</b> ' + tmpMentorDetails + '<br><b>Updated At: </b>' + noteDate +
                   '<p><b>Meeting Notes:</b><br>' + notesHtml + '</p>' +
-                  '<b>Action Items:</b> ' + actionItemsHtml +
+                  '<b>Action Items:</b> ' + actionItemsHtml + imgsHTML +
                   ' </div> </div>';
               });
             }
@@ -480,10 +487,10 @@
       bootbox.alert("<h4>Please fill the notes and write in few sentences what you talked about.</h4>");
       return;
     }
-    if (actionItems.length < 3) {
-      bootbox.alert("<h4>Please write the action items that you gave the startups.</h4>");
-      return;
-    }
+    // if (actionItems.length < 3) {
+    //   bootbox.alert("<h4>Please write the action items that you gave the startups.</h4>");
+    //   return;
+    // }
     var sliders = thisElem.parent().find('input');
     var receptiveVal = $("#" + sliders[0].id).slider('getValue');
     var effectiveVal = $("#" + sliders[1].id).slider('getValue');
@@ -648,13 +655,38 @@
   }
 
   //
+  // Filtering the startups base on the text
+  //
+  $('#startups-list').on('keyup', '#search-startups-text', function(event) {
+    filterStartups();
+  });
+  
+  //
+  //
+  //
+  function filterStartups() {
+    var filter = $('#search-startups-text').val().toUpperCase();
+    //console.log("looking for: " + filter);
+    
+    $('.startup-name').each(function(i, obj) {
+      var startupName = obj.childNodes[0].textContent.toUpperCase();
+      if (startupName.indexOf(filter) > -1) {
+          obj.parentElement.parentElement.style.display = "";
+      } else {
+          obj.parentElement.parentElement.style.display = "none";
+      }
+    });
+  }
+
+  //
   // Read the list of startups and display it
   //
   function readStartups(authData) {
     var readRef = firebase.database().ref("startups");
     readRef.orderByKey().on("value", function(snapshot) {
       //console.log("The Startups: " + JSON.stringify(snapshot.val()));
-      $("#startups-list").html("");
+      
+      $("#startups-list").html('<div class="input-group search-field-group"> <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span> </div> <input type="text" id="search-startups-text" class="form-control" placeholder="Find Startups..."> </div>');
       startupNameList = [];
       snapshot.forEach(function(childSnapshot) {
         var key = childSnapshot.key;
@@ -665,7 +697,7 @@
         var videoButton = "";
         if (startupData.video && startupData.video.length > 5) {
           var videoLink = addhttp(startupData.video);
-          videoButton = '<a href="' + videoLink + '" target="_blank" class="btn btn-info ">Intro Clip</a>  ';
+          videoButton = '<a href="' + videoLink + '" target="_blank" class="btn btn-info "> <span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span> </a>  ';
         }
         var twitterLink = "";
         if (startupData.twitter && startupData.twitter.length > 2) {
@@ -674,15 +706,15 @@
         var onePagerButton = "";
         if (startupData.historyUrl && startupData.historyUrl.length > 4) {
           var onePagerLink = addhttp(startupData.historyUrl);
-          onePagerButton = '<a href="' + onePagerLink + '" target="_blank" class="btn btn-info">First Day Evaluation</a>  ';
+          onePagerButton = '<a href="' + onePagerLink + '" target="_blank" class="btn btn-info">1-Pager</a>  ';
         }
         $("#startups-list").append(
-          '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
+          '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title startup-name">' +
           startupData.name + "&nbsp;&nbsp;<img src='" + startupLogoUrl + "' class='logo-img' alt='startup logo'>" +
           '</h3> </div> <div class="panel-body startup-edit" data-key="' + key + '"> <div class="startup-card-desc">' + startupData.description +
           '</div><b>From: </b>' + startupData.country + '  ' + startupData.city +
           '<b> Founded: </b>' + founded + '<br><b>Employees: </b>' + startupData.numEmployees +
-          twitterLink + '<br>' + videoButton + '&nbsp;&nbsp;' + onePagerButton +
+          twitterLink + '<br><br>' + videoButton + '&nbsp;&nbsp;' + onePagerButton +
           '&nbsp;&nbsp;&nbsp;<button class="btn btn-warning fetch-notes-button" data-key="' +
           startupData.name + '">Notes</button> </div> </div>'
         );
@@ -702,7 +734,7 @@
   //
   $("#form-save-mentor").click(function() {
     if (authUserData) {
-      console.log("User " + authUserData.uid + " is logged in with " + authUserData.provider);
+      console.log("User " + authUserData.uid + " is logged in with " + authUserData.email);
     } else {
       console.log("User is logged out");
       $("#alert-warning-sign-in").show();
@@ -808,13 +840,35 @@
   });
 
   //
+  // Filtering the mentors base on the text
+  //
+  $('#mentors-list').on('keyup', '#search-mentors-text', function(event) {
+    filterMentors();
+  });
+  
+  //
+  //
+  //
+  function filterMentors() {
+    var filter = $('#search-mentors-text').val().toUpperCase();
+    $('.mentor-name-div').each(function(i, obj) {
+      var startupName = obj.childNodes[0].textContent.toUpperCase();
+      if (startupName.indexOf(filter) > -1) {
+          obj.parentElement.parentElement.style.display = "";
+      } else {
+          obj.parentElement.parentElement.style.display = "none";
+      }
+    });
+  }
+
+  //
   // read the list of mentors and display it
   //
   function readMentors(authData) {
     var readRef = firebase.database().ref("mentors");
     readRef.orderByKey().on("value", function(snapshot) {
       //console.log("The mentors: " + JSON.stringify(snapshot.val()));
-      $("#mentors-list").html("");
+      $("#mentors-list").html('<div class="input-group search-field-group mentor-search-group"> <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span> </div> <input type="text" id="search-mentors-text" class="form-control" placeholder="Find Mentors..."> </div>');
       snapshot.forEach(function(childSnapshot) {
         var key = childSnapshot.key;
         var mentorData = childSnapshot.val();
@@ -823,10 +877,44 @@
           var divDetailKey = key.replace("@", "");
           var mBio = "";
           if (mentorData.bio && mentorData.bio != undefined) {
-            mBio = (mentorData.bio).replace(/\n/g, "<br>");
+            mBio = '<h4><b>Bio</b></h4> ' + (mentorData.bio).replace(/\n/g, "<br>");
+          }
+          var geoLoc = "";
+          if (mentorData.country) {
+            geoLoc += "<br><b>From: </b> " + mentorData.country;
+          }
+          if (mentorData.city) {
+            geoLoc += " , " + mentorData.city; 
+          }
+          var twitterStr = "";
+          if (mentorData.twitter) {
+            twitterStr = "<br><Br><b>Twitter: </b><a target='_blank' href='https://twitter.com/" + mentorData.twitter + "'>" + 
+              mentorData.twitter + " </a>";
+          }
+          var funFact = "";
+          if (mentorData.funFact && mentorData.funFact.length > 3) {
+            funFact = "<h5>Fun Fact: " + mentorData.funFact + "</h5>";
+          }
+          var site = "";
+          if (mentorData.site) {
+            site = "<br><b>Site:</b> <a target='_blank' href='" + mentorData.site + "'>" + mentorData.site +  "</a>";
+          }
+          var linkedin = "";
+          if (mentorData.linkedin && mentorData.linkedin.length > 4) {
+            var linkedinUrl = mentorData.linkedin;
+            if (mentorData.linkedin.indexOf("www.linkedin.com") < 0) {
+              linkedinUrl = "http://www.linkedin.com/in/" + mentorData.linkedin;
+            }
+
+            linkedin = "<br><b>Linkedin:</b> <a href='" + linkedinUrl + "' target='_blank'>" +
+              mentorData.linkedin + " </a>";
+          }
+          var expertiseStr = "";
+          if (mentorData.expertise) {
+            expertiseStr = "<br><b>Expertise: </b> " + mentorData.expertise ;
           }
           $("#mentors-list").append(
-            '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
+            '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title mentor-name-div">' +
             mentorData.name + '<img src="' + mPicUrl + '" class="att-pic-card" alt="mentor picture" /> ' +
             ' &nbsp; &nbsp;<button class="btn" type="button" data-toggle="collapse" data-target="#mentor-panel-' + divDetailKey +
             '" aria-expanded="false" aria-controls="collapseMentorDetails"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span></button>' +
@@ -834,8 +922,8 @@
             '"> <h5><a href="mailto:' + mentorData.email + '" target="_blank">' + mentorData.email + '</a></h5>' +
             '<b>Phone:</b> <a href="tel:' + mentorData.phone + '">' + mentorData.phone + "</a><br>" +
             '<b>Domain:</b> ' + mentorData.domain + ' - <b>Secondary:</b> ' + mentorData.domainSec +
-            '<h4><b>Expertise</b></h4> ' + mentorData.expertise +
-            '<h4><b>Bio</b></h4> ' + mBio + ' </div> </div>'
+            geoLoc + expertiseStr + twitterStr + linkedin + funFact + site +
+            mBio + ' </div> </div>'
           );
         }
 
@@ -920,12 +1008,34 @@
   //////////////////////////////////////////////////////////////////////////////
 
   //
+  // Filtering the attendees base on the text
+  //
+  $('#att-list').on('keyup', '#search-att-text', function(event) {
+    filterAttendees();
+  });
+  
+  //
+  //
+  //
+  function filterAttendees() {
+    var filter = $('#search-att-text').val().toUpperCase();
+    $('.att-name-div').each(function(i, obj) {
+      var startupName = obj.childNodes[0].textContent.toUpperCase();
+      if (startupName.indexOf(filter) > -1) {
+          obj.parentElement.parentElement.style.display = "";
+      } else {
+          obj.parentElement.parentElement.style.display = "none";
+      }
+    });
+  }
+
+  //
   // read the list of Attendees and display it
   //
   function readAttendees(authData) {
     var readRef = firebase.database().ref("/attendees/");
     readRef.orderByKey().on("value", function(snapshot) {
-      $("#att-list").html("");
+      $("#att-list").html('<div class="input-group search-field-group"> <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span> </div> <input type="text" id="search-att-text" class="form-control" placeholder="Find Attendees..."> </div>');
       snapshot.forEach(function(childSnapshot) {
         var key = childSnapshot.key;
         var attData = childSnapshot.val();
@@ -936,13 +1046,26 @@
         } else {
           role = " | " + role;
         }
+        var linkedin = "";
+        if (attData.linkedin && attData.linkedin.length > 4) {
+          var linkedinUrl = attData.linkedin;
+          if (attData.linkedin.indexOf("linkedin.com") < 0) {
+            linkedinUrl = "http://www.linkedin.com/in/" + attData.linkedin;
+          }
+          linkedin = "<br><b>Linkedin:</b> <a href='" + linkedinUrl + "' target='_blank'>" +
+              attData.linkedin + " </a>";
+        }
+        var funFact = "";
+        if (attData.funFact) {
+          funFact = '<br><b>Fun Fact: </b> ' + attData.funFact;
+        }
+
         $("#att-list").append(
-          '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title">' +
+          '<div class="panel panel-primary"> <div class="panel-heading"> <h3 class="panel-title att-name-div">' +
           attData.name + '<img src="' + picUrl + '" class="att-pic-card" alt="attendee picture"/> ' +
           '</h3> </div> <div class="panel-body att-edit" data-key="' + key + '"> <h4>' + attData.startup +
-          role + '</h4>' + "<b>email:</b><a href='mailto:" + attData.email + "' target='_blank'>" + attData.email + "</a>" +
-          '<br><b>Linkedin:</b> <a href="http://www.linkedin.com/in/' +
-          attData.linkedin + '" target="_blank">' + attData.linkedin + '</a><br><b>Fun Fact:</b> ' + attData.funFact +
+          role + '</h4>' + "<b>email: </b><a href='mailto:" + attData.email + "' target='_blank'>" + attData.email + "</a>" +
+          linkedin + funFact +
           ' </div> </div>'
         );
       });
@@ -1006,14 +1129,15 @@
   //
   // Catch errors and send them to GA
   //
-  window.onerror = function(msg, url, lineNumber) {
-    console.log("Err:" + msg + " url: " + url + " line: " + lineNumber);
+  window.onerror = function(msg, url, lineNumber, colNum, error) {
+    console.log("Err:" + JSON.stringify(msg) + " Err: " + JSON.stringify(error.stack) + " url: " + JSON.stringify(url) + " line: " + lineNumber);
     ga('send', {
       hitType: 'event',
-      eventCategory: 'mentor-gen-error',
-      eventAction: 'msg: ' + msg,
-      eventLabel: 'url: ' + url + " line: " + lineNumber
+      eventCategory: 'admin-gen-error',
+      eventAction: 'msg: ' + msg + " Err: " + JSON.stringify(error.stack),
+      eventLabel: 'url: ' + url + " line: " + lineNumber + " col: " + colNum
     });
+    return true;
   };
 
   //

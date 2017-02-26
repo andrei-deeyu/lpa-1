@@ -43,7 +43,7 @@
   <link rel="stylesheet" href="css/bootstrap-theme.min.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
   <link rel="stylesheet" href="css/buttons.dataTables.min.css">
-  <!-- Firechat 
+  <!-- Firechat
   <link rel='stylesheet' href='https://cdn.firebase.com/libs/firechat/2.0.1/firechat.min.css' />
   -->
   <!-- Intro / Help -->
@@ -69,7 +69,7 @@
       </div>
       <div id="navbar" class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
-          <li><a href="/index-mentor.html" target="_blank">Mentor</a></li>
+          <li><a href="/mentor" target="_blank">Mentor</a></li>
           <li><a href="/startup.html" target="_blank">Attendee</a></li>
           <li><a href="https://github.com/greenido/lpa-1" target="_blank">Code</a></li>
           <li><a id="help-but" href="#">Help</a></li>
@@ -212,7 +212,7 @@
                     <label for="form-comments">Comments</label>
                     <textarea class="form-control col-lg-6" id="form-comments" name="comments"></textarea>
                     <br>
-                    <label for="form-linkedin-url">Your LinkedIn</label>
+                    <label for="form-linkedin-url">LinkedIn</label>
                     <div class="input-group">
                       <span class="input-group-addon" id="form-linkedin-url-pre">http://www.linkedin.com/in/</span>
                       <input type="text" class="form-control" id="form-linkedin-url">
@@ -245,7 +245,6 @@
                 <div id="mentors-list">
                   <img src="img/spin-82.svg" alt="spinner" />
                 </div>
-                <button id="export-all-mentors-button" class="btn btn-info">Export All Mentors</button>
                 <img src="img/little-men.jpeg" class="img-background-max">
               </div>
             </div>
@@ -415,6 +414,7 @@
                 <div id="att-list">
                   <img src="img/spin-82.svg" alt="spinner" />
                 </div>
+                <div id="att-list-meta-data"></div>
                 <img src="img/city.jpeg" class="img-background-max">
               </div>
             </div>
@@ -479,7 +479,7 @@
             </div>
             <div class="row">
               <div class="col-md-2 col-lg-1 text-center vcenter-s-header">Startup</div>
-              <div class="col-md-1 col-lg-1 vcenter-s-header"></div> 
+              <div class="col-md-1 col-lg-1 vcenter-s-header"></div>
               <div class="col-md-1 col-lg-1 vcenter-s-header"></div>
               <div class="col-md-1 col-lg-1 vcenter-s-header"></div>
               <div class="col-md-1 col-lg-1 vcenter-s-header"></div>
@@ -495,12 +495,12 @@
             <div id="schedule-tab-table"></div>
             <div id="schedule-local-ops" class="row">
               <div class="col-md-6 col-lg-6">
-                <div id="schedule-ops"></div> 
+                <div id="schedule-ops"></div>
               </div>
               <div class="col-md-6 col-lg-6">
                 <h5>Careful Here</h5>
-                <button id="remove-allbackups" class="btn btn-warning" title='Remove all the local backups'>Remove All Local 
-              Backups</button>
+                <button id="remove-allbackups" class="btn btn-warning" title='Remove all the local backups'>Remove All Local Backups
+                </button>
               </div>
             </div>
           </div>
@@ -528,19 +528,14 @@
               <div class="col-sm-5 col-md-5 col-lg-2  notes-header">
                 <button id="notes-viewer-reload-button" class="btn btn-info">Reload All Startup's Notes</button>
               </div>
-              <div class="col-sm-5 col-md-5 col-lg-2  notes-header">
-                <button id="notes-viewer-export-all-button" class="btn btn-warning">Export All Notes</button>
-              </div>
             </div>
-
-             <div class="row">
+            <div class="row">
               <div id="mentor-notes-viewer" class="col-sm-3 col-md-3 col-lg-3 notes-header">
               </div>
               <div class="col-sm-2 col-md-3 col-lg-1 text-center notes-header">
                 <button id="notes-per-mentor-reload-button" class="btn btn-info">Reload All Mentor's Notes</button>
               </div>
             </div>
-
             <div class="row">
               <div id="startup-notes-list" class="col-md-12 col-lg-12 text-center">
                 <table id="startup-notes-table" class="display" width="100%">
@@ -565,8 +560,12 @@
           <div role="tabpanel" class="tab-pane" id="gen-ops-tab">
             <div class="row">
               <div class="col-sm-4 col-md-4 col-lg-4 notes-header">
-              <h4>Attendees Utils</h4>
+                <h4>Attendees Utils</h4>
                 <button id="gen-ops-remove-all-att-button" class="btn btn-warning">Remove All Attendees</button>
+                <br><br>
+                <div id="att-export-div">
+                    <button id="export-all-att-button" class="btn btn-info">Export All Attendees</button>
+                </div>
               </div>
               <div class="col-sm-6 col-md-6 col-lg6 notes-header">
                 <!-- email for mentor to do a comeback -->
@@ -576,22 +575,30 @@
                   <label for="mentor-comeback-email-field" class="sr-only">Email</label>
                   <div class="input-group">
                     <div class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></div>
-                    <input type="email" class="form-control must-have-field" title="The email should be like: ido@gmail-com"
-                      id="mentor-comeback-email-field" placeholder="Email" autocomplete="email" required>
+                    <input type="email" class="form-control must-have-field" title="The email should be like: ido@gmail-com" id="mentor-comeback-email-field" placeholder="Email" autocomplete="email" required>
                   </div>
                 </div>
                 <button id="move-back-mentor-button" class="btn btn-info">Move back</button>
                 <button id="remove-all-mentors-button" class="btn btn-warning">Remove All Mentors</button>
+                <div id="mentor-export-div">
+                    <div id="mentor-export-div-meta"></div>
+                    <button id="export-all-mentors-button" class="btn btn-info">Export All Mentors</button>
+                </div>
               </div>
             </div>
             <div class="row">
               <div class="col-sm-4 col-md-4 col-lg-4 notes-header">
-              <h4>Startups Utils</h4>
+                <h4>Startups Utils</h4>
                 <button id="gen-ops-remove-all-startups-button" class="btn btn-warning">Remove All Startups</button>
               </div>
             </div>
-          </div>
+            <div class="row">
+                <div class="col-sm-5 col-md-5 col-lg-2  notes-header">
+                    <button id="notes-viewer-export-all-button" class="btn btn-info">Export All Notes</button>
+                </div>
+            </div>
 
+          </div>
           <!-- end of tabs -->
         </div>
       </div>
@@ -606,7 +613,7 @@
           <h4 class="modal-title">Oppss... A little problam</h4>
         </div>
         <div class="modal-body">
-          <h3>Check again your email/password.</h3>
+          <h3>Check again your email and password.</h3>
           <p>If you can't login please check with the organizers</p>
         </div>
         <div class="modal-footer">
@@ -621,7 +628,6 @@
     <footer>
       <div class="col-md-4">
         <a href="https://github.com/greenido/lpa-1-issues/issues/new" class="btn btn-success" target="_blank">Feedback</a>
-        </p>
       </div>
     </footer>
   </div>
@@ -673,7 +679,6 @@
   <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
   <script src="js/vendor/dataTables.buttons.min.js"></script>
   <script src="js/vendor/buttons.html5.min.js"></script>
-
   <script>
   (function(i, s, o, g, r, a, m) {
     i['GoogleAnalyticsObject'] = r;
@@ -688,6 +693,7 @@
   })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
   ga('create', 'UA-76781519-3', 'auto');
+  ga('set', 'transport', 'beacon');
   ga('send', 'pageview');
   </script>
   <script src="js/main.js"></script>

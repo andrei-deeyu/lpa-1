@@ -6,6 +6,15 @@ fb-3-auth.html
 IDs.txt
 
 *.sublime-workspace
+<<<<<<< HEAD
 
 node_modules/*
 
+=======
+node_modules
+public
+dist
+**/.DS_Store
+
+.vscode/launch.json
+>>>>>>> master

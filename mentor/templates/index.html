@@ -1,0 +1,669 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en">
+<!--<![endif]-->
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="author" content="Green Ido | @greenido | plus.google.com/+greenido">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LPA - Mentor</title>
+  <meta name="description" content="A note for our LPA">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.json">
+  <meta name=mobile-web-app-capable content=yes>
+  <meta name=application-name content="LPA-1">
+  <link rel=icon sizes=192x192 href="/img/pencil-192.png">
+  <meta name=apple-mobile-web-app-capable content=yes>
+  <meta name=apple-mobile-web-app-status-bar-style content=black>
+  <meta name=apple-mobile-web-app-title content="LPA">
+  <link rel=apple-touch-icon href="/img/pencil-192.png">
+  <meta name=msapplication-TileImage content="/img/pencil-144.png">
+  <meta name=msapplication-TileColor content=#2196F3>
+  <meta name=theme-color content=#2196F3>
+  <meta property=og:title content="LPA">
+  <meta property=og:type content=website>
+  <meta property=og:image content=https://lpa-1.firebaseapp.com/img/pencil-192.png>
+  <meta property=og:url content="https://lpa-1.firebaseapp.com/">
+  <meta property=og:description content="Our LPA web app! Smile!">
+  <meta name=twitter:card content=summary>
+  <meta name=twitter:url content="https://lpa-1.firebaseapp.com">
+  <meta name=twitter:title content="LPA">
+  <meta name=twitter:description content="Our LPA web app! Smile!">
+  <meta name=twitter:image content=https://lpa-1.firebaseapp.com/img/pencil-192.png>
+  <meta name=twitter:creator content=@greenido>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="/mentor/css/mentor.css" />
+  <script>
+  function loadHeader() {
+    document.getElementById('lpa-header').classList.add('lpa-loaded');
+  };
+  // Feature detect link.preload feature.
+  var script = document.createElement('link');
+  script.rel = 'preload';
+  if (!('preload' in script)) {
+    document.addEventListener('DOMContentLoaded', loadHeader);
+  }
+  </script>
+  <link rel="preload" href="img/lpa-header_1x.jpg" as="image" media="(max-width: 1600px)" onload="loadHeader()">
+  <link rel="preload" href="img/lpa-header_2x.jpg" as="image" media="(min-width: 1600px)" onload="loadHeader()">
+
+  <script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
+
+</head>
+
+<body>
+
+  <div class="lpa-layout mdl-js-layout">
+    <header id="lpa-header" class="lpa-header mdl-layout__header mdl-layout__header--waterfall">
+      <!-- Top row, always visible -->
+      <div class="mdl-layout__header-row">
+        <!-- Title -->
+        <span class="mdl-layout-title">Launchpad Mentor</span>
+        <div class="mdl-layout-spacer"></div>
+        <nav class="mdl-navigation lpa-sign-out-nav lpa-user-nav" id="lpa-user-nav">
+          <a class="mdl-navigation__link lpa-profile-btn" href="" data-subpage="profile"><i class="material-icons">account_circle</i></a>
+          <a class="mdl-navigation__link lpa-sign-out" href=""><i class="material-icons">exit_to_app</i></a>
+        </nav>
+        <nav class="mdl-navigation lpa-sign-in-nav">
+          <a class="mdl-navigation__link lpa-sign-in" href="">Sign in</a>
+        </nav>
+      </div>
+      <!-- Bottom row, not visible on scroll -->
+      <div class="mdl-layout__header-row"></div>
+    </header>
+
+    <div class="mdl-tabs mdl-js-tabs lpa-tabs">
+      <nav class="mdl-tabs__tab-bar mdl-navigation lpa-main-nav" id="lpa-main-nav">
+        <a class="mdl-tabs__tab mdl-navigation__link lpa-tab" href="#lpa-tab" data-subpage="schedule"><i class="material-icons">event</i></a>
+        <a class="mdl-tabs__tab mdl-navigation__link lpa-tab" href="#lpa-tab" data-subpage="startups">Startups</a>
+        <a class="mdl-tabs__tab mdl-navigation__link lpa-tab" href="#lpa-tab" data-subpage="attendees">Attendees</a>
+        <a class="mdl-tabs__tab mdl-navigation__link lpa-tab" href="#lpa-tab" data-subpage="mentors">Mentors</a>
+        <div class="hidden" id="lpa-tab"></div>
+      </nav>
+    </div>
+
+    <div class="mdl-layout__drawer" id="lpa-drawer">
+      <span class="mdl-layout-title">Launchpad</span>
+      <nav class="mdl-navigation" id="lpa-drawer-nav">
+        <a class="mdl-navigation__link" href="" data-subpage="schedule">Schedule</a>
+        <a class="mdl-navigation__link" href="" data-subpage="startups">Startups</a>
+        <a class="mdl-navigation__link" href="" data-subpage="attendees">Attendees</a>
+        <a class="mdl-navigation__link" href="" data-subpage="mentors">Mentors</a>
+        <a class="mdl-navigation__link" href="" data-subpage="profile">My Profile</a>
+        <a class="mdl-navigation__link" href="" data-subpage="guidelines">Guidelines</a>
+      </nav>
+      <nav class="mdl-navigation">
+        <a class="mdl-navigation__link lpa-sign-in" href="">Sign in</a>
+        <a class="mdl-navigation__link lpa-sign-out" href="">Sign out</a>
+      </nav>
+    </div>
+
+
+    <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" id="lpa-survey-btn">
+        <i class="material-icons">note_add</i>
+    </button>
+    <main class="mdl-layout__content lpa-main" id="lpa-main">
+
+      <div class="lpa-page-content">
+
+        <section class="lpa-sign-in-section lpa-subpage lpa-active" id="lpa-signin-subpage">
+          <p>Welcome to the mentor site! Please sign in to view your schedule.</p>
+          <button id="lpa-sign-in"
+              class="lpa-sign-in mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+            Sign in
+          </button>
+        </section>
+
+        <section class="lpa-unregistered-section lpa-subpage" id="lpa-unregistered-subpage">
+          <p>It seems that you are not registered as a mentor. Get in touch with us to get added!</p>
+          <a href="mailto:me@me.org">
+          <button id="lpa-contact"
+              class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+            Get in touch
+          </button>
+        </a>
+        </section>
+
+
+        <section class="lpa-subpage" id="lpa-schedule-subpage">
+          <h1>Schedule</h1>
+
+          Select the day:  <input id="schedule-datepicker" type="date"/>
+
+          <ul class="mdl-list" id="lpa-schedule-list">
+
+          </ul>
+        </section>
+
+        <section class="lpa-subpage" id="lpa-startups-subpage">
+          <h1>Startups</h1>
+          <ul class="mdl-list" id="lpa-startups-list"></ul>
+
+
+        </section>
+
+        <section class="lpa-subpage" id="lpa-attendees-subpage">
+          <h1>Attendees</h1>
+          <ul class="mdl-list" id="lpa-attendees-list">
+          </ul>
+
+
+        </section>
+
+        <section class="lpa-subpage" id="lpa-mentors-subpage">
+          <h1>Mentors</h1>
+          <ul class="mdl-list lpa-mentors-list" id="lpa-mentors-list"></ul>
+        </section>
+
+        <section class="lpa-subpage" id="lpa-profile-subpage">
+          <h1>My profile</h1>
+          <form id="lpa-profile-form">
+
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+              <input class="mdl-textfield__input" type="text" id="lpa-profile-name">
+              <label class="mdl-textfield__label" for="lpa-profile-name">Name</label>
+            </div>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+              <input class="mdl-textfield__input" type="text" id="lpa-profile-email">
+              <label class="mdl-textfield__label" for="lpa-profile-email">Email</label>
+            </div>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+              <input class="mdl-textfield__input" type="text" id="lpa-profile-phone">
+              <label class="mdl-textfield__label" for="lpa-profile-phone">Phone</label>
+            </div>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+              <input class="mdl-textfield__input" type="text" id="lpa-profile-country">
+              <label class="mdl-textfield__label" for="lpa-profile-country">Country</label>
+            </div>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+              <input class="mdl-textfield__input" type="text" id="lpa-profile-city">
+              <label class="mdl-textfield__label" for="lpa-profile-city">City</label>
+            </div>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+              <textarea class="mdl-textfield__input"
+                  type="text" rows= "5"
+                  id="lpa-profile-bio"></textarea>
+              <label class="mdl-textfield__label" for="lpa-profile-bio">Bio</label>
+            </div>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+              <textarea class="mdl-textfield__input"
+                  type="text" rows= "5"
+                  id="lpa-profile-funfact"></textarea>
+              <label class="mdl-textfield__label" for="lpa-profile-funfact">Fun fact</label>
+            </div>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+              <textarea class="mdl-textfield__input"
+                  type="text" rows= "5"
+                  id="lpa-profile-expertise"></textarea>
+              <label class="mdl-textfield__label" for="lpa-profile-expertise">Expertise</label>
+            </div>
+
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+              <input class="mdl-textfield__input" type="text" id="lpa-profile-twitter">
+              <label class="mdl-textfield__label" for="lpa-profile-twitter">Twitter</label>
+            </div>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+              <input class="mdl-textfield__input" type="text" id="lpa-profile-linkedin">
+              <label class="mdl-textfield__label" for="lpa-profile-linkedin">Linkedin</label>
+            </div>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+              <input class="mdl-textfield__input" type="text" id="lpa-profile-site">
+              <label class="mdl-textfield__label" for="lpa-profile-site">Personal site</label>
+            </div>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+              <input class="mdl-textfield__input" type="text" id="lpa-profile-pic">
+              <label class="mdl-textfield__label" for="lpa-profile-pic">Picture url</label>
+            </div>
+
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+              <textarea class="mdl-textfield__input"
+                  type="text" rows= "5"
+                  id="lpa-profile-comments"></textarea>
+              <label class="mdl-textfield__label" for="lpa-profile-comments">Comments</label>
+            </div>
+            <button type="button" class="mdl-button" id="lpa-profile-reset">Reset</button>
+            <button type="button" class="mdl-button mdl-button--colored" id="lpa-profile-submit">Submit</button>
+            <span id="lpa-profile-confirm"><span>
+          </form>
+        </section>
+
+        <section class="lpa-subpage" id="lpa-startup-subpage">
+          <h1>Startup</h1>
+          <div id="lpa-startup"></div>
+          <a href="#" class="lpa-zippy" id="lpa-startup-show-notes">Historical notes</a>
+          <div id="lpa-startup-notes" class="hidden">
+          </div>
+
+        </section>
+
+        <section class="lpa-subpage" id="lpa-help-subpage">
+          <h1>Help</h1>
+
+          <p>Welcome to the mentor app!</p>
+          <p>Is it your first time here?
+            <ol>
+              <li>Sign in (at the top right corner).</li>
+              <li>Once logged in, please fill in the details in your profile: <i class="material-icons">account_circle</i></li>
+            </ol>
+          </p>
+
+          <p>Once logged in, you can:
+            <ul>
+              <li><i class="material-icons">event</i> - You can see the daily schedule, plan your day and fill the notes after each session.</li>
+              <li>Startups - Learn about the startups in this LPA class.</li>
+              <li>Attendees - See the attendees' details and email them action items.</li>
+              <li>Mentors - See all the mentors' details and email them funny jokes.</li>
+              <li><i class="material-icons">account_circle</i> - Update your profile.</li>
+              <li><i class="material-icons">note_add</i> - Add a note for an ad-hoc meeting.</li>
+            </ul>
+          </p>
+        </section>
+
+        <section class="lpa-subpage" id="lpa-guidelines-subpage">
+          <h1>Mentor Guidelines</h1>
+
+            <h4><a id="Before_your_session_1"></a>Before your session:</h4>
+            <ol>
+              <li>Read up on the startup you are about to meet using the
+                <a href="https://lpa-1.firebaseapp.com/index-mentor.html">Accelerator app</a>. There you will find:
+                <ol>
+                  <li>Their basic company information</li>
+                  <li>Their first day diagnostic interview</li>
+                  <li>Notes from previous mentors</li>
+                </ol>
+              </li>
+              <li>Get to know who already mentored the startup. Sync with them on the 2-3 strengths and weaknesses of each startup.</li>
+            </ol>
+            <h4><a id="During_your_session_11"></a>During your session:</h4>
+            <h5><a id="Introductions_12"></a>Introductions</h5>
+            <ol>
+              <li>Take the first 5 minutes to set up expectations for the mentoring session with the startup
+                <ol>
+                  <li>“In this session I will be able to do xyz…”</li>
+                  <li>“What do you expect to come out of this mentorship session?”</li>
+                  <li>Be sure all parties get on the same page</li>
+                </ol>
+              </li>
+              <li>Present yourself in a way that the startup can better understand what your added value is for them.
+                <ol>
+                  <li>The startups will have access to your background/bio in the app, but its best to share a little about why you’re relevant in helping <em>them</em> specifically.
+                  </li>
+                </ol>
+              </li>
+              <li>Try to focus on their needs and challenges, and not on the solutions they suggest.
+              </li>
+              <li>Give them mostly hooks, not fish… but make sure they get some fish.</li>
+            </ol>
+            <h5><a id="Culture_28"></a>Culture</h5>
+            <ol>
+              <li>Be aware of cultural differences. For example, some cultures finds it impolite to disagree with you, and they will almost never tell you that they don’t agree.</li>
+              <li>Encourage the startups to speak, and tell them it is perfectly o.k. to disagree with you.</li>
+              <li>In some cases, being too direct can be perceived as rudeness by you, however, this is the common way of conveying messages among a different culture, hence, the startup perceives it very naturally.</li>
+              <li>Keep in mind that conventions, solutions, preferences are different among different countries.</li>
+              <li>Don’t be shy to ask the startups for details. Elaboration will ensure you are on the same page. Sometimes you think you know what they mean, but you really don’t. This can be due to language barriers or for other reasons.</li>
+            </ol>
+            <h5><a id="Overall_Best_Practices_44"></a>Overall Best Practices</h5>
+            <ol>
+              <li>Good mentors can communicate well and provide clear reasoning for their advice.
+              </li>
+              <li>Turn it into discussion, not a lecture. Make sure you are listening (NO talking) for <em>at least</em> 50% of the time.</li>
+              <li>It is perfectly alright to say: “I don’t know”, or “I’m not sure”.</li>
+              <li>Lead by example. Try to give the startups examples from your real world experience. In most cases, this is a better way to drive your points.</li>
+              <li>It is great to say: “let me think about it, and I’ll get back to you later.”</li>
+              <li>We highly encourage you to invite another mentor to give his/her opinion.</li>
+              <li>It is perfectly o.k. to disagree with a previous mentor, however, always try to provide the startup with the rationale behind these differences in approach so they can make up their own mind. Make sure you don’t confuse them.
+              </li>
+              <li>Good mentorship leads the startup in a proactive process:
+                <ol>
+                  <li>give startups homework</li>
+                  <li>instruct them what to do and use the outcome as a baseline for your next meeting with them (or their meetings with other mentors).</li>
+                </ol>
+              </li>
+              <li>Remember that this is <em>their</em> company. Mentorship is extremely valuable, and you will often be the expert, but ultimately they will need to choose what is best for their company.</li>
+            </ol>
+            <h4><a id="After_your_session_67"></a>After your session</h4>
+            <ol>
+              <li>The last 10 minutes of each session is designated for you to take notes and reflect on your session. Use the Accelerator app. Please be sure to do this–for the success of the startups and the program at-large.</li>
+              <li>Have a coffee :-)</li>
+              <li>Everyday ends with a mentor debriefing session. We would love to have you there to share your learnings and observations from the day.</li>
+            </ol>
+            <h4><a id="Most_importantly_76"></a>Most importantly</h4>
+            <p><strong>Have fun!</strong> If you have fun, everyone will benefit the most!</p>
+            <p><img src="/mentor/img/lpa-logo-305x80.png" alt="lpa logo" /></p>
+
+        </section>
+
+        <div class="lpa-message hide" id="lpa-message"></div>
+
+      </div>
+    </main>
+    <footer class="mdl-mini-footer lpa-footer">
+      <div class="mdl-mini-footer__left-section">
+        <div class="mdl-logo">
+          <a href="https://developers.google.com/startups/accelerator/">Launchpad Accelerator</a>
+        </div>
+        <ul class="mdl-mini-footer__link-list">
+          <li><a href="/help" class="lpa-help-link" data-subpage="help">Help</a></li>
+          <li><a href="https://github.com/greenido/lpa-1-issues/issues/new">Feedback</a></li>
+          <!--<li><a href="https://events.withgoogle.com/bootcamp-class-2/">Bootcamp</a></li>-->
+        </ul>
+      </div>
+      <!--
+      <div class="mdl-mini-footer__right-section">
+        <button class="mdl-mini-footer__social-btn"></button>
+        <button class="mdl-mini-footer__social-btn"></button>
+        <button class="mdl-mini-footer__social-btn"></button>
+      </div>
+    -->
+    </footer>
+
+  </div>
+
+  <dialog class="mdl-dialog lpa-dialog" id="lpa-survey">
+    <h4 class="mdl-dialog__title">Add notes for a startup</h4>
+    <div class="mdl-dialog__content">
+
+      <p id="lpa-survey-session-datetime"></p>
+
+      <form>
+        <input class="hidden" type="text"
+            id="lpa-survey-session">
+        <input class="hidden" type="text"
+            id="lpa-survey-date">
+        <input class="hidden" type="text"
+            id="lpa-survey-starttime">
+        <input class="hidden" type="text"
+            id="lpa-survey-endtime">
+        <p id="lpa-choose-startup" class="hidden">
+          <label for="">Change startup:</label>
+          <button id="lpa-choose-startup-btn"
+                class="mdl-button mdl-js-button mdl-button--icon">
+            <i class="material-icons">more_vert</i>
+          </button>
+          <input class="hidden" type="text"
+              id="lpa-survey-startup">
+          <span class="lpa-survey-error hidden">Please choose a startup</span>
+          <ul id="lpa-choose-startup-menu"
+              for="lpa-choose-startup-btn">
+          </ul>
+        </p>
+
+        <label for="">Were the attendees open and receptive? (1-5)</label>
+        <p style="width:300px">
+          <span for="lpa-survey-receptive">3</span>
+          <input class="mdl-slider mdl-js-slider" type="range"
+              id="lpa-survey-receptive" min="1" max="5"
+              value="3">
+        </p>
+        <label for="">Was the session effective? (1-5)</label>
+        <p style="width:300px">
+          <span for="lpa-survey-effective">3</span>
+          <input class="mdl-slider mdl-js-slider" type="range"
+              id="lpa-survey-effective" min="1" max="5"
+              value="3">
+        </p>
+        <p>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <textarea class="mdl-textfield__input"
+                type="text" rows= "5"
+                id="lpa-survey-notes"
+                placeholder="Focus on primary purpose / challenge and please elaborate."></textarea>
+            <label class="mdl-textfield__label" for="sample5">What did you talk about?</label>
+          </div>
+        </p>
+        <p>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <textarea class="mdl-textfield__input"
+                type="text" rows= "5"
+                id="lpa-survey-actionitems"></textarea>
+            <label class="mdl-textfield__label" for="sample5">What are the action items?</label>
+          </div>
+        </p>
+        <p>
+          <input type="file" accept="image/*" capture="camera"
+              id="lpa-camera" class="lpa-fileinput-fab">
+          <button id="lpa-survey-photos"
+              class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect">
+              <i class="material-icons">add_a_photo</i>
+          </button>
+          <label for="">Add photos</label>
+        </p>
+        <div id="lpa-camera-preview">
+        </div>
+      </form>
+    </div>
+    <div class="mdl-dialog__actions">
+      <button type="button" class="mdl-button" id="lpa-survey-submit">Submit</button>
+      <button type="button" class="mdl-button close">Cancel</button>
+    </div>
+  </dialog>
+
+  <!-- Partial templates -->
+
+  <template id="tmpl-attendees-list">
+    <li class="mdl-list__item lpa-template">
+      <span class="mdl-list__item-primary-content">
+        <!-- Background in case the pic is 404 -->
+        <i class="material-icons mdl-list__item-avatar">person</i>
+        <i class="material-icons mdl-list__item-avatar lpa-attendee-avatar" data-field="pic">person</i>
+        <div>
+          <p data-field="name" class="lpa-list-name">Placeholder name</p>
+          <p class="lpa-list-annotation">
+            <span data-field="role">
+              Placeholder role.
+            </span> at <span data-field="startup">
+              Placeholder startup.
+            </span>
+          </p>
+          <p class="mdl-list__item-text-body lpa-list-desc" data-field="funfact">
+            Placeholder funfact.
+          </p>
+        </div>
+      </span>
+      <span class="mdl-list__item-secondary-content">
+        <a class="mdl-list__item-secondary-action" data-field="email"><i class="material-icons lpa-icon-big">email</i></a>
+        <a class="mdl-list__item-secondary-action" data-field="linkedin"><i class="lpa-icon lpa-icon-big lpa-icon-linkedin"></i></a>
+      </span>
+    </li>
+  </template>
+
+  <template id="tmpl-mentors-list">
+    <li class="mdl-list__item" id="lpa-mentors-list-template">
+      <span class="mdl-list__item-primary-content">
+        <div class="lpa-mentor-avatar-wrapper">
+          <!-- Background in case the pic is 404 -->
+          <i class="material-icons mdl-list__item-avatar lpa-mentor-avatar">person</i>
+          <i class="material-icons mdl-list__item-avatar lpa-mentor-avatar" data-field="pic">person</i>
+        </div>
+
+        <div>
+          <p data-field="name" class="lpa-list-name">Placeholder name</p>
+          <p class="lpa-list-annotation">
+            <span data-field="city">
+              Placeholder city.
+            </span><span data-field="country">
+              Placeholder country.
+            </span>
+          </p>
+          <p data-field="expertise" class="hidden">
+              Placeholder expertise.
+          </p>
+          <p data-field="bio" class="hidden lpa-list-desc">
+              Placeholder bio.
+          </p>
+          <p class="lpa-domain">
+            <span class="mdl-chip">
+              <span class="mdl-chip__text" data-field="domain">Domain</span>
+            </span>
+            <span class="mdl-chip">
+              <span class="mdl-chip__text" data-field="domainsec">DomainSec</span>
+            </span>
+          </p>
+          <p>
+            <a data-field="email" class="hidden"><i class="material-icons">email</i></a>
+            <a data-field="site" class="hidden"><i class="material-icons">language</i></a>
+            <a data-field="linkedin" class="hidden">
+              <i class="material-icons">
+                <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                    <path fill="#ffab40" d="M19,19H16V13.7A1.5,1.5 0 0,0 14.5,12.2A1.5,1.5 0 0,0 13,13.7V19H10V10H13V11.2C13.5,10.36 14.59,9.8 15.5,9.8A3.5,3.5 0 0,1 19,13.3M6.5,8.31C5.5,8.31 4.69,7.5 4.69,6.5A1.81,1.81 0 0,1 6.5,4.69C7.5,4.69 8.31,5.5 8.31,6.5A1.81,1.81 0 0,1 6.5,8.31M8,19H5V10H8M20,2H4C2.89,2 2,2.89 2,4V20A2,2 0 0,0 4,22H20A2,2 0 0,0 22,20V4C22,2.89 21.1,2 20,2Z" />
+                </svg>
+              </i>
+            </a>
+            <a data-field="twitter" class="hidden">
+              <i class="material-icons">
+                <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                    <path fill="#ffab40" d="M17.71,9.33C17.64,13.95 14.69,17.11 10.28,17.31C8.46,17.39 7.15,16.81 6,16.08C7.34,16.29 9,15.76 9.9,15C8.58,14.86 7.81,14.19 7.44,13.12C7.82,13.18 8.22,13.16 8.58,13.09C7.39,12.69 6.54,11.95 6.5,10.41C6.83,10.57 7.18,10.71 7.64,10.74C6.75,10.23 6.1,8.38 6.85,7.16C8.17,8.61 9.76,9.79 12.37,9.95C11.71,7.15 15.42,5.63 16.97,7.5C17.63,7.38 18.16,7.14 18.68,6.86C18.47,7.5 18.06,7.97 17.56,8.33C18.1,8.26 18.59,8.13 19,7.92C18.75,8.45 18.19,8.93 17.71,9.33M20,2H4A2,2 0 0,0 2,4V20A2,2 0 0,0 4,22H20A2,2 0 0,0 22,20V4C22,2.89 21.1,2 20,2Z" />
+                </svg>
+              </i>
+            </a>
+          </p>
+        </div>
+      </span>
+    </li>
+
+  </template>
+
+  <template id="tmpl-startups-list">
+    <li class="mdl-list__item lpa-template">
+      <span class="mdl-list__item-primary-content">
+        <img data-field="logo" class="lpa-startups-logo" src=""/>
+        <div>
+          <p data-field="name" class="lpa-list-name">Placeholder name</p>
+          <p class="lpa-list-annotation">
+            <span data-field="city">
+              Placeholder city.
+            </span>
+            <span data-field="country">
+              Placeholder country.
+            </span>
+          </p>
+          <p class="lpa-startups-founded">Founded in <span data-field="datefoundedyear">
+              Placeholder founded.
+            </span>
+          </p>
+          <p class="lpa-startups-size">
+            Size: <span data-field="numemployees">
+              Placeholder size.
+            </span>
+          </p>
+
+          <p class="mdl-list__item-text-body lpa-list-desc" data-field="description">
+            Placeholder description.
+          </p>
+          <p>
+            <a href="" data-field="historyurl">One-pager</a>
+          </p>
+        </div>
+
+
+      </span>
+      <span class="mdl-list__item-secondary-content">
+        <!--
+        <a class="mdl-list__item-secondary-action" href="#"><i class="material-icons lpa-icon">insert_drive_file</i></a>
+        <a class="mdl-list__item-secondary-action" href="#"><i class="lpa-icon lpa-icon-twitter"></i></a>
+      -->
+      </span>
+    </li>
+  </template>
+
+  <template id="tmpl-startup">
+    <div>
+      <img data-field="logo" class="lpa-startups-logo" src=""/>
+      <div>
+        <p data-field="name" class="lpa-list-name">Placeholder name</p>
+        <p class="lpa-list-annotation">
+          <span data-field="city">
+            Placeholder city.
+          </span>,
+          <span data-field="country">
+            Placeholder country.
+          </span>
+        </p>
+        <p class="lpa-startups-founded">Founded in <span data-field="datefoundedyear">
+            Placeholder founded.
+          </span>
+        </p>
+        <p class="lpa-startups-size">
+          Size: <span data-field="numemployees">
+            Placeholder size.
+          </span>
+        </p>
+        <p class="mdl-list__item-text-body lpa-list-desc" data-field="description">
+          Placeholder description.
+        </p>
+        <p>
+          <a data-field="historyurl" href="">One-pager</a>
+        </p>
+        <p>
+          <a data-field="twitter"><i class="material-icons lpa-icon-twitter"></i></a>
+        </p>
+      </div>
+    </div>
+  </template>
+
+  <template id="tmpl-startup-note">
+    <div class="lpa-startup-note">
+      <p class="lpa-list-annotation">
+        <span data-field="date">Placeholder date</span> by
+        <span data-field="mentorkey">
+          Placeholder mentor.
+        </span>
+      </p>
+      <p>
+        <span data-field="meetingnotes">
+          Placeholder notes.
+        </span>
+      </p>
+      <p>
+        <span data-field="actionitems">
+          Placeholder action-items.
+        </span>
+      </p>
+    </div>
+  </template>
+
+  <template id="tmpl-schedule-list">
+    <li class="mdl-list__item mdl-list__item--three-line">
+      <span class="mdl-list__item-primary-content">
+        <i class="material-icons mdl-list__item-avatar">person</i>
+        <span data-field="starttime">Placeholder name</span>
+        <span data-field="startup">Placeholder startup</span>
+        <span class="mdl-list__item-text-body" data-field="location">
+          Placeholder location.
+        </span>
+      </span>
+      <span class="mdl-list__item-secondary-content">
+        <button class="mdl-button mdl-js-button mdl-button--fab lpa-survey-btn">
+            <i class="material-icons">mode_edit</i>
+        </button>
+      </span>
+    </li>
+  </template>
+
+  <script src="https://www.gstatic.com/firebasejs/3.0.4/firebase.js"></script>
+  <script>
+  (function(i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r;
+    i[r] = i[r] || function() {
+      (i[r].q = i[r].q || []).push(arguments)
+    }, i[r].l = 1 * new Date();
+    a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0];
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m)
+  })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+  ga('create', 'UA-76781519-1', 'auto');
+  ga('send', 'pageview');
+  </script>
+  <script src="/mentor/js/mentor.js"></script>
+</body>
+</html>

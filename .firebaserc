@@ -1,6 +1,10 @@
 {
   "projects": {
     "default": "project-1969056342883930904",
+<<<<<<< HEAD
     "lpa-mex": "lpa-mex"
+=======
+    "development": "lpa-3-14341"
+>>>>>>> master
   }
 }
