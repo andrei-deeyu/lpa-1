@@ -62,7 +62,8 @@ Make sure you have gulp installed (`npm install -g gulp`).
 -----
 
 ![LPA PWA](https://lpa-1.firebaseapp.com/img/lion-hd.jpeg)
-####A lion runs the fastest when he is hungry.
+
+### A lion runs the fastest when he is hungry.
 -----
 
 ## Data Model
