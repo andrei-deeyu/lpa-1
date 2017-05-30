@@ -15,11 +15,11 @@ const critical = require('critical').stream;
 
 
 const path = require('path');
-
 const ROOT_DIR = 'mentor';
 
-
-
+//
+// Do magic on the images
+//
 gulp.task('images', () =>
   gulp.src(path.join(ROOT_DIR, 'img/**/*'))
     .pipe(imagemin({
@@ -30,6 +30,9 @@ gulp.task('images', () =>
     .pipe(size({title: 'images'}))
 );
 
+//
+// Add the JS files to the party
+//
 gulp.task('js', () => {
   // Order matters!
   var scripts = [
@@ -51,7 +54,9 @@ gulp.task('js', () => {
     .pipe(gulp.dest('dist/mentor/js'));
 });
 
+//
 // Compile and automatically prefix stylesheets
+//
 gulp.task('styles', () => {
   /*const AUTOPREFIXER_BROWSERS = [
     'ie >= 10',
@@ -82,8 +87,9 @@ gulp.task('styles', () => {
     .pipe(gulp.dest('dist/mentor/css'))
 });
 
-
+//
 // Generate & Inline Critical-path CSS
+//
 gulp.task('critical', ['styles'], function () {
   return gulp.src(path.join(ROOT_DIR, 'templates', 'index.html'))
     .pipe(critical({
@@ -98,8 +104,14 @@ gulp.task('critical', ['styles'], function () {
     .pipe(gulp.dest('dist/mentor/'));
 });
 
+//
+// Main build tasks
+//
 gulp.task('build', ['critical', 'js', 'images']);
 
+//
+// local dev mode
+//
 gulp.task('serve', ['build'], function() {
   gulp.src('dist')
     .pipe(webserver({
