@@ -1,13 +1,12 @@
-![](https://developers.google.com/startups/images/logo-launch.svg)
 ## Overview
 
-The goal of these apps is to enable us to run a LPA event(s).
+The goal of these apps is to enable you to take notes from mentorship meetings.
 We got three web apps:
 
 * [Admin Web App](https://lpa-1.firebaseapp.com/) - Used by the organizers to set the schedule for the mentors and startups.
   * The mentors and attendees emails/names should be added to the system so they will be 'white listed'.
   * The startups' details should be filled.
-  * The schedule per day of the LPA.
+  * The schedule per day.
 
 * [Mentor Web App](https://lpa-1.firebaseapp.com/index-mentor.html) - Used by the mentors to see who they are going to meet (=which startup) and when.
   * The mentor should sign-in with their gmail account and fill their personal details.
@@ -43,7 +42,7 @@ Make sure you have gulp installed (`npm install -g gulp`).
 ## ToDos
 
 ### General
-* [ ] Add build process (Gulp) - copy, minify, image optimization etc'.
+* [x] Add build process (Gulp) - copy, minify, image optimization etc'.
 * [ ] Add unit tests
 
 ### PWA
@@ -157,7 +156,7 @@ Make sure you have gulp installed (`npm install -g gulp`).
 
 ## License
 
-Copyright 2015 Google, Inc.
+Copyright 2017 Ido Green.
 
 Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the “License”); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 
